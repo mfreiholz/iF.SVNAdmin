@@ -1,0 +1,3 @@
+<Files cli.php>
+  deny from all
+</Files>
