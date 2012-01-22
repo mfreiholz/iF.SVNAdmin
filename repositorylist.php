@@ -53,7 +53,7 @@ catch (Exception $ex) {
 	$appEngine->addException($ex);
 }
 
-SetValue("ShowDeleteButton", ($appEngine->getConfig()->getValue('GUI', 'RepositoryDeleteEnabled', '1') == 1));
+SetValue("ShowDeleteButton", ($appEngine->getConfig()->getValueAsBoolean("GUI", "RepositoryDeleteEnabled", "true")));
 SetValue("RepositoryList", $repos);
 ProcessTemplate("repository/repositorylist.html.php");
 ?>
