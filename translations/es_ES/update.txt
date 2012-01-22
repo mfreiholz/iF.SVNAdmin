@@ -1,0 +1,8 @@
+"Synchronize","Sincroniza"
+"Synchronize your data.","Sincroniza tus datos."
+"The following views are up-to-date now:","Las siguientes vistas están actualizadas:"
+"has been updated","ha sido actualizado"
+"The following views could not been updated:","Las siguientes vistas no se han podido actualizar:"
+"Your current application configuration uses a data provider, which requires updates from time to time. Here you can force an update now, if you didn't configure any cron-jobs or Windows task to perform this update.","La configuración actual de la aplicación utiliza un proveedor de datos que requiere actualizaciones frecuentes. Aquí puedes forzar una actualización ahora, si no has configurado ningun cron-job o tarea de Windows para realizar esta actualización."
+"Note: This could take a few seconds. Do not press this button twice!","Nota: Esto puede tardar algunos segundos. No pressiones dos veces el botón!"
+"Synchronize now","Sincronizar ahora"

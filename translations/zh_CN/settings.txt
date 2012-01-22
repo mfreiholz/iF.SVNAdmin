@@ -1,0 +1,29 @@
+# All
+"Example","样例"
+
+# Settings table
+"Subversion authorization","Subversion 授权相关"
+"Subversion authorization file","Subversion 授权文件"
+"Data providers","数据提供方相关"
+"User authentication","用户身份验证"
+"User authentication file (SVNUserFile)","用户身份验证文件 (SVNUserFile)"
+"Subversion settings","Subversion 设置相关"
+"Parent directory of the repositories (SVNParentPath)","代码仓库的父目录 (SVNParentPath)"
+"Subversion client executable","'svn.exe' 或 'svn'可执行文件："
+"Subversion admin executable","'svnadmin.exe' 或 'svnadmin' 可执行文件："
+"LDAP connection information","LDAP 连接信息相关"
+"Host address","LDAP主机地址 "
+"Protocol version","LDAP 协议版本"
+"LDAP user provider information","LDAP 用户信息相关 "
+"LDAP group provider information","LDAP 用户组信息相关"
+
+# No users, no edit provider
+"You have not defined an "UserEditProviderType", but the system also could not find any user from the configured user view provider.","您并未定义 "UserEditProviderType" . 且系统未从用户数据提供方 发现任何用户 ."
+"You should now create a new user in your configured backend (e.g.: LDAP/Active Directory).","您现在应该在您的配置文件中添加一个新的用户 (例如: LDAP/Active Directory)."
+"If you think your configuration is incorrect, <a href="settings.php?firststart=1">click here.</a>","如果认为您的配置有误，请单击 <a href="settings.php?firststart=1">.</a>"
+
+# Define administrator
+"Could not find existing users with your configuration. Created default Administrator account.","未从您的配置文件中找到用户，创建一个默认的Admin帐户."
+"You can <a href="login.php"><b>login now.</b></a>"," <a href="login.php"><b>登录.</b></a>"
+"No administrator defined! Select the user for the administator privileges, please.","并无权限！请配置用户的admin权限"
+"Save","保存"

@@ -1,0 +1,5 @@
+"Change password of user","Cambia el password del usuario"
+"Change the password of your subversion account.","Cambia el password de tu cuenta de subversion."
+"New password","Nuevo password"
+"Re-type password","Vuelve a escribir el password"
+"The password's doesn't match each other.","Los passwords no coinciden."

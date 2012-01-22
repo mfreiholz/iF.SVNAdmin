@@ -1,0 +1,2 @@
+"Group management","组管理"
+"Here you can see a list of all groups, which are defined in your subversion configuration.","在这里，您可以查看所有已从svn配置文件中定义的组."

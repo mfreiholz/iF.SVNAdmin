@@ -1,0 +1,6 @@
+"On this page you can see all assignments of the user.","Übersicht der Gruppen und Rechte des Benutzers."
+"Groups of user","Gruppen des Benutzers"
+"Permissions of users","Berechtigungen des Benutzers"
+"Inherit from Group","Geerbt durch Gruppe"
+"<b>Note:</b> You can not unassign permissions from user, which are inherited by a group.","<b>Hinweis:</b> Sie können hier keine Berechtigungen entfernen die von einer Gruppe vererbt wurden."
+"User is project manager of:","Benutzer ist Projekt-Manager von:"

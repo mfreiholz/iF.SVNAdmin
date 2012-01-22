@@ -1,0 +1,2 @@
+"User &lt;&gt; Group assignment","用户/组 授权"
+"Here you can assign users to groups.","在这里，您可以将用户划分到组里."

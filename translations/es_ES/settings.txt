@@ -1,0 +1,31 @@
+# All
+"Example","Ejemplo"
+
+# Settings table
+"Subversion authorization","Autorización de subversion"
+"Subversion authorization file","Fichero de autorización de subversion"
+"Data providers","Proveedores de datos"
+"User authentication","Autentificación de Usuarios"
+"User authentication file (SVNUserFile)","Fichero de autentificación de Usuarios (SVNUserFile)"
+"Subversion settings","Opciones de subversion"
+"Parent directory of the repositories (SVNParentPath)","Directorio raíz de los repositorios (SVNParentPath)"
+"Subversion client executable","Ejecutable cliente de subversion 'svn.exe'"
+"Subversion admin executable","Ejecutable administrador de subversion 'svnadmin.exe'"
+"Parent directory of the svn Http server","URL raíz del servidor Http SVN de repositorios" 
+"Parent directory of the svn Http viewer","URL raíz del servidor visor Http SVN de repositorios"
+"LDAP connection information","Información de conexión LDAP"
+"Host address","Dirección del host"
+"Protocol version","Versión de protocolo"
+"LDAP user provider information","Información del proveedor LDAP de usuarios"
+"LDAP group provider information","Información del proveedor LDAP de grupos"
+
+# No users, no edit provider
+"You have not defined an "UserEditProviderType", but the system also could not find any user from the configured user view provider.","No has definido un "UserEditProviderType", pero el sistema no ha podido encontrar ningún usuario para proveedor de vista de usuarios configurado."
+"You should now create a new user in your configured backend (e.g.: LDAP/Active Directory).","Deberías ahora crear un nuevo usuario en tu gestor de usuarios configurado (e.g.: LDAP/Active Directory)."
+"If you think your configuration is incorrect, <a href="settings.php?firststart=1">click here.</a>","Si piensas que tu configuración es incorrecta <a href="settings.php?firststart=1">haz click aquí.</a>"
+
+# Define administrator
+"Could not find existing users with your configuration. Created default Administrator account.","No se han podido encontrar usuarios con tu configuración. Creada cuenta de administración por defecto."
+"You can <a href="login.php"><b>login now.</b></a>","Puedes <a href="login.php"><b>iniciar sesión ahora.</b></a>"
+"No administrator defined! Select the user for the administator privileges, please.","¡No hay un administrador definido! Selecciona el usuario con privilegios de administrador, por favor."
+"Save","Salvar"

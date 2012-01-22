@@ -1,0 +1,29 @@
+# All
+"Example","Beispiel"
+
+# Settings table
+"Subversion authorization","Subversion Authorisierung"
+"Subversion authorization file","Subversion Authorisierungsdatei"
+"Data providers","Datenquellen"
+"User authentication","Benutzer Authentifizierung"
+"User authentication file (SVNUserFile)","Benutzerauthentifizierungsdatei (SVNUserFile)"
+"Subversion settings","Subversion Einstellungen"
+"Parent directory of the repositories (SVNParentPath)","Verzeichnis in dem die Repositories liegen (SVNParentPath)"
+"Subversion client executable","Pfad zur ausführbaren 'svn.exe' Datei"
+"Subversion admin executable","Pfad zur ausführbaren 'svnadmin.exe' Datei"
+"LDAP connection information","LDAP Verbindungseinstellungen"
+"Host address","Host Adresse"
+"Protocol version","Protokoll Version"
+"LDAP user provider information","LDAP Benutzerdateneinstellungen"
+"LDAP group provider information","LDAP Gruppendateneinstellungen"
+
+# No users, no edit provider
+"You have not defined an "UserEditProviderType", but the system also could not find any user from the configured user view provider.","Sie haben keinen "UserEditProviderType" definiert. Allerdings konnten auch keine Benutzer mit Ihrer aktuellen Konfiguration gefunden werden."
+"You should now create a new user in your configured backend (e.g.: LDAP/Active Directory).","Bitte erstellen Sie jetzt in Ihrem festgelegten System einen Benutzer (z.B.: LDAP/Active Directory)."
+"If you think your configuration is incorrect, <a href="settings.php?firststart=1">click here.</a>","Wenn Sie glauben das Ihre Konfiguration fehlerhaft ist, dann <a href="settings.php?firststart=1">klicken Sie hier.</a>"
+
+# Define administrator
+"Could not find existing users with your configuration. Created default Administrator account.","Anhand Ihrer Konfiguration konnten keine existierenden Benutzer gefunden werden, deshalb wurde der Standard Administrator Account erstellt."
+"You can <a href="login.php"><b>login now.</b></a>","Sie können sich jetzt <a href="login.php"><b>einloggen.</b></a>"
+"No administrator defined! Select the user for the administator privileges, please.","Es ist kein Administrator festgelegt. Bitte wählen Sie nun einen Benutzer aus, welcher die Administrator Berechtigungen erhalten soll."
+"Save","Speichern"

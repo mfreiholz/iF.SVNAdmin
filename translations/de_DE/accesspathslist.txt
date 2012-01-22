@@ -1,0 +1,3 @@
+"Access-Path management","Zugriffspfadverwaltung"
+"Here you can see a list of all access path, which are defined in your subversion configuration.","Übersicht aller konfigurierten Zugriffspfade auf die Repositories."
+"Set project manager","Projekt-Manager setzen"

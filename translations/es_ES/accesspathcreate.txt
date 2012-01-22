@@ -1,0 +1,7 @@
+"Create access-path","Crea Path de Acceso"
+"Create a new access-path to grant access to users and groups.","Crea un nuevo Path de Acceso para permitir el acceso a todos los usuarios y grupos."
+"New access-path data","Nuevo Path de Acceso"
+"Path","Path"
+"Syntax","Sintaxis"
+"An "/" as access path holds permissions over all repositories.","Un "/" como Path de Acceso fija los permisos para todos los repositorios."
+"Browse...","Navegar..."

@@ -1,0 +1,311 @@
+html,body,th,td,div,h1,h2,h3,h4,h5,h6,a,hr,ul,li,ol,dd,dt,dl { padding:0; margin:0; }
+body { font-family:"Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif; font-size:12px; color:#000000; }
+body { background-color:#ffffff; }
+
+h1,h2,h3 { padding:0px 0px 5px 0px; margin:0; }
+h1 { font-size:22px; font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif; font-style:italic; color:#555555; }
+h2 { font-size:14px; font-family:Georgia,"Times New Roman","Bitstream Charter",Times,serif; font-style:italic; color:#555555; }
+h3 { font-size:1.2em; }
+
+img { border-width:0px; }
+
+a { color:#1B6383; text-decoration:none; }
+a:hover { color:#ff0000; text-decoration:none; }
+
+input,textarea,select { font-family:"Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif; font-size:11px; background-color:#fafafa; border:1px #aaaaaa solid; color:#000000; }
+input[type=submit] { font-size:11px; cursor:pointer; padding:5px; background-color:#eeeeee; background:url("images/button-background-grey.png") repeat-x scroll left top; -moz-border-radius:11px; -khtml-border-radius:11px; -webkit-border-radius:11px; border-radius:11px; }
+input[type=submit]:hover { border-color:#000000; }
+select{ padding:4px; }
+
+ul,ol,li { list-style:none; }
+
+.clear { float:clear; }
+
+input.filterbox{
+  width:200px;
+  padding:5px 5px 5px 25px;
+  font-size:12px;
+  font-weight:bold;
+  background-image:url("icons/magnifier.png");
+  background-position:4px 4px;
+  background-repeat:no-repeat;
+  border-width:1px;
+  border-color:#cccccc;
+  border-style:solid;
+  -moz-border-radius:5px;
+  -khtml-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+}
+
+input.lineedit{
+  -moz-border-radius:5px;
+  -khtml-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+}
+
+p.hdesc{
+  color:#797c80;
+  padding:0px 0px 20px 0px;
+  margin:0px;
+}
+
+test.fieldset{
+  margin:0 0 1em 0;
+  padding:0.5em 0.5em 0.5em 0.5em;
+  border:1px #cccccc solid;
+}
+
+test.fieldset ol{
+  padding:1em 1em 0 1em;
+  list-style:none;
+}
+
+test.fieldset li{
+  padding-bottom:1em;
+  float:left;
+  clear:left;
+  width:100%;
+}
+
+test.fieldset.formsubmit{
+  float:none;
+  width:auto;
+  background-color:#d0e6ff;
+}
+
+test.fieldset label{
+  position:relative;    
+  float:left;
+  width:10em;
+  margin-right:1em;
+  text-align:right;
+}
+
+test.fieldset label strong{
+  display:block;
+  color:#FF0000;
+  font-size:0.8em;
+  font-weight:normal;
+}
+
+div#main{
+  width:100%;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/*******************************************************************************
+ * Page header, logged in username, locale selection.
+ ******************************************************************************/
+
+#header { color:#fff; }
+#header { text-align:left; background-image:url("images/header-background.png"); background-position:top left; background-repeat:repeat-x; background-color:#000000; height:50px; }
+#header img{ float:left; padding:5px 0px 0px 20px; margin:0 20px 0 0; }
+#header h1 { font:normal 22px Georgia,"Times New Roman","Bitstream Charter",Times,serif; color:#ffffff; padding:12px 0px 0px 0px; }
+#header a{ color:#ffffff; text-decoration:none; }
+#header a:hover{ text-decoration:underline; }
+
+#loggedin { position:absolute; top:10px; right:30px; font-size:0.8em; }
+
+#locale-selection { position:absolute; top:25px; right:30px; }
+#locale-selection select { background-color:#000; color:#fff; padding:0; margin:0; border:1px solid #555; }
+#locale-selection select option { background-position:3px 3px; background-repeat:no-repeat; padding-left:20px; }
+
+/*******************************************************************************
+ * Top navigation, drop down menu style.
+ ******************************************************************************/
+
+#topnav { width:100%; overflow:auto; box-shadow:0px 1px 5px #888; }
+#topnav { background-image:url("images/nav-block-header-bg.png"); background-position:top left; background-repeat:repeat-x; }
+#topnav { border-width:0 0 2px 0; border-color:#ddd; border-style:solid; }
+
+ul.ddm {}
+ul.ddm li { float:left; list-style:none; min-width:120px; }
+ul.ddm li a { white-space:nowrap; display:block; padding:0 12px 0 12px; text-decoration:none; border-width:0 1px 0 0; border-style:solid; border-color:#ddd; line-height:2.0em; color:#555; }
+ul.ddm li a:hover { background-color:#eee; }
+
+ul.ddm-sub { display:none; position:absolute; border:1px solid #ddd; box-shadow:2px 2px 5px #888; }
+ul.ddm-sub li { float:none; min-width:120px; }
+ul.ddm-sub li a { white-space:nowrap; padding-left:20px; width:auto; background-color:#fff; border-width:0 0 0px 0; border-style:solid; border-color:#ddd; line-height:2.5em; }
+ul.ddm-sub li a:hover { background-color:#eee; font-weight:normal; }
+/*ul.ddm-sub li a:hover { background-image:url("images/nav-block-header-bg.png"); background-position:top left; background-repeat:repeat-x; }*/
+
+/*******************************************************************************
+ * Page content, text content.
+ ******************************************************************************/
+
+div#contentarea{ margin:10px 10px 10px 10px; }
+
+div#textarea{
+  margin:10px 10px 0px 10px;
+  padding:0px 0px 10px 0px;
+}
+
+/*******************************************************************************
+ *
+ ******************************************************************************/
+
+div#bottomarea{
+  text-align:center;
+  font-size:10px;
+}
+
+div#login{
+	margin:auto; text-align:left; width:400px;
+	border:1px #cccccc solid; background-color:#ffffff;
+}
+div#login input[type=text], div#login input[type=password]{
+	font-size:20px;
+}
+
+.trbase{
+  background-color:#ffffff;
+}
+
+.tralt{
+  background-color:#f3f3f3;
+}
+
+table.datatable{
+  border-collapse:collapse;
+  width:100%;
+}
+
+table.datatable th{
+  border:1px #dddddd solid;
+  background-color:#efefef;
+  font-weight:bold;
+  height:30px;
+  background-image:url("images/th-background.png");
+  background-position:top left;
+  background-repeat:repeat-x;
+}
+
+table.datatable tr{
+  height:30px;
+}
+
+table.datatable td{
+  border:1px #dddddd solid;
+  padding:2px;
+  line-height:1.5;
+}
+
+table.datatable td small{
+  font-size:10px;
+  color:#666666;
+}
+
+table.datatableinline {
+  width:100%;
+}
+
+table.datatableinline td {
+  border:0;
+  padding:0;
+  margin:0;
+}
+
+div.datatablesearch{
+  padding:5px;
+}
+
+td.asslefttoright{
+  background:url('images/assignment-lefttoright.png') no-repeat center center;
+}
+
+td.asstoptobottom{
+  background:url('images/assignment-toptobottom.png') no-repeat center center;
+}
+
+/**
+ * Messages
+ */
+
+.top-message { display:block; border:1px #ff0000 solid; padding:7px 10px 7px 55px; margin-bottom:10px; background-position:10px 10px; background-repeat:no-repeat; }
+.top-message .top-message-header h3 { font-size:1.2em; text-decoration:underline; }
+.top-message .top-message-content {}
+.top-message .top-message-content ul { margin-left:20px; }
+.top-message .top-message-content li { list-style-type:square; }
+
+.top-message-error { background-image:url("icons/exception.png"); background-color:#ffcccc; }
+.top-message-info { background-image:url("icons/info.png"); background-color:#ccccff; border:1px #0000ff solid; }
+
+div.hintmsg{
+	position:relative;
+	background-color:#eeeeee;
+	border:1px #cccccc solid;
+	padding:7px 5px 7px 45px;
+	margin:0 0 10px 0;
+	color:#000000;
+	background-image:url("icons/info-24x24.png");
+	background-position:10px 10px;
+	background-repeat:no-repeat;
+	min-height: 25px;
+}
+
+.okmsg { color:green; }
+.errormsg { color:red; }
+
+#next{
+  padding:10px 10px 0px 0px;
+  text-align:right;
+}
+
+#next a{
+  font-weight:bold;
+  color:#0000ff;
+  text-decoration:none;
+}
+
+#next a:hover{
+  color:#ff0000;
+}
+
+/* Styles for forms in a div */
+div.formdiv{
+}
+
+div.formdiv label{
+  font-weight:bold;
+}
+
+div.formdiv input{
+  margin-bottom:20px;
+}
+
+div.formdiv input[type=text], div.formdiv input[type=password]{
+  width:99%;
+  padding:5px;
+}
+
+div.form-field{
+	margin-bottom:20px;
+}
+
+div.form-field label{
+	font-weight:normal;
+	line-height:2.0em;
+	display:block;
+}
+
+div.form-field input[type=text],input[type=password]{
+	width:25em;
+	padding:5px;
+}
+
+div.form-field p{
+	padding:3px;
+	margin:0px;
+	font-style:italic;
+	color:#777777;
+	font-size:smaller;
+	line-height:2.0em;
+}
+
+/* Settings page */
+table.settings tr td input[type='text'], tr td input[type='password']{
+  width:300px;
+}

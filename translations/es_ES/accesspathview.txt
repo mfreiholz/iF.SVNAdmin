@@ -1,0 +1,3 @@
+"Assigned users and groups to this access-path.","Usuarios y grupos asignados a este Path de Acceso."
+"Assigned users","Usuarios asignados"
+"Assigned groups","Grupos asignados"

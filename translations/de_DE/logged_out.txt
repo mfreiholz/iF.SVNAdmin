@@ -1,0 +1,4 @@
+"Logged out!","Ausgeloggt!"
+"You have been logged out now.","Sie haben sich erfolgreich ausgeloggt."
+"See you soon","Aufwiedersehen"
+"You can close your browser now or <a href="login.php">login</a> as another user.","Sie können den Browser jetzt schliessen oder sich mit einem anderen Benutzer <a href="login.php">einloggen.</a>"

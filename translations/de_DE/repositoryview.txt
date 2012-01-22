@@ -1,0 +1,2 @@
+"Repository browsing","Repository durchsuchen"
+"Add access path","Zugriffspfad definieren"

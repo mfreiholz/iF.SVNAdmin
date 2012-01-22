@@ -1,0 +1,5 @@
+"Change password of user","修改密码"
+"Change the password of your subversion account.","修改svn帐户密码."
+"New password","新密码"
+"Re-type password","新密码确认"
+"The password's doesn't match each other.","两次新密码不匹配."

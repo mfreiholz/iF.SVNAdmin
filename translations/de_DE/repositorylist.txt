@@ -1,0 +1,3 @@
+"On this page you can view your existing repositories and create or delete an repository.","Auf dieser Seite können Sie alle existierenden Repositories sehen, neue erstellen oder bestehende löschen."
+"Repository management","Repository-Verwaltung"
+"Add access path", "Zugriffspfad hinzufügen"

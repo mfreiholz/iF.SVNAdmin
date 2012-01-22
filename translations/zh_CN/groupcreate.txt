@@ -1,0 +1,6 @@
+"Create group","创建组"
+"Create a new group to grant access to the repositories for a range of users.","创建一个新组，用于对一群用户针对一个代码仓库的访问权限."
+"New group data","新组数据"
+"Group name","组名"
+"Valid group names are","合法的组名为"
+"Invalid group names are","不合法的组名为:"

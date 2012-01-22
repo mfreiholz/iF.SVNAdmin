@@ -1,0 +1,4 @@
+"Logged out!","注销!"
+"You have been logged out now.","已注销."
+"See you soon","再见"
+"You can close your browser now or <a href="login.php">login</a> as another user.","<a href="login.php">重新登录.</a>"

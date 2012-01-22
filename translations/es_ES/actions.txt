@@ -1,0 +1,84 @@
+# all
+"An unknown error occured. Check your configuration, please.","Un error desconocido ha ocurrido. Comprueba tu configuración, por favor."
+"You have to fill out all fields.","Debes completar todos los campos."
+"Done","Hecho."
+
+# assign_projectmanager.php
+"You have to select at least one access-path and one user.","Debes seleccionar por lo menos un Path de Acceso y un usuario."
+"The following Access-Path's has been assigned:","El siguiente Path de Acceso ha sido asignado:"
+"It is not possible to set an Project-Manager for the following path's:","No es posible fijar un Gestor de Proyectos para el siguiente path:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Debido a un error desconocido, el siguiente Path de Acceso no se ha podido tratar:"
+
+# assign_usergrouptoaccesspath.php
+"You have to select a user or group and an access-path to perform this action.","Debes seleccionar un usuario o un grupo y un Path de Acceso para realizar esta acción."
+"The following Access-Path's has been assigned:","El siguiente Path de Acceso ha sido asignado:"
+"You have no permission to assign the following Access-Path's, they have been skipped:","No tienes permiso para asignar los siguientes Paths de Acceso, se han omitido:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Debido a un error desconocido, el siguiente Path de Acceso no se ha podido tratar:"
+
+# assign_userrole.php
+"You have to select at least one user and one role.","Debes seleccionar al menos un usuario y un rol."
+"The following assignments has been done:","Se han realizado las siguientes asignaciones:"
+"It is not possible to do the following assignments, skipped them:","No es posible realizar las siguientes asignaciones, omitidas:"
+"Due to an unknown error, the following assignments could not been handled:","Debido a un error desconocido, las siguientes asignaciones no se han podido tratar:"
+
+# assign_usertogroup.php
+"You have to select at least one user and one group.","Debes seleccionar al menos un usuario y un grupo."
+
+# change_password.php
+"No username given.","Falta el nombre de usuario."
+"The password's doesn't match each other.","Los passwords no coinciden."
+
+# create_accesspath.php
+"You don't have the permission to create this access path: %0","No tienes los permisos para crear este Path de Acceso: %0"
+
+# create_group.php
+# None
+
+# create repository.php
+# None
+
+# create_user.php
+# None
+
+# delete_accesspath.php
+"The following Access-Path's has been deleted:","Los siguientes Paths de Acceso han sido borrados:"
+"You have no permission to delete the following Access-Path's, they have been skipped:","No tienes permiso para eliminar los siguientes Paths de Acceso, se han omitido:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Debido a un error desconocido, no se han podido tratar los siguientes Paths de Acceso:"
+
+# delete_group.php
+"You have to select at least one group.","Debes seleccionar al menos un grupo."
+"The following group(s) could not been deleted","El(Los) siguientes grupo(s) no se ha(han) podido eliminar "
+
+# delete_repository.php
+"You have to select at least one repository.","Debes seleccionar al menos un repositorio."
+"The following repository(s) could not been deleted:","El(Los) siguiente(s) repositorio(s) no se ha(han) podido eliminar :"
+
+# delete_user.php
+"The following user's has been deleted:","El siguiente usuario ha sido eliminado:"
+"Could not remove user's Access-Path-Manager associations:","No se pueden eliminar las asociaciones del Gestor de Paths de Acceso:"
+"Due to an unknown error, the following user's could not been deleted:","Debido a un error desconocido, los siguientes usuarios no se han podido eliminar:"
+
+# login_authentication.php
+"Login failed.","Fallo de inicio de sesión."
+
+# logout.php
+# None
+
+# switch_locale.php
+# None
+
+# unassign_permission.php
+"You have to select at least one access-path and one user or group.","Debes seleciconar al menos un Path de Acceso y un usuario o grupo."
+"The following Access-Path's has been unassigned:","El siguiente Path de Acceso ha sido eliminado:"
+"You have no permission to unassign the following Access-Path's, they have been skipped:","No tienes permiso para eliminar los siguiente Path de Acceso, se han omitido:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Debido a un error desconocido, los siguientes Paths de Acceso no se han podido tratar:"
+
+# unassign_projectmanager.php
+"The following Access-Path's has been unassigned:","Los siguientes Paths de Acceso se han eliminado:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Debido a un error desconocido, , los siguientes Paths de Acceso no se han podido tratar:"
+
+# unassign_usergroup.php
+# None
+
+# unassign_userrole.php
+"You have to select at least one user and one role.","Debes seleccionar al menos un usuario y un rol."

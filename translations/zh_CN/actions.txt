@@ -1,0 +1,84 @@
+# all
+"An unknown error occured. Check your configuration, please.","未知错误，请检查配置."
+"You have to fill out all fields.","请填写所有要求的信息."
+"Done","已完成."
+
+# assign_projectmanager.php
+"You have to select at least one access-path and one user.","请至少选择一个用户和一个访问路径."
+"The following Access-Path's has been assigned:","下列访问路径已被授权:"
+"It is not possible to set an Project-Manager for the following path's:","无法为下列访问路径设置项目经理"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知错误，下列访问路径未被处理."
+
+# assign_usergrouptoaccesspath.php
+"You have to select a user or group and an access-path to perform this action.","为完成此项操作，请至少选择一个用户或用户组，和一个访问路径."
+"The following Access-Path's has been assigned:","下列访问路径已授权:"
+"You have no permission to assign the following Access-Path's, they have been skipped:","您并无下列访问路径的分配权限，已跳过:"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知错误，下列访问路径未被处理:"
+
+# assign_userrole.php
+"You have to select at least one user and one role.","请至少选择一个用户和一个角色."
+"The following assignments has been done:","已完成下列分配:"
+"It is not possible to do the following assignments, skipped them:","无法完成下列分配任务，已跳过:"
+"Due to an unknown error, the following assignments could not been handled:","未知错误，下列分配任务未处理:"
+
+# assign_usertogroup.php
+"You have to select at least one user and one group.","请至少选择一个用户和一个组 ."
+
+# change_password.php
+"No username given.","未指定用户名."
+"The password's doesn't match each other.","密码不匹配."
+
+# create_accesspath.php
+"You don't have the permission to create this access path: %0","您并无权限进行该访问路径的创建: %0"
+
+# create_group.php
+# None
+
+# create repository.php
+# None
+
+# create_user.php
+# None
+
+# delete_accesspath.php
+"The following Access-Path's has been deleted:","已删除下列访问路径:"
+"You have no permission to delete the following Access-Path's, they have been skipped:","您无权限删除下列访问路径，已跳过"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知错误，下列访问路径未被处理:"
+
+# delete_group.php
+"You have to select at least one group.","请至少选择一个组."
+"The following group(s) could not been deleted","下列组无法被删除."
+
+# delete_repository.php
+"You have to select at least one repository.","请至少选择一个代码仓库."
+"The following repository(s) could not been deleted:","下列代码仓库无法被删除:"
+
+# delete_user.php
+"The following user's has been deleted:","已删除下列用户:"
+"Could not remove user's Access-Path-Manager associations:","无法删除用户的访问路径管理关联:"
+"Due to an unknown error, the following user's could not been deleted:","未知错误，无法删除下列用户:"
+
+# login_authentication.php
+"Login failed.","登录失败."
+
+# logout.php
+# None
+
+# switch_locale.php
+# None
+
+# unassign_permission.php
+"You have to select at least one access-path and one user or group.","请至少选择一个用户或组，和一个访问路径."
+"The following Access-Path's has been unassigned:","已解除下列访问路径:"
+"You have no permission to unassign the following Access-Path's, they have been skipped:","您无权解除下列访问路径，已跳过"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知错误,下列访问路径未被处理:"
+
+# unassign_projectmanager.php
+"The following Access-Path's has been unassigned:","已解除下列访问路径:"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知错误，下列访问路径未被处理:"
+
+# unassign_usergroup.php
+# None
+
+# unassign_userrole.php
+"You have to select at least one user and one role.","请至少选择一个用户和一个角色."

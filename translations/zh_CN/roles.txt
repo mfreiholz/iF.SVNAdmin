@@ -1,0 +1,27 @@
+"Roles of user","用户角色"
+"Please choose","请选择"
+"You have to select at least one user and one role.","请选择至少一个用户和一个权限."
+
+"Administrator","超级管理员"
+"Web application administrator.","网页程序管理员."
+
+"User","用户"
+"Can login and change the own password.","可登录并修改自己的密码."
+
+"User-Group-Manager","用户－组－管理员"
+"Create/Delete users and groups and manages memberships and change passwords of users.","可 增加－删除用户／组 ，和管理其间关系，可为用户修改密码"
+
+"Access-Path-Manager","访问路径管理员"
+"Create/Delete Access-Paths and manages user and group permissions.","可 增加－删除 访问路径，和管理用户和组之间的关系."
+
+"Repository-Creator","代码仓库创建者"
+"Can create new repositories, but NOT delete.","可创建新代码仓库，但不能删除."
+
+"Repository-Manager","代码仓库管理员"
+"Create/Delete repositories.","增加－删除 代码仓库."
+
+"Role-Manager","角色管理员"
+"Assign and unassign web application roles to users.","为用户分配和解除网页程序的角色."
+
+"Update-Manager","更新管理员"
+"Can synchronize the user data from provider with the SVNAuthFile.","可以从数据提供方同步用户数据."

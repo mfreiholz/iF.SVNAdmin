@@ -1,0 +1,2 @@
+"Repository browsing","代码仓库浏览"
+"Add access path","添加访问路径"

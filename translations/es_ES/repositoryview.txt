@@ -1,0 +1,2 @@
+"Repository browsing","Navegación de repositorios"
+"Add access path","Añadir Path de Acceso"

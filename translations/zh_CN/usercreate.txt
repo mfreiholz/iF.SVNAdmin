@@ -1,0 +1,6 @@
+"Create user","创建用户"
+"Create a new user to grant access to the repositories.","创建一个可以授权访问对应代码仓库的新用户."
+"New user data","新用户数据"
+"Username","用户名"
+"Password","密码"
+"Re-type password","确认密码"

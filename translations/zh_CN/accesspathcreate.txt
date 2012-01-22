@@ -1,0 +1,7 @@
+"Create access-path","创建访问路径"
+"Create a new access-path to grant access to users and groups.","创建一个路径，用于授权用户和用户组.."
+"New access-path data","新路径数据"
+"Path","路径"
+"Syntax","注意语法:"
+"An "/" as access path holds permissions over all repositories.","用 "/" 作为路径，会包含所有代码仓库的权限 ."
+"Browse...","浏览..."

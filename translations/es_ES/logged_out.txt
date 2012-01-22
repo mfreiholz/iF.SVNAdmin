@@ -1,0 +1,4 @@
+"Logged out!","Sesión iniciada!"
+"You have been logged out now.","Has cerrado sesión."
+"See you soon","Hasta luego"
+"You can close your browser now or <a href="login.php">login</a> as another user.","Puedes cerrar tu navegador ahora o <a href="login.php"> loguearte</a> como otro usuario."

@@ -1,0 +1,7 @@
+"Create access-path","Zugriffspfad erstellen"
+"Create a new access-path to grant access to users and groups.","Erstellen Sie einen neuen Zugriffspfad um spezifische Rechte auf diesen zu vergeben."
+"New access-path data","Neue Zugriffspfaddaten"
+"Path","Pfad"
+"Syntax","Syntax"
+"An "/" as access path holds permissions over all repositories.","Verwenden Sie "/" um einen Zugriffspfad zu erstellen der über allen anderen gültig ist."
+"Browse...","Durchsuchen..."

@@ -1,0 +1,2 @@
+"User management","用户管理"
+"Here you can see a list of all users which can be authenticated by your subversion server.","在这里，您可以看到所有已被认证到svn服务器的用户."

@@ -1,0 +1,4 @@
+"You must login to get access to the application.","Debes iniciar sesión para acceder a la aplicación."
+"Username","Usuario"
+"Password","Password"
+"You are now logged out.","Has cerrado sesión."

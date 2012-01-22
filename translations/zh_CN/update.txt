@@ -1,0 +1,8 @@
+"Synchronize","同步"
+"Synchronize your data.","同步数据."
+"The following views are up-to-date now:","数据已同步"
+"has been updated"," 已同步"
+"The following views could not been updated:"," 下列为未同步数据:"
+"Your current application configuration uses a data provider, which requires updates from time to time. Here you can force an update now, if you didn't configure any cron-jobs or Windows task to perform this update.","您当前的配置文件采用了一个需要多次更新的数据提供方,若无任何定时任务来进行更新的话，您可以强制更新."
+"Note: This could take a few seconds. Do not press this button twice!","注意: 同步可能需要一段时间,请勿双击!"
+"Synchronize now","同步"

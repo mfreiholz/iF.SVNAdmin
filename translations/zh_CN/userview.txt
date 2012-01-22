@@ -1,0 +1,6 @@
+"On this page you can see all assignments of the user.","在本页，您可以看到所有用户的分配情况."
+"Groups of user","用户组"
+"Permissions of users","用户权限"
+"Inherit from Group","从组继承"
+"<b>Note:</b> You can not unassign permissions from user, which are inherited by a group.","<b>注意:</b> 您无法解除从组继承过来的用户的权限."
+"User is project manager of:","用户是项目经理:"

@@ -1,0 +1,2 @@
+"User &lt;&gt; Group assignment","Usuario &lt;&gt; Asignacion de Grupos"
+"Here you can assign users to groups.","Aquí puedes asignar usuarios a grupos."
