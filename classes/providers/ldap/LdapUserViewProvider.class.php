@@ -599,22 +599,21 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 
 	/**
 	 * Updates the SVNAuthFile with Users and Groups from LDAP server.
-	 *
-	 * Algorithm:
-	 * Step 1: Get all users and groups.
-	 * Step 2: Iterate all groups and for each group whether a user is a member of it.
 	 */
 	public function updateSvnAuthFile()
 	{
 		$this->init();
 		$E = \svnadmin\core\Engine::getInstance();
 		try {
+			// @todo Backup file.
+
 			// Step 1
 			// Load the current SVNAuthFile and remove/reset all existing groups.
 
 			// Load file.
 			$svnAuthFilePath = $E->getConfig()->getValue("Subversion", "SVNAuthFile");
 			$svnAuthFile = new \IF_SVNAuthFileC($svnAuthFilePath);
+			$svnAuthFileOld = new \IF_SVNAuthFileC($svnAuthFilePath);
 
 			// Remove groups.
 			$svnAuthFileGroups = $svnAuthFile->groups();
@@ -702,8 +701,65 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 				}
 			} // foreach($groups)
 
-			// Save SVNAuthFile to disk.
+			// Step 4
+			// Save new SVNAuthFile to disk.
 			$svnAuthFile->save();
+			return;
+
+			// Step 5
+			// Compare with previous file to revoke AccessPath permissions of deleted group.
+			$apEditProvider = $E->getProvider(PROVIDER_ACCESSPATH_EDIT);
+
+			// Collect removed groups.
+			$removedGroups = array();
+
+			foreach ($svnAuthFileOld->groups() as $g)
+			{
+				if (!$svnAuthFile->groupExists($g))
+				{
+					// The group $g is not in the new configuration (Removed from LDAP).
+					$removedGroups[] = $g;
+
+					if (false)
+					{
+						$apEditProvider->removeGroupFromAllAccessPaths(
+							new \svnadmin\core\entities\Group($g, $g)
+						);
+					}
+				}
+			}
+
+			// Collect removed users with directy associated AccessPath permissions.
+			// Revoke all permissions of $removedUsers and $removedGroups.
+			$removedUsers = array();
+
+			foreach ($svnAuthFile->repositories() as $r)
+			{
+				// Users.
+				foreach ($svnAuthFile->usersOfRepository($r) as $u)
+				{
+					if (!$this->userExists(new \svnadmin\core\entities\User($u, $u)))
+					{
+						// The user has direct AccessPath permissions but does
+						// not exist on LDAP server.
+						$removedUsers[] = $u;
+
+						if (false)
+						{
+							// Revoke permissions.
+							try {
+								$apEditProvider->removeUserFromAccessPath(
+									new \svnadmin\core\entities\User($u, $u),
+									new \svnadmin\core\entities\AccessPath($r)
+								);
+							}
+							catch (Exception $e) {
+								$E->addException($e);
+							}
+						}
+					}
+				}
+			} // foreach (repositories)
 		}
 		catch (Exception $ex) {
 			throw $ex;

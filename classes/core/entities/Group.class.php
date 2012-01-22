@@ -23,27 +23,27 @@ namespace svnadmin\core\entities
   {
     public $id;
     public $name;
-    
+
     // Object(Permission)
     public $perm;
 
-    public function __construct()
+    public function __construct($id=null, $name=null)
     {
-      $this->id = NULL;
-      $this->name = NULL;
+      $this->id = $id;
+      $this->name = $name;
     }
-    
+
     public function ctr( $id, $name )
     {
       $this->id = $id;
       $this->name = $name;
     }
-    
+
     public function getName()
     {
       return $this->name;
     }
-    
+
     public function getPermission()
     {
       return $this->perm;
@@ -53,7 +53,7 @@ namespace svnadmin\core\entities
     {
       return rawurlencode( $this->name );
     }
-    
+
     public static function compare( $o1, $o2 )
     {
       if( $o1->name == $o2->name )
