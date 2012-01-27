@@ -459,36 +459,54 @@ class Engine
 	 */
 	public function getProvider($providerId)
 	{
+		$prov = null;
 		switch ($providerId)
 		{
 			case PROVIDER_USER_VIEW:
-				return $this->m_userViewProvider;
+				$prov = $this->m_userViewProvider;
+				break;
+
 			case PROVIDER_USER_EDIT:
-				return $this->m_userEditProvider;
+				$prov = $this->m_userEditProvider;
+				break;
 
 			case PROVIDER_GROUP_VIEW:
-				return $this->m_groupViewProvider;
+				$prov = $this->m_groupViewProvider;
+				break;
+
 			case PROVIDER_GROUP_EDIT:
-				return $this->m_groupEditProvider;
+				$prov = $this->m_groupEditProvider;
+				break;
 
 			case PROVIDER_ACCESSPATH_VIEW:
-				return $this->m_pathViewProvider;
+				$prov = $this->m_pathViewProvider;
+				break;
+
 			case PROVIDER_ACCESSPATH_EDIT:
-				return $this->m_pathEditProvider;
+				$prov = $this->m_pathEditProvider;
+				break;
 
 			case PROVIDER_REPOSITORY_VIEW:
-				return $this->m_repositoryViewProvider;
+				$prov = $this->m_repositoryViewProvider;
+				break;
+
 			case PROVIDER_REPOSITORY_EDIT:
-				return $this->m_repositoryEditProvider;
+				$prov = $this->m_repositoryEditProvider;
+				break;
 
 			case PROVIDER_AUTHENTICATION:
-				return $this->m_authenticator;
+				$prov = $this->m_authenticator;
+				break;
 
 			default:
-				if_log_debug('Unknown Provider ID: '.$providerId);
+				if_log_debug("Unknown Provider ID: ".$providerId);
 				return null;
 		}
-		return null;
+
+		if ($prov != null) {
+			$prov->init();
+		}
+		return $prov;
 	}
 
 

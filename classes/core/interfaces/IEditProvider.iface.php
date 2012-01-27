@@ -17,15 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.
  */
-namespace svnadmin\core\interfaces
+namespace svnadmin\core\interfaces;
+
+interface IEditProvider extends IProvider
 {
-  interface IEditProvider extends IProvider
-  { 
-    /**
-     * Inokes a save to all changes.
-     * @return bool
-     */
-    public function save();
-  }
+	/**
+	 * Inokes a save to all changes.
+	 *
+	 * @return bool
+	 */
+	public function save();
 }
 ?>

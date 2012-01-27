@@ -80,6 +80,16 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 
 	/**
 	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IPathsEditProvider::reset()
+	 */
+	public function reset()
+	{
+		$E = \svnadmin\core\Engine::getInstance();
+		$this->m_authfile = new \IF_SVNAuthFileC($E->getConfig()->getValue("Subversion", "SVNAuthFile"));
+	}
+
+	/**
+	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IEditProvider::save()
 	 */
 	public function save()

@@ -657,7 +657,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 				if (!property_exists($g, $gp_name))
 					continue; // The group-name property doesn't exist.
 
-				// Create group in SVNAuthFile.
+				// Create group in SVNAuthFile. (throws Exception)
 				$svnAuthFile->createGroup($g->$gp_name);
 
 				// Find members.
@@ -704,11 +704,15 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 			// Step 4
 			// Save new SVNAuthFile to disk.
 			$svnAuthFile->save();
-			return;
+
 
 			// Step 5
 			// Compare with previous file to revoke AccessPath permissions of deleted group.
 			$apEditProvider = $E->getProvider(PROVIDER_ACCESSPATH_EDIT);
+			$apEditProvider->reset();
+
+			// @todo Go through all repositories and search for direct group assignments which are not
+			// in the $svnAuthFile in [groups]
 
 			// Collect removed groups.
 			$removedGroups = array();
@@ -720,11 +724,17 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 					// The group $g is not in the new configuration (Removed from LDAP).
 					$removedGroups[] = $g;
 
-					if (false)
+					if (true)
 					{
-						$apEditProvider->removeGroupFromAllAccessPaths(
-							new \svnadmin\core\entities\Group($g, $g)
-						);
+						try {
+							$apEditProvider->removeGroupFromAllAccessPaths(
+								new \svnadmin\core\entities\Group($g, $g)
+							);
+							$E->addMessage(tr("The group <b>%0</b> has been removed from LDAP. Removed all assigned permissions.", array($g)));
+						}
+						catch (Exception $e) {
+							$E->addException($e);
+						}
 					}
 				}
 			}
@@ -744,7 +754,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 						// not exist on LDAP server.
 						$removedUsers[] = $u;
 
-						if (false)
+						if (true)
 						{
 							// Revoke permissions.
 							try {
@@ -752,6 +762,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 									new \svnadmin\core\entities\User($u, $u),
 									new \svnadmin\core\entities\AccessPath($r)
 								);
+								$E->addMessage(tr("The user <b>%0</b> doesn't exist anymore. Removed direct Access-Path permission to <b>%1</b>", array($u, $r)));
 							}
 							catch (Exception $e) {
 								$E->addException($e);
@@ -760,6 +771,9 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 					}
 				}
 			} // foreach (repositories)
+
+			// Save changes made to "$apEditProvider".
+			$apEditProvider->save();
 		}
 		catch (Exception $ex) {
 			throw $ex;
