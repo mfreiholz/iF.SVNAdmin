@@ -71,12 +71,12 @@ class IF_IniFile
    * @param string $key
    * @return string or NULL
    */
-  public function getValue($block, $key)
+  public function getValue($block, $key, $default=null)
   {
     if (isset($this->settings[$block][$key]))
       return $this->settings[$block][$key];
     else
-      return null;
+      return $default;
   }
 
   /**
@@ -84,12 +84,12 @@ class IF_IniFile
    * @param string $block
    * @param string $key
    */
-  public function getValueAsBoolean($block, $key)
+  public function getValueAsBoolean($block, $key, $default=false)
   {
-	$v = $this->getValue($block, $key);
+	$v = $this->getValue($block, $key, $default);
 
 	if (empty($v))
-		return false;
+		return $default;
 
 	if ($v == 1
 		|| $v == "1"
@@ -98,7 +98,7 @@ class IF_IniFile
 		return true;
 	}
 
-	return false;
+	return $default;
   }
 
   /**

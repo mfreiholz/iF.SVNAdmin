@@ -239,7 +239,12 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		if (!$this->m_update_done)
 		{
 			$this->m_update_done = true;
-			$this->updateSvnAuthFile();
+
+			$E = \svnadmin\core\Engine::getInstance();
+			$autoRemoveUsers = $E->getConfig()->getValueAsBoolean("Update:ldap", "AutoRemoveUsers", true);
+			$autoRemoveGroups = $E->getConfig()->getValueAsBoolean("Update:ldap", "AutoRemoveGroups", true);
+
+			$this->updateSvnAuthFile($autoRemoveUsers, $autoRemoveGroups);
 		}
 		return true;
 	}
@@ -279,8 +284,6 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IUserViewProvider::userExists()
-	 *
-	 * @todo Test me!
 	 */
 	public function userExists($objUser)
 	{
@@ -344,8 +347,6 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::groupExists()
-	 *
-	 * @todo Test me!
 	 */
 	public function groupExists($objGroup)
 	{
@@ -600,10 +601,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	/**
 	 * Updates the SVNAuthFile with Users and Groups from LDAP server.
 	 */
-	public function updateSvnAuthFile()
+	public function updateSvnAuthFile($autoRemoveUsers=true, $autoRemoveGroups=true)
 	{
 		$this->init();
 		$E = \svnadmin\core\Engine::getInstance();
+
 		try {
 			// @todo Backup file.
 
@@ -707,16 +709,20 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 
 
 			// Step 5
-			// Compare with previous file to revoke AccessPath permissions of deleted group.
+			// Compare with previous file to revoke AccessPath permissions of
+			// deleted groups and users.
+			//
+			// We need to reset the Provider object, because it holds the
+			// SVNAuthFile and should be reloaded, because of the cahnges
+			// above.
 			$apEditProvider = $E->getProvider(PROVIDER_ACCESSPATH_EDIT);
 			$apEditProvider->reset();
 
-			// @todo Go through all repositories and search for direct group assignments which are not
-			// in the $svnAuthFile in [groups]
-
-			// Collect removed groups.
+			$removedUsers = array();
 			$removedGroups = array();
 
+			// Collect removed groups.
+			// Groups which are in the old file but not in the new one.
 			foreach ($svnAuthFileOld->groups() as $g)
 			{
 				if (!$svnAuthFile->groupExists($g))
@@ -724,7 +730,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 					// The group $g is not in the new configuration (Removed from LDAP).
 					$removedGroups[] = $g;
 
-					if (true)
+					if ($autoRemoveGroups)
 					{
 						try {
 							$apEditProvider->removeGroupFromAllAccessPaths(
@@ -739,10 +745,8 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 				}
 			}
 
-			// Collect removed users with directy associated AccessPath permissions.
-			// Revoke all permissions of $removedUsers and $removedGroups.
-			$removedUsers = array();
-
+			// Collect removed users and groups with direct associated
+			// Access-Path permissions and revoke the permissions.
 			foreach ($svnAuthFile->repositories() as $r)
 			{
 				// Users.
@@ -754,7 +758,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 						// not exist on LDAP server.
 						$removedUsers[] = $u;
 
-						if (true)
+						if ($autoRemoveUsers)
 						{
 							// Revoke permissions.
 							try {
@@ -769,7 +773,35 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 							}
 						}
 					}
-				}
+				} // foreach (users)
+
+				// Groups.
+				foreach ($svnAuthFile->groupsOfRepository($r) as $g)
+				{
+					// We can check against the new SVNAuthFile, because the
+					// containing groups are updated from LDAP.
+					//if (!$this->groupExists(new \svnadmin\core\entities\Group($g, $g)))
+					if (!$svnAuthFile->groupExists($g))
+					{
+						$removedGroups[] = $g;
+
+						if ($autoRemoveGroups)
+						{
+							// Revoke permissions.
+							try {
+								$apEditProvider->removeGroupFromAccessPath(
+									new \svnadmin\core\entities\Group($g, $g),
+									new \svnadmin\core\entities\AccessPath($r)
+								);
+								$E->addMessage(tr("The group <b>%0</b> doesn't exist anymore. Removed direct Access-Path permission to <b>%1</b>", array($g, $r)));
+							}
+							catch (Exception $e) {
+								$E->addException($e);
+							}
+						}
+					}
+				} // foreach (groups)
+
 			} // foreach (repositories)
 
 			// Save changes made to "$apEditProvider".
