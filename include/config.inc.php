@@ -169,14 +169,14 @@ $cfg = $appEngine->getConfig();
  */
 if ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "passwd")
 {
-  include_once($ifphplib_path."IF_HtPasswd.class.php");
+  include_once($ifcorelib_path."IF_HtPasswd.class.php");
   include_once("./classes/providers/PasswdUserProvider.class.php");
   $userView = \svnadmin\providers\PasswdUserProvider::getInstance();
   $appEngine->setUserViewProvider( $userView );
 }
 elseif ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "digest")
 {
-  include_once($ifphplib_path."IF_HtDigest.class.php");
+  include_once($ifcorelib_path."IF_HtDigest.class.php");
   include_once( "./classes/providers/DigestUserProvider.class.php" );
   $userView = \svnadmin\providers\DigestUserProvider::getInstance();
   $appEngine->setUserViewProvider( $userView );
@@ -194,14 +194,14 @@ elseif ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "ldap")
  */
 if ($cfg->getValue("Engine:Providers", "UserEditProviderType") == "passwd")
 {
-  include_once($ifphplib_path."IF_HtPasswd.class.php");
+  include_once($ifcorelib_path."IF_HtPasswd.class.php");
   include_once( "./classes/providers/PasswdUserProvider.class.php" );
   $userEdit = \svnadmin\providers\PasswdUserProvider::getInstance();
   $appEngine->setUserEditProvider( $userEdit );
 }
 if ($cfg->getValue("Engine:Providers", "UserEditProviderType") == "digest")
 {
-  include_once($ifphplib_path."IF_HtDigest.class.php");
+  include_once($ifcorelib_path."IF_HtDigest.class.php");
   include_once( "./classes/providers/DigestUserProvider.class.php" );
   $userEdit = \svnadmin\providers\DigestUserProvider::getInstance();
   $appEngine->setUserEditProvider( $userEdit );
