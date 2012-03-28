@@ -28,7 +28,7 @@ class IF_AbstractLdapConnector
 	 * This is useful to get the error message of the LDAP connection.
 	 * @var link_identifier The LDAP connection.
 	 */
-	protected $connection;
+	public $connection;
 
 	/**
 	 * Indicates the encoding which should be used for DN and attribute
@@ -36,6 +36,13 @@ class IF_AbstractLdapConnector
 	 * @var string
 	 */
 	protected $protocolVersion;
+	
+	/**
+	 * If PHP function "ldap_control_paged_results()" is available,
+	 * this value indicates the size of each page fetched from LDAP server.
+	 * @var int
+	 */
+	protected $ldapSearchPageSize = 100;
 
 	/**
 	 * Destructor.
@@ -254,6 +261,10 @@ class IF_AbstractLdapConnector
 
 	/**
 	 * Searches for entries in the ldap.
+	 * 
+	 * <b>Note:</b>
+	 * Using PHP version < 5.4 will never return more than 1001 items.
+	 * PHP 5.4 is required for large results.
 	 *
 	 * @param HANDLE $conn The ldap connection handle.
 	 * @param string $base_dn The base DN in which is to search.
@@ -264,52 +275,44 @@ class IF_AbstractLdapConnector
 	 * @return array of stdClass objects with property values defined by $return_attributes+"dn"
 	 */
 	protected function objectSearch($conn, $base_dn, $search_filter, $return_attributes, $limit)
-	{
+	{	
 		$base_dn = $this->prepareQueryString($base_dn);
 		$search_filter = $this->prepareQueryString($search_filter);
 
-		$sr = ldap_search(
-			$conn,
-			$base_dn,
-			$search_filter,
-			$return_attributes,
-			0,
-			$limit
-		);
-
-		if ($sr)
-		{
+		$ret = array();
+		$pageCookie = "";
+		do {
+			if (function_exists("ldap_control_paged_result") && function_exists("ldap_control_paged_result_response")) {
+				ldap_control_paged_result($conn, $this->ldapSearchPageSize, true, $pageCookie);
+			}
+			
+			// Start search in LDAP directory.
+			$sr = ldap_search($conn, $base_dn, $search_filter, $return_attributes, 0, $limit);
+			if (!$sr)
+				break;
+			
 			// Get the found entries as array.
 			$entries = ldap_get_entries($conn,$sr);
+			if (!$entries)
+				break;
 
-			if($entries)
-			{
-				$ret = array();
-				$count = $entries["count"];
-				for($i=0; $i<$count; $i++)
-				{
-					// A $entry contains all attributes of a single dataset from ldap.
-					// (array)
-					$entry = $entries[$i];
+			$count = $entries["count"];
+			for ($i = 0; $i < $count; ++$i) {
+				// A $entry (array) contains all attributes of a single dataset from LDAP.
+				$entry = $entries[$i];
 
-					// Create a new user object which will hold the attributes.
-					// And add the default attribute "dn".
-					$u = self::createObjectFromEntry($entry);
-
-					// Add the user object to the return list.
-					$ret[] = $u;
-				}
-				return $ret;
+				// Create a new object which will hold the attributes.
+				// And add the default attribute "dn".
+				$o = self::createObjectFromEntry($entry);
+				$ret[] = $o;
 			}
-			else
-			{
-				return false;
+			
+			if (function_exists("ldap_control_paged_result") && function_exists("ldap_control_paged_result_response")) {
+				ldap_control_paged_result_response($conn, $sr, $pageCookie);
 			}
 		}
-		else
-		{
-			return false;
-		}
+		while ($pageCookie !== null && $pageCookie != "");
+		return $ret;
 	}
 
 	/**
