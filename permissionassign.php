@@ -42,13 +42,13 @@ $paths		= array();
 if ($appEngine->isUserViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_USER, ACL_ACTION_VIEW))
 {
 	$users = $appEngine->getUserViewProvider()->getUsers();
-	usort($users, array("\svnadmin\core\entities\User","compare"));
+	usort($users, array('\svnadmin\core\entities\User',"compare"));
 }
 
 if ($appEngine->isGroupViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_GROUP, ACL_ACTION_VIEW))
 {
 	$groups = $appEngine->getGroupViewProvider()->getGroups();
-	usort($groups, array("\svnadmin\core\entities\Group","compare"));
+	usort($groups, array('\svnadmin\core\entities\Group',"compare"));
 }
 
 if (true)
@@ -65,7 +65,7 @@ if (true)
 		}
 	}
 
-	usort($paths, array("\svnadmin\core\entities\AccessPath","compare") );
+	usort($paths, array('\svnadmin\core\entities\AccessPath',"compare") );
 }
 
 SetValue("PermNone", \svnadmin\core\entities\Permission::$PERM_NONE);

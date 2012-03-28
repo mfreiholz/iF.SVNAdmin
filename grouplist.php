@@ -31,7 +31,7 @@ if($delete)
 
 // Get all groups and sort them by name.
 $groups = $appEngine->getGroupViewProvider()->getGroups();
-usort( $groups, array("\svnadmin\core\entities\Group","compare") );
+usort( $groups, array('\svnadmin\core\entities\Group',"compare") );
 
 SetValue("GroupList", $groups);
 ProcessTemplate("group/grouplist.html.php");

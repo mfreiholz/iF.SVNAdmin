@@ -47,7 +47,7 @@ if (check_request_var("delete"))
 $repos = array();
 try {
 	$repos = $appEngine->getRepositoryViewProvider()->getRepositories();
-	usort($repos, array("\svnadmin\core\entities\Repository","compare"));
+	usort($repos, array('\svnadmin\core\entities\Repository',"compare"));
 }
 catch (Exception $ex) {
 	$appEngine->addException($ex);

@@ -50,14 +50,14 @@ if ($appEngine->isAccessPathEditActive() && $appEngine->checkUserAccess(ACL_MOD_
 	if ($appEngine->isUserViewActive())
 	{
 		$allusers = $appEngine->getUserViewProvider()->getUsers();
-		usort($allusers, array("\svnadmin\core\entities\User","compare"));
+		usort($allusers, array('\svnadmin\core\entities\User',"compare"));
 		SetValue("UserListAll", $allusers);
 	}
 
 	if ($appEngine->isGroupViewActive())
 	{
 		$allgroups = $appEngine->getGroupViewProvider()->getGroups();
-		usort($allgroups, array("\svnadmin\core\entities\Group","compare"));
+		usort($allgroups, array('\svnadmin\core\entities\Group',"compare"));
 		SetValue("GroupListAll", $allgroups);
 	}
 }

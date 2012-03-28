@@ -54,13 +54,13 @@ $allusers=null;
 if ($appEngine->isGroupViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_GROUP, ACL_ACTION_VIEW))
 {
   $users = $appEngine->getGroupViewProvider()->getUsersOfGroup( $oGroup );
-  usort( $users, array("\svnadmin\core\entities\User","compare") );
+  usort( $users, array('\svnadmin\core\entities\User',"compare") );
   
   // All users except the already assigned users.
   if ($appEngine->isUserViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_GROUP, ACL_ACTION_ASSIGN))
   {
     $allusers = $appEngine->getUserViewProvider()->getUsers(false);
-    usort($allusers, array("\svnadmin\core\entities\User","compare"));
+    usort($allusers, array('\svnadmin\core\entities\User',"compare"));
     $len = count($users);
     for ($i=0; $i<$len; $i++)
     {
@@ -75,7 +75,7 @@ $paths=null;
 if ($appEngine->isAccessPathViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_ACCESSPATH, ACL_ACTION_VIEW))
 {
   $paths = $appEngine->getAccessPathViewProvider()->getPathsOfGroup( $oGroup );
-  usort( $paths, array("\svnadmin\core\entities\AccessPath","compare") );
+  usort( $paths, array('\svnadmin\core\entities\AccessPath',"compare") );
 }
 
 SetValue("GroupName", $groupname);

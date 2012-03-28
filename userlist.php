@@ -40,12 +40,12 @@ if ($appEngine->isAclManagerActive() && $appEngine->checkUserAuthentication(fals
 {
   // All existing roles.
   $allroles = $appEngine->getAclManager()->getRoles();
-  usort($allroles, array("\svnadmin\core\entities\Role","compare"));
+  usort($allroles, array('\svnadmin\core\entities\Role',"compare"));
 }
 
 // Get all users and sort them by name.
 $users = $appEngine->getUserViewProvider()->getUsers();
-usort( $users, array("\svnadmin\core\entities\User","compare") );
+usort( $users, array('\svnadmin\core\entities\User',"compare") );
 
 
 SetValue("UserList", $users);

@@ -73,7 +73,7 @@ if ($appEngine->isAclManagerActive() && $appEngine->checkUserAuthentication(fals
   {
     // All existing roles.
     $allroles = $appEngine->getAclManager()->getRoles();
-    usort($allroles, array("\svnadmin\core\entities\Role","compare"));
+    usort($allroles, array('\svnadmin\core\entities\Role',"compare"));
 
     // Remove all roles from array, which are already assigned to the user.
     $rolesOfUserLen = count($rolesOfUser);
@@ -91,13 +91,13 @@ $allgroups=null;
 if ($appEngine->isGroupViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_GROUP, ACL_ACTION_VIEW))
 {
   $groups = $appEngine->getGroupViewProvider()->getGroupsOfUser( $oUser );
-  usort( $groups, array("\svnadmin\core\entities\Group","compare") );
+  usort( $groups, array('\svnadmin\core\entities\Group',"compare") );
   
   // Get all existing groups and remove the groups in which the user is already in.
   if ($appEngine->isGroupViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_GROUP, ACL_ACTION_ASSIGN))
   {
   	$allgroups = $appEngine->getGroupViewProvider()->getGroups();
-  	usort($allgroups, array("\svnadmin\core\entities\Group","compare"));
+  	usort($allgroups, array('\svnadmin\core\entities\Group',"compare"));
   	$len = count($groups);
   	for ($i=0; $i<$len; $i++)
   	{
@@ -112,7 +112,7 @@ $paths=null;
 if ($appEngine->isAccessPathViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_ACCESSPATH, ACL_ACTION_VIEW))
 {
   $paths = $appEngine->getAccessPathViewProvider()->getPathsOfUser( $oUser );
-  usort( $paths, array("\svnadmin\core\entities\AccessPath","compare") );
+  usort( $paths, array('\svnadmin\core\entities\AccessPath',"compare") );
 }
 
 // Check whether the user is an project administrator.
@@ -126,7 +126,7 @@ if ($appEngine->isAuthenticationActive())
     $restricted_paths = $appEngine->getAclManager()->getAccessPathsOfUser($uname);
     if (count($restricted_paths) > 0)
     {
-      usort($restricted_paths, array("\svnadmin\core\entities\AccessPath","compare"));
+      usort($restricted_paths, array('\svnadmin\core\entities\AccessPath',"compare"));
       $isprojectmanager=true;
     }
   }

@@ -55,7 +55,7 @@ $users = array();
 try {
 	// All AccessPaths.
 	$list = $appEngine->getAccessPathViewProvider()->getPaths();
-	usort($list, array("\svnadmin\core\entities\AccessPath", "compare"));
+	usort($list, array('\svnadmin\core\entities\AccessPath', "compare"));
 
 
 	// Filter access-paths for project-managers.
@@ -71,7 +71,7 @@ try {
 		if ($appEngine->isUserViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_PROJECTMANAGER, ACL_ACTION_ASSIGN))
 		{
 			$users = $appEngine->getUserViewProvider()->getUsers(false);
-			usort($users, array("\svnadmin\core\entities\User", "compare"));
+			usort($users, array('\svnadmin\core\entities\User', "compare"));
 		}
 
 		// Get the project managers of each path.

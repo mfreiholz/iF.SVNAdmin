@@ -443,7 +443,7 @@ if (check_request_var("setadmin") || $show_setadmin)
     // Display user selection.
     else
     {
-      usort($users, array("\svnadmin\core\entities\User","compare"));
+      usort($users, array('\svnadmin\core\entities\User',"compare"));
       SetValue("UserList", $users);
       SetValue("ShowUserSelection", true);
     }
