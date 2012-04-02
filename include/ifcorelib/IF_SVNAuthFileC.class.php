@@ -39,7 +39,8 @@ class IF_SVNAuthFileC
 	private $SIGN_ALL_USERS	= '*';
 	private $GROUP_SIGN		= '@';
 	private $GROUP_SECTION	= 'groups';
-	private $ALIAS_SECTION	= 'alias';
+	private $ALIAS_SIGN		= '&';
+	private $ALIAS_SECTION	= 'aliases';
 
 	/**
 	 * Holds the IF_Config object which is used to manage
@@ -106,16 +107,25 @@ class IF_SVNAuthFileC
 		}
 		return false;
 	}
+	
+	/**
+	 * Gets all existing aliases.
+	 * 
+	 * @return array <string>
+	 */
+	public function aliases()
+	{
+		return $this->config->getSectionKeys($this->ALIAS_SECTION);
+	}
 
 	/**
 	 * Gets all existing groups.
 	 *
-	 * @return array<string>
+	 * @return array <string>
 	 */
 	public function groups()
 	{
-		$arrGroups = $this->config->getSectionKeys($this->GROUP_SECTION);
-		return $arrGroups;
+		return $this->config->getSectionKeys($this->GROUP_SECTION);
 	}
 
 	/**
@@ -137,6 +147,22 @@ class IF_SVNAuthFileC
 		}
 
 		return $ret;
+	}
+	
+	/**
+	 * Resolves the given alias to its real value.
+	 * 
+	 * @param string $alias
+	 * 
+	 * @return string 
+	 */
+	public function getAliasValue($alias)
+	{
+		$aliasKey = $alias;
+		if (strpos($aliasKey, "&") !== 0) {
+			$aliasKey = substr($aliasKey, 1);
+		}
+		return $this->config->getValue($this->ALIAS_SECTION, $aliasKey, $alias);
 	}
 
 	/**
