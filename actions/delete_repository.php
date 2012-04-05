@@ -32,7 +32,7 @@ if (!$appEngine->isProviderActive(PROVIDER_REPOSITORY_EDIT))
 }
 
 // Disabled by config?
-if (!($appEngine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDeleteEnabled', 'true')))
+if (!($appEngine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDeleteEnabled', true)))
 {
 	$appEngine->forwardError(ERROR_INVALID_MODULE);
 }

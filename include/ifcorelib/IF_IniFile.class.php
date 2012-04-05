@@ -88,14 +88,22 @@ class IF_IniFile
   {
 	$v = $this->getValue($block, $key, $default);
 
-	if (empty($v))
-		return $default;
-
-	if ($v == 1
-		|| $v == "1"
-		|| strcasecmp($v, "true") == 0
-		|| strcasecmp($v, "yes") == 0) {
+	if ($v === 1
+		|| $v === "1"
+		|| strcasecmp($v, "true") === 0
+		|| strcasecmp($v, "yes") === 0
+		|| strcasecmp($v, "on") === 0
+		|| $v === true) {
 		return true;
+	}
+	
+	if ($v === 0
+		|| $v === "0"
+		|| strcasecmp($v, "false") === 0
+		|| strcasecmp($v, "no") === 0
+		|| strcasecmp($v, "off") === 0
+		|| $v === false) {
+		return false;
 	}
 
 	return $default;
