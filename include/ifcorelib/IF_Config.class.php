@@ -129,14 +129,14 @@ class IF_Config
 		if (!file_exists($path))
 		{
 			// Config file doesn't exist.
-			return false;
+			//return false;
 		}
 
 		$fh = fopen($this->configFilePath, 'r');
 		if (!$fh)
 		{
 			// Can not open file.
-			return false;
+			//return false;
 		}
 
 		// Arrays of items which has been written.

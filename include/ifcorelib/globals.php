@@ -1,10 +1,48 @@
 <?php
-/*******************************************************************************
- * This file contains some global helper functions and configuration
- * of some classes.
- *
- * @author Manuel Freiholz
- ******************************************************************************/
+/**
+ * Global function for the "ifcorelib".
+ * 
+ * @author Manuel Freiholz, insaneFactory.com 
+ */
+
+/**
+ * Gets a message which describes the last occured JSON error.
+ * 
+ * @param int $code [optional] The last occured JSON error code.
+ * @return string
+ */
+function if_json_last_error_message($code = null)
+{
+	$code = $code === null ? json_last_error() : $code;
+	
+	$json_error_message = "";
+	switch ($code) {
+		case JSON_ERROR_NONE:
+			$json_error_message = "No error has occurred.";
+			break;
+
+		case JSON_ERROR_DEPTH:
+			$json_error_message = "The maximum stack depth has been exceeded.";
+			break;
+
+		case JSON_ERROR_STATE_MISMATCH:
+			$json_error_message = "Occurs with underflow or with the modes mismatch.";
+			break;
+
+		case JSON_ERROR_CTRL_CHAR:
+			$json_error_message = "Control character error, possibly incorrectly encoded.";
+			break;
+
+		case JSON_ERROR_SYNTAX:
+			$json_error_message = "Syntax error.";
+			break;
+
+		case JSON_ERROR_UTF8:
+			$json_error_message = "Malformed UTF-8 characters, possibly incorrectly encoded.";
+			break;
+	}
+	return $json_error_message;
+}
 
 /**
  * Set which encryption method should be used as default from the IF_HtPasswd

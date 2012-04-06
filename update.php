@@ -23,7 +23,8 @@ require_once("include/config.inc.php");
 // Authentication
 //
 
-if (!$appEngine->isViewUpdateable())
+if (!$appEngine->isViewUpdateable()
+	|| !$appEngine->getConfig()->getValueAsBoolean('GUI', 'AllowUpdateByGui', true))
 {
 	$appEngine->forwardError(ERROR_INVALID_MODULE);
 }

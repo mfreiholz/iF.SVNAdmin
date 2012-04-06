@@ -659,8 +659,14 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 				if (!property_exists($g, $gp_name))
 					continue; // The group-name property doesn't exist.
 
-				// Create group in SVNAuthFile. (throws Exception)
-				$svnAuthFile->createGroup($g->$gp_name);
+				try {
+					// Create group in SVNAuthFile. (throws Exception)
+					$svnAuthFile->createGroup($g->$gp_name);
+				}
+				catch (\Exception $except) {
+					$E->addException($except);
+					continue;
+				}
 
 				// Find members.
 				if (!property_exists($g, $gp_member_id))
@@ -738,7 +744,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 							);
 							$E->addMessage(tr("The group <b>%0</b> has been removed from LDAP. Removed all assigned permissions.", array($g)));
 						}
-						catch (Exception $e) {
+						catch (\Exception $e) {
 							$E->addException($e);
 						}
 					}
@@ -768,7 +774,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 								);
 								$E->addMessage(tr("The user <b>%0</b> doesn't exist anymore. Removed direct Access-Path permission to <b>%1</b>", array($u, $r)));
 							}
-							catch (Exception $e) {
+							catch (\Exception $e) {
 								$E->addException($e);
 							}
 						}
@@ -795,7 +801,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 								);
 								$E->addMessage(tr("The group <b>%0</b> doesn't exist anymore. Removed direct Access-Path permission to <b>%1</b>", array($g, $r)));
 							}
-							catch (Exception $e) {
+							catch (\Exception $e) {
 								$E->addException($e);
 							}
 						}
@@ -807,7 +813,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 			// Save changes made to "$apEditProvider".
 			$apEditProvider->save();
 		}
-		catch (Exception $ex) {
+		catch (\Exception $ex) {
 			throw $ex;
 		}
 	}

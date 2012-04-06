@@ -183,9 +183,19 @@ elseif ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "digest")
 }
 elseif ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "ldap")
 {
-  include_once( "./classes/providers/ldap/LdapUserViewProvider.class.php" );
-  $userView = \svnadmin\providers\ldap\LdapUserViewProvider::getInstance();
-  $appEngine->setUserViewProvider( $userView );
+	$userView = null;
+	include_once("./classes/providers/ldap/LdapUserViewProvider.class.php");
+  
+	if ($cfg->getValueAsBoolean('Ldap', 'CacheEnabled', true)) {
+		include_once("./classes/providers/ldap/CachedLdapUserViewProvider.class.php");
+		include_once("./include/ifcorelib/IF_JsonObjectStorage.class.php");
+		$userView = \svnadmin\providers\ldap\CachedLdapUserViewProvider::getInstance();
+	}
+	else {
+		$userView = \svnadmin\providers\ldap\LdapUserViewProvider::getInstance();
+	}
+
+	$appEngine->setUserViewProvider( $userView );
 }
 
 /**
@@ -218,11 +228,20 @@ if ($cfg->getValue("Engine:Providers", "GroupViewProviderType") == "svnauthfile"
 }
 elseif($cfg->getValue("Engine:Providers", "GroupViewProviderType") == "ldap" && $cfg->getValue("Engine:Providers", "UserViewProviderType") == "ldap")
 {
-  include_once( "./classes/providers/ldap/LdapUserViewProvider.class.php" );
-  include_once( "./classes/providers/AuthFileGroupAndPathsProvider.class.php" );
-  $groupView = \svnadmin\providers\ldap\LdapUserViewProvider::getInstance();
-  //$groupView->groupViewCachingProvider        = \svnadmin\providers\AuthFileGroupAndPathProvider::getInstance();
-  $appEngine->setGroupViewProvider( $groupView );
+	$groupView = null;
+	include_once("./classes/providers/ldap/LdapUserViewProvider.class.php");
+	include_once("./classes/providers/AuthFileGroupAndPathsProvider.class.php");
+	
+	if ($cfg->getValueAsBoolean('Ldap', 'CacheEnabled', true)) {
+		include_once("./classes/providers/ldap/CachedLdapUserViewProvider.class.php");
+		include_once("./include/ifcorelib/IF_JsonObjectStorage.class.php");
+		$groupView = \svnadmin\providers\ldap\CachedLdapUserViewProvider::getInstance();
+	}
+	else {
+		$groupView = \svnadmin\providers\ldap\LdapUserViewProvider::getInstance();
+	}
+	
+	$appEngine->setGroupViewProvider($groupView);
 }
 
 /**

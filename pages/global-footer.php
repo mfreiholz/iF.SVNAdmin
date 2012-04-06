@@ -4,7 +4,7 @@
 	  <div id="bottomarea">
 	    <p>
 	      <a href="http://www.insanefactory.com/if-svnadmin/?pk_campaign=iFSVNAdmin-Footer" target="_blank">iF.SVNAdmin <?php AppVersion(); ?></a> -
-	      Copyright &copy; by <a href="http://www.insanefactory.com/?pk_campaign=iFSVNAdmin-Footer" target="_blank">insaneFactory.com</a>
+	      &copy; 2009-2012 <a href="http://www.insanefactory.com/?pk_campaign=iFSVNAdmin-Footer" target="_blank">insaneFactory.com</a>
 	    </p>
 	  </div>
 

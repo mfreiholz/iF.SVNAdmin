@@ -424,7 +424,8 @@ class IF_SVNAuthFileC
 		$pattern = '/^[A-Za-z0-9\-\_]+$/i';
 		if (!preg_match($pattern, $groupname))
 		{
-			throw new Exception('Invalid group name. (Pattern: '.$pattern.')');
+			throw new Exception('Invalid group name "' . $groupname .
+					'". Allowed signs are: A-Z, a-z, Underscore, Dash, (no spaces!) ');
 		}
 
 		if (self::groupExists($groupname))
