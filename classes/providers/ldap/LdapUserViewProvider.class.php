@@ -605,6 +605,12 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	{
 		$this->init();
 		$E = \svnadmin\core\Engine::getInstance();
+		
+		// Increase max_execution_time for big LDAP structures.
+		$maxTime = intval(ini_get('max_execution_time'));
+		if ($maxTime != 0 && $maxTime < 300) {
+			@ini_set('max_execution_time', 300);
+		}
 
 		try {
 			// @todo Backup file.
