@@ -55,15 +55,15 @@ class IF_SVNClientC extends IF_SVNBaseC
 	/**
 	 * Creates a new directory in repository.
 	 *
-	 * @param string $path Absolute path to the new directory.
+	 * @param array $path Absolute path to the new directory (multiple)
 	 * @param bool $parents Indiciates whether parents should be created, too.
 	 * @param string $commitMessage
 	 * @throws IF_SVNException
 	 * @throws IF_SVNCommandExecutionException
 	 */
-	public function svn_mkdir($path, $parents=true, $commitMessage="Created folder.")
+	public function svn_mkdir(array $paths, $parents=true, $commitMessage="Created folder.")
 	{
-		if (empty($path))
+		if (empty($paths))
 		{
 			throw new IF_SVNException('Empty path for svn_mkdir() command.');
 		}
@@ -88,8 +88,12 @@ class IF_SVNClientC extends IF_SVNBaseC
 		{
 			$args["--quiet"] = "";
 		}
+		
+		for ($i = 0; $i < count($paths); ++$i) {
+			$paths[$i] = $this->encode_url_path($paths[$i]);
+		}
 
-		$command = self::create_svn_command($this->svnExe, "mkdir", self::encode_url_path($path), $args, false);
+		$command = self::create_svn_command($this->svnExe, "mkdir", implode(' ', $paths), $args, false);
 
 		$output = null;
 		$return_var = 0;

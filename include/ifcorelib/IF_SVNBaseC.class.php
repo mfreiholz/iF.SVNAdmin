@@ -285,7 +285,7 @@ class IF_SVNBaseC
   {
   	$cmd = "\"".$exe."\" ".$command;
 
-		if ($asXml === true)
+	if ($asXml === true)
   	  $cmd.= " --xml";
 
   	if ($this->non_interactive)

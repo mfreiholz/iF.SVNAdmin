@@ -124,10 +124,14 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IRepositoryEditProvider::mkdir()
 	 */
-	public function mkdir(\svnadmin\core\entities\Repository $oRepository, $path)
+	public function mkdir(\svnadmin\core\entities\Repository $oRepository, array $paths)
 	{
-		$absoluteRepositoryPath = $this->svnParentPath."/".$oRepository->name."/".$path;
-		$this->m_svn->svn_mkdir($absoluteRepositoryPath);
+		// Create absolute paths.
+		for ($i = 0; $i < count($paths); ++$i) {
+			$paths[$i] = $this->svnParentPath . '/' . $oRepository->name . '/' . $paths[$i];
+		}
+		
+		$this->m_svn->svn_mkdir($paths);
     	return true;
     }
 }

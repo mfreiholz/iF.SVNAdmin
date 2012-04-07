@@ -44,10 +44,10 @@ interface IRepositoryEditProvider extends IEditProvider
 	 * Creates a new folder in the repository (including parents of folder).
 	 *
 	 * @param \svnadmin\core\entities\Repository $oRepository
-	 * @param string $path Path to the folder.
+	 * @param array $path Paths to the folders which should be created.
 	 *
 	 * @return bool
 	 */
-	public function mkdir(\svnadmin\core\entities\Repository $oRepository, $path);
+	public function mkdir(\svnadmin\core\entities\Repository $oRepository, array $paths);
 }
 ?>
