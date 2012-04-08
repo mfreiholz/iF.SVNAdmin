@@ -23,20 +23,24 @@ include("include/config.inc.php");
 // Authentication
 //
 
-if (!$appEngine->isRepositoryViewActive())
-{
-	$appEngine->forwardInvalidModule(true);
+$engine = \svnadmin\core\Engine::getInstance();
+
+if (!$engine->isProviderActive(PROVIDER_REPOSITORY_VIEW)) {
+	$engine->forwardError(ERROR_INVALID_MODULE);
 }
 
-$appEngine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_VIEW);
+$engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_VIEW);
 $appTR->loadModule("repositoryview");
 
 //
 // HTTP Request Vars
 //
 
-$varRepoEnc = get_request_var("r");
-$varPathEnc = get_request_var("p");
+$varParentIdentifierEnc = get_request_var('pi');
+$varRepoEnc = get_request_var('r');
+$varPathEnc = get_request_var('p');
+
+$varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 $varRepo = rawurldecode($varRepoEnc);
 $varPath = rawurldecode($varPathEnc);
 
@@ -44,16 +48,15 @@ $varPath = rawurldecode($varPathEnc);
 // View Data
 //
 
-$oR = new \svnadmin\core\entities\Repository();
-$oR->name = $varRepo;
+$oR = new \svnadmin\core\entities\Repository($varRepo, $varParentIdentifier);
 
 try {
 	// Get the files of the selected repository path.
-	$repoPathList = $appEngine->getRepositoryViewProvider()->listPath($oR, $varPath);
+	$repoPathList = $engine->getRepositoryViewProvider()->listPath($oR, $varPath);
 
 	// Web-Link - Directory Listing
-	$apacheWebLink = $appEngine->getConfig()->getValue("Subversion:WebListing", "ApacheDirectoryListing");
-	$customWebLink = $appEngine->getConfig()->getValue("Subversion:WebListing", "CustomDirectoryListing");
+	$apacheWebLink = $engine->getConfig()->getValue("Subversion:WebListing", "ApacheDirectoryListing");
+	$customWebLink = $engine->getConfig()->getValue("Subversion:WebListing", "CustomDirectoryListing");
 	$hasApacheWebLink = !empty($apacheWebLink) ? true : false;
 	$hasCustomWebLink = !empty($customWebLink) ? true : false;
 
@@ -113,7 +116,7 @@ try {
 	SetValue("RepositoryRoot", $isRepositoryRoot);
 }
 catch (Exception $ex) {
-	$appEngine->addException($ex);
+	$engine->addException($ex);
 }
 ProcessTemplate("repository/repositoryview.html.php");
 ?>

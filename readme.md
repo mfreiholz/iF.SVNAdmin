@@ -42,6 +42,22 @@ I recommend to do clean installation, because the complete templating system has
 __Note:__ You can still use your old `/data/` directory, which contains the configuration of the application.
 
 
+Additional configuration
+========================
+
+### Show Repository delete option
+
+```
+[GUI]
+RepositoryDeleteEnabled=true
+```
+
+FAQ
+===
+Q: I get a "Maximum execution time exceeded" error, if i try to update/synchronize my data.
+A: http://www.php.net/manual/de/info.configuration.php#ini.max-execution-time
+
+
 Who is responsible for this crap?
 ---------------------------------
 &copy; 2009-2012 Manuel Freiholz, [insaneFactory.com](http://www.insanefactory.com/if-svnadmin/)

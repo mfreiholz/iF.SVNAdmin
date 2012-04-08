@@ -25,31 +25,74 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	 * The singelton instance of this class.
 	 * @var \svnadmin\providers\RepositoryViewProvider
 	 */
-	private static $m_instance = NULL;
-
-	/**
-	 * @var bool
-	 */
-	private $m_init_done = false;
-
-	/**
-	 * The directory where all the repositories takes place.
-	 * @var string
-	 */
-	public $svnParentPath = NULL;
+	private static $_instance = NULL;
 
 	/**
 	 * The svn-client class object to handle command on the repository.
 	 * @var \IF_SVNClientC
 	 */
-	private $m_svnclient = NULL;
+	private $_svnClient = NULL;
+	
+	/**
+	 * Holds multiple repository configurations.
+	 * e.g.: array(
+	 *			0 => array(
+	 *				'SVNParentPath' => '/var/svn/repositories',
+	 *				...
+	 *			),
+	 *			1 => array(
+	 *				'SVNParentPath' => '/var/svn/repository-archive-2011',
+	 *				...
+	 *			),
+	 *			2 => array(
+	 *				'SVNParentPath' => '/var/svn/repository-archive-2012',
+	 *				...
+	 *			),
+	 *		)
+	 * @var array
+	 */
+	private $_config = array();
 
 
 	/**
-	 * The constructor.
+	 * Initializes the object by Engine configuration.
 	 */
 	public function __construct()
 	{
+		$engine = \svnadmin\core\Engine::getInstance();
+		$config = $engine->getConfig();
+		
+		// Subversion class for browsing.
+		$this->_svnClient = new \IF_SVNClientC($engine->getConfig()
+				->getValue('Repositories:svnclient', 'SvnExecutable'));
+		
+		// Load default repository location configuration.
+		$defaultSvnParentPath = $engine->getConfig()
+				->getValue('Repositories:svnclient', 'SVNParentPath');
+		
+		// Set as default.
+		$this->_config[0]['SVNParentPath'] = $defaultSvnParentPath;
+		$this->_config[0]['description'] = 'Repositories';
+		
+		// Issue #5: Support multiple path values for SVNParentPath
+		// Try to load more repository locations.
+		$index = (int) 1;
+		while (true) {
+			$svnParentPath = $config->getValue('Repositories:svnclient:' . $index, 'SVNParentPath');
+			if ($svnParentPath != null) {
+				$this->_config[$index]['SVNParentPath'] = $svnParentPath;
+			}
+			else {
+				break;
+			}
+			
+			$description = $config->getValue('Repositories:svnclient:' . $index, 'Description');
+			if ($description != null) {
+				$this->_config[$index]['description'] = $description;
+			}
+			
+			++$index;
+		}
 	}
 
 	/**
@@ -59,11 +102,10 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	 */
 	public static function getInstance()
 	{
-		if( self::$m_instance == NULL )
-		{
-			self::$m_instance = new RepositoryViewProvider();
+		if (self::$_instance == null) {
+			self::$_instance = new self();
 		}
-		return self::$m_instance;
+		return self::$_instance;
 	}
 
 	/**
@@ -72,13 +114,6 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	 */
 	public function init()
 	{
-		if(!$this->m_init_done)
-		{
-			global $appEngine;
-			$this->m_init_done = true;
-			$this->svnParentPath = $appEngine->getConfig()->getValue("Repositories:svnclient", "SVNParentPath");
-			$this->m_svnclient = new \IF_SVNClientC($appEngine->getConfig()->getValue("Repositories:svnclient", "SvnExecutable"));
-		}
 		return true;
 	}
 
@@ -99,6 +134,25 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	{
 		return false;
 	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IRepositoryViewProvider::getRepositoryParents()
+	 */
+	public function getRepositoryParents()
+	{
+		$ret = array();
+		
+		foreach ($this->_config as $parentIdentifier => $options) {
+			$ret[] = new \svnadmin\core\entities\RepositoryParent(
+					$parentIdentifier,
+					$this->getRepositoryParentConfigValue($parentIdentifier, 'SVNParentPath'),
+					$this->getRepositoryParentConfigValue($parentIdentifier, 'description')
+				);
+		}
+		
+		return $ret;
+	}
 
 	/**
 	 * (non-PHPdoc)
@@ -107,13 +161,35 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	public function getRepositories()
 	{
 		$ret = array();
-
-		$repoList = $this->m_svnclient->listRepositories($this->svnParentPath);
-		foreach ($repoList as $repoName)
-		{
-			$ret[] = new \svnadmin\core\entities\Repository($repoName);
+		
+		foreach ($this->_config as $parentIdentifier => $options) {
+			$list = $this->_svnClient->listRepositories($options['SVNParentPath']);
+			
+			foreach ($list as $name) {
+				$ret[] = new \svnadmin\core\entities\Repository($name, $parentIdentifier);
+			}
 		}
-
+		
+		return $ret;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IRepositoryViewProvider::getRepositoriesOfParent()
+	 */
+	public function getRepositoriesOfParent(\svnadmin\core\entities\RepositoryParent $parent)
+	{
+		$ret = array();
+		
+		$svnParentPath = $this->getRepositoryParentConfigValue($parent->identifier);
+		if ($svnParentPath != NULL) {
+			$list = $this->_svnClient->listRepositories($svnParentPath);
+			
+			foreach ($list as $name) {
+				$ret[] = new \svnadmin\core\entities\Repository($name, $parent->identifier);
+			}
+		}
+		
 		return $ret;
 	}
 
@@ -123,32 +199,31 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
      */
 	public function listPath(\svnadmin\core\entities\Repository $oRepository, $relativePath)
     {
+		// Get SVNParentPath of given Repository object.
+		$svnParentPath = $this->getRepositoryParentConfigValue(
+				$oRepository->getParentIdentifier(), 'SVNParentPath');
+		
 		// Absolute path to the repository.
-		$repo = $this->svnParentPath;
-		$repo.= "/";
-		$repo.= $oRepository->name;
+		$repo = $svnParentPath . '/' . $oRepository->name;
 
-		if ($relativePath == "/")
-		{
-			$relativePath = "";
+		if ($relativePath == '/') {
+			$relativePath = '';
 		}
 
 		// Append the relative path.
-		$uri = $repo."/".$relativePath;
+		$uri = $repo . '/' . $relativePath;
 
 		$ret = array();
 
 		// Get the file list.
 		// @throws Exception
-		$svn_entry_list = $this->m_svnclient->svn_list($uri);
+		$svn_entry_list = $this->_svnClient->svn_list($uri);
 
-		if (empty($svn_entry_list->entries))
-		{
+		if (empty($svn_entry_list->entries)) {
 			return $ret;
 		}
 
-		foreach ($svn_entry_list->entries as $entry)
-		{
+		foreach ($svn_entry_list->entries as $entry) {
 			$oRP = new \svnadmin\core\entities\RepositoryPath();
 			$oRP->parent = $relativePath;
 			$oRP->name = $entry->name;
@@ -160,6 +235,29 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 		}
 
 		return $ret;
+	}
+	
+	/**
+	 * Gets the configuration value associated to the given $parentIdentifier.
+	 * 
+	 * @param string $parentIdentifier
+	 * @param string $key
+	 * @return string
+	 */
+	protected function getRepositoryParentConfigValue($parentIdentifier, $key = 'SVNParentPath')
+	{
+		$v = null;
+
+		if ($parentIdentifier === null) {
+			$v = $this->_config[0][$key];
+		}
+		else if (isset($this->_config[$parentIdentifier])){
+			if (isset ($this->_config[$parentIdentifier][$key])) {
+				$v = $this->_config[$parentIdentifier][$key];
+			}
+		}
+		
+		return $v;
 	}
 }
 ?>

@@ -23,12 +23,13 @@ include("include/config.inc.php");
 // Authentication
 //
 
-if (!$appEngine->isRepositoryEditActive())
-{
-	$appEngine->forwardInvalidModule(true);
+$engine = \svnadmin\core\Engine::getInstance();
+
+if (!$engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)) {
+	$engine->forwardInvalidModule(true);
 }
 
-$appEngine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_ADD);
+$engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_ADD);
 $appTR->loadModule("repositorycreate");
 
 //
@@ -37,12 +38,13 @@ $appTR->loadModule("repositorycreate");
 
 if (check_request_var('create'))
 {
-	$appEngine->handleAction('create_repository');
+	$engine->handleAction('create_repository');
 }
 
 //
 // View Data
 //
 
+SetValue('RepositoryParentList', $engine->getRepositoryViewProvider()->getRepositoryParents());
 ProcessTemplate("repository/repositorycreate.html.php");
 ?>

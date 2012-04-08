@@ -126,19 +126,17 @@ function if_array_remove_empty_values(&$arr)
  * @param(optional) reference to scalar, will be set to 'get' or 'post'
  * @return bool
  */
-function check_request_var( $varname, &$method = NULL )
+function check_request_var($varname, &$method = NULL)
 {
-  if( isset($_POST[$varname]) && !empty($_POST[$varname]) )
-  {
-    $method = 'post';
-    return TRUE;
-  }
-  else if( isset($_GET[$varname]) && !empty($_GET[$varname]) )
-  {
-    $method = 'get';
-    return TRUE;
-  }
-  return FALSE;
+	if (isset($_POST[$varname])) {
+		$method = 'post';
+		return true;
+	}
+	else if (isset($_GET[$varname])) {
+		$method = 'get';
+		return true;
+	}
+	return false;
 }
 
 function get_request_var( $varname )

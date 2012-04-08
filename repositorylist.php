@@ -23,37 +23,45 @@ include("include/config.inc.php");
 // Authentication
 //
 
-if (!$appEngine->isRepositoryViewActive())
-{
-	$appEngine->forwardError(ERROR_INVALID_MODULE);
+$engine = \svnadmin\core\Engine::getInstance();
+
+if (!$engine->isProviderActive(PROVIDER_REPOSITORY_VIEW)) {
+	$engine->forwardError(ERROR_INVALID_MODULE);
 }
 
-$appEngine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_VIEW);
+$engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_VIEW);
 $appTR->loadModule("repositorylist");
 
 //
 // Actions
 //
 
-if (check_request_var("delete"))
-{
-	$appEngine->handleAction("delete_repository");
+if (check_request_var("delete")) {
+	$engine->handleAction("delete_repository");
 }
 
 //
 // View data
 //
 
-$repos = array();
+$repositoryParentList = array();
+$repositoryList = array();
 try {
-	$repos = $appEngine->getRepositoryViewProvider()->getRepositories();
-	usort($repos, array('\svnadmin\core\entities\Repository',"compare"));
+	// Repository parent locations.
+	$repositoryParentList = $engine->getRepositoryViewProvider()->getRepositoryParents();
+	
+	// Repositories of all locations.
+	foreach ($repositoryParentList as $rp) {
+		$repositoryList[$rp->identifier] = $engine->getRepositoryViewProvider()->getRepositoriesOfParent($rp);
+		usort($repositoryList[$rp->identifier], array('\svnadmin\core\entities\Repository', 'compare'));
+	}
 }
 catch (Exception $ex) {
-	$appEngine->addException($ex);
+	$engine->addException($ex);
 }
 
-SetValue("ShowDeleteButton", $appEngine->getConfig()->getValueAsBoolean("GUI", "RepositoryDeleteEnabled", true));
-SetValue("RepositoryList", $repos);
-ProcessTemplate("repository/repositorylist.html.php");
+SetValue('RepositoryParentList', $repositoryParentList);
+SetValue('RepositoryList', $repositoryList);
+SetValue('ShowDeleteButton', $appEngine->getConfig()->getValueAsBoolean("GUI", "RepositoryDeleteEnabled", true));
+ProcessTemplate('repository/repositorylist.html.php');
 ?>

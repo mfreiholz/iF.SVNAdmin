@@ -1,77 +1,75 @@
 <?php GlobalHeader(); ?>
 
-<script type="text/javascript">
-$(document).ready(function(){
-	$("#selectall").click(function(){
-		selectAll(this, "selected_repos[]");
-	});
-});
-</script>
-
 <h1><?php Translate("Repository management"); ?></h1>
 <p class="hdesc"><?php Translate("On this page you can view your existing repositories and create or delete an repository."); ?></p>
 
-<?php HtmlFilterBox('repolist'); ?>
+<?php foreach (GetArrayValue('RepositoryParentList') as $rp) : ?>
 
-<form action="repositorylist.php" method="POST">
-	<table id="repolist" class="datatable">
+	<h2><?php Translate('Location'); ?>: <?php print($rp->description); ?><br><small>(<?php print($rp->path); ?>)</small></h2>
 
-	<thead>
-		<tr>
-			<th width="22"></th>
-			<th width="20">
-				<?php if (IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE) && GetBoolValue('ShowDeleteButton')): ?>
-				<input type="checkbox" id="selectall">
-				<?php endif; ?>
-			</th>
-			<th>
-				<?php Translate("Repository"); ?>
-			</th>
-		</tr>
-	</thead>
+	<?php HtmlFilterBox('repolist_' . $rp->identifier); ?>
 
-	<?php if (IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE) && GetBoolValue('ShowDeleteButton')): ?>
-	<tfoot>
-		<tr>
-			<td colspan="3">
+	<form action="repositorylist.php" method="POST">
+		<input type="hidden" name="pi" value="<?php print($rp->getEncodedIdentifier()); ?>">
+		
+		<table id="repolist_<?php print($rp->identifier); ?>" class="datatable">
 
-			<table class="datatableinline">
-			<colgroup>
-				<col width="50%">
-				<col width="50%">
-			</colgroup>
-				<tr>
-					<td>
-						<input type="submit" name="delete" value="<?php Translate("Delete"); ?>" class="delbtn" onclick="return deletionPrompt('<?php Translate("Are you sure?"); ?>');">
+		<thead>
+			<tr>
+				<th width="22"></th>
+				<th width="20"></th>
+				<th><?php Translate("Repository"); ?></th>
+			</tr>
+		</thead>
 
-						<?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)): ?>
-						<small>(<input type="checkbox" id="delete_ap" name="delete_ap" value="1" checked><label for="delete_ap"> <?php Translate('+Remove configured Access-Paths'); ?></label>)</small>
-						<?php endif; ?>
-					</td>
-					<td align="right"></td>
+		<?php if (IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE) && GetBoolValue('ShowDeleteButton')): ?>
+		<tfoot>
+			<tr>
+				<td colspan="3">
+
+				<table class="datatableinline">
+				<colgroup>
+					<col width="50%">
+					<col width="50%">
+				</colgroup>
+					<tr>
+						<td>
+							<input type="submit" name="delete" value="<?php Translate("Delete"); ?>" class="delbtn" onclick="return deletionPrompt('<?php Translate("Are you sure?"); ?>');">
+
+							<?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)): ?>
+							<small>(<input type="checkbox" id="delete_ap" name="delete_ap" value="1" checked><label for="delete_ap"> <?php Translate('+Remove configured Access-Paths'); ?></label>)</small>
+							<?php endif; ?>
+						</td>
+						<td align="right"></td>
+					</tr>
+				</table>
+
+				</td>
+			</tr>
+		</tfoot>
+		<?php endif; ?>
+
+		<tbody>
+			<?php
+				$list = GetArrayValue('RepositoryList');
+				$list = $list[$rp->identifier];
+				foreach ($list as $r) {
+			?>
+			<tr>
+				<td>
+					<?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) { ?>
+					<a href="accesspathcreate.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>"><img src="templates/icons/addpath.png" alt="<?php Translate("Add access path"); ?>" title="<?php Translate("Add access path"); ?>"></a>
+					<?php } ?>
+				</td>
+				<td><?php if (IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE) && GetBoolValue('ShowDeleteButton')) { ?><input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>"><?php } ?></td>
+				<td><a href="repositoryview.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>"><?php print($r->name); ?></a></td>
 				</tr>
-			</table>
+			<?php } ?>
+		</tbody>
 
-			</td>
-		</tr>
-	</tfoot>
-	<?php endif; ?>
+		</table>
+	</form>
 
-  <tbody>
-    <?php foreach (GetArrayValue("RepositoryList") as $r) { ?>
-    <tr>
-      <td>
-        <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) { ?>
-        <a href="accesspathcreate.php?r=<?php print($r->getEncodedName()); ?>"><img src="templates/icons/addpath.png" alt="<?php Translate("Add access path"); ?>" title="<?php Translate("Add access path"); ?>"></a>
-        <?php } ?>
-      </td>
-      <td><?php if (IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE) && GetBoolValue('ShowDeleteButton')) { ?><input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>"><?php } ?></td>
-      <td><a href="repositoryview.php?r=<?php print($r->getEncodedName()); ?>"><?php print($r->name); ?></a></td>
-    </tr>
-    <?php } ?>
-  </tbody>
-
-  </table>
-</form>
+<?php endforeach; ?>
 
 <?php GlobalFooter(); ?>

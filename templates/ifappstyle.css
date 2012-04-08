@@ -15,6 +15,7 @@ a:hover { color:#ff0000; text-decoration:none; }
 input,textarea,select { font-family:"Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif; font-size:11px; background-color:#fafafa; border:1px #aaaaaa solid; color:#000000; }
 input[type=submit] { font-size:11px; cursor:pointer; padding:5px; background-color:#eeeeee; background:url("images/button-background-grey.png") repeat-x scroll left top; -moz-border-radius:11px; -khtml-border-radius:11px; -webkit-border-radius:11px; border-radius:11px; }
 input[type=submit]:hover { border-color:#000000; }
+input[type=checkbox] { border:0; }
 select{ padding:4px; }
 
 ul,ol,li { list-style:none; }
@@ -171,12 +172,15 @@ div#login input[type=text], div#login input[type=password]{
 table.datatable{
   border-collapse:collapse;
   width:100%;
+  margin-bottom: 20px;
+  box-shadow:0px 0px 5px 0px #ccc;
 }
 
 table.datatable th{
   border:1px #dddddd solid;
   background-color:#efefef;
   font-weight:bold;
+  font-size:0.9em;
   height:30px;
   background-image:url("images/th-background.png");
   background-position:top left;

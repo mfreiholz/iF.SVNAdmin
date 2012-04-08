@@ -169,7 +169,7 @@ class IF_Config
 					// Before we change the to the new section header,
 					// we need to prove whether there are any new key
 					// items for the previous section.
-					if ($current_section != '')
+					if ($current_section != '' && isset($this->items[$current_section]))
 					{
 						foreach ($this->items[$current_section] as $key => $value)
 						{

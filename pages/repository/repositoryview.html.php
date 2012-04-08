@@ -2,7 +2,7 @@
 
 <h1><?php Translate("Repository browsing"); ?></h1>
 <p class="hdesc">
-  <a href="repositoryview.php?r=<?php print(GetValue("Repository")->getEncodedName()); ?>"><?php print(GetValue("Repository")->getName()); ?></a>
+  <a href="repositoryview.php?pi=<?php print(GetValue("Repository")->getEncodedParentIdentifier()); ?>&amp;r=<?php print(GetValue("Repository")->getEncodedName()); ?>"><?php print(GetValue("Repository")->getName()); ?></a>
   : <?php PrintStringValue("CurrentPath"); ?>
 </p>
 
@@ -13,7 +13,7 @@
       <?php if (GetBoolValue("RepositoryRoot")) { ?>
       <a href="repositorylist.php"><img src="templates/icons/back.png" alt="TR{Back}}"></a>
       <?php } else { ?>
-      <a href="repositoryview.php?r=<?php print(GetValue("Repository")->getEncodedName()); ?>&amp;p=<?php PrintStringValue("BackLinkPathEncoded"); ?>"><img src="templates/icons/back.png" alt="<?php Translate("Back"); ?>"></a>
+      <a href="repositoryview.php?pi=<?php print(GetValue("Repository")->getEncodedParentIdentifier()); ?>&amp;r=<?php print(GetValue("Repository")->getEncodedName()); ?>&amp;p=<?php PrintStringValue("BackLinkPathEncoded"); ?>"><img src="templates/icons/back.png" alt="<?php Translate("Back"); ?>"></a>
       <?php } ?>
     </th>
     <th width="22">#</th>
@@ -32,7 +32,7 @@
     	<?php if (GetBoolValue("RepositoryRoot")) { ?>
       <a href="repositorylist.php"><img src="templates/icons/back.png" alt="TR{Back}}"></a>
     	<?php } else { ?>
-      <a href="repositoryview.php?r=<?php print(GetValue("Repository")->getEncodedName()); ?>&amp;p=<?php PrintStringValue("BackLinkPathEncoded"); ?>"><img src="templates/icons/back.png" alt="<?php Translate("Back"); ?>"></a>
+      <a href="repositoryview.php?pi=<?php print(GetValue("Repository")->getEncodedParentIdentifier()); ?>&amp;r=<?php print(GetValue("Repository")->getEncodedName()); ?>&amp;p=<?php PrintStringValue("BackLinkPathEncoded"); ?>"><img src="templates/icons/back.png" alt="<?php Translate("Back"); ?>"></a>
       <?php } ?>
     </td>
     <td></td>
@@ -50,7 +50,7 @@
   <tr>
     <td>
       <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) { ?>
-	    <a href="accesspathcreate.php?r=<?php print(GetValue("Repository")->getEncodedName()); ?>&amp;p=<?php print($item->getEncodedRelativePath()); ?>"><img src="templates/icons/addpath.png" alt="-" title="<?php Translate("Add access path"); ?>"></a>
+	    <a href="accesspathcreate.php?pi=<?php print(GetValue("Repository")->getEncodedParentIdentifier()); ?>&amp;r=<?php print(GetValue("Repository")->getEncodedName()); ?>&amp;p=<?php print($item->getEncodedRelativePath()); ?>"><img src="templates/icons/addpath.png" alt="-" title="<?php Translate("Add access path"); ?>"></a>
       <?php } ?>
     </td>
     <td>
@@ -62,7 +62,7 @@
     </td>
     <td>
     	<?php if ($item->type == 0) { ?>
-      <a href="repositoryview.php?r=<?php print(GetValue("Repository")->getEncodedName()); ?>&amp;p=<?php print($item->getEncodedRelativePath()); ?>"><?php print($item->name); ?></a>
+      <a href="repositoryview.php?pi=<?php print(GetValue("Repository")->getEncodedParentIdentifier()); ?>&amp;r=<?php print(GetValue("Repository")->getEncodedName()); ?>&amp;p=<?php print($item->getEncodedRelativePath()); ?>"><?php print($item->name); ?></a>
       <?php } else { ?>
 			<?php print($item->name); ?>
       <?php } ?>

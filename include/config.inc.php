@@ -75,6 +75,7 @@ include_once( "./classes/core/entities/User.class.php" );
 include_once( "./classes/core/entities/AccessPath.class.php" );
 include_once( "./classes/core/entities/Repository.class.php" );
 include_once( "./classes/core/entities/RepositoryPath.class.php" );
+include_once( "./classes/core/entities/RepositoryParent.class.php" );
 include_once( "./classes/core/entities/Role.class.php" );
 include_once( "./classes/core/interfaces/IProvider.iface.php" );
 include_once( "./classes/core/interfaces/IAuthenticator.iface.php" );
@@ -186,7 +187,7 @@ elseif ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "ldap")
 	$userView = null;
 	include_once("./classes/providers/ldap/LdapUserViewProvider.class.php");
   
-	if ($cfg->getValueAsBoolean('Ldap', 'CacheEnabled', true)) {
+	if ($cfg->getValueAsBoolean('Ldap', 'CacheEnabled', false)) {
 		include_once("./classes/providers/ldap/CachedLdapUserViewProvider.class.php");
 		include_once("./include/ifcorelib/IF_JsonObjectStorage.class.php");
 		$userView = \svnadmin\providers\ldap\CachedLdapUserViewProvider::getInstance();
@@ -232,7 +233,7 @@ elseif($cfg->getValue("Engine:Providers", "GroupViewProviderType") == "ldap" && 
 	include_once("./classes/providers/ldap/LdapUserViewProvider.class.php");
 	include_once("./classes/providers/AuthFileGroupAndPathsProvider.class.php");
 	
-	if ($cfg->getValueAsBoolean('Ldap', 'CacheEnabled', true)) {
+	if ($cfg->getValueAsBoolean('Ldap', 'CacheEnabled', false)) {
 		include_once("./classes/providers/ldap/CachedLdapUserViewProvider.class.php");
 		include_once("./include/ifcorelib/IF_JsonObjectStorage.class.php");
 		$groupView = \svnadmin\providers\ldap\CachedLdapUserViewProvider::getInstance();

@@ -20,6 +20,23 @@ $(document).ready(function(){
 <p class="hdesc"><?php Translate("Create a new repository to manage your sources."); ?></p>
 <div>
   <form method="POST" action="repositorycreate.php">
+	  
+	<div class="form-field">
+		<label for="pi"><?php Translate('Repository location'); ?></label>
+		<select name="pi" id="pi" class="">
+			<?php foreach (GetArrayValue('RepositoryParentList') as $rp) : ?>
+				<option value="<?php print($rp->getEncodedIdentifier()); ?>">
+					<?php print($rp->path); ?>
+					<?php
+					if (!empty($rp->description)) {
+						print(' - ');
+						print($rp->description);
+					}
+					?>
+				</option>
+			<?php endforeach; ?>
+		</select>
+	</div>
 
     <div class="form-field">
       <label for="reponame"><?php Translate("Repository name"); ?></label>

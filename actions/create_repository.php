@@ -19,8 +19,11 @@ $engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_ADD);
 // HTTP Request Vars
 //
 
+$varParentIdentifierEnc = get_request_var('pi');
 $reponame = get_request_var("reponame");
 $repotype = get_request_var("repotype");
+
+$varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 
 //
 // Validation
@@ -30,7 +33,7 @@ if ($reponame == NULL) {
 	$engine->addException(new ValidationException(tr("You have to fill out all fields.")));
 }
 else {
-	$r = new \svnadmin\core\entities\Repository($reponame);
+	$r = new \svnadmin\core\entities\Repository($reponame, $varParentIdentifier);
 
 	// Create repository.
 	try {

@@ -17,8 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.
  */
-if (!defined('ACTION_HANDLING'))
-{
+if (!defined('ACTION_HANDLING')) {
 	die("HaHa!");
 }
 
@@ -26,45 +25,43 @@ if (!defined('ACTION_HANDLING'))
 // Authentication
 //
 
-if (!$appEngine->isProviderActive(PROVIDER_REPOSITORY_EDIT))
-{
-	$appEngine->forwardError(ERROR_INVALID_MODULE);
+$engine = \svnadmin\core\Engine::getInstance();
+
+if (!$engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)) {
+	$engine->forwardError(ERROR_INVALID_MODULE);
 }
 
 // Disabled by config?
-if (!($appEngine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDeleteEnabled', true)))
-{
-	$appEngine->forwardError(ERROR_INVALID_MODULE);
+if (!($engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDeleteEnabled', true))) {
+	$engine->forwardError(ERROR_INVALID_MODULE);
 }
 
 //
 // HTTP Request Vars
 //
 
+$varParentIdentifierEnc = get_request_var('pi');
 $selrepos = get_request_var("selected_repos");
 $remove_accesspaths = check_request_var('delete_ap');
+
+$varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 
 //
 // Validation
 //
 
-if ($selrepos == NULL)
-{
-	$appEngine->addException(new ValidationException(tr("You have to select at least one repository.")));
+if ($selrepos == NULL || $varParentIdentifier === NULL) {
+	$engine->addException(new ValidationException(tr("You have to select at least one repository.")));
 }
-else
-{
+else {
 	try {
 		// Iterate all selected items.
 		$c = count($selrepos);
-		for($i = 0; $i < $c; $i++)
-		{
-			$oR = new \svnadmin\core\entities\Repository();
-			$oR->name = $selrepos[$i];
+		for($i = 0; $i < $c; $i++) {
+			$oR = new \svnadmin\core\entities\Repository($selrepos[$i], $varParentIdentifier);
 
 			$b = $appEngine->getRepositoryEditProvider()->delete($oR);
-			if (!$b)
-			{
+			if (!$b) {
 				throw new Exception(tr("Could not delete repository %0", array($oR->name)));
 			}
         	$appEngine->addMessage(tr("The repository %0 has been deleted.", array($oR->name)));
