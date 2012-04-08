@@ -55,8 +55,8 @@ try {
 	$repoPathList = $engine->getRepositoryViewProvider()->listPath($oR, $varPath);
 
 	// Web-Link - Directory Listing
-	$apacheWebLink = $engine->getConfig()->getValue("Subversion:WebListing", "ApacheDirectoryListing");
-	$customWebLink = $engine->getConfig()->getValue("Subversion:WebListing", "CustomDirectoryListing");
+	$apacheWebLink = $engine->getConfig()->getValue("GUI", "ApacheDirectoryListing");
+	$customWebLink = $engine->getConfig()->getValue("GUI", "CustomDirectoryListing");
 	$hasApacheWebLink = !empty($apacheWebLink) ? true : false;
 	$hasCustomWebLink = !empty($customWebLink) ? true : false;
 
