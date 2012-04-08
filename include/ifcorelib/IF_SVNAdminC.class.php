@@ -99,7 +99,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
 
 		if ($exitCode != 0)
 		{
-			throw new IF_SVNCommandExecutionException('Command='.$command.'; Return='.$return_var.'; Output='.$output.';');
+			throw new IF_SVNCommandExecutionException('Command='.$cmd.'; Return='.$exitCode.'; Output='.$output.';');
 		}
 	}
 

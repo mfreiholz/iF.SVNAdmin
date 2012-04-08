@@ -255,7 +255,7 @@ class IF_SVNBaseC
   		// We must replace the first two "//" with "\\".
   		if (substr($local_path, 0, 2) == "//")
   		{
-  			$local_path = '\\'.substr($local_path, 2);
+  			$local_path = '\\\\'.substr($local_path, 2);
   		}
   	}
 
