@@ -1,0 +1,187 @@
+---
+layout: default
+title: Documentation
+---
+
+<ul>
+	<li><a href="#installation">Installation</a>
+		<ul>
+			<li><a href="#installation-version-stable">Current stable version (>= 1.4)</a></li>
+		</ul>
+	</li>
+	<li><a href="#update">Update</a>
+		<ul>
+			<li><a href="#update-older-1.4.x">Updating from older version to 1.4.x</a></li>
+			<li><a href="#update-greater-1.4.x-1.6.0">Updating from >= 1.4.x to 1.6.x</a></li>
+		</ul>
+	</li>
+	<li><a href="#configuration-gui">Configuration (GUI)</a>
+		<ul>
+			<li><a href="#show-delete-repository-delete-button">Show/Hide delete button in Repository-List</a></li>
+			<li><a href="#show-update-button-in-navigation">Show/Hide update button in navigation</a></li>
+		</ul>
+	</li>
+	<li><a href="#repository-management">Repository management</a>
+		<ul>
+			<li><a href="#multiple-repository-locations">Multiple repository locations</a></li>
+		</ul>
+	</li>
+	<li><a href="#ldap">LDAP (e.g. ActiveDirectory/OpenLDAP)</a>
+		<ul>
+			<li><a href="#ldap-enable-disable-caching">Enable/disable LDAP caching</a></li>
+			<li><a href="#ldap-more-than-1000-users-and-groups">More than 1000 users and groups in LDAP</a></li>
+		</ul>
+	</li>
+</ul>
+
+<h2><a name="installation">Installation</a></h2>
+<h3><a name="installation-version-stable">Current stable version (>= 1.4)</a></h3>
+<div>
+	<h4>Extract & Prepare</h4>
+	<p>
+		Extract the ZIP archive and copy the complete <code>/svnadmin/</code> folder to your 
+		web folder. You can also copy the contents of the folder to your web servers 
+		(VirtualHost) root directory.
+	</p>
+	<h4>File Permissions</h4>
+	<p>
+		The application requires full-access to its own <code>/data/</code> folder.
+		<br><code>$> chmod -R 777 /var/www/svnadmin/data</code><br>
+		To manage the Subversion authorization file it is also required to set 
+		write permissions on the SVNAuthFile. (make a backup!)
+	</p>
+	<h4>Configure</h4>
+	<p>
+		After the above steps you can reach the application by typing 
+		<code>http://www.&lt;yourhost&gt;.com/svnadmin/</code> into the address bar of 
+		your browser and configure it.
+	</p>
+</div>
+
+<h2><a name="update">Update</a></h2>
+<h3><a name="update-older-1.4.x">Updating from older version to 1.4.x</a></h3>
+<div>
+	<p>
+		Easy to say: <i>“It is not possible.”</i><br>
+		The 1.4 comes with a new structure to make future updates easy. 
+		All configurations are now saved in the new <code>data/config.ini</code> file, 
+		which is created on the first start up. We recommend to save your current 
+		<code>include/config.inc.php</code> to simply copy-paste your 
+		configuration into the new setup page.
+	</p>
+</div>
+<h3><a name="update-greater-1.4.x-1.6.0">Updating from >= 1.4.x to 1.6.x</a></h3>
+<div>
+	<p>
+		No tests until now...<br>
+		I recommend to do clean installation, because the complete templating 
+		system has been changed and a lot of files has been moved.<br>
+		<br>
+		<b>Note:</b> You can still use your old <code>/data/</code> directory, 
+		which contains the configuration of the application.
+	</p>
+</div>
+
+<h2><a name="configuration-gui">Configuration (GUI)</a></h2>
+<div>
+	<p>
+		The configurations are all in the application <code>/data/config.ini</code>
+		file. If you have made updates, it is possible that not all configurations
+		are in your config file. You can copy them from <code>/data/config.ini.tpl</code>.<br>
+		<br>
+		Here are all configurations beeing covered, which are not changeable by the
+		application's settings page.
+	</p>
+</div>
+<h3><a name="show-delete-repository-delete-button">Show/Hide delete button in Repository-List</a></h3>
+<div>
+	The application provides the functionality to delete repositories, but its
+	disabled by default.
+	
+	<img src="/images/show-delete-repository-button.png" class="block-image">
+	
+	<table class="config-table">
+		<tr><th>Section</th><td>GUI</td></tr>
+		<tr><th>Key</th><td>RepositoryDeleteEnabled</td></tr>
+		<tr><th>Value</th><td>(bool) true / false</td></tr>
+	</table>
+</div>
+<h3><a name="show-update-button-in-navigation">Show/Hide update button in navigation</a></h3>
+<div>
+	In cases of long running updates it makes sense to hide the <code>Update</code> link
+	in navigation and run the updates via the command line interface (<code>cli.php</code>).
+	
+	<table class="config-table">
+		<tr><th>Section</th><td>GUI</td></tr>
+		<tr><th>Key</th><td>AllowUpdateByGui</td></tr>
+		<tr><th>Value</th><td>(bool) true / false</td></tr>
+	</table>
+</div>
+
+<!--
+	Repository management
+-->
+
+<h2><a name="repository-management">Repository management</a></h2>
+<h3><a name="multiple-repository-locations">Multiple repository locations</a></h3>
+<div>
+	<p>The settings page currently only allows to use a single location of repositories
+	(<code>SVNParentPath</code>). You can configure more adding additional sections.</p>
+	
+	<p>Example configuration for multiple repository locations:</p>
+	<pre><code>[Repositories:svnclient]
+SVNParentPath=C:\my repos
+SvnExecutable=C:\subversion\svn.exe
+SvnAdminExecutable=C:\subversion\svnadmin.exe
+Description=First location
+
+[Repositories:svnclient:1]
+SVNParentPath=C:\my repos 1
+Description=Second location
+
+[Repositories:svnclient:2]
+SVNParentPath=C:\my repos 2
+Description=Third location</code></pre>
+	
+	
+</div>
+
+<!--
+	LDAP
+-->
+
+<h2><a name="ldap">LDAP (e.g. ActiveDirectory/OpenLDAP)</a></h2>
+<div>
+	<p>Most configurations are already available on the application's settings page.</p>
+</div>
+
+<h3><a name="ldap-enable-disable-caching">Enable/disable LDAP caching</a></h3>
+<div>
+	The caching mechanism allows to save the required data from LDAP server
+	to a local storage file (in <code>/data/</code>) directory. This increases
+	the performance a lot.
+	
+	<table class="config-table">
+		<tr><th>Section</th><td>Ldap</td></tr>
+		<tr><th>Key</th><td>CacheEnabled</td></tr>
+		<tr><th>Value</th><td>(bool) true / false</td></tr>
+	</table>
+	
+	The path to the storage file can be configured by (optional):
+	
+	<table class="config-table">
+		<tr><th>Section</th><td>Ldap</td></tr>
+		<tr><th>Key</th><td>CacheFile</td></tr>
+		<tr><th>Value</th><td>(string) Path to the storage file</td></tr>
+		<tr><th>Default</th><td>./data/ldap.cache.json</td></tr>
+	</table>
+</div>
+
+<h3><a name="ldap-more-than-1000-users-and-groups">More than 1000 users and groups in LDAP</a></h3>
+<div>
+	<p>If you LDAP database has more than 1000 users and groups, but you only
+	receive 1001 entities you need to update your PHP version to 5.4. Previous
+	PHP version doesn't support fetching more than 1001 entities from LDAP server.</p>
+	
+	<p><b>iF.SVNAdmin is compatible with PHP 5.4 since 1.6.0</b></p>
+</div>

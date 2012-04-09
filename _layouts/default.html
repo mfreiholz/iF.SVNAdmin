@@ -3,11 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>iF.SVNAdmin by Manuel Freiholz | insaneFactory</title>
+    <title>iF.SVNAdmin | {{ page.title }}</title>
     
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+    <link rel="stylesheet" href="/stylesheets/pygment_trac.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="author" content="Manuel Freiholz">
+	<meta name="keywords" content="Subversion Management LDAP Repository">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -19,24 +21,31 @@
         <p>Web-based GUI to manage Subversion repositories and User/Group permissions (+LDAP support)</p>
         <p class="view"><a href="https://github.com/mfreiholz/iF.SVNAdmin">View the Project on GitHub <small>mfreiholz/iF.SVNAdmin</small></a></p>
 		
-		<h2>Download latest stable release:</h2>
-        <ul>
+        <ul class="dlbuttons">
           <li><a href="https://github.com/mfreiholz/iF.SVNAdmin/zipball/stable-1.6.0">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/mfreiholz/iF.SVNAdmin/tarball/stable-1.6.0">Download <strong>TAR Ball</strong></a></li>
           <li><a href="https://github.com/mfreiholz/iF.SVNAdmin">Fork On <strong>GitHub</strong></a></li>
         </ul>
+		
+		<nav>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/documentation">Documentation</a></li>
+				<li><a href="/screenshots">Screenshots</a></li>
+				<li><a href="https://github.com/mfreiholz/iF.SVNAdmin/issues" target="_blank">Report Problem</a></li>
+			</ul>
+		</nav>
       </header>
       <section>
-	  
 		<h1>{{ page.title }}</h1>
 		{{ page.content }}
-	  
 	  </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/mfreiholz">Manuel Freiholz</a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
+	  
 	<!-- Piwik -->
 	<script type="text/javascript">
 	var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.insanefactory.com/" : "http://piwik.insanefactory.com/");
@@ -49,6 +58,7 @@
 	} catch( err ) {}
 	</script><noscript><p><img src="http://piwik.insanefactory.com/piwik.php?idsite=4" style="border:0" alt="" /></p></noscript>
 	<!-- End Piwik Tracking Code -->
-    <script src="javascripts/scale.fix.js"></script>
+	
+    <script src="/javascripts/scale.fix.js"></script>
   </body>
 </html>

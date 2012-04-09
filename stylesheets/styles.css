@@ -12,7 +12,7 @@ h1, h2, h3, h4, h5, h6 {
   margin:0 0 20px;
 }
 
-h2 {
+h2, h3 {
   margin-top:20px;
 }
 
@@ -99,13 +99,32 @@ img {
   max-width:100%;
 }
 
+img.block-image {
+	text-align:left;
+	display:block;
+	margin-top:4px;
+	margin-bottom: 4px;
+}
+
+a img {
+	border-width:0;
+}
+
+table.config-table {
+	margin-top:5px;
+}
+
+table.config-table th {
+	width: 60px;
+}
+
 header {
   width:270px;
   float:left;
   position:fixed;
 }
 
-header ul {
+header ul.dlbuttons {
   list-style:none;
   height:40px;
   
@@ -125,14 +144,14 @@ header ul {
   width:270px;
 }
 
-header li {
+header ul.dlbuttons li {
   width:89px;
   float:left;
   border-right:1px solid #d2d2d2;
   height:40px;
 }
 
-header ul a {
+header ul.dlbuttons a {
   line-height:1;
   font-size:11px;
   color:#999;
@@ -147,20 +166,36 @@ strong {
   font-weight:700;
 }
 
-header ul li + li {
+header ul.dlbuttons li + li {
   width:88px;
   border-left:1px solid #fff;
 }
 
-header ul li + li + li {
+header ul.dlbuttons li + li + li {
   border-right:none;
   width:89px;
 }
 
-header ul a strong {
+header ul.dlbuttons a strong {
   font-size:14px;
   display:block;
   color:#222;
+}
+
+nav ul {
+	list-style:none;
+	padding:0;
+}
+
+nav ul li {
+	border-width:0px 0px 1px 0px;
+	border-style:solid;
+	border-color:#ccc;
+	padding-left:4px;
+}
+
+nav ul li:hover {
+	background-color:#eee;
 }
 
 section {
