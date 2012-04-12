@@ -19,6 +19,7 @@ title: Documentation
 		<ul>
 			<li><a href="#show-delete-repository-delete-button">Show/Hide delete button in Repository-List</a></li>
 			<li><a href="#show-update-button-in-navigation">Show/Hide update button in navigation</a></li>
+			<li><a href="#show-links-to-external-browsers">Show/Hide links to external repository browsers (ViewVC, WebSVN)</a></li>
 		</ul>
 	</li>
 	<li><a href="#repository-management">Repository management</a>
@@ -115,6 +116,32 @@ title: Documentation
 		<tr><th>Section</th><td>GUI</td></tr>
 		<tr><th>Key</th><td>AllowUpdateByGui</td></tr>
 		<tr><th>Value</th><td>(bool) true / false</td></tr>
+	</table>
+</div>
+<h3><a name="show-links-to-external-browsers">Show/Hide links to external repository browsers (ViewVC, WebSVN)</a></h3>
+<div>
+	The application allows you to define two configuration for external
+	repository browsers. The inbuild Apache Subversion browsing functionality
+	and a custom one like ViewVC or WebSVN.
+	
+	<img src="/images/show-links-to-external-browsers.png" class="block-image">
+	
+	<h4>Configuration for Apache directory listing</h4>
+	<table class="config-table">
+		<tr><th>Section</th><td>GUI</td></tr>
+		<tr><th>Key</th><td>ApacheDirectoryListing</td></tr>
+		<tr><th>Value</th><td>(string) URL</td></tr>
+		<tr><th>Parameters</th><td>%1 = Repository name<br>%2 = Relative path (no leading slash)</td></tr>
+		<tr><th>Example</th><td>https://svn.insanefactory.com/repositories/%1/%2</td></tr>
+	</table>
+	
+	<h4>Configuration for custom web application repository listing</h4>
+	<table class="config-table">
+		<tr><th>Section</th><td>GUI</td></tr>
+		<tr><th>Key</th><td>CustomDirectoryListing</td></tr>
+		<tr><th>Value</th><td>(string) URL</td></tr>
+		<tr><th>Parameters</th><td>%1 = Repository name<br>%2 = Relative path (no leading slash)</td></tr>
+		<tr><th>Example</th><td>http://localhost/svnadmin/repositoryview.php?r=%1&p=%2</td></tr>
 	</table>
 </div>
 
