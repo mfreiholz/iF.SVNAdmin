@@ -28,7 +28,7 @@ $engine = \svnadmin\core\Engine::getInstance();
 //
 
 if (!$engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
-	|| $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDumpEnabled', true)) {
+	|| !$engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDumpEnabled', true)) {
 	$engine->forwardError(ERROR_INVALID_MODULE);
 }
 
