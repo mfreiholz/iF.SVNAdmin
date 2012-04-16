@@ -132,5 +132,39 @@ class IF_SVNAdminC extends IF_SVNBaseC
 
 		return true;
 	}
+	
+	/**
+	 * Dump the contents of the given file-system
+	 * 
+	 * @param string $path	Local path to the repository.
+	 * @param string $file [optional]	If NULL the binary output of the dump
+	 *									comannd is directed to STDOUT (browser).
+	 *									Otherwise... not implemented.
+	 */
+	public function dump($path, $file = NULL)
+	{
+		if (empty($path)) {
+			throw new IF_SVNException('Empty path parameter for dump() command.');
+		}
+		
+		$args = array();
+		
+		if (!empty($this->config_directory)) {
+			$args['--config-dir'] = escapeshellarg($this->config_directory);
+		}
+		
+		if ($file != NULL) {
+			$args[] = '> ' . escapeshellarg($file);
+		}
+		
+		$cmd = self::create_svn_command($this->m_svnadmin, 'dump', self::encode_local_path($path), $args, false);
+		
+		if ($file != NULL) {
+			// Not supported....
+		}
+		else {
+			passthru($cmd);
+		}
+		return true;
+	}
 }
-?>

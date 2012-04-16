@@ -39,6 +39,14 @@ $appTR->loadModule("repositorylist");
 if (check_request_var("delete")) {
 	$engine->handleAction("delete_repository");
 }
+else if (check_request_var('dump')) {
+	$engine->handleAction('dump_repository');
+	exit(0);
+}
+else if (check_request_var('load')) {
+	
+	exit(0);
+}
 
 //
 // View data
@@ -55,6 +63,15 @@ try {
 		$repositoryList[$rp->identifier] = $engine->getRepositoryViewProvider()->getRepositoriesOfParent($rp);
 		usort($repositoryList[$rp->identifier], array('\svnadmin\core\entities\Repository', 'compare'));
 	}
+	
+	// Show options column?
+	if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
+		&& $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DUMP)
+		&& $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDumpEnabled', true))
+		){
+		SetValue('ShowOptions', true);
+		SetValue('ShowDumpOption', true);
+	}
 }
 catch (Exception $ex) {
 	$engine->addException($ex);
@@ -62,6 +79,6 @@ catch (Exception $ex) {
 
 SetValue('RepositoryParentList', $repositoryParentList);
 SetValue('RepositoryList', $repositoryList);
-SetValue('ShowDeleteButton', $appEngine->getConfig()->getValueAsBoolean("GUI", "RepositoryDeleteEnabled", true));
+SetValue('ShowDeleteButton', $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDeleteEnabled', true));
 ProcessTemplate('repository/repositorylist.html.php');
 ?>

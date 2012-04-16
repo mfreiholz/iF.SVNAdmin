@@ -197,6 +197,34 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
     }
 	
 	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IRepositoryEditProvider::dump()
+	 */
+	public function dump(\svnadmin\core\entities\Repository $oRepository)
+	{
+		$svnParentPath = $this->getRepositoryConfigValue($oRepository, 'SVNParentPath');
+		
+		if ($svnParentPath == NULL) {
+			throw new \Exception('Invalid parent-identifier: ' .
+					$oRepository->getParentIdentifier());
+		}
+		
+		$absoluteRepositoryPath = $svnParentPath . '/' . $oRepository->name;
+		
+		// Set HTTP header
+		header('Content-Description: Repository Dump');
+		header('Content-type: application/octet-stream');
+		header('Content-Disposition: attachment; filename=' . $oRepository->name . '.dump');
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		
+		// Stream file to STDOUT now.
+		return $this->_svnAdmin->dump($absoluteRepositoryPath);
+	}	
+	
+	/**
 	 * Gets the configuration value associated to the given Repository object
 	 * (identified by 'parentIdentifier')
 	 * 

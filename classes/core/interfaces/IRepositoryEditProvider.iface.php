@@ -49,5 +49,14 @@ interface IRepositoryEditProvider extends IEditProvider
 	 * @return bool
 	 */
 	public function mkdir(\svnadmin\core\entities\Repository $oRepository, array $paths);
+	
+	/**
+	 * Dumps a repository file system content to STDOUT (Browser).
+	 * 
+	 * @param \svnadmin\core\entities\Repository $oRepository
+	 * 
+	 * @return bool
+	 */
+	public function dump(\svnadmin\core\entities\Repository $oRepository);
 }
 ?>

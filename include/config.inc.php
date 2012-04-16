@@ -97,8 +97,8 @@ include_once( "./classes/core/Exceptions.class.php" );
  * iF.SVNAdmin version.
  */
 define("MAJOR_VERSION", "1");
-define("MINOR_VERSION", "6");
-define("VERSION_EXTRA", "1 (trunk)");
+define("MINOR_VERSION", "7");
+define("VERSION_EXTRA", "(inofficial)");
 
 /**
  * Constant ACL modules.
@@ -116,16 +116,17 @@ define("ACL_MOD_PROJECTMANAGER",       "projectmanagers");
 /**
  * Constant ACL actions.
  */
-define("ACL_ACTION_VIEW",              "view");
-define("ACL_ACTION_ADD",               "add");
-define("ACL_ACTION_DELETE",            "delete");
-define("ACL_ACTION_ASSIGN",            "assign");
-define("ACL_ACTION_UNASSIGN",          "unassign");
-define("ACL_ACTION_LOGIN",             "login");      // ACL_MOD_BASIC only!
-define("ACL_ACTION_CHANGEPASS",        "changepass"); // ACL_MOD_USER only!
-define("ACL_ACTION_CHANGEPASS_OTHER",  "changepassother"); // ACL_MOD_USER only!
-define("ACL_ACTION_SYNCHRONIZE",       "synchronize"); // ACL_MOD_UPDATE only!
-define("ACL_ACTION_CHANGE",            "change"); // ACL_MOD_SETTINGS only (atm...)!
+define("ACL_ACTION_VIEW",				"view");
+define("ACL_ACTION_ADD",				"add");
+define("ACL_ACTION_DELETE",				"delete");
+define("ACL_ACTION_ASSIGN",				"assign");
+define("ACL_ACTION_UNASSIGN",			"unassign");
+define("ACL_ACTION_LOGIN",				"login");			// ACL_MOD_BASIC only!
+define("ACL_ACTION_CHANGEPASS",			"changepass");		// ACL_MOD_USER only!
+define("ACL_ACTION_CHANGEPASS_OTHER",	"changepassother");	// ACL_MOD_USER only!
+define("ACL_ACTION_SYNCHRONIZE",		"synchronize");		// ACL_MOD_UPDATE only!
+define("ACL_ACTION_CHANGE",				"change");			// ACL_MOD_SETTINGS only (atm...)!
+define("ACL_ACTION_DUMP",				"dump");			// ACL_MOD_REPO
 
 /*
  * Switch current locale procecure.
@@ -141,10 +142,11 @@ if ($requestedLocale != null)
  * The variable is a global variable and can be called in each class
  * and function which are used with this application.
  *
+ * @var $appEngine \svnadmin\core\Engine
  * @global $appEngine \svnadmin\core\Engine
+ * @deprecated No longer use this global variable!
  */
 $appEngine = \svnadmin\core\Engine::getInstance();
-
 
 /**
  * Global object to translate strings into different languages.
