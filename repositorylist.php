@@ -67,7 +67,7 @@ try {
 	// Show options column?
 	if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
 		&& $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DUMP)
-		&& $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDumpEnabled', true))
+		&& $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDumpEnabled', false))
 		){
 		SetValue('ShowOptions', true);
 		SetValue('ShowDumpOption', true);
