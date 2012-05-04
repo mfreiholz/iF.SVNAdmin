@@ -35,7 +35,7 @@ class IF_Config
 	public function __construct($configFilePath)
 	{
 		$this->configFilePath = $configFilePath;
-		self::parse();
+		$this->parse();
 	}
 
 	/**
@@ -45,66 +45,51 @@ class IF_Config
 	 */
 	private function parse()
 	{
-		if (!file_exists($this->configFilePath))
-		{
-			// Config file doesn't exist.
-			return false;
+		if (!file_exists($this->configFilePath) || !is_file($this->configFilePath)) {
+			throw new Exception('Config file does not exist. ' . $this->configFilePath);
 		}
 
 		$fh = fopen($this->configFilePath, 'r');
-
-		if (!$fh)
-		{
-			// Can't open file.
-			return false;
+		if (!flock($fh, LOCK_SH )) {
+			throw new Exception('Can not lock (shared) file. ' . $this->configFilePath);
 		}
+  
+		$last_section_name = NULL;
+		while (!feof($fh)) {
+			$line = fgets($fh);
+			$line = trim($line);
 
-		// Insert default '' section.
-		$this->items[""] = array();
-
-		// Read line-by-line.
-		$current_section = "";
-		while (($buffer = fgets($fh, 4096)) !== FALSE)
-		{
-			// Skip comments.
-			if (strpos($buffer, '#') === 0 || strpos($buffer, ';') === 0)
-			{
+			// skip empty lines
+			if (empty($line)) {
+				continue;
+			}
+    
+			// skip comments
+			if (strpos($line, '#') === 0
+				|| strpos($line, ';') === 0) {
 				continue;
 			}
 
-			// Section header.
-			if (substr($buffer, 0, 1) == '[')
-			{
-				$end_pos = strpos($buffer, ']');
-				if ($end_pos !== FALSE)
-				{
-					$section_name = substr($buffer, 1, $end_pos-1);
-					$current_section = trim($section_name);
-					$this->items[$current_section] = array();
-					continue;
-				}
-				else
-				{
-					throw new IF_SyntaxErrorException("Close tag ']' of section header missing => ".trim($buffer));
-				}
+			// section header
+			if (substr($line, 0, 1) == '[' ) {
+				$section_name = substr($line, 1, strlen($line)-2);
+				$this->items[$section_name] = array();
+				$last_section_name = $section_name;
+				continue;
 			}
+			// "key=value" pairs of last section header
+			else {
+				$splits = explode('=', $line, 2);
+				$key = trim($splits[0]);
+				$val = NULL;
 
-			// Key=Value pairs.
-			// Note: We need to "trim()" the value, because of the line-break.
-			if (preg_match('/^(.*?)=(.*?)$/', $buffer, $matches))
-			{
-				$key = trim($matches[1]);
-				$value = trim($matches[2]);
-				$this->items[$current_section][$key] = $value;
+				if (count($splits) > 1) {
+					$val = trim($splits[1]);
+				}
+				$this->items[$last_section_name][$key] = $val;
 			}
 		}
-
-		if (!feof($fh))
-		{
-			// Reading has been canceled unexpected!
-			return false;
-		}
-
+		flock($fh, LOCK_UN);
 		fclose($fh);
 		return true;
 	}
@@ -121,161 +106,38 @@ class IF_Config
 	 */
 	public function save($path = null)
 	{
-		if (empty($path))
-		{
+		if (!is_array($this->items)) {
+			return false;
+		}
+	
+		if ($path == null) {
 			$path = $this->configFilePath;
 		}
 
-		if (!file_exists($path))
-		{
-			// Config file doesn't exist.
-			//return false;
+		if (!file_exists($path)) {
+			// try to create the file
+			if (!touch($path)) {
+				throw new Exception('File does not exist and can not create it. ' . $path);
+			}
 		}
 
-		$fh = fopen($this->configFilePath, 'r');
-		if (!$fh)
-		{
-			// Can not open file.
-			//return false;
+		$fh = fopen($path, 'w');
+		flock($fh, LOCK_EX);
+		
+		// iterate all sections
+		foreach ($this->items as $section_name => $section_data) {
+			fwrite($fh, "\n[" . $section_name . "]\n");
+
+			if (is_array($section_data)) {
+				// iterate key/value pairs of section
+				foreach ($section_data as $key => $val) {
+					fwrite($fh, $key . '=' . $val . "\n");
+				}
+			}
 		}
-
-		// Arrays of items which has been written.
-		// e.g.: array( "section_name" => array("key1", "key2") )
-		$written_items = array();
-		$written_items[""] = array();
-
-		// Read line-by-line.
-		$nc = '';
-		$current_section = "";
-		while (($buffer = fgets($fh, 4096)) !== FALSE)
-		{
-			// Skip comments.
-			if (strpos($buffer, '#') === 0 || strpos($buffer, ';') === 0)
-			{
-				// Do not save comments of a removed section.
-				if (!isset($this->items[$current_section]))
-				{
-					continue;
-				}
-
-				$nc.= $buffer;
-			}
-			// Section header.
-			else if (substr($buffer, 0, 1) == '[')
-			{
-				$end_pos = strpos($buffer, ']');
-				if ($end_pos !== FALSE)
-				{
-					// Before we change the to the new section header,
-					// we need to prove whether there are any new key
-					// items for the previous section.
-					if ($current_section != '' && isset($this->items[$current_section]))
-					{
-						foreach ($this->items[$current_section] as $key => $value)
-						{
-							if (!in_array($key, $written_items[$current_section]))
-							{
-								// New config key for the previous section.
-								$nc.= $key.'='.$this->items[$current_section][$key]."\n";
-								$written_items[$current_section][] = $key;
-							}
-						}
-					}
-
-					// Switch to new section now.
-					$section_name = substr($buffer, 1, $end_pos-1);
-					$current_section = $section_name;
-
-					// Has the section been removed?
-					if (!isset($this->items[$current_section]))
-					{
-						continue;
-					}
-
-					$nc.= $buffer;
-					$written_items[$current_section] = array();
-				}
-				else
-				{
-					throw new IF_SyntaxErrorException("Close tag ']' of section header missing => ".trim($buffer));
-				}
-			}
-			// Key=Value pairs.
-			// Note: We need to "trim()" the value, because of the line-break.
-			else if (preg_match('/^(.*?)=(.*?)$/', $buffer, $matches))
-			{
-				$key = trim($matches[1]);
-				$value = trim($matches[2]);
-
-				// Write new value to cfg file, if value changed.
-				if (isset($this->items[$current_section][$key]) /*&& ($this->items[$current_section][$key] != trim($value))*/)
-				{
-					$nc.= $key.'='.$this->items[$current_section][$key]."\n";
-					$written_items[$current_section][] = $key;
-				}
-				// Key/Value pair has been removed.
-				else
-				{
-					//$nc.= $buffer;
-				}
-			}
-			else
-			{
-				$nc.= $buffer;
-			}
-
-		} // while (readline)
-
-		if (!feof($fh))
-		{
-			// Reading has been canceled unexpected!
-			fclose($fh);
-			return false;
-		}
+		
+		flock($fh, LOCK_UN);
 		fclose($fh);
-
-
-		// Block copied from content while loop.
-		// Especially if the last section in file gets new config entry.
-		if ($current_section != '' && isset($this->items[$current_section]))
-		{
-			foreach ($this->items[$current_section] as $key => $value)
-			{
-				if (!in_array($key, $written_items[$current_section]))
-				{
-					// New config key for the previous section.
-					$nc.= $key.'='.$this->items[$current_section][$key]."\n";
-					$written_items[$current_section][] = $key;
-				}
-			}
-		}
-
-
-		// Check for new added sections.
-		foreach ($this->items as $section => $kvarray)
-		{
-			if (!isset($written_items[$section]))
-			{
-				// Append the section + KV-pairs.
-				$nc.= "\n";
-				$nc.= '['.$section.']';
-				$nc.= "\n";
-				$written_items[$section] = array();
-
-				foreach ($kvarray as $key => $value)
-				{
-					$nc.= $key.'='.$value."\n";
-					$written_items[$section][] = $key;
-				}
-			}
-		}
-
-
-		// Write configuration.
-		$fh = fopen($path, 'w+');
-		fwrite($fh, $nc);
-		fclose($fh);
-
 		return true;
 	}
 

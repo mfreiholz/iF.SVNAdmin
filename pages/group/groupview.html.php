@@ -117,7 +117,7 @@
     <tr>
       <td>
         <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN)): ?>
-        <input type="checkbox" name="selected_accesspaths[]" value="${paths}{path}">
+        <input type="checkbox" name="selected_accesspaths[]" value="<?php echo $ap->getPath(); ?>">
         <?php endif; ?>
       </td>
       <td>
