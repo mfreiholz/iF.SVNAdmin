@@ -97,8 +97,8 @@ include_once( "./classes/core/Exceptions.class.php" );
  * iF.SVNAdmin version.
  */
 define("MAJOR_VERSION", "1");
-define("MINOR_VERSION", "7");
-define("VERSION_EXTRA", "(inofficial)");
+define("MINOR_VERSION", "6.1");
+define("VERSION_EXTRA", "");
 
 /**
  * Constant ACL modules.
