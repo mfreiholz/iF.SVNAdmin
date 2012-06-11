@@ -87,7 +87,7 @@ class IF_SVNBaseC
 	public function __construct()
 	{
 		// Find out whether the system is based on MS Windows.
-		$soft = $_SERVER["SERVER_SOFTWARE"];
+		$soft = PHP_OS;
 		$soft = strtoupper($soft);
 
 		if (strpos($soft, "WIN") !== FALSE)
