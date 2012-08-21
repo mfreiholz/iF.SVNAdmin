@@ -22,11 +22,11 @@
 namespace svnadmin\providers\ad;
 
 /**
- * The  CachedLdapUserViewProvider class provides fast access for data which
- * comes from the LdapUserViewProvider. It only accesses the LDAP server inside
- * the "update()" method implementation.
+ * The  CachedAdUserViewProvider class provides fast access for data which
+ * comes from the AdUserViewProvider. It's based on th original
+ * CachedLdapUserViewProvider implementation.
  * 
- * @author Manuel Freiholz, insaneFactory.com
+ * @author Roy Kaldung <roy@kaldung.com>
  */
 class CachedAdUserViewProvider
 	extends \svnadmin\providers\ad\AdUserViewProvider
