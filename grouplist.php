@@ -4,6 +4,8 @@
  * Copyright (c) 2010 by Manuel Freiholz
  * http://www.insanefactory.com/
  *
+ * Copyright (c) 2012 by Roy Kaldung <roy@kaldung.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; version 2
