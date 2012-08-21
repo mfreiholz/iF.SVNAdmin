@@ -130,6 +130,11 @@ class AdUserViewProvider
     protected $groups_to_users_attribute_value;
 
     /**
+     * @var adLDAP
+     */
+    protected $adLDAP;
+
+    /**
      * Holds the singelton instance of this class.
      * @var \svnadmin\providers\ldap\LdapUserViewProvider
      */
@@ -143,6 +148,8 @@ class AdUserViewProvider
     {
         $E = \svnadmin\core\Engine::getInstance();
         $cfg = $E->getConfig();
+
+        $this->adLDAP = new \\adLDAP();
 
         $this->host_address = $cfg->getValue("Ldap", "HostAddress");
         $this->host_protocol_version = $cfg->getValue("Ldap", "ProtocolVersion");
@@ -165,12 +172,12 @@ class AdUserViewProvider
     /**
      * Gets the "singelton" instance of this class.
      *
-     * @return \svnadmin\providers\ldap\LdapUserViewProvider
+     * @return \svnadmin\providers\ad\AdUserViewProvider
      */
     public static function getInstance()
     {
         if (self::$m_instance == null)
-            self::$m_instance = new LdapUserViewProvider();
+            self::$m_instance = new ADUserViewProvider();
         return self::$m_instance;
     }
 

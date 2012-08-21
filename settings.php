@@ -471,7 +471,7 @@ SetValue("SVNAuthFile", $svnAuthFile);
 SetValue("SVNAuthFileEx", $svnAuthFileEx);
 
 // UserViewProviderType
-$userViewProviderTypes = array(/*"off",*/ "passwd", "digest", "ldap");
+$userViewProviderTypes = array("off", "passwd", "digest", "ldap", "ad");
 array_unshift($userViewProviderTypes, $cfgEngine->getValue("Engine:Providers","UserViewProviderType"));
 SetValue("userViewProviderTypes", $userViewProviderTypes);
 
@@ -481,7 +481,7 @@ array_unshift($userEditProviderTypes, $cfgEngine->getValue("Engine:Providers","U
 SetValue("userEditProviderTypes", $userEditProviderTypes);
 
 // GroupViewProviderType
-$groupViewProviderTypes = array("off", "svnauthfile", "ldap");
+$groupViewProviderTypes = array("off", "svnauthfile", "ldap", "ad");
 array_unshift($groupViewProviderTypes, $cfgEngine->getValue("Engine:Providers","GroupViewProviderType"));
 SetValue("groupViewProviderTypes", $groupViewProviderTypes);
 

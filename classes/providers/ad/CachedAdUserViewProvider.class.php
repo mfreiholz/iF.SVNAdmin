@@ -23,10 +23,10 @@ namespace svnadmin\providers\ad;
 
 /**
  * The  CachedAdUserViewProvider class provides fast access for data which
- * comes from the AdUserViewProvider. It's based on th original
- * CachedLdapUserViewProvider implementation.
+ * comes from the AdUserViewProvider. It only accesses the LDAP server inside
+ * the "update()" method implementation.
  * 
- * @author Roy Kaldung <roy@kaldung.com>
+ * @author Manuel Freiholz, insaneFactory.com
  */
 class CachedAdUserViewProvider
 	extends \svnadmin\providers\ad\AdUserViewProvider
@@ -36,7 +36,7 @@ class CachedAdUserViewProvider
 	 * @var \IF_JsonObjectStorage
 	 */
 	private $_cache;
-	
+
 	/**
 	 * Holds the singleton instance of this class.
 	 * @var \svnadmin\providers\ldap\CachedLdapUserViewProvider 
@@ -54,7 +54,7 @@ class CachedAdUserViewProvider
 	 * @var type 
 	 */
 	private $_init_done = false;
-	
+
 	/**
 	 * Constructor.
 	 * Loads cache file. 
@@ -98,7 +98,7 @@ class CachedAdUserViewProvider
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Update the SVNAuthFile with data from LDAP server.
 	 * @see svnadmin\core\interfaces.IViewProvider::update()
