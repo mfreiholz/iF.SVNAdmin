@@ -288,6 +288,74 @@ function testSettings(testSection, params, resultContainer)
 }
 
 /**
+ * Executes an XHR request an put the result into a textfield
+ *
+ * @param testSection The section to test.
+ * @param requestVars The variables which are required for an successful test.
+ * @param resultContainer The id of the container, which will contain the result.
+ * @param errorContainer The id of the cotainer where errors will be displayed.
+ */
+function getSettings(testSection, params, resultContainer, errorContainer)
+{
+    // Append static control parameters.
+    params.dotest = 1;
+    params.dotestsec = testSection;
+
+    var C = $(errorContainer);
+    var D = $(resultContainer);
+
+    $.ajax({
+        type: "post",
+        url: "settings.php",
+        data: params,
+        cache: false,
+        dataType: "json",
+
+        beforeSend: function(jqXHR, settings) {
+            // Hide old result element.
+            C.removeClass();
+            C.html(HtmlData.ajaxLoadingImage());
+            C.show();
+        },
+
+        error: function(jqXHR, textStatus, errorThrown) {
+            var s =
+                "AJAX Error:<br>" +
+                    "jqXHR=" + jqXHR + "<br>" +
+                    "textStatus=" + textStatus + ";<br>" +
+                    "errorThrown=" + errorThrown + ";<br>";
+            C.addClass("errormsg");
+            C.html(s).show();
+        },
+
+        success: function(data, textStatus, jqXHR) {
+            // Get response text.
+            var msg = data.message;
+
+            if (typeof data.php_error !== "undefined") {
+                msg += "<br><b>An PHP error occured!</b><br>";
+                msg += data.php_error.message;
+            }
+
+            // Set style class of container.
+            if (data.type == "error") {
+                C.addClass("errormsg");
+                C.html(data.message);
+            }
+            else {
+                C.addClass("okmsg");
+                C.html('OK');
+                D.val(data.message);
+            }
+        },
+
+        complete: function(jqXHR, textStatus) {
+            // Show result.
+            C.show();
+        }
+    });
+}
+/**
  * This function should be called with any change of the provider types.
  * It handles the logic of possible combinations and updates the user interface.
  * On this way the user can not make a wrong configuration.
@@ -310,7 +378,6 @@ function updateSettingsSelection()
   else if($("#UserViewProviderType").val() == "passwd")
   {
     $("#tbl_ldapconnection").hide(speed);
-    $("#tbl_ldapuser").hide(speed);
     $("#tbl_userdigestfile").hide(speed);
     $("#tbl_userfile").show(speed);
     $("#UserEditProviderType").removeAttr("disabled");
@@ -321,6 +388,7 @@ function updateSettingsSelection()
   {
     $("#tbl_ldapconnection").hide(speed);
     $("#tbl_ldapuser").hide(speed);
+    $("#tbl_adconnection").hide(speed);
     $("#tbl_userfile").hide(speed);
     $("#tbl_userdigestfile").show(speed);
     $("#UserEditProviderType").removeAttr("disabled");
@@ -332,9 +400,24 @@ function updateSettingsSelection()
     $("#tbl_userfile").hide(speed);
     $("#tbl_userdigestfile").hide(speed);
     $("#tbl_ldapconnection").show(speed);
+    $("#tbl_adconnection").hide(speed);
     $("#tbl_ldapuser").show(speed);
     $("#UserEditProviderType").val("off");
     $("#UserEditProviderType").attr("disabled", "disabled");
+  }
+  else if($("#UserViewProviderType").val() == "ad")
+  {
+      $("#tbl_userfile").hide(speed);
+      $("#tbl_userdigestfile").hide(speed);
+      $("#tbl_ldapconnection").hide(speed);
+      $("#tbl_adconnection").show(speed);
+      $("#tbl_ldapuser").hide(speed);
+      if ($("#GroupViewProviderType").val() == 'ldap') {
+          alert("Can't combine LDAP and Active Directory provider x");
+          $("#GroupViewProviderType").val("ad");
+      }
+      $("#UserEditProviderType").val("off");
+      $("#UserEditProviderType").attr("disabled", "disabled");
   }
 
   // Group view
@@ -343,7 +426,11 @@ function updateSettingsSelection()
     if ($("#UserViewProviderType").val() != "ldap"){
       $("#tbl_ldapconnection").hide(speed);
     }
+    if ($("#UserViewProviderType").val() != "ad"){
+      $("#tbl_adconnection").hide(speed);
+    }
     $("#tbl_ldapgroup").hide(speed);
+    $("#tbl_adgroup").hide(speed);
     $("#GroupEditProviderType").val("off");
     $("#GroupEditProviderType").attr("disabled", "disabled");
   }
@@ -355,12 +442,28 @@ function updateSettingsSelection()
     $("#tbl_ldapgroup").hide(speed);
     $("#GroupEditProviderType").removeAttr("disabled");
   }
+  else if ($("#GroupViewProviderType").val() == "ad")
+  {
+    $("#tbl_ldapconnection").hide(speed);
+    $("#tbl_ldapgroup").hide(speed);
+    $("#tbl_ldapgroup").hide(speed);
+    $("#tbl_adconnection").show(speed);
+    $("#tbl_adgroup").show(speed);
+    if ($("#UserViewProviderType").val() == "ldap") {
+        alert("Can't combine LDAP and Active Directory provider");
+        $("#UserViewProviderType").val("off");
+        $("#tbl_ldapuser").hide(speed);
+    }
+    $("#GroupEditProviderType").val("off");
+    $("#GroupEditProviderType").attr("disabled", "disabled");
+  }
   else if ($("#GroupViewProviderType").val() == "ldap")
   {
     if ($("#UserViewProviderType").val() == "ldap")
     {
       $("#tbl_ldapconnection").show(speed);
       $("#tbl_ldapgroup").show(speed);
+      $("#tbl_adgroup").hide(speed);
       $("#GroupEditProviderType").val("off");
       $("#GroupEditProviderType").attr("disabled", "disabled");
     }
@@ -368,6 +471,7 @@ function updateSettingsSelection()
     {
       $("#GroupViewProviderType").val("off");
       $("#tbl_ldapgroup").hide(speed);
+      $("#tbl_adgroup").hide(speed);
       $("#GroupEditProviderType").val("off");
       $("#GroupEditProviderType").attr("disabled", "disabled");
       alert("The users must be fetched from LDAP, if you want to use the groups from your LDAP server.");

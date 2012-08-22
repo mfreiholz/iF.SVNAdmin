@@ -78,6 +78,13 @@ $pLdapGroupSearchFilter = get_request_var("LdapGroupSearchFilter");
 $pLdapGroupAttributes = get_request_var("LdapGroupAttributes");
 $pLdapGroupsToUserAttribute = get_request_var("LdapGroupsToUserAttribute");
 $pLdapGroupsToUserAttributeValue = get_request_var("LdapGroupsToUserAttributeValue");
+$pAdDomainName = get_request_var("AdDomainName");
+$pAdDomainController = get_request_var("AdDomainController");
+$pAdBindUser = get_request_var("AdBindUser");
+$pAdBindPassword = get_request_var("AdBindPassword");
+$pAdGroupFilter = get_request_var("AdGroupFilter");
+$pAdGroupStrictMode = get_request_var("AdGroupStrictMode");
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Reset first start up value.
@@ -123,6 +130,12 @@ if (check_request_var("save"))
 	$cfgEngine->setValue("Groups:ldap", "Attributes", $pLdapGroupAttributes);
 	$cfgEngine->setValue("Groups:ldap", "GroupsToUserAttribute", $pLdapGroupsToUserAttribute);
 	$cfgEngine->setValue("Groups:ldap", "GroupsToUserAttributeValue", $pLdapGroupsToUserAttributeValue);
+    $cfgEngine->setValue('Ad', 'DomainName', $pAdDomainName);
+    $cfgEngine->setValue('Ad', 'DomainController', $pAdDomainController);
+    $cfgEngine->setValue('Ad', 'BindUser', $pAdBindUser);
+    $cfgEngine->setValue('Ad', 'BindPassword', $pAdBindPassword);
+    $cfgEngine->setValue('Groups:ad', 'Filter', $pAdGroupFilter);
+    $cfgEngine->setValue('Groups:ad', 'StrictMode', $pAdGroupStrictMode ? 'true' : 'false');
 	$cfgEngine->setValue("Common", "FirstStart", 0);
 
 	// Save configuration now.
@@ -327,6 +340,49 @@ if (check_request_var("dotest") && check_request_var("dotestsec"))
 				$msgErr = tr("PHP LDAP extension is not available.");
 			}
 			break;
+
+        case "AdDomainControllerDetect":
+            if (IF_AbstractLdapConnector::isLdapExtensionEnabled())
+            {
+                $dcs = dns_get_record('_ldap._tcp.dc._msdcs.' . $pAdDomainName, DNS_SRV);
+                if (is_array($dcs)) {
+                    $msgOk = '';
+                    foreach($dcs as $dc) {
+                        $msgOk .= $dc['target'] . ',';
+                    }
+                    $msgOk = substr($msgOk, 0, -1);
+                }
+                if (!$dcs) {
+                    $msgErr = tr('No Domain Controller found.');
+                }
+            }
+            else
+            {
+                $msgErr = tr("PHP LDAP extension is not available.");
+            }
+            break;
+
+        case 'AdConnection':
+            if (IF_AbstractLdapConnector::isLdapExtensionEnabled())
+            {
+                try {
+                    $test = new adLDAP(array(
+                        'domain_controllers' => explode(',', $pAdDomainController),
+                        'admin_username' => $pAdBindUser,
+                        'admin_password' => $pAdBindPassword,
+                        'base_dn' => null,
+                        'account_suffix' => '',
+                    ));
+                    $msgOk = "OK, BaseDN is " . $test->findBaseDn();
+                } catch (Exception $e) {
+                    $msgErr = $e->getMessage();
+                }
+            }
+            else
+            {
+                $msgErr = tr("PHP LDAP extension is not available.");
+            }
+            break;
 
 		default:
 			$msgErr = "Invalid request.";
@@ -584,6 +640,22 @@ SetValue("LdapGroupsToUserAttribute", $ldapGroupsToUserAttribute);
 SetValue("LdapGroupsToUserAttributeEx", $ldapGroupsToUserAttributeEx);
 SetValue("LdapGroupsToUserAttributeValue", $ldapGroupsToUserAttributeValue);
 SetValue("LdapGroupsToUserAttributeValueEx", $ldapGroupsToUserAttributeValueEx);
+
+// AD connection
+$adDomainName = $cfg->getValue('Ad', 'DomainName');
+$adBindUser   = $cfg->getValue('Ad', 'BindUser');
+$adBindPassword = $cfg->getValue('Ad', 'BindPassword');
+$adDomainController = $cfg->getValue('Ad', 'DomainController');
+$adGroupFilter = $cfg->getValue('Groups:ad', 'Filter');
+$adGroupStrictMode = $cfg->getValueAsBoolean('Groups:ad', 'StrictMode');
+SetValue('AdDomainName', $adDomainName);
+SetValue('AdBindUser', $adBindUser);
+SetValue('AdBindPassword', $adBindPassword);
+SetValue('AdDomainController', $adDomainController);
+SetValue('AdGroupFilter', $adGroupFilter);
+SetValue('AdGroupStrictMode', $adGroupStrictMode);
+
+
 
 // Process template.
 ProcessTemplate("settings/backend.html.php");
