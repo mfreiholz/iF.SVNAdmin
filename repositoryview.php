@@ -75,7 +75,7 @@ try {
 		// Add weblink property.
 		if ($hasApacheWebLink || $hasCustomWebLink)
 		{
-			$args = array($oR->name, $val->getEncodedRelativePath());
+			$args = array($oR->getEncodedName(), $val->getEncodedRelativePath());
 
 			if ($hasApacheWebLink)
 			{
