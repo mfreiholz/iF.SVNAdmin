@@ -82,7 +82,7 @@
 				<td>
 					<?php if (GetBoolValue("ShowDumpOption")) : ?>
 					<a href="repositorylist.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>&amp;dump=true">
-						<?php Translate("Dump"); ?>
+						<img src="templates/icons/exportdump.png" border="0" alt="<?php Translate("Dump"); ?>" title="<?php Translate("Export dump"); ?>">
 					</a>
 					<?php endif; ?>
 				</td>
