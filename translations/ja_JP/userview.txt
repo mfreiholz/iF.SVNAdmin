@@ -1,0 +1,6 @@
+"On this page you can see all assignments of the user.","ユーザーに対する全ての割当状況を見る事ができます。"
+"Groups of user","所属グループ"
+"Permissions of users","パーミッション"
+"Inherit from Group","グループからの継承"
+"<b>Note:</b> You can not unassign permissions from user, which are inherited by a group.","<b>注:</b> グループから継承しているパーミッションを削除する事はできません。"
+"User is project manager of:","管理プロジェクト"

@@ -1,0 +1,31 @@
+# All
+"Example","例"
+
+# Settings table
+"Subversion authorization","サブヴァージョンの権限"
+"Subversion authorization file","サブヴァージョンの権限ファイル"
+"Data providers","データープロバイダ"
+"User authentication","ユーザー認証"
+"User authentication file (SVNUserFile)","ユーザー認証ファイル (SVNUserFile)"
+"Subversion settings","サブヴァージョンの設定"
+"Parent directory of the repositories (SVNParentPath)","リポジトリの親ディレクトリ (SVNParentPath)"
+"Subversion client executable","サブヴァージョンクライアント実行ファイル 'svn'"
+"Subversion admin executable","サブヴァージョンアドミン実行ファイル 'svnadmin'"
+"Parent directory of the svn Http server","svn Http サーバーの親ディレクトリ" 
+"Parent directory of the svn Http viewer","svn Http ビューワーの親ディレクトリ"
+"LDAP connection information","LDAPコネクション"
+"Host address","ホストアドレス"
+"Protocol version","プロトコルヴァージョン"
+"LDAP user provider information","LDAPユーザープロバイダ"
+"LDAP group provider information","LDAPグループプロバイダ"
+
+# No users, no edit provider
+"You have not defined an "UserEditProviderType", but the system also could not find any user from the configured user view provider.",""UserEditProviderType" が未定義でかつ指定されたユーザービュープロバイダからユーザーを見つける事ができません。"
+"You should now create a new user in your configured backend (e.g.: LDAP/Active Directory).","設定したバックエンド(例: LDAP/Active Directory)に対して新しいユーザーを作成してください。"
+"If you think your configuration is incorrect, <a href="settings.php?firststart=1">click here.</a>","設定に誤りがあると思われる時は<a href="settings.php?firststart=1">ここ</a>をクリックして下さい。"
+
+# Define administrator
+"Could not find existing users with your configuration. Created default Administrator account.","現在のコンフィグレーションにはユーザーが存在しません。デフォルトの管理者アカウントを作成しました。"
+"You can <a href="login.php"><b>login now.</b></a>","<a href="login.php"><b>ログイン</b></a>することができます。"
+"No administrator defined! Select the user for the administator privileges, please.","管理者が設定されていません。管理者権限をもつユーザーを選択して下さい。"
+"Save","保存"

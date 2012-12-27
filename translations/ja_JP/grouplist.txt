@@ -1,0 +1,2 @@
+"Group management","グループ管理"
+"Here you can see a list of all groups, which are defined in your subversion configuration.","このページでは登録済みの全てのグループを表示します。"

@@ -1,0 +1,8 @@
+"Synchronize","同期"
+"Synchronize your data.","データの同期を取ります."
+"The following views are up-to-date now:","以下のビューが更新されます:"
+"has been updated","アップデートしました。"
+"The following views could not been updated:","以下のビューは更新できませんでした："
+"Your current application configuration uses a data provider, which requires updates from time to time. Here you can force an update now, if you didn't configure any cron-jobs or Windows task to perform this update.","現在のアプリケーションの設定は定期的なアップデートが必要なデータープロバイダーを使用しています。もし cron ジョブや Windows タスクでこのアップデートを行うよう設定していない場合、ここで強制的にアップデートする事ができます。"
+"Note: This could take a few seconds. Do not press this button twice!","注: 更新には数秒間を要する事があります。このボタンを何度も押さないで下さい！"
+"Synchronize now","今すぐ同期する"

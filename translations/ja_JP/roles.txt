@@ -1,0 +1,27 @@
+"Roles of user","ユーザーの役割"
+"Please choose","選択してください。"
+"You have to select at least one user and one role.","少なくと一人のユーザーと１つの役割を選択しなければなりません。"
+
+"Administrator","管理者"
+"Web application administrator.","ウェブアプリケーションの管理者。"
+
+"User","ユーザー"
+"Can login and change the own password.","ログインおよびパスワードの変更が可能です。"
+
+"User-Group-Manager","ユーザー•グループ管理者"
+"Create/Delete users and groups and manages memberships and change passwords of users.","ユーザーおよびグループの作成/削除、所属グループの管理、ユーザーのパスワード変更が可能です。"
+
+"Access-Path-Manager","アクセスパス管理者"
+"Create/Delete Access-Paths and manages user and group permissions.","アクセスパスの作成/削除、ユーザーおよびグループの権限の管理が可能です。"
+
+"Repository-Creator","リポジトリ作成者"
+"Can create new repositories, but NOT delete.","リポジトリの作成が可能です。（削除はできません）"
+
+"Repository-Manager","リポジトリ管理者"
+"Create/Delete repositories.","リポジトリの作成/削除が可能です。"
+
+"Role-Manager","役割管理者"
+"Assign and unassign web application roles to users.","ウェブアプリケーションの役割の割当/解除が可能です。"
+
+"Update-Manager","更新管理者"
+"Can synchronize the user data from provider with the SVNAuthFile.","SVNAuthFile内のユーザーデータとデータプロバイダ間の同期を取る事が可能です。"
