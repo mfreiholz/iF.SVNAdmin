@@ -1,0 +1,6 @@
+"Create user","ユーザーの作成"
+"Create a new user to grant access to the repositories.","新規ユーザーを作成しリポジトリへのアクセスを許可します。"
+"New user data","新規ユーザー情報"
+"Username","ユーザー名"
+"Password","パスワード"
+"Re-type password","パスワード再入力"

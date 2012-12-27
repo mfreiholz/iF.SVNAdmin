@@ -1,0 +1,2 @@
+"User &lt;&gt; Group assignment","所属グループの追加"
+"Here you can assign users to groups.","ここではユーザーの所属グループを追加することが可能です。"

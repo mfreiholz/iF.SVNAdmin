@@ -1,0 +1,5 @@
+"General information","一般情報"
+"Logged in as","ログイン"
+"Application version","アプリケーションヴァージョン"
+"Check for updates","アップデートの確認"
+"PHP version","PHPのヴァージョン"

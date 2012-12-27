@@ -1,0 +1,84 @@
+# all
+"An unknown error occured. Check your configuration, please.","未知のエラーが発生しました。コンフィグレーションをチェックして下さい。"
+"You have to fill out all fields.","全てのフィールドに記入しなければなりません。"
+"Done","完了"
+
+# assign_projectmanager.php
+"You have to select at least one access-path and one user.","少なくとも１つのアクセスパスと１人のユーザーを選択しなければなりません。"
+"The following Access-Path's has been assigned:","以下のアクセスパスが割当てられました:"
+"It is not possible to set an Project-Manager for the following path's:","以下のパスにプロジェクト管理者を設定できません:"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知のエラーのため、以下のアクセスパスを処理できませんでした:"
+
+# assign_usergrouptoaccesspath.php
+"You have to select a user or group and an access-path to perform this action.","アクションを実行するにはユーザーかグループとアクセスパスを選択しなければなりません。"
+"The following Access-Path's has been assigned:","以下のアクセスパスが割当てられました:"
+"You have no permission to assign the following Access-Path's, they have been skipped:","以下のアクセスパスへの割当権限がありません。スキップしました:"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知のエラーのため以下のアクセスパスを処理できませんでした:"
+
+# assign_userrole.php
+"You have to select at least one user and one role.","少なくと１人のユーザーと１つの役割を選択しなければなりません"
+"The following assignments has been done:","以下の割当が完了しました:"
+"It is not possible to do the following assignments, skipped them:","以下の割当を実行できません。スキップしました:"
+"Due to an unknown error, the following assignments could not been handled:","未知のエラーのため以下の割当を処理できませんでした:"
+
+# assign_usertogroup.php
+"You have to select at least one user and one group.","少なくとも１人のユーザーと１つのグループを選択しなければなりません。"
+
+# change_password.php
+"No username given.","ユーザー名が指定されていません。"
+"The password's doesn't match each other.","同一のパスワードが指定されていません。"
+
+# create_accesspath.php
+"You don't have the permission to create this access path: %0","以下のアクセスパスを作成する権限がありません: %0"
+
+# create_group.php
+# None
+
+# create repository.php
+# None
+
+# create_user.php
+# None
+
+# delete_accesspath.php
+"The following Access-Path's has been deleted:","以下のアクセスパスを削除しました:"
+"You have no permission to delete the following Access-Path's, they have been skipped:","以下のアクセスパスの削除権限がありません。スキップしました:"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知のエラーのため以下のアクセスパスを処理できませんでした:"
+
+# delete_group.php
+"You have to select at least one group.","少なくとも１つのグループを選択しなければなりません。"
+"The following group(s) could not been deleted","以下のグループは削除できませんでした。"
+
+# delete_repository.php
+"You have to select at least one repository.","少なくとも１つのリポジトリを選択して下さい。"
+"The following repository(s) could not been deleted:","以下のリポジトリを削除できませんでした:"
+
+# delete_user.php
+"The following user's has been deleted:","以下のユーザーを削除しました:"
+"Could not remove user's Access-Path-Manager associations:","ユーザーのアクセスパス管理者割当を削除する事はできません:"
+"Due to an unknown error, the following user's could not been deleted:","未知のエラーのため以下のユーザーは削除できませんでした:"
+
+# login_authentication.php
+"Login failed.","ログインできません"
+
+# logout.php
+# None
+
+# switch_locale.php
+# None
+
+# unassign_permission.php
+"You have to select at least one access-path and one user or group.","少なくとも１つのアクセスパスと１人のユーザーまたはグループを選択しなければなりません。"
+"The following Access-Path's has been unassigned:","以下のアクセスパスの割当を解除しました:"
+"You have no permission to unassign the following Access-Path's, they have been skipped:","以下のアクセスパスの割当解除権限がありません。スキップしました:"
+"Due to an unknown error, the following Access-Path's could not been handled:","未知のエラーのため以下のアクセスパスは処理できませんでした:"
+
+# unassign_projectmanager.php
+"The following Access-Path's has been unassigned:","以下のアクセスパスは未割当となりました。"
+"Due to an unknown error, the following Access-Path's could not been handled:","エラーのため以下のアクセスパスは取り扱えません。"
+
+# unassign_usergroup.php
+# None
+
+# unassign_userrole.php
+"You have to select at least one user and one role.","少なくと一人のユーザーと１つの役割を選択しなければなりません。"

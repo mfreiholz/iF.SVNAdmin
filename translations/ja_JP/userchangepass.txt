@@ -1,0 +1,5 @@
+"Change password of user","パスワードの変更"
+"Change the password of your subversion account.","パスワードを変更します。"
+"New password","新しいパスワード"
+"Re-type password","再入力"
+"The password's doesn't match each other.","異なるパスワードが入力されています。"
