@@ -72,7 +72,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
 		}
 
 		// Validate repository name.
-		$pattern = '/^([a-z0-9\_\-]+)$/i';
+		$pattern = '/^([a-z0-9\_\-.]+)$/i';
 		$repo_name = basename($path);
 
 		if (!preg_match($pattern, $repo_name))
