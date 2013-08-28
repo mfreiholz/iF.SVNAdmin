@@ -97,7 +97,7 @@ include_once( "./classes/core/Exceptions.class.php" );
  * iF.SVNAdmin version.
  */
 define("MAJOR_VERSION", "1");
-define("MINOR_VERSION", "6.1");
+define("MINOR_VERSION", "6.2");
 define("VERSION_EXTRA", "");
 
 /**
