@@ -45,15 +45,10 @@ class IF_SVNAdminC extends IF_SVNBaseC
 		$this->non_interactive = false;
 		$this->m_svnadmin = $svn_admin_binary;
 
-		if (!file_exists($svn_admin_binary))
-		{
-			throw new IF_SVNException('Path to "svnadmin" binary does not exist: '.$this->svnExe);
-		}
-
-		if (!is_executable($svn_admin_binary))
-		{
-			throw new IF_SVNException('Permission denied! Can not execute "svnadmin" executable: '.$this->svnExe);
-		}
+		// if (!file_exists($svn_admin_binary))
+		// 	throw new IF_SVNException('Path to "svnadmin" binary does not exist: '.$this->m_svnadmin);
+		// if (!is_executable($svn_admin_binary))
+		// 	throw new IF_SVNException('Permission denied! Can not execute "svnadmin" executable: '.$this->m_svnadmin);
 	}
 
 	/**
