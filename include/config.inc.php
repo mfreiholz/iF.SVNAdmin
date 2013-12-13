@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.
  */
-error_reporting(E_ALL);
+error_reporting(E_ERROR);
 include_once("./classes/util/global.func.php");
 set_exception_handler('exception_handler');
 
@@ -97,8 +97,8 @@ include_once( "./classes/core/Exceptions.class.php" );
  * iF.SVNAdmin version.
  */
 define("MAJOR_VERSION", "1");
-define("MINOR_VERSION", "6.2");
-define("VERSION_EXTRA", "");
+define("MINOR_VERSION", "6.3");
+define("VERSION_EXTRA", "UNOFFICAL");
 
 /**
  * Constant ACL modules.
