@@ -582,12 +582,8 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 */
 	protected function p_resolveGroupMemberId($memberId)
 	{
-		// Create filter.
-		$filter = $this->groups_to_users_attribute_value.'='.$memberId;
-		$filter = '(&('.$filter.')'.$this->users_search_filter.')';
-
 		// Execute search.
-		$found = parent::objectSearch($this->connection, $this->users_base_dn, $filter, $this->users_attributes, 1);
+        $found = parent::objectSearch($this->connection, $memberId, $this->users_search_filter, $this->users_attributes, 1);
 
 		if (!is_array($found) || count($found) <= 0)
 		{
