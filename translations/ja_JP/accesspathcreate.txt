@@ -1,0 +1,7 @@
+"Create access-path","アクセスパスの追加"
+"Create a new access-path to grant access to users and groups.","ユーザー/グループにアクセスを許可するために新しいアクセスパスを作成します。"
+"New access-path data","新アクセスパス"
+"Path","パス"
+"Syntax","シンタックス"
+"An "/" as access path holds permissions over all repositories.",""/" は全てのレポジトリに対するパーミッションを規定するアクセスパスです。"
+"Browse...","ブラウズ..."

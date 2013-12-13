@@ -1,0 +1,2 @@
+"User management","ユーザー管理"
+"Here you can see a list of all users which can be authenticated by your subversion server.","サブヴァージョンサーバーが認証可能な全てのユーザーの一覧を見る事ができます。"

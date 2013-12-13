@@ -1,0 +1,4 @@
+"Logged out!","ログアウト!"
+"You have been logged out now.","ログアウトしました。"
+"See you soon","再アクセスをお待ちしております。"
+"You can close your browser now or <a href="login.php">login</a> as another user.","ブラウザーを閉じるか、別のユーザーで<a href="login.php">ログイン</a>してください。"
