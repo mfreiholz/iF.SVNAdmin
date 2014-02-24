@@ -37,6 +37,21 @@ if ($appEngine->checkUserAuthentication(false))
 
 $appTR->loadModule("login");
 
+$simplesaml_path = "/var/simplesamlphp";
+$simplesaml_uid = 'uid';
+
+if(is_dir($simplesaml_path)) {
+	include_once("$simplesaml_path/lib/_autoload.php");
+	$ssp = new SimpleSAML_Auth_Simple("multiauth");
+	$ssp->requireAuth();
+        if ($ssp->isAuthenticated()) {
+        	$attributes = $ssp->getAttributes();
+		$_SESSION["svnadmin_username"] = $attributes[$simplesaml_uid][0];
+		$appEngine->forward(PAGE_HOME, null, true);
+        }
+}
+
+
 //
 // Actions
 //
