@@ -47,7 +47,7 @@ if (!file_exists("./data/config.ini"))
  * PHP/Subversion bug workarround for:
  * Custom config-directory for subversion.
  */
-//define("IF_SVNBaseC_ConfigDir", "E:/Development/Test/temp svnadmin/svn-config-dir");
+define("IF_SVNBaseC_ConfigDir", "/etc/subversion");
 
 // The iF.CoreLib
 $ifcorelib_path = "./include/ifcorelib/";
