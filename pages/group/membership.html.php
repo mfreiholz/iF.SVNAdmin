@@ -39,6 +39,7 @@ $(document).ready(function(){
             <?php endforeach; ?>
             </tbody>
           </table>
+          <p>Add new user: <input type="text" name="selusers[]" id="username" class="lineedit"></p>
           
         </td>
         <td width="30" class="asslefttoright">

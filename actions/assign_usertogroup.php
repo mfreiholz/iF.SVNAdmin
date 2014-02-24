@@ -1,16 +1,18 @@
 <?php if (!defined('ACTION_HANDLING')) { die("HaHa!"); }
 $appEngine->forwardInvalidModule( !$appEngine->isGroupEditActive() );
 
+
 // Parameters.
-$selusers = get_request_var('selusers');
+$selusers = array_values(array_filter(get_request_var('selusers')));
 $selgroups = get_request_var('selgroups');
 
 if ($selusers == NULL)
-	$selusers = get_request_var("selected_users");
+  $selusers = array_values(array_filter(get_request_var("selected_users")));
 
 if ($selgroups == NULL)
   $selgroups = get_request_var("selected_groups");
-  
+ 
+ 
 if ($selusers != NULL && count($selusers) > 0 && empty($selusers[0]))
 {
 	$selusers = NULL;

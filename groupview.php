@@ -37,7 +37,7 @@ if (check_request_var('unassign_permission'))
 }
 if (check_request_var('assign_usergroup'))
 {
-	$appEngine->handleAction("assign_usertogroup");
+  $appEngine->handleAction("assign_usertogroup");
 }
 
 // Get required variables.

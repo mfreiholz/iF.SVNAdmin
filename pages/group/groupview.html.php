@@ -43,6 +43,7 @@
                 <option value="<?php print($u->name); ?>"><?php print($u->name); ?></option>
                 <?php endforeach; ?>
               </select>
+              <input type="text" name="selected_users[]" id="username" class="lineedit">
               <input type="submit" name="assign_usergroup" value="<?php Translate('Assign'); ?>" class="anbtn">
               <?php endif; ?>
             </td>

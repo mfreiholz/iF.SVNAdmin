@@ -40,7 +40,7 @@ $(document).ready(function(){
               <?php endforeach; ?>
               </tbody>
             </table>
-
+            <p>Add new user: <input type="text" name="selected_users[]" id="username" class="lineedit"></p>
           </td>
           <td valign="top" width="50%">
 

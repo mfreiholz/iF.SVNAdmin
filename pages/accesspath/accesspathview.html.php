@@ -42,7 +42,7 @@
 								<option value="<?php print($u->getName()); ?>"><?php print($u->getName()); ?></option>
 								<?php endforeach; ?>
 							</select>
-
+                                                        <input type="text" name="selected_users[]" id="username" class="lineedit">
 							<select name="permission">
 								<option value="<?php PrintStringValue("PermNone"); ?>"><?php Translate("No permission"); ?></option>
 								<option value="<?php PrintStringValue("PermRead"); ?>"><?php Translate("Read only"); ?></option>
