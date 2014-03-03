@@ -3,11 +3,12 @@ $appEngine->forwardInvalidModule( !$appEngine->isGroupEditActive() );
 
 
 // Parameters.
-$selusers = array_values(array_filter(get_request_var('selusers')));
+$selusers = array_values(array_map('strtolower', array_filter(get_request_var('selusers'))));
 $selgroups = get_request_var('selgroups');
 
+
 if ($selusers == NULL)
-  $selusers = array_values(array_filter(get_request_var("selected_users")));
+  $selusers = array_values(array_map('strtolower', array_filter(get_request_var("selected_users"))));
 
 if ($selgroups == NULL)
   $selgroups = get_request_var("selected_groups");
