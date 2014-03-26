@@ -58,5 +58,15 @@ interface IRepositoryEditProvider extends IEditProvider
 	 * @return bool
 	 */
 	public function dump(\svnadmin\core\entities\Repository $oRepository);
+
+	/**
+	 * Loads a repository file system content from dumped file.
+	 * 
+	 * @param \svnadmin\core\entities\Repository $oRepository
+	 * 
+	 * @return bool
+	 */
+	public function load(\svnadmin\core\entities\Repository $oRepository, $file);
+	
 }
 ?>

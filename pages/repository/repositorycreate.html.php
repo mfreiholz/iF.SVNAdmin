@@ -6,12 +6,15 @@ $(document).ready(function(){
   $("#repostructuretype").change(function(){
     var eSingle = $("#repostructuretype-single");
     var eMulti  = $("#repostructuretype-multi");
+    var eDump   = $("#repostructuretype-dump");
 
     eSingle.hide();
     eMulti.hide();
+    eDump.hide();
 
     if ($(this).val() == "single"){ eSingle.show(); }
     else if ($(this).val() == "multi"){ eMulti.show(); }
+    else if ($(this).val() != "") { eDump.show(); }
   });
 });
 </script>
@@ -65,7 +68,19 @@ $(document).ready(function(){
         <option value=""><?php Translate("No pre-defined structure"); ?></option>
         <option value="single"><?php Translate("Single project structure"); ?></option>
         <option value="multi"><?php Translate("Multi project structure"); ?></option>
+        <?php foreach (GetArrayValue('RepositoryTemplateList') as $rt) : ?>
+		<option value="<?php print($rt['Name']); ?>">
+			<?php print($rt['Name']); ?>
+		</option>
+	<?php endforeach; ?>
       </select>
+    </div>
+
+    <div class="form-field" id="repostructuretype-dump" style="display:none;">
+      <p>
+        <b><?php Translate("Dumped project structure"); ?></b><br>
+        <?php Translate("Load initial repository content from a custom dump."); ?>
+      </p>
     </div>
 
     <div class="form-field" id="repostructuretype-single" style="display:none;">

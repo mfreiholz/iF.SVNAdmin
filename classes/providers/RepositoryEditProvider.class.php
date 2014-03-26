@@ -225,6 +225,26 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	}	
 	
 	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IRepositoryEditProvider::load()
+	 */
+	public function load(\svnadmin\core\entities\Repository $oRepository, $file)
+	{
+		$svnParentPath = $this->getRepositoryConfigValue($oRepository, 'SVNParentPath');
+		
+		if ($svnParentPath == NULL) {
+			throw new \Exception('Invalid parent-identifier: ' .
+					$oRepository->getParentIdentifier());
+		}
+		
+		$absoluteRepositoryPath = $svnParentPath . '/' . $oRepository->name;
+
+		$this->_svnAdmin->load($absoluteRepositoryPath, $file);
+		
+		return true;
+	}
+	
+	/**
 	 * Gets the configuration value associated to the given Repository object
 	 * (identified by 'parentIdentifier')
 	 * 

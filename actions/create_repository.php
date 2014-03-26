@@ -57,6 +57,29 @@ else {
 			$engine->addException($e2);
 		}
 
+		//
+		// MAUMAR: Avaliable repository templates (dumps)
+		//
+		$_templateList = array();
+		$config = $engine->getConfig();
+		$index = (int) 1;
+		while (true) {
+        		$tmplName = $config->getValue('Repositories:template:' . $index, 'Name');
+        		if ($tmplName != null) {
+                		$_templateList[$index]['Name'] = $tmplName;
+        		}
+        		else {
+                		break;
+        		}
+
+        		$tmplSource = $config->getValue('Repositories:template:' . $index, 'Source');
+        		if ($tmplSource != null) {
+                		$_templateList[$index]['Source'] = $tmplSource;
+        		}
+
+        		++$index;
+		}
+
 		// Create a initial repository structure.
 		try {
 			$repoPredefinedStructure = get_request_var("repostructuretype");
@@ -80,6 +103,19 @@ else {
 						}
 						else {
 							throw new ValidationException(tr("Missing project name"));
+						}
+						break;
+					default:
+						foreach ($_templateList as $rt) {
+							if ("$repoPredefinedStructure" == $rt['Name']) {
+								error_log("load ".$rt['Name']." into ".$reponame);
+								
+								$engine->getRepositoryEditProvider()
+									->load($r, $rt['Source']);
+								$engine->addMessage(tr("Loaded structure '%0' into repository '%1'", array($rt['Name'], $reponame)));
+								
+								break;
+							}
 						}
 						break;
 				}
