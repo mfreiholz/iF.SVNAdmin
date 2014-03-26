@@ -90,6 +90,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 */
 	protected $users_attributes;
 
+	/**
+	 * MAUMAR: Holds multiple search queries
+	 */
+	protected $users_extra_queries = array();
+	
 	/*
 	 * Settings to find groups.
 	 */
@@ -151,6 +156,28 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		$this->users_search_filter = $cfg->getValue("Users:ldap", "SearchFilter");
 		$this->users_attributes = $cfg->getValue("Users:ldap", "Attributes");
 		$this->users_attributes = explode(",", $this->users_attributes);
+		
+		// MAUMAR: Support multiple ldap search query. Try to load it
+		$index = (int) 1;
+		while (true) {
+			$extra_alias = $cfg->getValue("Users:ldap:" . $index, "Alias");
+			if ($extra_alias != null) {
+				$this->users_extra_queries[$index]['Alias'] = $extra_alias;
+			}
+			else {
+				break;
+			}
+
+			//error_log("Loading users extra query ".$extra_alias);
+			
+			$extra_base_dn = $cfg->getValue("Users:ldap:" . $index, "BaseDN");
+			$extra_search_filter = $cfg->getValue("Users:ldap:" . $index, "SearchFilter");
+
+			$this->users_extra_queries[$index]['BaseDN'] = $extra_base_dn;
+			$this->users_extra_queries[$index]['SearchFilter'] = $extra_search_filter;
+
+			++$index;			
+		}
 
 		$this->groups_base_dn = $cfg->getValue("Groups:ldap", "BaseDN");
 		$this->groups_search_filter = $cfg->getValue("Groups:ldap", "SearchFilter");
@@ -294,10 +321,22 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		// Search for a user, where the 'users_attributes' equals the $objUser->name.
 		$found = parent::objectSearch($this->connection, $this->users_base_dn, $final_filter, $this->users_attributes, 1);
 
-		if (!is_array($found) || count($found) <= 0)
-			return false;
+		if (is_array($found) && count($found) > 0) {
+				return true;
+		}
+		
+		foreach ($this->users_extra_queries as $q) {
+			$base_dn = $q['BaseDN'];
+			$search_filter = $q['SearchFilter'];
+			$final_filter = '(&('.$user_name_filter.')'.$search_filter.')';
 
-		return true;
+			$found = parent::objectSearch($this->connection, $base_dn, $final_filter, $this->users_attributes, 1);
+
+			if (is_array($found) && count($found) > 0)
+				return true;
+		}
+		
+		return false;
 	}
 
 	/**
@@ -313,9 +352,22 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		// Search for a user, where the 'users_attributes' equals the $objUser->name.
 		$found = parent::objectSearch( $this->connection, $this->users_base_dn, $final_filter, $this->users_attributes, 1 );
 
-		if (!is_array($found) || count($found) <= 0)
-			return false; // User not found.
+		if (!is_array($found) || count($found) <= 0) {
+			foreach ($this->users_extra_queries as $q) {
+				$base_dn = $q['BaseDN'];
+				$search_filter = $q['SearchFilter'];
+				$final_filter = '(&('.$user_name_filter.')'.$search_filter.')';
 
+				$found = parent::objectSearch($this->connection, $base_dn, $final_filter, $this->users_attributes, 1);
+
+				if (is_array($found) && count($found) > 0)
+					break;
+			}
+
+			if (!is_array($found) || count($found) <= 0)
+				return false; // User not found.
+		}
+		
 		// The user has been found.
 		// Get the dn of the user and authenticate him/her now.
 		return \IF_AbstractLdapConnector::authenticateUser($this->host_address, $this->host_port, $found[0]->dn, $password, $this->host_protocol_version);
@@ -506,7 +558,24 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		// Include the attribute which is used in the "member" attribute of a group-entry.
 		$attributes[] = $this->groups_to_users_attribute_value;
 
-		return parent::objectSearch($this->connection, $this->users_base_dn, $this->users_search_filter, $attributes, 0);
+		$result = parent::objectSearch($this->connection, $this->users_base_dn, $this->users_search_filter, $attributes, 0);
+
+		foreach ($this->users_extra_queries as $q) {
+			$base_dn = $q['BaseDN'];
+			$search_filter = $q['SearchFilter'];
+			
+			$found = parent::objectSearch($this->connection, $base_dn, $search_filter, $attributes, 0);
+
+			if (is_array($found) && count($found) > 0) {
+					$result = array_merge($result, $found);
+			}
+		}
+		
+		if (is_array($result) && count($result) > 0) {
+				return $result;
+		}
+		
+		return NULL;
 	}
 
 	/**
@@ -542,10 +611,23 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 
 		$found = parent::objectSearch($this->connection, $this->users_base_dn, $final_filter, $attributes, 1);
 
-		if (!is_array($found) || count($found) <= 0)
-			return NULL;
+		if (is_array($found) && count($found) > 0) {
+				return $found[0];
+		}
+		
+		foreach ($this->users_extra_queries as $q) {
+			$base_dn = $q['BaseDN'];
+			$search_filter = $q['SearchFilter'];
+			$final_filter = '(&('.$user_name_filter.')'.$search_filter.')';
+			
+			$found = parent::objectSearch($this->connection, $base_dn, $final_filter, $attributes, 1);
 
-		return $found[0];
+			if (is_array($found) && count($found) > 0) {
+					return $found[0];
+			}
+		}
+
+		return NULL;
 	}
 
 	/**
@@ -585,13 +667,22 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		// Execute search.
         $found = parent::objectSearch($this->connection, $memberId, $this->users_search_filter, $this->users_attributes, 1);
 
-		if (!is_array($found) || count($found) <= 0)
-		{
-			error_log("Can not resolve member ID. member-id=$memberId; filter=$filter;");
-			return null;
+		if (is_array($found) && count($found) > 0) {
+				return $found[0];
 		}
+		
+		foreach ($this->users_extra_queries as $q) {
+			$search_filter = $q['SearchFilter'];
+			
+			$found = parent::objectSearch($this->connection, $memberId, $search_filter, $this->users_attributes, 1);
 
-		return $found[0];
+			if (is_array($found) && count($found) > 0) {
+					return $found[0];
+			}
+		}
+		
+		error_log("Can not resolve member ID. member-id=$memberId; filter=$filter;");
+		return null;
 	}
 
 	/**
