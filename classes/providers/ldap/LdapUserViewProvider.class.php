@@ -284,6 +284,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	{
 		$ret = array();
 		$up_name = strtolower($this->users_attributes[0]);
+		$attrCount = count($this->users_attributes);
 
 		// Search users in LDAP.
 		$ldapUsers = $this->p_getUserEntries();
@@ -294,6 +295,16 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 			$u = new \svnadmin\core\entities\User;
 			$u->id = $ldapUsers[$i]->dn;
 			$u->name = $ldapUsers[$i]->$up_name;
+			
+			if ($attrCount > 1) 
+			{
+				for ($x = 1; $x < $attrCount; $x++)
+				{
+					$attr_name = strtolower($this->users_attributes[$x]);
+					$u->attributes[$attr_name] = $ldapUsers[$i]->$attr_name;
+				}
+			}	
+			
 			$ret[] = $u;
 		}
 

@@ -41,12 +41,15 @@ $(document).ready(function(){
 	  <th>
 	  	<?php Translate("User"); ?>
 	  </th>
+	  <th>
+	  	<?php Translate("Attributes"); ?>
+	  </th>
 	</tr>
 	</thead>
 	
 	<tfoot>
 	<tr>
-	  <td colspan="2">
+	  <td colspan="3">
 	
 	    <table class="datatableinline">
 	      <colgroup>
@@ -87,6 +90,7 @@ $(document).ready(function(){
         <?php } ?>
       </td>
 		  <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->name); ?></a></td>
+		  <td><?php print($u->getEncodedAttributes()); ?></td>
 		</tr>
 		<?php } ?>
 	</tbody>
