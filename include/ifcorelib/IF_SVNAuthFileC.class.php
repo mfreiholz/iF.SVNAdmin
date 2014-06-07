@@ -421,7 +421,7 @@ class IF_SVNAuthFileC
 	public function createGroup($groupname)
 	{
 		// Validate the groupname.
-		$pattern = '/^[A-Za-z0-9\-\_]+$/i';
+		$pattern = '/^[A-Za-z0-9\-\_\x{4e00}-\x{9fa5}]+$/ui';
 		if (!preg_match($pattern, $groupname))
 		{
 			throw new Exception('Invalid group name "' . $groupname .
