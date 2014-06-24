@@ -24,10 +24,13 @@ $appTR->loadModule("usercreate");
 
 // Action handling.
 // Form request to create the user
-$create = check_request_var('create');
-if( $create )
+if( check_request_var('create') )
 {
   $appEngine->handleAction('create_user');
+} 
+elseif( check_request_var('bulkcreate') )
+{
+  $appEngine->handleAction('bulkcreate_users');
 }
 
 ProcessTemplate("user/usercreate.html.php");

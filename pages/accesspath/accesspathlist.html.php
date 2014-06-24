@@ -45,6 +45,7 @@ $(document).ready(function(){
                   <option><?php print($u->name); ?></option>
                 <?php endforeach; ?>
                 </select>
+          	<span><input type="text" name="selected_users[]" id="username" class="lineedit"></span>
                 <input type="submit" name="assign_projectmanager" value="<?php Translate("Assign"); ?>">
                 <?php endif; ?>
               </td>
