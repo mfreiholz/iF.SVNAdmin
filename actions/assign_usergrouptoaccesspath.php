@@ -2,7 +2,7 @@
 $appEngine->checkUserAuthentication(true, ACL_MOD_ACCESSPATH, ACL_ACTION_ASSIGN);
 
 // Required variables.
-$selusers  = get_request_var('selected_users');
+$selusers  = array_values(array_map('strtolower', array_filter(get_request_var('selected_users'))));
 $selgroups = get_request_var('selected_groups');
 $selpaths  = get_request_var('selected_accesspaths');
 $selperm   = get_request_var('permission'); // TODO: There is no check, whether this var is given!

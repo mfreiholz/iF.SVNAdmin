@@ -2,7 +2,7 @@
 $appEngine->forwardInvalidModule(!$appEngine->isAuthenticationActive());
 $appEngine->checkUserAuthentication(true, ACL_MOD_PROJECTMANAGER, ACL_ACTION_ASSIGN);
 
-$selusers = get_request_var("selected_users");
+$selusers = array_values(array_map('strtolower', array_filter(get_request_var('selected_users'))));
 $selpaths = get_request_var("selected_accesspaths");
 
 if ($selusers == null || $selpaths == null)
