@@ -70,6 +70,8 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 * Settings to find users.
 	 */
 
+  protected $user_view_enabled = false;
+
 	/**
 	 * The base path of users.
 	 * @var string
@@ -93,6 +95,8 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	/*
 	 * Settings to find groups.
 	 */
+
+  protected $group_view_enabled = false;
 
 	/**
 	 * The base path of groups.
@@ -182,17 +186,29 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		$this->bind_password = $bindPassword;
 	}
 
+  public function setUserViewEnabled($yesno)
+  {
+    $this->user_view_enabled = $yesno;
+  }
+
 	// Required to execute tests on settings page.
 	public function setUserViewInformation($usersBaseDn, $usersSearchFilter, $usersAttributes)
 	{
+	  $this->user_view_enabled = true;
 		$this->users_base_dn = $usersBaseDn;
 		$this->users_search_filter = $usersSearchFilter;
 		$this->users_attributes = explode(",", $usersAttributes);
 	}
 
+	public function setGroupViewEnabled($yesno)
+	{
+	  $this->group_view_enabled = $yesno;
+	}
+
 	// Required to execute tests on settings page.
 	public function setGroupViewInformation($groupsBaseDn, $groupsSearchFilter, $groupsAttributes, $groupsMemberAttribute, $groupsMemberAttributeValueAttribute)
 	{
+	  $this->group_view_enabled = true;
 		$this->groups_base_dn = $groupsBaseDn;
 		$this->groups_search_filter = $groupsSearchFilter;
 		$this->groups_attributes = explode(",", $groupsAttributes);
@@ -225,7 +241,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 */
 	public function isUpdateable()
 	{
-		return true;
+		return $this->user_view_enabled && $this->group_view_enabled;
 	}
 
 	/**
@@ -601,7 +617,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	{
 		$this->init();
 		$E = \svnadmin\core\Engine::getInstance();
-		
+
 		// Increase max_execution_time for big LDAP structures.
 		$maxTime = intval(ini_get('max_execution_time'));
 		if ($maxTime != 0 && $maxTime < 300) {

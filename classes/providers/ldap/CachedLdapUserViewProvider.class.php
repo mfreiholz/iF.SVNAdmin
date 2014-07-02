@@ -23,7 +23,7 @@ namespace svnadmin\providers\ldap;
  * The  CachedLdapUserViewProvider class provides fast access for data which
  * comes from the LdapUserViewProvider. It only accesses the LDAP server inside
  * the "update()" method implementation.
- * 
+ *
  * @author Manuel Freiholz, insaneFactory.com
  */
 class CachedLdapUserViewProvider
@@ -34,28 +34,28 @@ class CachedLdapUserViewProvider
 	 * @var \IF_JsonObjectStorage
 	 */
 	private $_cache;
-	
+
 	/**
 	 * Holds the singleton instance of this class.
-	 * @var \svnadmin\providers\ldap\CachedLdapUserViewProvider 
+	 * @var \svnadmin\providers\ldap\CachedLdapUserViewProvider
 	 */
 	private static $_instance;
-	
+
 	/**
 	 * Indicates whether the
-	 * @var type 
+	 * @var type
 	 */
 	private $_update_done = false;
-	
+
 	/**
 	 * Indicates whether the 'init()' method has been called.
-	 * @var type 
+	 * @var type
 	 */
 	private $_init_done = false;
-	
+
 	/**
 	 * Constructor.
-	 * Loads cache file. 
+	 * Loads cache file.
 	 */
 	public function __construct()
 	{
@@ -65,11 +65,11 @@ class CachedLdapUserViewProvider
 				->getValue('Ldap', 'CacheFile', './data/ldap.cache.json')
 			);
 	}
-	
+
 	/**
 	 * Gets the singleton instance of this class.
-	 * 
-	 * @return \svnadmin\providers\ldap\CachedLdapUserViewProvider 
+	 *
+	 * @return \svnadmin\providers\ldap\CachedLdapUserViewProvider
 	 */
 	public static function getInstance()
 	{
@@ -78,7 +78,7 @@ class CachedLdapUserViewProvider
 		}
 		return self::$_instance;
 	}
-	
+
 	public function init()
 	{
 		if (!$this->_init_done) {
@@ -87,7 +87,7 @@ class CachedLdapUserViewProvider
 		}
 		return parent::init();
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IViewProvider::isUpdateable()
@@ -96,7 +96,7 @@ class CachedLdapUserViewProvider
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Update the SVNAuthFile with data from LDAP server.
 	 * @see svnadmin\core\interfaces.IViewProvider::update()
@@ -105,17 +105,19 @@ class CachedLdapUserViewProvider
 	{
 		if (!$this->_update_done) {
 			$this->_update_done = true;
-			
+
 			// Get all users from LDAP and save them to cache.
 			$users = parent::getUsers(false);
 			$this->_cache->setData("users", $users);
 			$this->_cache->save();
-			
-			return parent::update();
+
+      if (parent::isUpdateable()) {
+        return parent::update();
+      }
 		}
 		return true;
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IUserViewProvider::getUsers()
@@ -124,22 +126,22 @@ class CachedLdapUserViewProvider
 	{
 		$cached_users = $this->_cache->getData("users");
 		$users = array();
-		
+
 		for ($i = 0; $i < count($cached_users); ++$i) {
 			$o = $this->_cache->objectCast($cached_users[$i], '\svnadmin\core\entities\User');
 			$users[] = $o;
 		}
-		
+
 		if ($withStarUser) {
 			$o = new \svnadmin\core\entities\User;
 			$o->id = '*';
 			$o->name = '*';
 			$users[] = $o;
 		}
-		
+
 		return $users;
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IUserViewProvider::userExists()
@@ -153,7 +155,7 @@ class CachedLdapUserViewProvider
 		}
 		return false;
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::getGroups()
@@ -162,7 +164,7 @@ class CachedLdapUserViewProvider
 	{
 		return \svnadmin\providers\AuthFileGroupAndPathProvider::getInstance()->getGroups();
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::groupExists()
@@ -171,7 +173,7 @@ class CachedLdapUserViewProvider
 	{
 		return \svnadmin\providers\AuthFileGroupAndPathProvider::getInstance()->groupExists($objGroup);
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::getGroupsOfUser()
@@ -180,7 +182,7 @@ class CachedLdapUserViewProvider
 	{
 		return \svnadmin\providers\AuthFileGroupAndPathProvider::getInstance()->getGroupsOfUser($objUser);
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::getUsersOfGroup()
@@ -189,7 +191,7 @@ class CachedLdapUserViewProvider
 	{
 		return \svnadmin\providers\AuthFileGroupAndPathProvider::getInstance()->getUsersOfGroup($objGroup);
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::isUserInGroup()
