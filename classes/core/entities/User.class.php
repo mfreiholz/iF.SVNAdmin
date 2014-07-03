@@ -24,6 +24,7 @@ namespace svnadmin\core\entities
     public $id;
     public $name;
     public $password;
+    public $attributes;   // MAUMAR: LDAP Attributes
 
     // Object(Permission)
     public $perm;
@@ -34,6 +35,7 @@ namespace svnadmin\core\entities
       $this->name = $name;
       $this->password = $password;
       $this->perm = $perm;
+      $this->attributes = array();
     }
 
     public function ctr( $id, $name, $password )
@@ -63,6 +65,16 @@ namespace svnadmin\core\entities
       return rawurlencode( $this->name );
     }
 
+    public function getEncodedAttributes()
+    {
+	  $result = "";
+	  foreach ($this->attributes as $a) {
+		$result .= rawurlencode($a) . "&nbsp;,&nbsp;";
+	  }
+		
+      return $result;
+    }
+    
     public static function compare( $o1, $o2 )
     {
       if( $o1->name == $o2->name )

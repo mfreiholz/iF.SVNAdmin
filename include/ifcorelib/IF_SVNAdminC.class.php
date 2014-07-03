@@ -162,4 +162,47 @@ class IF_SVNAdminC extends IF_SVNBaseC
 		}
 		return true;
 	}
+	
+	/**
+	 * Load the contents of the given file
+	 * 
+	 * @param string $path	Local path to the repository.
+	 * @param string $file	Local path to dump-file to load. Be sure the dump
+	 * 						is created with the some version of SubVersion
+	 */
+	 public function load($path, $file)
+	 {
+		if (empty($path)) {
+			throw new IF_SVNException('Empty path parameter for load() command.');
+		}
+		if (empty($file)) {
+			throw new IF_SVNException('Empty file parameter for load() command.');
+		}
+		if (!file_exists($file)) {
+			throw new IF_SVNException('Invalid file parameter for load() command.');
+		}
+
+		$args = array();
+		
+		if (!empty($this->config_directory)) {
+			$args['--config-dir'] = escapeshellarg($this->config_directory);
+		}
+
+		$absoluteFileName = realpath($file);
+		$absoluteRepoPath = self::encode_local_path($path);
+		
+		$args[$absoluteRepoPath] = '< ' . escapeshellarg($absoluteFileName);
+		
+		$cmd = self::create_svn_command($this->m_svnadmin, 'load', '', $args, false);
+
+		$output = null;
+		$exitCode = 0;
+		exec($cmd, $output, $exitCode);
+
+		if ($exitCode != 0)
+		{
+			throw new IF_SVNCommandExecutionException('Command='.$cmd.'; Return='.$exitCode.'; Output='.$output.';');
+		}
+	}
+		 
 }

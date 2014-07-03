@@ -42,9 +42,35 @@ if (check_request_var('create'))
 }
 
 //
+// MAUMAR: Avaliable repository templates (dumps)
+//
+$_templateList = array();
+$config = $engine->getConfig();
+$index = (int) 1;
+while (true) {
+	$tmplName = $config->getValue('Repositories:template:' . $index, 'Name');
+	//echo "name= $tmplName\n";
+	if ($tmplName != null) {
+		$_templateList[$index]['Name'] = $tmplName;
+	}
+	else {
+		break;
+	}
+
+	$tmplSource = $config->getValue('Repositories:template:' . $index, 'Source');
+	if ($tmplSource != null) {
+		$_templateList[$index]['Source'] = $tmplSource;
+	}
+
+	++$index;
+}
+//print_r($_templateList);
+
+//
 // View Data
 //
 
 SetValue('RepositoryParentList', $engine->getRepositoryViewProvider()->getRepositoryParents());
+SetValue('RepositoryTemplateList', $_templateList);
 ProcessTemplate("repository/repositorycreate.html.php");
 ?>
