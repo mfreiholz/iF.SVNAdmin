@@ -23,10 +23,9 @@ namespace svnadmin\core\entities
   {
     public $id;
     public $name;
-    public $password;
-
-    // Object(Permission)
-    public $perm;
+    public $password; // Optional - Only used during authentication or similar actions.
+    public $perm; // Object(Permission)
+    public $displayName; // Optional
 
     public function __construct($id=null, $name=null, $password=null, $perm=null)
     {
@@ -34,6 +33,7 @@ namespace svnadmin\core\entities
       $this->name = $name;
       $this->password = $password;
       $this->perm = $perm;
+      $this->displayName = $name;
     }
 
     public function ctr( $id, $name, $password )
@@ -41,6 +41,7 @@ namespace svnadmin\core\entities
       $this->id = $id;
       $this->name = $name;
       $this->password = $password;
+      $this->displayName = $name;
     }
 
     public function getName()
@@ -56,6 +57,13 @@ namespace svnadmin\core\entities
     public function getPermission()
     {
       return $this->perm;
+    }
+
+    public function getDisplayName()
+    {
+      if (empty($this->displayName))
+        return $this->name;
+      return $this->displayName;
     }
 
     public function getEncodedName()

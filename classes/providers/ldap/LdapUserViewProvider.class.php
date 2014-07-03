@@ -92,6 +92,17 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 */
 	protected $users_attributes;
 
+	/**
+	 * Allows to define a custom displayName format for each user.
+	 * Makes it possible to display the user's firstname and lastname instead of
+	 * the internal login name.
+	 * Using attributes from User's LDAP object requires them to be fetched via
+	 * the "$users_attributes" variable.
+	 * e.g.: %givenName %sn (%sAMAccountName)
+	 * @var string
+	 */
+	protected $users_display_name_format;
+
 	/*
 	 * Settings to find groups.
 	 */
@@ -155,6 +166,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		$this->users_search_filter = $cfg->getValue("Users:ldap", "SearchFilter");
 		$this->users_attributes = $cfg->getValue("Users:ldap", "Attributes");
 		$this->users_attributes = explode(",", $this->users_attributes);
+		$this->users_display_name_format = $cfg->getValue("Users:ldap", "DisplayNameFormat");
 
 		$this->groups_base_dn = $cfg->getValue("Groups:ldap", "BaseDN");
 		$this->groups_search_filter = $cfg->getValue("Groups:ldap", "SearchFilter");
@@ -283,6 +295,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 			$u = new \svnadmin\core\entities\User;
 			$u->id = $ldapUsers[$i]->dn;
 			$u->name = $ldapUsers[$i]->$up_name;
+			$u->displayName = $this->formatDisplayName($this->users_display_name_format, $ldapUsers[$i]);
 			$ret[] = $u;
 		}
 
@@ -508,6 +521,24 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	/**************************************************************************
 	 * Protected helper methods.
 	 *************************************************************************/
+
+  protected function formatDisplayName($format, $ldapUser)
+  {
+    if (empty($format) || empty($ldapUser))
+      return null;
+    $displayName = $format;
+    $matches = array();
+    $offset = 0;
+    while (preg_match('/\%([A-Za-z0-9\-\_]+)/i', $displayName, $matches, PREG_OFFSET_CAPTURE, $offset) === 1) {
+      $attributeName = strtolower($matches[1][0]);
+      if (!isset($ldapUser->$attributeName)) {
+        $offset = $matches[0][1] + strlen($matches[0][0]);
+        continue;
+      }
+      $displayName = str_replace($matches[0][0], $ldapUser->$attributeName, $displayName);
+    }
+    return $displayName;
+  }
 
 	/**
 	 * Gets all user LDAP entries from server.

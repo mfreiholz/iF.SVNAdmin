@@ -16,13 +16,13 @@ $(document).ready(function(){
 
 <form action="usergroupassign.php" method="POST">
   <table width="100%">
-    
+
     <tbody>
       <tr>
         <td valign="top" width="48%">
-        
+
           <?php HtmlFilterBox("userlist", 1); ?>
-          
+
           <table id="userlist" class="datatable">
             <thead>
             <tr>
@@ -34,20 +34,20 @@ $(document).ready(function(){
             <?php foreach (GetArrayValue("UserList") as $u) : ?>
             <tr>
               <td><input type="checkbox" name="selusers[]" value="<?php print($u->name); ?>"></td>
-              <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->name); ?></a></td>
+              <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
             </tr>
             <?php endforeach; ?>
             </tbody>
           </table>
-          
+
         </td>
         <td width="30" class="asslefttoright">
           <!-- Empty column -->
         </td>
         <td valign="top" width="48%">
-          
+
           <?php HtmlFilterBox("grouplist", 1); ?>
-          
+
           <table id="grouplist" class="datatable">
             <thead>
             <tr>
@@ -64,18 +64,18 @@ $(document).ready(function(){
             <?php endforeach; ?>
             </tbody>
           </table>
-          
+
         </td>
       </tr>
     </tbody>
   </table>
-  
+
   <?php if (IsProviderActive(PROVIDER_GROUP_EDIT)) : ?>
   <div class="formsubmit">
     <input type="submit" name="assign" value="<?php Translate('Assign'); ?>" class="anbtn">
   </div>
   <?php endif; ?>
-  
+
 </form>
 
 <p>

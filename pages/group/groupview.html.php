@@ -40,7 +40,7 @@
               <select name="selected_users[]">
                 <option value="">--- <?php Translate("User"); ?> ---</option>
                 <?php foreach(GetArrayValue("AllUserList") as $u): ?>
-                <option value="<?php print($u->name); ?>"><?php print($u->name); ?></option>
+                <option value="<?php print($u->name); ?>"><?php print($u->getDisplayName()); ?></option>
                 <?php endforeach; ?>
               </select>
               <input type="submit" name="assign_usergroup" value="<?php Translate('Assign'); ?>" class="anbtn">
