@@ -40,29 +40,36 @@ else
 	try {
 	  // Count of: All, Done, Failed
 	  $cntAll = count($selroles) * count($selusers);
-	
+
 	  // Iterate all selected users and roles.
 	  for ($i=0; $i<count($selroles); $i++)
 	  {
 	    $oR = new \svnadmin\core\entities\Role;
 	    $oR->name = $selroles[$i];
-	
+
 	    for ($j=0; $j<count($selusers); $j++)
 	    {
 	      $oU = new \svnadmin\core\entities\User;
 	      $oU->name = $selusers[$j];
-	
+
+	      // Skip unassignment, if the user doesn't have permission to unassign the "admin" role.
+	      if ($appEngine->getAclManager()->isAdminRole($oR) && !$appEngine->hasPermission(ACL_MOD_ROLE, ACL_ACTION_UNASSIGN_ADMIN_ROLE))
+	      {
+	        $appEngine->addException(new Exception(tr("Can not remove user %0 from role %1", array($oU->name, $oR->name))));
+	        continue;
+	      }
+
 	      if ($appEngine->getAclManager()->removeUserFromRole($oU, $oR))
 	      {
 	      	$appEngine->addMessage(tr("The user %0 has been removed from role %1", array($oU->name, $oR->name)));
 	      }
 	      else
 	      {
-	      	$appEngine->addException(tr("Can not remove user %0 from role %1", array($oU->name, $oR->name)));
+	      	$appEngine->addException(new Exception(tr("Can not remove user %0 from role %1", array($oU->name, $oR->name))));
 	      }
 	    } //for
 	  } //for
-	
+
 	  if (!$appEngine->getAclManager()->save())
 	    ;//throw new Exception("Could not save ACL.");
 	}

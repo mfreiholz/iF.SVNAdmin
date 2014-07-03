@@ -2,7 +2,7 @@
 namespace svnadmin\core\acl
 {
   /**
-   * 
+   *
    * Manages the permission of roles to different modules.
    * @author Manuel Freiholz
    *
@@ -21,13 +21,13 @@ namespace svnadmin\core\acl
      * @var IF_ACL
      */
     private $acl;
-    
+
     /**
      * Holds the path to the user-role-assignment-file.
      * @var string
      */
     private $user_role_file;
-    
+
     /**
      * Holds the parsed data of the $user_role_file.
      * @var array
@@ -79,6 +79,16 @@ namespace svnadmin\core\acl
       }
     }
 
+    public function isAdminRole($objRole)
+    {
+      if (!$objRole)
+        return false;
+      elseif ($objRole->name == $this->administrator_role_name)
+        return true;
+      else
+        return false;
+    }
+
     /**
      * Gets all available roles.
      * @return array<IF_ACLRole>
@@ -108,7 +118,7 @@ namespace svnadmin\core\acl
     {
       // Get roles of user.
       $roles = self::getRolesOfUser($objUser);
-      
+
       // Check all roles for permission, until one has the permission.
       foreach ($roles as &$roleObj)
       {
@@ -322,7 +332,7 @@ namespace svnadmin\core\acl
       }
       return $list;
     }
-    
+
     /**
      * Gets all project managers of the given $path.
      * @param $path The Access-Path.
@@ -333,7 +343,7 @@ namespace svnadmin\core\acl
     	$list = array();
     	if ($this->assignments == null)
     	  return $list;
-    	  
+
     	// Iterate all AccessPaths sections and search for matching of $path.
     	foreach ($this->assignments as $sec => &$key)
     	{
@@ -475,7 +485,7 @@ namespace svnadmin\core\acl
           $this->assignments[$section][$i] = $list[$i];
         }
       }
-      
+
       return true;
     }
 
@@ -555,7 +565,7 @@ namespace svnadmin\core\acl
     		  throw new Exception("The file is not writable: ".$this->user_role_file);
     		}
     	}
-    	
+
       // Load the default ACL object.
       $this->acl = self::getDefaultAcl();
 

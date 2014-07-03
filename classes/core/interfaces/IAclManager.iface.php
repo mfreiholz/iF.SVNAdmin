@@ -6,6 +6,12 @@ interface IAclManager
 	public function init();
 
 	/**
+	 * Checks whether the given role is the admin (root) role.
+	 * @param \svnadmin\core\entities\Role $objRole
+	 */
+	public function isAdminRole($objRole);
+
+	/**
 	 * Checks whether the user has the given permission "$action" on
 	 * the resource "$module".
 	 * @param string $user
