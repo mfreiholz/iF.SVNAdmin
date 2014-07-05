@@ -277,6 +277,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		return true;
 	}
 
+  public function getUserCount($withStarUser=true)
+  {
+    return parent::objectSearchResultCount($this->connection, $this->users_base_dn, $this->users_search_filter);
+  }
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IUserViewProvider::getUsers()
