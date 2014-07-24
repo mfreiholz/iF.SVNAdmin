@@ -1,0 +1,8 @@
+.LoginView {
+  max-width: 330px;
+  padding: 15px;
+}
+
+.LoginView form > h3 {
+  margin-top: 0px;
+}

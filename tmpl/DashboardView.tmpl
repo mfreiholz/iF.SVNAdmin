@@ -1,0 +1,45 @@
+<script id="tmpl-DashboardView" type="text/html">
+<div class="DashboardView">
+  <h1><span class="glyphicon glyphicon-dashboard"></span> Dashboard</h1>
+  <div class="system-info-wrapper">
+  </div>
+  <div class="filesystem-info-wrapper">
+  </div>
+</div>
+</script>
+
+<script id="tmpl-SystemInfoPanelView" type="text/html">
+<div class="SystemInfoPanelView">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> System</h1>
+    </div>
+    <div class="panel-body">
+      {{>response.os}}
+      {{>response.osversion}}
+      {{>response.machine}}
+      {{>response.hostname}}
+      {{>response.php.versionname}}
+      {{>response.php.memorypeakusage}}
+      {{>response.php.memoryusage}}
+      {{>response.php.sapiname}}
+    </div>
+  </div>
+</div>
+</script>
+
+<script id="tmpl-FileSystemInfoPanelView" type="text/html">
+<div class="FileSystemInfoPanelView">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> File System</h1>
+    </div>
+    <div class="panel-body">
+      <dl>
+        <dt>{{>~tr("Free disk space")}}</dt><dd>{{>~formatSize(response.diskfreespace)}}</dd>
+        <dt>{{>~tr("Total disk space")}}</dt><dd>{{>~formatSize(response.disktotalspace)}}</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+</script>
