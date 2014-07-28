@@ -9,7 +9,6 @@ return array (
         /**
          * Subversion
          */
-
         "svn_binary_path" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\subversion 1.7.4-1\\svn.exe",
         "svnadmin_binary_path" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\subversion 1.7.4-1\\svnadmin.exe",
         "svn_config_directory" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\svn-config-dir",
@@ -17,7 +16,6 @@ return array (
         /**
          * Functionality
          */
-
         "allow_repository_deletion" => false
     ),
 
@@ -122,6 +120,14 @@ return array (
                     "sAMAccountName"
                 ),
                 "display_name_format" => ""
+            )
+        ),
+
+        // User/Group association
+        "usergroup" => array (
+            "svnauthfile" => array (
+                "class_name" => "SvnAuthUserGroupAssociater",
+                "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz"
             )
         ),
 

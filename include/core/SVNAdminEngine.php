@@ -52,7 +52,7 @@ class SVNAdminEngine {
 
   public static function getInstance() {
     if (self::$_instance == null) {
-      self::$_instance = new SVNAdminEngine((include "../config/main.php"));
+      self::$_instance = new SVNAdminEngine((include SVNADMIN_BASE_DIR . "/config/main.php"));
     }
     return self::$_instance;
   }
