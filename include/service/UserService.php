@@ -18,6 +18,10 @@ class UserService extends ServiceBase {
         return $this->processInfo($request, $response);
       case "groups":
         return $this->processGroups($request, $response);
+      case "assigngroup":
+        return $this->processAssignUnassignGroup($request, $response, true);
+      case "unassigngroup":
+        return $this->processAssignUnassignGroup($request, $response, false);
     }
     return parent::processRequest($request, $response);
   }
@@ -246,8 +250,54 @@ class UserService extends ServiceBase {
     return true;
   }
 
-  public function processAssignUnassignGroup(WebRequest $request, WebResponse $response) {
-    return false;
+  public function processAssignUnassignGroup(WebRequest $request, WebResponse $response, $assignOrUnassign) {
+    $doAssign = $assignOrUnassign;
+    $doUnassign = !$assignOrUnassign;
+    $userProviderId = $request->getParameter("providerid");
+    $userId = $request->getParameter("userid");
+    $groupId = $request->getParameter("groupid");
+
+    if (empty($userProviderId) || empty($userId) || empty($groupId)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Invalid parameters."
+      ));
+      return true;
+    }
+
+    $engine = SVNAdminEngine::getInstance();
+    $provider = $engine->getAssociaterForUsers($userProviderId);
+
+    if (empty($provider)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Internal error."
+      ));
+      return true;
+    }
+
+    if ($doAssign) {
+      if (!$provider->assign($userId, $groupId)) {
+        $response->fail(500);
+        $response->write2json(array (
+            "message" => "Internal error."
+        ));
+        return true;
+      }
+    } else if ($doUnassign) {
+      if (!$provider->unassign($userId, $groupId)) {
+        $response->fail(500);
+        $response->write2json(array (
+            "message" => "Internal error."
+        ));
+        return true;
+      }
+    }
+
+    $response->write2json(array (
+        "status" => 0
+    ));
+    return true;
   }
 
 }
