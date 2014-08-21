@@ -2,12 +2,21 @@
 class SVNAdminEngine {
   const USER_PROVIDER = "user";
   const GROUP_PROVIDER = "group";
+  const USERGROUP_PROVIDER = "usergroup";
   const REPOSITORY_PROVIDER = "repository";
   private static $_instance = null;
   private static $_svn = null;
   private static $_svnadmin = null;
   private $_config = null;
   private $_classPaths = array ();
+
+  /**
+   * Cache of all loaded SvnAuthFiles.
+   * Key=ID; Value=SvnAuthFile Object
+   *
+   * @var array<string,SvnAuthFile>
+   */
+  private $_authfiles = array ();
 
   /**
    *
@@ -57,6 +66,21 @@ class SVNAdminEngine {
     return self::$_instance;
   }
 
+  public function getAuthFileById($id) {
+    if (!isset($this->_authfiles[$id])) {
+      if (!isset($this->_config["authfiles"][$id])) {
+        return null;
+      }
+      $conf = $this->_config["authfiles"][$id];
+      $obj = new SvnAuthFile();
+      if (!$obj->open($conf["file"])) {
+        return null;
+      }
+      $this->_authfile[$id] = $obj;
+    }
+    return $this->_authfile[$id];
+  }
+
   public function getAuthenticators() {
     if (empty($this->_authenticators)) {
       foreach ($this->_config["authenticators"] as &$authConfig) {
@@ -98,6 +122,32 @@ class SVNAdminEngine {
       $ret = $this->_providers[$type][$id];
     }
     return $ret;
+  }
+
+  public function getAssociaterForUsers($providerId) {
+    $type = SVNAdminEngine::USERGROUP_PROVIDER;
+    // Search the Associator.
+    $foundId = null;
+    foreach ($this->_config["providers"][$type] as $id => $conf) {
+      foreach ($conf["for_users"] as $userProviderId) {
+        if ($providerId === $userProviderId) {
+          $foundId = $id;
+          break;
+        }
+      }
+      if ($foundId !== null) {
+        break;
+      }
+    }
+    // Load the found associator.
+    if ($foundId === null) {
+      return null;
+    }
+    return $this->getProvider(SVNAdminEngine::USERGROUP_PROVIDER, $foundId);
+  }
+
+  public function getAssociaterForGroups($providerId) {
+
   }
 
   public function getSvn() {

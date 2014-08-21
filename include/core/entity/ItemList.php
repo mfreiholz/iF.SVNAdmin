@@ -1,6 +1,6 @@
 <?php
 class ItemList {
-  private $_items = null;
+  private $_items = array ();
   private $_hasMore = false;
 
   public function __construct() {

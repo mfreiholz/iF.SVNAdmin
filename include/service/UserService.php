@@ -14,6 +14,10 @@ class UserService extends ServiceBase {
         return $this->processDelete($request, $response);
       case "changepassword":
         return $this->processChangePassword($request, $response);
+      case "info":
+        return $this->processInfo($request, $response);
+      case "groups":
+        return $this->processGroups($request, $response);
     }
     return parent::processRequest($request, $response);
   }
@@ -193,6 +197,57 @@ class UserService extends ServiceBase {
         "status" => 0
     ));
     return true;
+  }
+
+  public function processInfo(WebRequest $request, WebResponse $response) {
+    return false;
+  }
+
+  public function processGroups(WebRequest $request, WebResponse $response) {
+    $providerId = $request->getParameter("providerid");
+    $id = $request->getParameter("id");
+    $offset = $request->getParameter("offset", 0);
+    $num = $request->getParameter("num", 10);
+
+    if (empty($providerId) || empty($id)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Invalid parameters."
+      ));
+      return true;
+    }
+
+    $engine = SVNAdminEngine::getInstance();
+    $provider = $engine->getAssociaterForUsers($providerId);
+
+    if (empty($provider)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Internal error."
+      ));
+      return true;
+    }
+
+    $itemList = $provider->getGroupsOfUser($id, $offset, $num);
+    $groups = $itemList->getItems();
+
+    $json = new stdClass();
+    $json->editable = $provider->isEditable();
+    $json->hasmore = $itemList->hasMore();
+    $json->groups = array ();
+    foreach ($groups as &$group) {
+      $jsonGroup = new stdClass();
+      $jsonGroup->id = $group->getId();
+      $jsonGroup->name = $group->getName();
+      $jsonGroup->displayname = $group->getDisplayName();
+      $json->groups[] = $jsonGroup;
+    }
+    $response->done2json($json);
+    return true;
+  }
+
+  public function processAssignUnassignGroup(WebRequest $request, WebResponse $response) {
+    return false;
   }
 
 }

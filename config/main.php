@@ -20,6 +20,18 @@ return array (
     ),
 
     /**
+     * Global accessible SVNAuthFiles
+     * Will be accessible by the SvnAdminEngine by it's ID.
+     */
+
+    "authfiles" => array (
+        "default" => array (
+            // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.passwd"
+            "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz"
+        )
+    ),
+
+    /**
      * Authentication
      * The authentication mechanism may use multiple Authenticators.
      */
@@ -123,11 +135,14 @@ return array (
             )
         ),
 
-        // User/Group association
+        // User<->Group association
         "usergroup" => array (
             "svnauthfile" => array (
                 "class_name" => "SvnAuthUserGroupAssociater",
-                "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz"
+                "for_users" => array("passwdusers", "digestusers", "digestusers2"),
+                "for_groups" => array("svnauthgroups"),
+                //"file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz",
+                "file_id" => "default"
             )
         ),
 

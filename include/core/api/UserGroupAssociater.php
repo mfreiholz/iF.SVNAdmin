@@ -12,6 +12,10 @@ class UserGroupAssociater {
     return new ItemList();
   }
 
+  public function isEditable() {
+    return false;
+  }
+
   public function assign($userId, $groupId) {
     return false;
   }
