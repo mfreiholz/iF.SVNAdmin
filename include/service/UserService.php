@@ -130,7 +130,7 @@ class UserService extends ServiceBase {
 
   public function processDelete(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
-    $id = $request->getParameter("id");
+    $id = $request->getParameter("userid");
 
     if (empty($providerId) || empty($id)) {
       $response->fail(500);
@@ -167,7 +167,7 @@ class UserService extends ServiceBase {
 
   public function processChangePassword(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
-    $id = $request->getParameter("id");
+    $id = $request->getParameter("userid");
     $password = $request->getParameter("password");
 
     if (empty($providerId) || empty($id) || empty($password)) {
@@ -209,7 +209,7 @@ class UserService extends ServiceBase {
 
   public function processGroups(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
-    $id = $request->getParameter("id");
+    $id = $request->getParameter("userid");
     $offset = $request->getParameter("offset", 0);
     $num = $request->getParameter("num", 10);
 

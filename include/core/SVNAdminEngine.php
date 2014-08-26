@@ -147,7 +147,25 @@ class SVNAdminEngine {
   }
 
   public function getAssociaterForGroups($providerId) {
-
+    $type = SVNAdminEngine::USERGROUP_PROVIDER;
+    // Search the Associator.
+    $foundId = null;
+    foreach ($this->_config["providers"][$type] as $id => $conf) {
+      foreach ($conf["for_groups"] as $userProviderId) {
+        if ($providerId === $userProviderId) {
+          $foundId = $id;
+          break;
+        }
+      }
+      if ($foundId !== null) {
+        break;
+      }
+    }
+    // Load the found associator.
+    if ($foundId === null) {
+      return null;
+    }
+    return $this->getProvider(SVNAdminEngine::USERGROUP_PROVIDER, $foundId);
   }
 
   public function getSvn() {

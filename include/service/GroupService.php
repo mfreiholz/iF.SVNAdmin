@@ -12,6 +12,14 @@ class GroupService extends ServiceBase {
         return $this->processCreate($request, $response);
       case "delete":
         return $this->processDelete($request, $response);
+      case "info":
+        break;
+      case "users":
+        return $this->processUsers($request, $response);
+      case "assignuser":
+        return $this->processAssignUnassignUser($request, $response, true);
+      case "unassignuser":
+        return $this->processAssignUnassignUser($request, $response, false);
     }
     return parent::processRequest($request, $response);
   }
@@ -117,7 +125,7 @@ class GroupService extends ServiceBase {
 
   public function processDelete(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
-    $id = $request->getParameter("id");
+    $id = $request->getParameter("groupid");
 
     if (empty($providerId) || empty($id)) {
       $response->fail(500);
@@ -144,6 +152,103 @@ class GroupService extends ServiceBase {
           "message" => "Internal error."
       ));
       return true;
+    }
+
+    $response->write2json(array (
+        "status" => 0
+    ));
+    return true;
+  }
+
+  public function processInfo(WebRequest $request, WebResponse $response) {
+    return true;
+  }
+
+  public function processUsers(WebRequest $request, WebResponse $response) {
+    $providerId = $request->getParameter("providerid");
+    $id = $request->getParameter("groupid");
+    $offset = $request->getParameter("offset", 0);
+    $num = $request->getParameter("num", 10);
+
+    if (empty($providerId) || empty($id)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Invalid parameters."
+      ));
+      return true;
+    }
+
+    $engine = SVNAdminEngine::getInstance();
+    $provider = $engine->getAssociaterForGroups($providerId);
+
+    if (empty($provider)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Internal error."
+      ));
+      return true;
+    }
+
+    $itemList = $provider->getUsersOfGroup($id, $offset, $num);
+    $users = $itemList->getItems();
+
+    $json = new stdClass();
+    $json->editable = $provider->isEditable();
+    $json->hasmore = $itemList->hasMore();
+    $json->users = array ();
+    foreach ($users as &$user) {
+      $jsonUser = new stdClass();
+      $jsonUser->id = $user->getId();
+      $jsonUser->name = $user->getName();
+      $jsonUser->displayname = $user->getDisplayName();
+      $json->users[] = $jsonUser;
+    }
+    $response->done2json($json);
+    return true;
+  }
+
+  public function processAssignUnassignUser(WebRequest $request, WebResponse $response, $assignOrUnassign) {
+    $doAssign = $assignOrUnassign;
+    $doUnassign = !$assignOrUnassign;
+    $groupProviderId = $request->getParameter("providerid");
+    $userId = $request->getParameter("userid");
+    $groupId = $request->getParameter("groupid");
+
+    if (empty($groupProviderId) || empty($userId) || empty($groupId)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Invalid parameters."
+      ));
+      return true;
+    }
+
+    $engine = SVNAdminEngine::getInstance();
+    $provider = $engine->getAssociaterForGroups($groupProviderId);
+
+    if (empty($provider)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Internal error."
+      ));
+      return true;
+    }
+
+    if ($doAssign) {
+      if (!$provider->assign($userId, $groupId)) {
+        $response->fail(500);
+        $response->write2json(array (
+            "message" => "Internal error."
+        ));
+        return true;
+      }
+    } else if ($doUnassign) {
+      if (!$provider->unassign($userId, $groupId)) {
+        $response->fail(500);
+        $response->write2json(array (
+            "message" => "Internal error."
+        ));
+        return true;
+      }
     }
 
     $response->write2json(array (
