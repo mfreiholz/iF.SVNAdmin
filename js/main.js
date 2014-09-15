@@ -148,7 +148,7 @@
         m: "UserService",
         action: "delete",
         providerid: providerId,
-        id: userId
+        userid: userId
       }
     });
   };

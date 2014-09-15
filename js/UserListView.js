@@ -55,12 +55,14 @@
           providerId = element.data("id");
         showUsers(providerId);
       },
+
       "click; a.user-link": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
           userId = element.data("id");
         svnadmin.app.showUserInfoView(_providerId, userId);
       },
+
       "click; button.submituser": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
@@ -83,6 +85,7 @@
           alert("Error: Can not add user.");
         });
       },
+
       "click; button.deleteuser": function (ev) {
         var view = this,
           checkedElements = jQ("input[name=user-selection]:checked"),
@@ -100,6 +103,7 @@
           alert("ERROR");
         });
       },
+
       "click; li:not(.disabled) a.previous-page": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
@@ -108,6 +112,7 @@
         showUsers(_providerId, offset, num);
         return ev.preventDefault();
       },
+
       "click; li:not(.disabled) a.next-page:not(.disabled)": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
