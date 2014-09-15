@@ -19,7 +19,7 @@
       data: { m: "LoginService", action: "check" }
     })
     .done(function (data) {
-      brite.display("MainView", ".AppContent");
+      svnadmin.app.showMainView();
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
       if (jqXHR.status === 401) {
@@ -28,6 +28,16 @@
         // Network error.
       }
     });
+  };
+
+  AppEngine.prototype.logout = function () {
+    svnadmin.service.logout().always(function () {
+      window.location.reload();
+    });
+  };
+
+  AppEngine.prototype.showMainView = function () {
+    brite.display("MainView", ".AppContent", {}, { emptyParent: true });
   };
 
   AppEngine.prototype.showUserInfoView = function (providerId, userId) {
@@ -53,7 +63,26 @@
     return jQ.ajax(settings);
   };
 
-  ServiceClient.prototype.login = function (login) {
+  ServiceClient.prototype.login = function (username, password) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "LoginService",
+        action: "login",
+        username: username,
+        password: password
+      }
+    });
+  };
+
+  ServiceClient.prototype.logout = function () {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "LoginService",
+        action: "logout"
+      }
+    });
   };
 
   ServiceClient.prototype.getSystemInfo = function () {
@@ -127,6 +156,14 @@
   window.svnadmin = window.svnadmin || {};
   window.svnadmin.service = window.svnadmin.service || new ServiceClient();
 }(jQuery));
+
+/**
+ * Global Helper Functions
+ */
+function tr(str) {
+  "use strict";
+  return str;
+}
 
 
 /**

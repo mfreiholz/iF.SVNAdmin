@@ -58,7 +58,7 @@ return array (
             "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.digest.passwd",
             "realm" => "myrealm"
         ),
-        array (
+        /*array (
             "id" => "authldap",
             "class_name" => "LdapAuthenticator",
             "host_url" => "ldap://192.168.178.24:389/",
@@ -68,7 +68,7 @@ return array (
             "search_base_dn" => "OU=iFSVNAdmin,DC=insanefactory,DC=com",
             "search_filter" => "(&(objectClass=person)(objectClass=user))",
             "attribute" => "sAMAccountName"
-        )
+        )*/
     ),
 
     /**
@@ -96,7 +96,7 @@ return array (
                 "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.digest.passwd",
                 "realm" => "myrealm2"
             ),
-            "ldapusers" => array (
+            /*"ldapusers" => array (
                 "class_name" => "LdapUserProvider",
                 "host_url" => "ldap://192.168.178.24:389/",
                 "protocol_version" => 3,
@@ -110,7 +110,7 @@ return array (
                     "sn"
                 ),
                 "display_name_format" => "%givenName %sn (%sAMAccountName)"
-            )
+            )*/
         ),
 
         // Groups
@@ -120,7 +120,7 @@ return array (
                 // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.authz"
                 "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz"
             ),
-            "ldapgroups" => array (
+            /*"ldapgroups" => array (
                 "class_name" => "LdapGroupProvider",
                 "host_url" => "ldap://192.168.178.24:389/",
                 "protocol_version" => 3,
@@ -132,7 +132,7 @@ return array (
                     "sAMAccountName"
                 ),
                 "display_name_format" => ""
-            )
+            )*/
         ),
 
         // User<->Group association

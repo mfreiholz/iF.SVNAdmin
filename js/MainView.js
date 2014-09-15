@@ -28,6 +28,9 @@
       },
       "click; .users-link": function (ev) {
         brite.display("UserListView", "#page-wrapper", {}, {emptyParent: true});
+      },
+      "click; .logout-link": function (ev) {
+        svnadmin.app.logout();
       }
     },
 
