@@ -40,9 +40,12 @@
     brite.display("MainView", ".AppContent", {}, { emptyParent: true });
   };
 
+  AppEngine.prototype.showUserListView = function (providerId) {
+    brite.display("UserListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
+  };
+
   AppEngine.prototype.showUserInfoView = function (providerId, userId) {
-    //alert("prov: " + providerId + "; user: " + userId);
-    brite.display("UserInfoView", "#page-wrapper", { providerid: providerId, userid: userId }, { emptyParent: true });
+    brite.display("UserInfoView", "#page-wrapper", { providerId: providerId, userId: userId }, { emptyParent: true });
   };
 
   window.svnadmin = window.svnadmin || {};
@@ -62,6 +65,8 @@
   ServiceClient.prototype.ajax = function (settings) {
     return jQ.ajax(settings);
   };
+
+  // Authentication
 
   ServiceClient.prototype.login = function (username, password) {
     return this.ajax({
@@ -85,6 +90,8 @@
     });
   };
 
+  // Common
+
   ServiceClient.prototype.getSystemInfo = function () {
     return this.ajax({
       url: "service/",
@@ -104,6 +111,8 @@
       }
     });
   };
+
+  // Users
 
   ServiceClient.prototype.getUserProviders = function () {
     return this.ajax({
@@ -147,6 +156,18 @@
       data: {
         m: "UserService",
         action: "delete",
+        providerid: providerId,
+        userid: userId
+      }
+    });
+  };
+
+  ServiceClient.prototype.getGroupsOfUser = function (providerId, userId) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "UserService",
+        action: "groups",
         providerid: providerId,
         userid: userId
       }

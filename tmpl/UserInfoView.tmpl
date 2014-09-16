@@ -1,8 +1,11 @@
 <script id="tmpl-UserInfoView" type="text/html">
 <div class="UserInfoView">
   <h1><span class="glyphicon glyphicon-user"></span> User Information</h1>
-  <div class="roles-wrapper"></div>
+  <p>
+    <a role="button" class="btn btn-default users-link" href="#!/users/{{>providerId}}" data-providerid="{{>providerId}}">{{>~tr('Back to overview')}}</a>
+  </p>
   <div class="groups-wrapper"></div>
+  <div class="roles-wrapper"></div>
 </div>
 </script>
 
@@ -14,28 +17,28 @@
       <h1 class="panel-title">{{>~tr("Groups")}}</h1>
     </div>
     <div class="panel-body">
+      <ul>
+      {{for groups}}
+        <li>ID({{>id}}) NAME({{>name}}) DNAME({{>displayname}})</li>
+      {{else}}
+        <li>{{>~tr('Empty')}}</li>
+      {{/for}}
+      </ul>
+    </div><!-- /.panel-body -->
+  </div><!-- /.panel -->
 
-      <div class="table-responsive">
-        <table class="table table-hover">
-        <thead>
-          <tr>
-            <th class="col-sm-1"></th>
-            <th class="col-sm-1">#</th>
-            <th class="col-sm-10">{{>~tr("Name")}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{for []}}
-          <tr>
-            <td><input type="checkbox" name="user-selection" data-providerid="{{>~pid}}" data-userid="{{>id}}"></td>
-            <td>{{>(#index + 1)}}</td>
-            <td>{{>displayname}}</td>
-          </tr>
-          {{/for}}
-        </tbody>
-        </table>
-      </div>
+</div>
+</script>
 
+<script id="tmpl-UserInfoView-Roles" type="text/html">
+<div class"UserInfoView-Roles">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">{{>~tr("Roles")}}</h1>
+    </div>
+    <div class="panel-body">
+      <p>Content here...</p>
     </div><!-- /.panel-body -->
   </div><!-- /.panel -->
 
