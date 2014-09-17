@@ -1,5 +1,7 @@
 (function (jQ) {
   "use strict";
+  var _loadingView = null;
+  
   /**
     Main class to manage the GUI and all of it's requirements.
   **/
@@ -17,15 +19,13 @@
     svnadmin.service.ajax({
       url: "service/",
       data: { m: "LoginService", action: "check" }
-    })
-    .done(function (data) {
+    }).done(function (data) {
       svnadmin.app.showMainView();
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
       if (jqXHR.status === 401) {
         brite.display("LoginView", ".AppContent");
       } else {
-        // Network error.
+        alert("Network error!");
       }
     });
   };
@@ -34,6 +34,19 @@
     svnadmin.service.logout().always(function () {
       window.location.reload();
     });
+  };
+  
+  AppEngine.prototype.showLoading = function () {
+    return brite.display("LoadingView", "body").done(function (view) {
+      _loadingView = view;
+    });
+  };
+  
+  AppEngine.prototype.hideLoading = function () {
+    if (_loadingView) {
+      _loadingView.$el.bRemove();
+      _loadingView = null;
+    }
   };
 
   AppEngine.prototype.showMainView = function () {
@@ -100,7 +113,7 @@
         action: "systeminfo"
       }
     });
-  }
+  };
 
   ServiceClient.prototype.getFileSystemInfo = function () {
     return this.ajax({
@@ -196,6 +209,7 @@ $.views.helpers({
     return str;
   },
   formatSize: function (bytes) {
+    "use strict";
     var kb = bytes / 1024,
       mb = kb / 1024,
       gb = mb / 1024,

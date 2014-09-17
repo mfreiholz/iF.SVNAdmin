@@ -1,0 +1,13 @@
+{
+  "jslint.options": {
+    "browser": true,
+    "nomen": true,
+    "vars": true,
+    "indent": 2,
+    "plusplus": true,
+    "bitwise": true,
+    "regexp": true,
+    "continue": true,
+    "predef": ["jQuery", "brite", "svnadmin", "alert", "$", "tr"]
+  }
+}

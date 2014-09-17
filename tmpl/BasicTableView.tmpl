@@ -1,6 +1,58 @@
 <script id="tmpl-BasicTableView" type="text/html">
 
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">{{>title}}</h1>
+    </div>
+    <div class="panel-body">
 
+      {{if showSearch}}
+      <div class="search-wrapper">
+        <div class="input-group">
+          <span class="input-group-addon">{{>~tr('Search')}}</span>
+          <input type="text" class="form-control" placeholder="{{>~tr('Search')}}">
+        </div>
+      </div>
+      {{/if}}
 
+      {{if actions.length > 0}}
+      <div class="action-wrapper">
+        {{for actions}}
+        <button class="btn btn-primary action" data-action="{{>id}}" data-toggle="modal" data-target="#useraddmodal">{{>name}}</button>
+        {{/for}}
+      </div>
+      {{/if}}
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+          {{for columns}}
+            <th data-column="{{>id}}">{{>name}}</th>
+          {{/for}}
+          </tr>
+        </thead>
+        <tbody>
+        {{for rows}}
+          <tr>
+          {{for columns}}
+            <td>{{>#data}}</td>
+          {{/for}}
+          </tr>
+        {{/for}}
+        </tbody>
+        </table>
+      </div>
+
+      {{if showPaging}}
+        {{if offset > 0 || response.hasmore}}
+        <ul class="pager">
+          <li class="previous {{if offset == 0}}disabled{{/if}}"><a class="previous-page" href="#" data-offset="{{>offset - num}}" data-num="{{>num}}">&larr; {{>~tr("Previous")}}</a></li>
+          <li class="next {{if !response.hasmore}}disabled{{/if}}"><a class="next-page" href="#" data-offset="{{>offset + num}}" data-num="{{>num}}">{{>~tr("Next")}} &rarr;</a></li>
+        </ul>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
 
 </script>

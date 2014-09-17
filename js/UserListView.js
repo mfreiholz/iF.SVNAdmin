@@ -16,7 +16,7 @@
     jQ(".UserListViewProviders li").removeClass("active");
 
     return svnadmin.service.getUsers(providerId, offset, num).done(function (data) {
-      jQ(".UserListViewProviders li[data-id=" + providerId +"]").addClass("active");
+      jQ(".UserListViewProviders li[data-id=" + providerId + "]").addClass("active");
       jQ(".user-table-wrapper").html(jQ("#tmpl-UserListViewUserTable").render({
         response: data,
         providerId: providerId,
@@ -24,8 +24,7 @@
         offset: offset,
         num: num
       }));
-    })
-    .fail(function () {
+    }).fail(function () {
       alert("FAIL: Can not fetch users.");
     });
   }
@@ -35,11 +34,11 @@
    */
   brite.registerView("UserListView", {}, {
 
-    create: function (config, data) {
+    create: function (data, config) {
       return jQ("#tmpl-UserListView").render();
     },
 
-    postDisplay: function (config, data) {
+    postDisplay: function (data, config) {
       // Load user providers and the users of the first provider.
       svnadmin.service.getUserProviders().done(function (data) {
         var html = jQ("#tmpl-UserListViewProviders").render({ providers: data, current: data[0].id });
@@ -80,8 +79,7 @@
         svnadmin.service.createUser(_providerId, name, password).done(function (data) {
           jQ("#useraddmodal").modal("hide");
           showUsers(_providerId);
-        })
-        .fail(function () {
+        }).fail(function () {
           alert("Error: Can not add user.");
         });
       },
@@ -89,8 +87,9 @@
       "click; button.deleteuser": function (ev) {
         var view = this,
           checkedElements = jQ("input[name=user-selection]:checked"),
-          defs = [];
-        for (var i = 0; i < checkedElements.length; ++i) {
+          defs = [],
+          i = 0;
+        for (i = 0; i < checkedElements.length; ++i) {
           var elem = jQ(checkedElements[i]);
           var providerId = elem.data("providerid");
           var userId = elem.data("userid");
@@ -98,8 +97,7 @@
         }
         jQ.when(defs).done(function () {
           showUsers(_providerId);
-        })
-        .fail(function () {
+        }).fail(function () {
           alert("ERROR");
         });
       },
