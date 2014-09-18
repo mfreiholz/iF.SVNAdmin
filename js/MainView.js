@@ -37,10 +37,11 @@
     winEvents: {
       "resize": function (ev) {
         var width = jQ(window).width();
-        if (width < 768)
+        if (width < 768) {
           jQ(".sidebar-collapse").collapse("hide");
-        else
+        } else {
           jQ(".sidebar-collapse").collapse("show");
+        }
       }
     }
 

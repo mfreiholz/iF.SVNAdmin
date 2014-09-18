@@ -3,8 +3,11 @@
 
   // Defines default values for the table-view.
   var _options = {
-    showFilter: true,
+    showSearch: true,
     showPaging: true,
+    title: "Basic Table View",
+    columns: [],
+    actions: [],
 
     loadMore: function (offset, num) {
       var def = new jQ.Deferred();
@@ -22,7 +25,7 @@
   brite.registerView("BasicTableView", {}, {
 
     create: function (config, data) {
-      return jQ("#tmpl-BasicTableView").render();
+      return jQ("#tmpl-BasicTableView").render(_options);
     },
 
     postDisplay: function (config, data) {
