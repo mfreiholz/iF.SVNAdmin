@@ -206,6 +206,19 @@
       }
     });
   };
+  
+  ServiceClient.prototype.getGroups = function (providerId, offset, num) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "GroupService",
+        action: "list",
+        providerid: providerId,
+        offset: offset,
+        num: num
+      }
+    });
+  };
 
   window.svnadmin = window.svnadmin || {};
   window.svnadmin.service = window.svnadmin.service || new ServiceClient();

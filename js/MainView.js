@@ -29,6 +29,9 @@
       "click; .users-link": function (ev) {
         svnadmin.app.showUserListView(undefined);
       },
+      "click; .groups-link": function (ev) {
+        svnadmin.app.showGroupListView(undefined);
+      },
       "click; .logout-link": function (ev) {
         svnadmin.app.logout();
       }

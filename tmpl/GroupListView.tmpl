@@ -7,8 +7,8 @@
 </div>
 </script>
 
-<script id="tmpl-UserListViewProviders" type="text/html">
-<div class="UserListViewProviders">
+<script id="tmpl-GroupListViewProviders" type="text/html">
+<div class="GroupListViewProviders">
   <ul class="nav nav-pills">
     {{for providers ~current=current}}
     <li data-id="{{>id}}">
@@ -16,5 +16,17 @@
     </li>
     {{/for}}
   </ul>
+</div>
+</script>
+
+<script id="tmpl-GroupListViewGroupTable" type="text/html">
+<div class="GroupListViewGroupTable">
+
+  <ul>
+  {{for response.groups}}
+    <li>{{>(#index + 1)}} - {{>name}} - {{>displayname}}</li>
+  {{/for}}
+  </ul>
+
 </div>
 </script>

@@ -73,7 +73,7 @@ class GroupService extends ServiceBase {
       $jsonGroup = new stdClass();
       $jsonGroup->id = $group->getId();
       $jsonGroup->name = $group->getName();
-      $jsonGroup->displayName = $group->getDisplayName();
+      $jsonGroup->displayname = $group->getDisplayName();
       $json->groups[] = $jsonGroup;
     }
     $response->done2json($json);
@@ -116,7 +116,7 @@ class GroupService extends ServiceBase {
     $jsonGroup = new stdClass();
     $jsonGroup->id = $group->getId();
     $jsonGroup->name = $group->getName();
-    $jsonGroup->displayName = $group->getDisplayName();
+    $jsonGroup->displayname = $group->getDisplayName();
     $json->group = $jsonGroup;
 
     $response->done2json($json);

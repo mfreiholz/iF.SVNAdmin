@@ -6,12 +6,8 @@
     if (!providerId) {
       return;
     }
-    if (!offset) {
-      offset = 0;
-    }
-    if (!num) {
-      num = 10;
-    }
+    offset = !offset ? 0 : offset;
+    num = !num ? 10 : num;
     _providerId = providerId;
     jQ(".UserListViewProviders li").removeClass("active");
 
@@ -43,7 +39,7 @@
       svnadmin.service.getUserProviders().done(function (resp) {
         var html = jQ("#tmpl-UserListViewProviders").render({ providers: resp, current: resp[0].id });
         jQ(".provider-selection-wrapper").html(html);
-        showUsers(data[0].id);
+        showUsers(resp[0].id);
       });
     },
 
