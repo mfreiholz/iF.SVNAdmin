@@ -47,6 +47,14 @@
   AppEngine.prototype.showUserInfoView = function (providerId, userId) {
     brite.display("UserInfoView", "#page-wrapper", { providerId: providerId, userId: userId }, { emptyParent: true });
   };
+  
+  AppEngine.prototype.showGroupListView = function (providerId) {
+    brite.display("GroupListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
+  };
+  
+  AppEngine.prototype.showGroupInfoView = function (providerId, groupId) {
+    brite.display("GroupInfoView", "#page-wrapper", { providerId: providerId, groupId: groupId }, { emptyParent: true });
+  };
 
   window.svnadmin = window.svnadmin || {};
   window.svnadmin.app = window.svnadmin.app || new AppEngine();
@@ -170,6 +178,18 @@
         action: "groups",
         providerid: providerId,
         userid: userId
+      }
+    });
+  };
+  
+  // Groups
+  
+  ServiceClient.prototype.getGroupProviders = function () {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "GroupService",
+        action: "providers"
       }
     });
   };

@@ -35,14 +35,14 @@
    */
   brite.registerView("UserListView", {}, {
 
-    create: function (config, data) {
+    create: function (data, config) {
       return jQ("#tmpl-UserListView").render();
     },
 
-    postDisplay: function (config, data) {
+    postDisplay: function (data, config) {
       // Load user providers and the users of the first provider.
-      svnadmin.service.getUserProviders().done(function (data) {
-        var html = jQ("#tmpl-UserListViewProviders").render({ providers: data, current: data[0].id });
+      svnadmin.service.getUserProviders().done(function (resp) {
+        var html = jQ("#tmpl-UserListViewProviders").render({ providers: resp, current: resp[0].id });
         jQ(".provider-selection-wrapper").html(html);
         showUsers(data[0].id);
       });

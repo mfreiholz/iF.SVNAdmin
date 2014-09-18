@@ -1,0 +1,20 @@
+<script id="tmpl-GroupListView" type="text/html">
+<div class="GroupListView">
+  <h1><span class="glyphicon glyphicon-group"></span> {{>~tr("Groups")}}</h1>
+  <div class="provider-selection-wrapper"></div>
+  <div class="table-wrapper"></div>
+  {{!-- include tmpl="#tmpl-UserListViewAddForm"/ --}}
+</div>
+</script>
+
+<script id="tmpl-UserListViewProviders" type="text/html">
+<div class="UserListViewProviders">
+  <ul class="nav nav-pills">
+    {{for providers ~current=current}}
+    <li data-id="{{>id}}">
+      <a class="provider-link" data-id="{{>id}}" href="#!/groups/{{>id}}">{{>id}}</a>
+    </li>
+    {{/for}}
+  </ul>
+</div>
+</script>
