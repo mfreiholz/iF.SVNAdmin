@@ -22,6 +22,11 @@
 <script id="tmpl-GroupListViewGroupTable" type="text/html">
 <div class="GroupListViewGroupTable">
 
+  <div>
+    <b>Actions:</b>
+    <button class="btn btn-primary add-link">{{>~tr("Add")}}</button>
+  </div>
+
   <ul>
   {{for response.groups}}
     <li>{{>(#index + 1)}} - {{>name}} - {{>displayname}}</li>

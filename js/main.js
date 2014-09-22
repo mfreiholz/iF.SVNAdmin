@@ -219,6 +219,18 @@
       }
     });
   };
+  
+  ServiceClient.prototype.createGroup = function (providerId, name) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "GroupService",
+        action: "create",
+        providerid: providerId,
+        name: name
+      }
+    });
+  };
 
   window.svnadmin = window.svnadmin || {};
   window.svnadmin.service = window.svnadmin.service || new ServiceClient();

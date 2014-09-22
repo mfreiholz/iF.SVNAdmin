@@ -40,11 +40,19 @@
     },
     
     events: {
+      
       "click; .provider-link": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
           providerId = element.data("id");
         showGroups(providerId);
+      },
+      
+      "click; .add-link": function (ev) {
+        var view = this,
+          element = jQ(ev.currentTarget);
+        brite.display("GroupAddView", "body", { providerId: _providerId }, { emptyParent: false });
+        // TODO Refresh group list on finish.
       }
       
     }
