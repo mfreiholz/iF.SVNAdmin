@@ -25,6 +25,7 @@
           element = jQ(ev.currentTarget),
           providerId = view.$element.data("providerid"),
           name = view.$el.find("input[name='name']").val();
+        ev.preventDefault();
         
         // Validate form.
         if (!providerId || !name) {
@@ -39,7 +40,6 @@
         }).always(function () {
           
         });
-        return ev.preventDefault();
       },
       
       "click; button.submit": function (ev) {

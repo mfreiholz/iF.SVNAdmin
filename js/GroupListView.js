@@ -12,10 +12,10 @@
     jQ(".GroupListViewProviders li").removeClass("active");
     
     return svnadmin.service.getGroups(providerId, offset, num).done(function (resp) {
-      var html = jQ("#tmpl-GroupListViewGroupTable").render({
+      jQ(".GroupListViewProviders li[data-id=" + providerId + "]").addClass("active");
+      jQ(".table-wrapper").html(jQ("#tmpl-GroupListViewGroupTable").render({
         response: resp
-      });
-      jQ(".table-wrapper").html(html);
+      }));
     }).fail(function () {
       alert("FAIL: Can not fetch groups.");
     });
