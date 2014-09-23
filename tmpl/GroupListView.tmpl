@@ -28,8 +28,12 @@
   </div>
 
   <ul>
-  {{for response.groups}}
-    <li>{{>(#index + 1)}} - {{>name}} - {{>displayname}}</li>
+  {{for response.groups ~providerId=providerId}}
+    <li>
+      {{>(#index + 1)}} - {{>name}} - {{>displayname}}
+      [<a href="#" class="delete" data-providerid="{{>~providerId}}" data-groupid="{{>id}}">Delete</a>]
+      [<a href="#!/groups/{{>~providerId}}/{{>id}}" class="info" data-providerid="{{>~providerId}}" data-groupid="{{>id}}">Info</a>]
+    </li>
   {{/for}}
   </ul>
 

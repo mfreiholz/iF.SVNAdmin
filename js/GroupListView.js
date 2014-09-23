@@ -14,6 +14,7 @@
     return svnadmin.service.getGroups(providerId, offset, num).done(function (resp) {
       jQ(".GroupListViewProviders li[data-id=" + providerId + "]").addClass("active");
       jQ(".table-wrapper").html(jQ("#tmpl-GroupListViewGroupTable").render({
+        providerId: providerId,
         response: resp
       }));
     }).fail(function () {
@@ -53,6 +54,26 @@
           element = jQ(ev.currentTarget);
         brite.display("GroupAddView", "body", { providerId: _providerId }, { emptyParent: false });
         // TODO Refresh group list on finish.
+      },
+      
+      "click; .info": function (ev) {
+        var view = this,
+          element = jQ(ev.currentTarget),
+          providerId = element.data("providerid"),
+          groupId = element.data("groupid");
+        svnadmin.app.showGroupInfoView(providerId, groupId);
+      },
+      
+      "click; .delete": function (ev) {
+        var view = this,
+          element = jQ(ev.currentTarget),
+          providerId = element.data("providerid"),
+          groupId = element.data("groupid");
+        svnadmin.service.deleteGroup(providerId, groupId).done(function (resp) {
+          showGroups(providerId, 0, -1);
+        }).fail(function () {
+          alert("Can not delete group.");
+        });
       }
       
     }

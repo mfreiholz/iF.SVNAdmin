@@ -231,6 +231,18 @@
       }
     });
   };
+  
+  ServiceClient.prototype.deleteGroup = function (providerId, groupId) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "GroupService",
+        action: "delete",
+        providerid: providerId,
+        groupid: groupId
+      }
+    });
+  };
 
   window.svnadmin = window.svnadmin || {};
   window.svnadmin.service = window.svnadmin.service || new ServiceClient();
