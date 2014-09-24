@@ -44,11 +44,19 @@
     },
 
     events: {
+
       "click; .provider-link": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
           providerId = element.data("id");
         showUsers(providerId);
+      },
+      
+      "click; .add-link": function (ev) {
+        var view = this,
+          element = jQ(ev.currentTarget),
+          providerId = element.data("providerid");
+        brite.display("UserAddView", "body", { providerId: providerId, submitted: function () { showUsers(providerId); } }, { emptyParent: false });
       },
 
       "click; a.user-link": function (ev) {
@@ -56,28 +64,6 @@
           element = jQ(ev.currentTarget),
           userId = element.data("id");
         svnadmin.app.showUserInfoView(_providerId, userId);
-      },
-
-      "click; button.submituser": function (ev) {
-        var view = this,
-          element = jQ(ev.currentTarget),
-          name = view.$el.find("input[name=username]").val(),
-          password = view.$el.find("input[name=password]").val(),
-          password2 = view.$el.find("input[name=password2]").val();
-        if (password === "") {
-          alert("Password is empty!");
-          return;
-        }
-        if (password !== password2) {
-          alert("Passwords doesn't match!");
-          return;
-        }
-        svnadmin.service.createUser(_providerId, name, password).done(function (data) {
-          jQ("#useraddmodal").modal("hide");
-          showUsers(_providerId);
-        }).fail(function () {
-          alert("Error: Can not add user.");
-        });
       },
 
       "click; button.deleteuser": function (ev) {

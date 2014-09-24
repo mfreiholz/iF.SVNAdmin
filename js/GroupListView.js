@@ -14,8 +14,11 @@
     return svnadmin.service.getGroups(providerId, offset, num).done(function (resp) {
       jQ(".GroupListViewProviders li[data-id=" + providerId + "]").addClass("active");
       jQ(".table-wrapper").html(jQ("#tmpl-GroupListViewGroupTable").render({
+        response: resp,
         providerId: providerId,
-        response: resp
+        providerEditable: resp.editable,
+        offset: offset,
+        num: num
       }));
     }).fail(function () {
       alert("FAIL: Can not fetch groups.");
@@ -51,9 +54,9 @@
       
       "click; .add-link": function (ev) {
         var view = this,
-          element = jQ(ev.currentTarget);
-        brite.display("GroupAddView", "body", { providerId: _providerId }, { emptyParent: false });
-        // TODO Refresh group list on finish.
+          element = jQ(ev.currentTarget),
+          providerId = element.data("providerid");
+        brite.display("GroupAddView", "body", { providerId: providerId, submitted: function () { showGroups(providerId); } }, { emptyParent: false });
       },
       
       "click; .info": function (ev) {

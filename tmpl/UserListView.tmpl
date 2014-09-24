@@ -3,7 +3,6 @@
   <h1><span class="glyphicon glyphicon-user"></span> {{>~tr("Users")}}</h1>
   <div class="provider-selection-wrapper"></div>
   <div class="user-table-wrapper"></div>
-  {{include tmpl="#tmpl-UserListViewAddForm"/}}
 </div>
 </script>
 
@@ -37,7 +36,7 @@
 
       {{if providerEditable}}
       <div class="">
-        <button class="btn btn-primary adduser" data-toggle="modal" data-target="#useraddmodal">{{>~tr("Add")}}</button>
+        <button class="btn btn-primary add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
         <button class="btn btn-danger deleteuser">{{>~tr("Delete")}}</button>
       </div>
       {{/if}}
@@ -77,69 +76,4 @@
   </div>
 
 </div>
-</script>
-
-<script id="tmpl-UserListViewAddForm" type="text/html">
-<div class="UserListViewAddForm">
-
-  <div class="modal fade" id="useraddmodal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{>~tr("Close")}}</span></button>
-          <h4 class="modal-title">{{>~tr("Add")}}</h4>
-        </div>
-        <div class="modal-body">
-
-          <form role="form">
-            <div class="form-group">
-              <label for="username">{{>~tr("Name")}}</label>
-              <input class="form-control" type="text" name="username" required>
-              <p class="help-block">{{>~tr("Valid characters: A-Z, 0-9, Dash (-), Underline (_)")}}</p>
-            </div>
-            <div class="form-group">
-              <label for="password">{{>~tr("Password")}}</label>
-              <input class="form-control" type="password" name="password" required>
-            </div>
-            <div class="form-group">
-              <label for="password">{{>~tr("Repeat Password")}}</label>
-              <input class="form-control" type="password" name="password2" required>
-            </div>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary submituser">{{>~tr("Add")}}</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</div>
-</script>
-
-
-<script id="tmpl-dev" type="text/html">
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> Create new user</h1>
-    </div>
-    <div class="panel-body">
-      <form class="user-add" role="form">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" name="username">
-          <p class="help-block">Valid characters: A-Z, 0-9, Dash (-), Underline (_)</p>
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" name="password">
-        </div>
-        <button type="submit" class="btn btn-default">Create</button>
-      </form>
-    </div>
-  </div>
-
 </script>
