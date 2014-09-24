@@ -1,0 +1,19 @@
+<script id="tmpl-RepositoryListView" type="text/html">
+<div class="RepositoryListView">
+  <h1><span class="glyphicon glyphicon-hdd"></span> {{>~tr("Repositories")}}</h1>
+  <div class="provider-selection-wrapper"></div>
+  <div class="user-table-wrapper"></div>
+</div>
+</script>
+
+<script id="tmpl-RepositoryListViewProviders" type="text/html">
+<div class="RepositoryListViewProviders">
+  <ul class="nav nav-pills">
+    {{for providers ~current=current}}
+    <li data-id="{{>id}}">
+      <a class="provider-link" data-id="{{>id}}" href="#!/repositories/{{>id}}">{{>id}}</a>
+    </li>
+    {{/for}}
+  </ul>
+</div>
+</script>

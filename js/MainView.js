@@ -32,6 +32,9 @@
       "click; .groups-link": function (ev) {
         svnadmin.app.showGroupListView(undefined);
       },
+      "click; .repositories-link": function (ev) {
+        svnadmin.app.showRepositoryListView(undefined);
+      },
       "click; .logout-link": function (ev) {
         svnadmin.app.logout();
       }

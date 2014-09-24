@@ -50,23 +50,27 @@
   };
 
   AppEngine.prototype.showMainView = function () {
-    brite.display("MainView", ".AppContent", {}, { emptyParent: true });
+    return brite.display("MainView", ".AppContent", {}, { emptyParent: true });
   };
 
   AppEngine.prototype.showUserListView = function (providerId) {
-    brite.display("UserListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
+    return brite.display("UserListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
   };
 
   AppEngine.prototype.showUserInfoView = function (providerId, userId) {
-    brite.display("UserInfoView", "#page-wrapper", { providerId: providerId, userId: userId }, { emptyParent: true });
+    return brite.display("UserInfoView", "#page-wrapper", { providerId: providerId, userId: userId }, { emptyParent: true });
   };
   
   AppEngine.prototype.showGroupListView = function (providerId) {
-    brite.display("GroupListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
+    return brite.display("GroupListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
   };
   
   AppEngine.prototype.showGroupInfoView = function (providerId, groupId) {
-    brite.display("GroupInfoView", "#page-wrapper", { providerId: providerId, groupId: groupId }, { emptyParent: true });
+    return brite.display("GroupInfoView", "#page-wrapper", { providerId: providerId, groupId: groupId }, { emptyParent: true });
+  };
+  
+  AppEngine.prototype.showRepositoryListView = function (providerId) {
+    return brite.display("RepositoryListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true});
   };
 
   window.svnadmin = window.svnadmin || {};
@@ -240,6 +244,18 @@
         action: "delete",
         providerid: providerId,
         groupid: groupId
+      }
+    });
+  };
+  
+  // Repositories
+  
+  ServiceClient.prototype.getRepositoryProviders = function () {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "providers"
       }
     });
   };
