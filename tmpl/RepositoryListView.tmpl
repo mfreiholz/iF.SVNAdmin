@@ -1,19 +1,37 @@
 <script id="tmpl-RepositoryListView" type="text/html">
 <div class="RepositoryListView">
   <h1><span class="glyphicon glyphicon-hdd"></span> {{>~tr("Repositories")}}</h1>
-  <div class="provider-selection-wrapper"></div>
-  <div class="user-table-wrapper"></div>
+  <div class="providers-wrapper"></div>
+  <div class="table-wrapper"></div>
 </div>
 </script>
 
-<script id="tmpl-RepositoryListViewProviders" type="text/html">
+<script id="tmpl-RepositoryListView-Providers" type="text/html">
 <div class="RepositoryListViewProviders">
   <ul class="nav nav-pills">
     {{for providers ~current=current}}
-    <li data-id="{{>id}}">
+    <li class="provider" data-id="{{>id}}">
       <a class="provider-link" data-id="{{>id}}" href="#!/repositories/{{>id}}">{{>id}}</a>
     </li>
     {{/for}}
+  </ul>
+</div>
+</script>
+
+<script id="tmpl-RepositoryListView-RepositoryList" type="text/html">
+<div class="GroupListViewGroupTable">
+  <div>
+    <b>Actions:</b>
+    <button class="btn btn-primary add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+  </div>
+  <ul>
+  {{for response.repositories ~providerId=providerId}}
+    <li>
+      {{>(#index + 1)}} - {{>name}} - {{>displayname}}
+      [<a href="#" class="delete-link" data-providerid="{{>~providerId}}" data-repositoryid="{{>id}}">Delete</a>]
+      [<a href="#!/repositories/{{>~providerId}}/{{>id}}" class="info-link" data-providerid="{{>~providerId}}" data-repositoryid="{{>id}}">Info</a>]
+    </li>
+  {{/for}}
   </ul>
 </div>
 </script>

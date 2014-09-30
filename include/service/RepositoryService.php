@@ -65,7 +65,7 @@ class RepositoryService extends WebModule {
       $o = new stdClass();
       $o->id = $repo->getId();
       $o->name = $repo->getName();
-      $o->displayName = $repo->getDisplayName();
+      $o->displayname = $repo->getDisplayName();
       $json->repositories[] = $o;
     }
     $response->done2json($json);
@@ -109,7 +109,7 @@ class RepositoryService extends WebModule {
     $o = new stdClass();
     $o->id = $repo->getId();
     $o->name = $repo->getName();
-    $o->displayName = $repo->getDisplayName();
+    $o->displayname = $repo->getDisplayName();
     $json->repository = $o;
     $response->done2json($json);
     return true;
@@ -117,7 +117,7 @@ class RepositoryService extends WebModule {
 
   public function processDelete(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
-    $id = $request->getParameter("id");
+    $id = $request->getParameter("repositoryid");
 
     if (empty($providerId) || empty($id)) {
       $response->fail(500);

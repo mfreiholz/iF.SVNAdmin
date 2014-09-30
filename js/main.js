@@ -70,7 +70,11 @@
   };
   
   AppEngine.prototype.showRepositoryListView = function (providerId) {
-    return brite.display("RepositoryListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true});
+    return brite.display("RepositoryListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
+  };
+  
+  AppEngine.prototype.showRepositoryInfoView = function (providerId, repositoryId) {
+    return brite.display("RepositoryInfoView", "#page-wrapper", { providerId: providerId, repositoryId: repositoryId }, { emptyParent: true });
   };
 
   window.svnadmin = window.svnadmin || {};
@@ -256,6 +260,43 @@
       data: {
         m: "RepositoryService",
         action: "providers"
+      }
+    });
+  };
+  
+  ServiceClient.prototype.getRepositories = function (providerId, offset, num) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "list",
+        providerid: providerId,
+        offset: offset,
+        num: num
+      }
+    });
+  };
+  
+  ServiceClient.prototype.createRepository = function (providerId, name) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "create",
+        providerid: providerId,
+        name: name
+      }
+    });
+  };
+  
+  ServiceClient.prototype.deleteRepository = function (providerId, repositoryId) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "delete",
+        providerid: providerId,
+        repositoryid: repositoryId
       }
     });
   };
