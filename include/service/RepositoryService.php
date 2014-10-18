@@ -55,11 +55,12 @@ class RepositoryService extends WebModule {
       return true;
     }
 
-    $repos = $provider->getRepositories($offset, $num);
+    $itemList = $provider->getRepositories($offset, $num);
+    $repos = $itemList->getItems();
 
     $json = new stdClass();
     $json->editable = $provider->isEditable();
-    $json->hasmore = false;
+    $json->hasmore = $itemList->hasMore();
     $json->repositories = array ();
     foreach ($repos as &$repo) {
       $o = new stdClass();

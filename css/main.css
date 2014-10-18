@@ -59,3 +59,11 @@ body {
     /*min-height: 1300px;*/
   }
 }
+
+/* Common styles */
+
+/* ------------------------------------ */
+
+.providers-wrapper {
+  margin-bottom: 20px;
+}

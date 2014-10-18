@@ -1,29 +1,47 @@
 <script id="tmpl-RepositoryListView" type="text/html">
-<div class="RepositoryListView">
-  <h1><span class="glyphicon glyphicon-hdd"></span> {{>~tr("Repositories")}}</h1>
-  <div class="providers-wrapper"></div>
-  <div class="table-wrapper"></div>
-</div>
+  <div class="RepositoryListView">
+    <h1><span class="glyphicon glyphicon-hdd"></span> {{>~tr("Repositories")}}</h1>
+    <div class="providers-wrapper"></div>
+    <div class="repositorylist-wrapper"></div>
+  </div>
 </script>
 
 <script id="tmpl-RepositoryListView-Providers" type="text/html">
-<div class="RepositoryListViewProviders">
-  <ul class="nav nav-pills">
-    {{for providers ~current=current}}
-    <li class="provider" data-id="{{>id}}">
-      <a class="provider-link" data-id="{{>id}}" href="#!/repositories/{{>id}}">{{>id}}</a>
-    </li>
-    {{/for}}
-  </ul>
-</div>
+  <div class="RepositoryListView-Providers">
+    <ul class="nav nav-pills">
+      {{for providers ~current=current}}
+      <li class="provider" data-providerid="{{>id}}">
+        <a class="provider-link" data-providerid="{{>id}}" href="#!/repositories/{{>id}}">{{>id}}</a>
+      </li>
+      {{/for}}
+    </ul>
+  </div>
 </script>
 
 <script id="tmpl-RepositoryListView-RepositoryList" type="text/html">
-<div class="GroupListViewGroupTable">
-  <div>
-    <b>Actions:</b>
-    <button class="btn btn-primary add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+  <div class="RepositoryListView-RepositoryList">
+    <div class="panel panel-primary panel-actions">
+      <div class="panel-body">
+        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading"></div>
+      <div class="panel-body">
+        <div class="table-wrapper"></div>
+      </div>
+    </div>
   </div>
+</script>
+
+
+
+
+
+
+
+
+<script id="tmpl-DEV" type="text/html">
   <ul>
   {{for response.repositories ~providerId=providerId}}
     <li>
@@ -33,5 +51,4 @@
     </li>
   {{/for}}
   </ul>
-</div>
 </script>

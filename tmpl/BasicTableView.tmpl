@@ -1,58 +1,66 @@
 <script id="tmpl-BasicTableView" type="text/html">
+  <div class="BasicTableView">
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h1 class="panel-title">{{>title}}</h1>
+    {{if options.showSearch}}
+    <div class="search-wrapper">
+      <div class="input-group">
+        <span class="input-group-addon">{{>~tr('Search')}}</span>
+        <input type="text" class="form-control search-query" placeholder="{{>~tr('Search')}}" />
+      </div>
     </div>
-    <div class="panel-body">
+    {{/if}}
 
-      {{if showSearch}}
-      <div class="search-wrapper">
-        <div class="input-group">
-          <span class="input-group-addon">{{>~tr('Search')}}</span>
-          <input type="text" class="form-control" placeholder="{{>~tr('Search')}}">
-        </div>
-      </div>
-      {{/if}}
-
-      {{if actions.length > 0}}
-      <div class="action-wrapper">
-        {{for actions}}
-        <button class="btn btn-primary action" data-action="{{>id}}" data-toggle="modal" data-target="#useraddmodal">{{>name}}</button>
-        {{/for}}
-      </div>
-      {{/if}}
-
-      <div class="table-responsive">
-        <table class="table table-hover">
-        <thead>
-          <tr>
-          {{for columns}}
-            <th data-column="{{>id}}">{{>name}}</th>
-          {{/for}}
-          </tr>
-        </thead>
-        <tbody>
-        {{for rows}}
-          <tr>
-          {{for columns}}
-            <td>{{>#data}}</td>
-          {{/for}}
-          </tr>
-        {{/for}}
-        </tbody>
-        </table>
-      </div>
-
-      {{if showPaging}}
-        {{if offset > 0 || response.hasmore}}
-        <ul class="pager">
-          <li class="previous {{if offset == 0}}disabled{{/if}}"><a class="previous-page" href="#" data-offset="{{>offset - num}}" data-num="{{>num}}">&larr; {{>~tr("Previous")}}</a></li>
-          <li class="next {{if !response.hasmore}}disabled{{/if}}"><a class="next-page" href="#" data-offset="{{>offset + num}}" data-num="{{>num}}">{{>~tr("Next")}} &rarr;</a></li>
-        </ul>
+    <div class="table-responsive">
+      <table class="table table-hover">
+      <thead>
+        <tr>
+        {{if options.multiSelection}}
+          <th width="50"></th>
         {{/if}}
-      {{/if}}
+        {{for options.columns}}
+          <th data-column="{{>id}}">{{>name}}</th>
+        {{/for}}
+        </tr>
+      </thead>
+      <tbody></tbody>
+      </table>
     </div>
-  </div>
 
+    <div class="pager-wrapper">
+    </div>
+
+    <div class="actions-wrapper">
+    </div>
+
+  </div>
+</script>
+
+<script id="tmpl-BasicTableView-Rows" type="text/html">
+  {{for data.rows}}
+    <tr data-rowid="{{>id}}">
+      {{if ~root.options.multiSelection}}
+        <td><input class="selection" type="checkbox" name="rowid" value="{{>id}}" /></td>
+      {{/if}}
+      {{for cells}}
+        <td>{{>#data}}</td>
+      {{/for}}
+    </tr>
+  {{/for}}
+</script>
+
+<script id="tmpl-BasicTableView-Pager" type="text/html">
+  {{if options.showPaging}}
+    {{if offset > 0 || hasMore}}
+      <ul class="pager">
+        <li class="previous {{if offset == 0}}disabled{{/if}}"><a class="previous-page" href="#" data-offset="{{>offset - options.pageSize}}" data-num="{{>options.pageSize}}">&larr; {{>~tr("Previous")}}</a></li>
+        <li class="next {{if !hasMore}}disabled{{/if}}"><a class="next-page" href="#" data-offset="{{>offset + options.pageSize}}" data-num="{{>options.pageSize}}">{{>~tr("Next")}} &rarr;</a></li>
+      </ul>
+    {{/if}}
+  {{/if}}
+</script>
+
+<script id="tmpl-BasicTableView-Actions" type="text/html">
+  {{for options.actions}}
+    <button class="btn btn-default action" data-actionid="{{>id}}">{{>name}}</button>
+  {{/for}}
 </script>

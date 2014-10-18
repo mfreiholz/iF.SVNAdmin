@@ -14,17 +14,22 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
   }
 
   public function getRepositories($offset, $num) {
-    $ret = array ();
+    $list = new ItemList();
+
     $svn = new SvnBase();
-    $paths = $svn->listRepositories($this->_directoryPath);
-    foreach ($paths as $dirName) {
-      $id = base64_encode($this->_directoryPath . "/" . $dirName);
-      $name = $dirName;
+    $repos = $svn->listRepositories($this->_directoryPath);
+    $reposCount = count($repos);
+
+    $listItems = array ();
+    $begin = (int) $offset;
+    $end = (int) $num === -1 ? $reposCount : (int) $offset + (int) $num;
+    for ($i = $begin; $i < $end && $i < $reposCount; ++$i) {
       $o = new Repository();
-      $o->initialize($id, $name);
-      $ret[] = $o;
+      $o->initialize(base64_encode($this->_directoryPath . "/" . $repos[$i]), $repos[$i]);
+      $listItems[] = $o;
     }
-    return $ret;
+    $list->initialize($listItems, $reposCount > $end);
+    return $list;
   }
 
   public function findRepository($id) {
