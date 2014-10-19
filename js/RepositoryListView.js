@@ -15,7 +15,7 @@
       var view = this;
       svnadmin.service.getRepositoryProviders().done(function (resp) {
         var html = jQ("#tmpl-RepositoryListView-Providers").render({ providers: resp });
-        view.$el.find(".providers-wrapper").html(html);
+        view.$el.find(".provider-wrapper").html(html);
         view.showRepositories(resp[0].id);
       });
     },
@@ -45,18 +45,6 @@
         alert("Show info: " + providerId + " / " + repositoryId);
       },*/
 
-      /*"click; .delete-link": function (ev) {
-        var view = this,
-          element = jQ(ev.currentTarget),
-          providerId = element.data("providerid"),
-          repositoryId = element.data("repositoryid");
-        svnadmin.service.deleteRepository(providerId, repositoryId).done(function (resp) {
-          view.showRepositories(providerId);
-        }).fail(function () {
-          alert("Can not delete.");
-        });
-      }*/
-
     },
 
     ///////////////////////////////////////////////////////////////////
@@ -72,9 +60,28 @@
           showPaging: true,
           multiSelection: true,
           pageSize: 5,
+
+          actions: [
+            {
+              id: "delete",
+              name: tr("Delete"),
+              callback: function (ids) {
+                var promises = [],
+                  i = 0;
+                for (i = 0; i < ids.length; ++i) {
+                  promises.push(svnadmin.service.deleteRepository(providerId, ids[i]));
+                }
+                return jQ.when.apply(null, promises).done(function () {
+                  view.showRepositories(providerId);
+                });
+              }
+            }
+          ],
+
           columns: [
             { id: "", name: tr("Name") }
           ],
+
           loadMore: function (offset, num) {
             view.$el.find("li.provider").removeClass("active");
             var def = new jQuery.Deferred();
@@ -94,9 +101,6 @@
               def.reject();
             });
             return def.promise();
-          },
-          onAction: function (actionId, ids) {
-            window.alert("action=" + actionId + "; ids=" + JSON.stringify(ids));
           }
         };
 

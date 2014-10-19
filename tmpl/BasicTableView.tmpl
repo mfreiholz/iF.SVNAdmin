@@ -5,7 +5,7 @@
     <div class="search-wrapper">
       <div class="input-group">
         <span class="input-group-addon">{{>~tr('Search')}}</span>
-        <input type="text" class="form-control search-query" placeholder="{{>~tr('Search')}}" />
+        <input type="text" class="form-control search-query" placeholder="" />
       </div>
     </div>
     {{/if}}
@@ -60,7 +60,8 @@
 </script>
 
 <script id="tmpl-BasicTableView-Actions" type="text/html">
+  <b>{{>~tr('Actions:')}}</b>
   {{for options.actions}}
-    <button class="btn btn-default action" data-actionid="{{>id}}">{{>name}}</button>
+    <button class="btn btn-link action" data-actionid="{{>id}}">{{>name}}</button>
   {{/for}}
 </script>

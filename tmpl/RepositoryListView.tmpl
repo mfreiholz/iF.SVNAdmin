@@ -1,7 +1,7 @@
 <script id="tmpl-RepositoryListView" type="text/html">
   <div class="RepositoryListView">
     <h1><span class="glyphicon glyphicon-hdd"></span> {{>~tr("Repositories")}}</h1>
-    <div class="providers-wrapper"></div>
+    <div class="provider-wrapper"></div>
     <div class="repositorylist-wrapper"></div>
   </div>
 </script>
@@ -20,10 +20,8 @@
 
 <script id="tmpl-RepositoryListView-RepositoryList" type="text/html">
   <div class="RepositoryListView-RepositoryList">
-    <div class="panel panel-primary panel-actions">
-      <div class="panel-body">
-        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
-      </div>
+    <div class="provider-action-wrapper">
+      <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
     </div>
     <div class="panel panel-default">
       <div class="panel-heading"></div>

@@ -48,8 +48,8 @@
       "click; .action": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
-          actionId = ele.data("actionid");
-        view.invokeAction(actionId);
+          actionId = ele.data("actionid"),
+          prom = view.invokeAction(actionId);
         return ev.preventDefault();
       }
 
@@ -66,8 +66,16 @@
       pageSize: 10,
 
       actions: [
-        { id: "clear-selection", name: "Clear" },
-        { id: "delete", name: "Delete" }
+        {
+          id: "clear",
+          name: "Clear",
+          onActivated: function (ids) {}
+        },
+        {
+          id: "delete",
+          name: "Delete",
+          onActivated: function (ids) {}
+        }
       ],
 
       columns: [
@@ -97,16 +105,6 @@
         });
         return def.promise();
       },
-
-      onAction: function (actionId, ids) {
-        var def = new jQ.Deferred();
-        if (true) {
-          def.resolve("Optional success message here...");
-        } else {
-          def.reject("Optional error messsage here...");
-        }
-        return def.promise();
-      }
     },
 
     loadMoreRows: function (offset) {
@@ -134,14 +132,19 @@
 
     invokeAction: function (actionId) {
       var view = this,
-        ids = [];
+        ids = [],
+        i = 0;
       if (view.options.multiSelection) {
         view.$el.find("input[type=checkbox]:checked").each(function () {
           ids.push(jQ(this).val());
         });
       }
-      if (typeof view.options.onAction === "function") {
-        return view.options.onAction(actionId, ids);
+      for (i = 0; i < view.options.actions.length; ++i) {
+        if (view.options.actions[i].id === actionId) {
+          if (typeof view.options.actions[i].callback === "function") {
+            return view.options.actions[i].callback(ids);
+          }
+        }
       }
       return null;
     },

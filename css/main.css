@@ -64,6 +64,10 @@ body {
 
 /* ------------------------------------ */
 
-.providers-wrapper {
+.provider-wrapper {
+  margin-bottom: 20px;
+}
+
+.provider-action-wrapper {
   margin-bottom: 20px;
 }
