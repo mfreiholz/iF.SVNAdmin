@@ -14,7 +14,7 @@
       <table class="table table-hover">
       <thead>
         <tr>
-        {{if options.multiSelection}}
+        {{if options.multiActions.length > 0}}
           <th width="50"></th>
         {{/if}}
         {{if options.showRowNumber}}
@@ -44,7 +44,7 @@
 <script id="tmpl-BasicTableView-Rows" type="text/html">
   {{for data.rows ~offset=offset}}
     <tr data-rowid="{{>id}}">
-      {{if ~root.options.multiSelection}}
+      {{if ~root.options.multiActions.length > 0}}
         <td><input class="selection" type="checkbox" name="rowid" value="{{>id}}" /></td>
       {{/if}}
       {{if ~root.options.showRowNumber}}
