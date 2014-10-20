@@ -45,11 +45,20 @@
         return ev.preventDefault();
       },
 
-      "click; .action": function (ev) {
+      "click; .single-action": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
           actionId = ele.data("actionid"),
-          prom = view.invokeAction(actionId);
+          rowId = ele.closest("tr").data("rowid"),
+          prom = view.invokeSingleAction(actionId, rowId);
+        return ev.preventDefault();
+      },
+
+      "click; .multi-action": function (ev) {
+        var view = this,
+          ele = jQ(ev.currentTarget),
+          actionId = ele.data("actionid"),
+          prom = view.invokeMultiAction(actionId);
         return ev.preventDefault();
       }
 
@@ -57,24 +66,29 @@
 
     ///////////////////////////////////////////////////////////////////
     // Custom properties
+    // The "options" object defines the public API of the table logic.
     ///////////////////////////////////////////////////////////////////
 
     options: {
       showSearch: false,
       showPaging: false,
-      multiSelection: false,
+      showRowNumber: false,
       pageSize: 10,
 
-      actions: [
+      singleActions: [
         {
-          id: "clear",
-          name: "Clear",
-          onActivated: function (ids) {}
-        },
+          id: "",
+          getName: function (id) { return ""; },
+          getLink: function (id) { return ""; },
+          onActivated: function (id) { return null; }
+        }
+      ],
+
+      multiActions: [
         {
-          id: "delete",
-          name: "Delete",
-          onActivated: function (ids) {}
+          id: "",
+          name: "",
+          onActivated: function (ids) { return null; }
         }
       ],
 
@@ -87,11 +101,11 @@
       loadMore: function (offset, num) {
         var def = new jQ.Deferred();
         def.resolve({
-          hasMore: false,
+          hasMore: true,
           rows: [
-            { id: 0, cells: ["Value 1", "Value 2", "Value 3"] },
-            { id: 1, cells: ["Value 4", "Value 5", "Value 6"] },
-            { id: 2, cells: ["Value 7", "Value 8", "Value 9"] }
+            { id: 0, cells: ["Value " + (1 + offset), "Value " + (2 + offset), "Value " + (3 + offset)] },
+            { id: 1, cells: ["Value " + (4 + offset), "Value " + (5 + offset), "Value " + (6 + offset)] },
+            { id: 2, cells: ["Value " + (7 + offset), "Value " + (8 + offset), "Value " + (9 + offset)] }
           ]
         });
         return def.promise();
@@ -104,56 +118,71 @@
           rows: []
         });
         return def.promise();
-      },
+      }
     },
 
     loadMoreRows: function (offset) {
-      var view = this;
+      var view = this,
+        prom = null;
       if (typeof view.options.loadMore === "function") {
-        return view.options.loadMore(offset, view.options.pageSize).done(function (resp) {
-          view.renderRows(resp);
+        prom = view.options.loadMore(offset, view.options.pageSize).done(function (resp) {
+          view.renderRows(resp, offset);
           view.renderPager(offset, resp.hasMore);
-          view.renderActions();
+          view.renderMultiActions();
         });
       }
       return null;
     },
 
     loadMoreResults: function (query, offset) {
-      var view = this;
+      var view = this,
+        prom = null;
       if (typeof view.options.search === "function") {
-        return view.options.search(query, offset, -1).done(function (resp) {
-          view.renderRows(resp);
+        prom = view.options.search(query, offset, -1).done(function (resp) {
+          view.renderRows(resp, offset);
           view.renderPager(0, false);
-          view.renderActions();
+          view.renderMultiActions();
         });
       }
+      return prom;
     },
 
-    invokeAction: function (actionId) {
+    invokeSingleAction: function (actionId, rowId) {
       var view = this,
-        ids = [],
         i = 0;
-      if (view.options.multiSelection) {
-        view.$el.find("input[type=checkbox]:checked").each(function () {
-          ids.push(jQ(this).val());
-        });
-      }
-      for (i = 0; i < view.options.actions.length; ++i) {
-        if (view.options.actions[i].id === actionId) {
-          if (typeof view.options.actions[i].callback === "function") {
-            return view.options.actions[i].callback(ids);
+      for (i = 0; i < view.options.singleActions.length; ++i) {
+        if (view.options.singleActions[i].id === actionId) {
+          if (typeof view.options.singleActions[i].callback === "function") {
+            return view.options.singleActions[i].callback(rowId);
           }
         }
       }
       return null;
     },
 
-    renderRows: function (data) {
+    invokeMultiAction: function (actionId) {
+      var view = this,
+        ids = [],
+        i = 0;
+      view.$el.find("input[type=checkbox]:checked").each(function () {
+        ids.push(jQ(this).val());
+      });
+      for (i = 0; i < view.options.multiActions.length; ++i) {
+        if (view.options.multiActions[i].id === actionId) {
+          if (typeof view.options.multiActions[i].callback === "function") {
+            return view.options.multiActions[i].callback(ids);
+          }
+        }
+      }
+      return null;
+    },
+
+    renderRows: function (data, offset) {
       var view = this,
         html = jQ("#tmpl-BasicTableView-Rows").render({
           options: view.options,
-          data: data
+          data: data,
+          offset: offset
         });
       view.$el.find("table tbody").html(html);
     },
@@ -168,12 +197,12 @@
       view.$el.find(".pager-wrapper").html(html);
     },
 
-    renderActions: function () {
+    renderMultiActions: function () {
       var view = this,
-        html = jQ("#tmpl-BasicTableView-Actions").render({
+        html = jQ("#tmpl-BasicTableView-MultiActions").render({
           options: view.options
         });
-      view.$el.find(".actions-wrapper").html(html);
+      view.$el.find(".multi-actions-wrapper").html(html);
     }
 
   });

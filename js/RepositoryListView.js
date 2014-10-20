@@ -58,10 +58,25 @@
 
       var options = {
           showPaging: true,
+          showRowNumber: true,
           multiSelection: true,
           pageSize: 5,
 
-          actions: [
+          singleActions: [
+            {
+              id: "permissions",
+              getName: function (id) { return tr("Permissions"); },
+              getLink: function (id) { return "#!/repositories/" + providerId + "/" + id + "/permissions"; },
+              callback: function (id) {
+                var def = new jQ.Deferred();
+                def.resolve();
+                window.alert("Show permissions of repository.\nprovider=" + providerId + "\nrepositoryid=" + id);
+                return def.promise();
+              }
+            }
+          ],
+
+          multiActions: [
             {
               id: "delete",
               name: tr("Delete"),

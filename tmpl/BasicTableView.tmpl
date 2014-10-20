@@ -17,9 +17,15 @@
         {{if options.multiSelection}}
           <th width="50"></th>
         {{/if}}
+        {{if options.showRowNumber}}
+          <th width="50">#</th>
+        {{/if}}
         {{for options.columns}}
           <th data-column="{{>id}}">{{>name}}</th>
         {{/for}}
+        {{if ~root.options.singleActions.length > 0}}
+          <th>{{>~tr('Options')}}</th>
+        {{/if}}
         </tr>
       </thead>
       <tbody></tbody>
@@ -29,21 +35,31 @@
     <div class="pager-wrapper">
     </div>
 
-    <div class="actions-wrapper">
+    <div class="multi-actions-wrapper">
     </div>
 
   </div>
 </script>
 
 <script id="tmpl-BasicTableView-Rows" type="text/html">
-  {{for data.rows}}
+  {{for data.rows ~offset=offset}}
     <tr data-rowid="{{>id}}">
       {{if ~root.options.multiSelection}}
         <td><input class="selection" type="checkbox" name="rowid" value="{{>id}}" /></td>
       {{/if}}
+      {{if ~root.options.showRowNumber}}
+        <td>{{>(#parent.index + 1 + ~offset)}}</td>
+      {{/if}}
       {{for cells}}
         <td>{{>#data}}</td>
       {{/for}}
+      {{if ~root.options.singleActions.length > 0}}
+        <td>
+          {{for ~root.options.singleActions ~id=id}}
+            <a class="single-action" data-actionid="{{>id}}" href="{{>getLink(~id)}}">{{>getName(~id)}}</a>
+          {{/for}}
+        </td>
+      {{/if}}
     </tr>
   {{/for}}
 </script>
@@ -59,9 +75,9 @@
   {{/if}}
 </script>
 
-<script id="tmpl-BasicTableView-Actions" type="text/html">
-  <b>{{>~tr('Actions:')}}</b>
-  {{for options.actions}}
-    <button class="btn btn-link action" data-actionid="{{>id}}">{{>name}}</button>
+<script id="tmpl-BasicTableView-MultiActions" type="text/html">
+  <b>{{>~tr('Multi actions:')}}</b>
+  {{for options.multiActions}}
+    <button class="btn btn-link multi-action" data-actionid="{{>id}}">{{>name}}</button>
   {{/for}}
 </script>

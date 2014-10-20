@@ -20,11 +20,10 @@
 
 <script id="tmpl-RepositoryListView-RepositoryList" type="text/html">
   <div class="RepositoryListView-RepositoryList">
-    <div class="provider-action-wrapper">
-      <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
-    </div>
     <div class="panel panel-default">
-      <div class="panel-heading"></div>
+      <div class="panel-heading">
+        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+      </div>
       <div class="panel-body">
         <div class="table-wrapper"></div>
       </div>
