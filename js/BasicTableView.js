@@ -51,7 +51,7 @@
           actionId = ele.data("actionid"),
           rowId = ele.closest("tr").data("rowid"),
           prom = view.invokeSingleAction(actionId, rowId);
-        return ev.preventDefault();
+        //return ev.preventDefault();
       },
 
       "click; .multi-action": function (ev) {

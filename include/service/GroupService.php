@@ -63,13 +63,14 @@ class GroupService extends ServiceBase {
       return true;
     }
 
-    $groups = $provider->getGroups($offset, $num);
+    $list = $provider->getGroups($offset, $num);
+    $items = $list->getItems();
 
     $json = new stdClass();
     $json->editable = $provider->isEditable();
-    $json->hasmore = false;
+    $json->hasmore = $list->hasMore();
     $json->groups = array ();
-    foreach ($groups as &$group) {
+    foreach ($items as &$group) {
       $jsonGroup = new stdClass();
       $jsonGroup->id = $group->getId();
       $jsonGroup->name = $group->getName();

@@ -76,7 +76,9 @@
 </script>
 
 <script id="tmpl-BasicTableView-MultiActions" type="text/html">
-  <b>{{>~tr('Multi actions:')}}</b>
+  {{if options.multiActions.length > 0}}
+    <b>{{>~tr('Multi actions:')}}</b>
+  {{/if}}
   {{for options.multiActions}}
     <button class="btn btn-link multi-action" data-actionid="{{>id}}">{{>name}}</button>
   {{/for}}

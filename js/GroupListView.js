@@ -1,64 +1,113 @@
 (function (jQ) {
   "use strict";
-  var _providerId = "";
-  
-  function showGroups(providerId, offset, num) {
-    if (!providerId) {
-      return;
-    }
-    offset = !offset ? 0 : offset;
-    num = !num ? 10 : num;
-    _providerId = providerId;
-    jQ(".GroupListViewProviders li").removeClass("active");
-    
-    return svnadmin.service.getGroups(providerId, offset, num).done(function (resp) {
-      jQ(".GroupListViewProviders li[data-id=" + providerId + "]").addClass("active");
-      jQ(".table-wrapper").html(jQ("#tmpl-GroupListViewGroupTable").render({
-        response: resp,
-        providerId: providerId,
-        providerEditable: resp.editable,
-        offset: offset,
-        num: num
-      }));
-    }).fail(function () {
-      alert("FAIL: Can not fetch groups.");
-    });
-  }
-  
-  /**
-   * Register view
-   */
   brite.registerView("GroupListView", {}, {
-    
+
     create: function (data, config) {
+      var view = this;
       return jQ("#tmpl-GroupListView").render();
     },
-    
+
     postDisplay: function (data, config) {
-      // Get providers.
+      var view = this;
       svnadmin.service.getGroupProviders().done(function (resp) {
-        var html = jQ("#tmpl-GroupListViewProviders").render({ providers: resp, current: resp[0].id });
-        jQ(".provider-selection-wrapper").html(html);
-        showGroups(resp[0].id);
+        var html = jQ("#tmpl-GroupListView-Providers").render({ providers: resp });
+        view.$el.find(".provider-wrapper").html(html);
+        view.showGroups(resp[0].id);
       });
     },
-    
+
     events: {
-      
+
       "click; .provider-link": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
-          providerId = element.data("id");
-        showGroups(providerId);
+          providerId = element.data("providerid");
+        view.showGroups(providerId);
       },
-      
+
       "click; .add-link": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
           providerId = element.data("providerid");
-        brite.display("GroupAddView", "body", { providerId: providerId, submitted: function () { showGroups(providerId); } }, { emptyParent: false });
-      },
-      
+        brite.display("GroupAddView", "body", { providerId: providerId, submitted: function () { view.showGroups(providerId); } }, { emptyParent: false });
+      }
+
+    }, // End of events.
+
+    ///////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////
+
+    showGroups: function (providerId) {
+      var view = this;
+      var html = jQ("#tmpl-GroupListView-GroupList").render({ providerId: providerId });
+      view.$el.find(".grouplist-wrapper").html(html);
+
+      var options = {
+        showPaging: true,
+        showRowNumber: true,
+        pageSize: 5,
+
+        singleActions: [
+          {
+            id: "info",
+            getName: function (id) { return tr("Info"); },
+            getLink: function (id) { return "#!/groups/" + providerId + "/" + id + "/info"; },
+            callback: function (id) { return svnadmin.app.showGroupInfoView(providerId, id); }
+          }
+        ],
+
+        multiActions: [
+          {
+            id: "delete",
+            name: tr("Delete"),
+            callback: function (ids) {
+              var promises = [],
+                i = 0;
+              for (i = 0; i < ids.length; ++i) {
+                promises.push(svnadmin.service.deleteGroup(providerId, ids[i]));
+              }
+              return jQ.when.apply(null, promises).done(function () {
+                view.showGroups(providerId);
+              });
+            }
+          }
+        ],
+
+        columns: [
+          { id: "", name: tr("Name") }
+        ],
+
+        loadMore: function (offset, num) {
+          view.$el.find("li.provider").removeClass("active");
+          var def = new jQuery.Deferred();
+          svnadmin.service.getGroups(providerId, offset, num).done(function (resp) {
+            var obj = {}, i = 0, row = null;
+            obj.hasMore = resp.hasmore;
+            obj.rows = [];
+            for (i = 0; i < resp.groups.length; ++i) {
+              row = {};
+              row.id = resp.groups[i].id;
+              row.cells = [resp.groups[i].displayname];
+              obj.rows.push(row);
+            }
+            def.resolve(obj);
+            view.$el.find("li.provider[data-providerid=" + providerId + "]").addClass("active");
+          }).fail(function () {
+            def.reject();
+          });
+          return def.promise();
+        }
+      };
+      brite.display("BasicTableView", view.$el.find(".table-wrapper"), { options: options });
+    }
+
+  });
+
+}(jQuery));
+
+/*,
+
       "click; .info": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
@@ -66,7 +115,7 @@
           groupId = element.data("groupid");
         svnadmin.app.showGroupInfoView(providerId, groupId);
       },
-      
+
       "click; .delete": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
@@ -77,10 +126,4 @@
         }).fail(function () {
           alert("Can not delete group.");
         });
-      }
-      
-    }
-    
-  });
-  
-}(jQuery));
+      }*/

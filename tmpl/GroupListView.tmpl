@@ -1,41 +1,32 @@
 <script id="tmpl-GroupListView" type="text/html">
-<div class="GroupListView">
-  <h1><span class="glyphicon glyphicon-group"></span> {{>~tr("Groups")}}</h1>
-  <div class="provider-selection-wrapper"></div>
-  <div class="table-wrapper"></div>
-  {{!-- include tmpl="#tmpl-UserListViewAddForm"/ --}}
-</div>
-</script>
-
-<script id="tmpl-GroupListViewProviders" type="text/html">
-<div class="GroupListViewProviders">
-  <ul class="nav nav-pills">
-    {{for providers ~current=current}}
-    <li data-id="{{>id}}">
-      <a class="provider-link" data-id="{{>id}}" href="#!/groups/{{>id}}">{{>id}}</a>
-    </li>
-    {{/for}}
-  </ul>
-</div>
-</script>
-
-<script id="tmpl-GroupListViewGroupTable" type="text/html">
-<div class="GroupListViewGroupTable">
-
-  <div>
-    <b>Actions:</b>
-    <button class="btn btn-primary add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+  <div class="GroupListView">
+    <h1><span class="glyphicon glyphicon-group"></span> {{>~tr("Groups")}}</h1>
+    <div class="provider-wrapper"></div>
+    <div class="grouplist-wrapper"></div>
   </div>
+</script>
 
-  <ul>
-  {{for response.groups ~providerId=providerId}}
-    <li>
-      {{>(#index + 1)}} - {{>name}} - {{>displayname}}
-      [<a href="#" class="delete" data-providerid="{{>~providerId}}" data-groupid="{{>id}}">Delete</a>]
-      [<a href="#!/groups/{{>~providerId}}/{{>id}}" class="info" data-providerid="{{>~providerId}}" data-groupid="{{>id}}">Info</a>]
-    </li>
-  {{/for}}
-  </ul>
+<script id="tmpl-GroupListView-Providers" type="text/html">
+  <div class="GroupListView-Providers">
+    <ul class="nav nav-pills">
+      {{for providers ~current=current}}
+      <li class="provider" data-providerid="{{>id}}">
+        <a class="provider-link" data-providerid="{{>id}}" href="#!/groups/{{>id}}">{{>id}}</a>
+      </li>
+      {{/for}}
+    </ul>
+  </div>
+</script>
 
-</div>
+<script id="tmpl-GroupListView-GroupList" type="text/html">
+  <div class="GroupListView-GroupList">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+      </div>
+      <div class="panel-body">
+        <div class="table-wrapper"></div>
+      </div>
+    </div>
+  </div>
 </script>

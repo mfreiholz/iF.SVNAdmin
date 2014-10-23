@@ -15,14 +15,20 @@ class SvnAuthGroupProvider extends GroupProvider {
   }
 
   public function getGroups($offset = 0, $num = -1) {
-    $ret = array();
     $groups = $this->_authfile->groups();
-    foreach ($groups as &$groupname) {
+    $groupsCount = count($groups);
+
+    $list = new ItemList();
+    $listItems = array ();
+    $begin = (int) $offset;
+    $end = (int) $num === -1 ? $groupsCount : (int) $offset + (int) $num;
+    for ($i = $begin; $i < $end && $i < $groupsCount; ++$i) {
       $o = new Group();
-      $o->initialize($groupname, $groupname);
-      $ret[] = $o;
+      $o->initialize($groups[$i], $groups[$i]);
+      $listItems[] = $o;
     }
-    return $ret;
+    $list->initialize($listItems, $groupsCount > $end);
+    return $list;
   }
 
   public function isEditable() {
@@ -52,5 +58,6 @@ class SvnAuthGroupProvider extends GroupProvider {
     $this->_authfile->save();
     return true;
   }
+
 }
 ?>

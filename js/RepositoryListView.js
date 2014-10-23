@@ -1,9 +1,5 @@
 (function (jQ) {
   "use strict";
-
-  /**
-   * Register view
-   */
   brite.registerView("RepositoryListView", {}, {
 
     create: function (data, config) {
@@ -36,15 +32,6 @@
         brite.display("RepositoryAddView", "body", { providerId: providerId, submitted: function () { view.showRepositories(providerId); } }, { emptyParent: false });
       }
 
-      /*"click; .info-link": function (ev) {
-        var view = this,
-          element = jQ(ev.currentTarget),
-          providerId = element.data("providerid"),
-          repositoryId = element.data("repositoryid");
-        //svnadmin.app.showRepositoryInfoView(providerId, repositoryId);
-        alert("Show info: " + providerId + " / " + repositoryId);
-      },*/
-
     },
 
     ///////////////////////////////////////////////////////////////////
@@ -59,7 +46,6 @@
       var options = {
           showPaging: true,
           showRowNumber: true,
-          multiSelection: true,
           pageSize: 5,
 
           singleActions: [
@@ -125,3 +111,12 @@
   });
 
 }(jQuery));
+
+/*"click; .info-link": function (ev) {
+        var view = this,
+          element = jQ(ev.currentTarget),
+          providerId = element.data("providerid"),
+          repositoryId = element.data("repositoryid");
+        //svnadmin.app.showRepositoryInfoView(providerId, repositoryId);
+        alert("Show info: " + providerId + " / " + repositoryId);
+      },*/
