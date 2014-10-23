@@ -1,6 +1,5 @@
 (function (jQ) {
   "use strict";
-
   brite.registerView("MainView", { emptyParent: true }, {
 
     create: function (config, data) {
@@ -8,14 +7,8 @@
     },
 
     postDisplay: function (config, data) {
-      var width = jQ(window).width();
-      if (width < 768) {
-        jQ(".sidebar-collapse").collapse({toggle: false});
-      } else {
-        jQ(".sidebar-collapse").collapse({toggle: true});
-      }
-      // Show dashboard by default.
-      brite.display("DashboardView", "#page-wrapper", {}, {emptyParent: true});
+      var view = this;
+      view.$el.find(".dashboard-link").trigger("click");
     },
 
     events: {
@@ -24,31 +17,40 @@
         jQ(".sidebar-collapse").collapse("toggle");
       },
       "click; .dashboard-link": function (ev) {
-        brite.display("DashboardView", "#page-wrapper", {}, {emptyParent: true});
+        var view = this;
+        view.setActiveNavLink(ev.currentTarget.className);
+        svnadmin.app.showDashboard();
+      },
+      "click; .repositories-link": function (ev) {
+        var view = this;
+        view.setActiveNavLink(ev.currentTarget.className);
+        svnadmin.app.showRepositoryListView(undefined);
       },
       "click; .users-link": function (ev) {
+        var view = this;
+        view.setActiveNavLink(ev.currentTarget.className);
         svnadmin.app.showUserListView(undefined);
       },
       "click; .groups-link": function (ev) {
+        var view = this;
+        view.setActiveNavLink(ev.currentTarget.className);
         svnadmin.app.showGroupListView(undefined);
       },
-      "click; .repositories-link": function (ev) {
-        svnadmin.app.showRepositoryListView(undefined);
-      },
       "click; .logout-link": function (ev) {
+        var view = this;
+        view.setActiveNavLink(ev.currentTarget.className);
         svnadmin.app.logout();
       }
     },
 
-    winEvents: {
-      "resize": function (ev) {
-        var width = jQ(window).width();
-        if (width < 768) {
-          jQ(".sidebar-collapse").collapse("hide");
-        } else {
-          jQ(".sidebar-collapse").collapse("show");
-        }
-      }
+    ///////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////
+
+    setActiveNavLink: function (linkClass) {
+      var view = this;
+      view.$el.find("ul.nav li").removeClass("active");
+      view.$el.find("ul.nav li a[class='" + linkClass + "']").closest("li").addClass("active");
     }
 
   });

@@ -1,7 +1,7 @@
 (function (jQ) {
   "use strict";
   var _loadingView = null;
-  
+
   /**
     Main class to manage the GUI and all of it's requirements.
   **/
@@ -35,13 +35,13 @@
       window.location.reload();
     });
   };
-  
+
   AppEngine.prototype.showLoading = function () {
     return brite.display("LoadingView", "body").done(function (view) {
       _loadingView = view;
     });
   };
-  
+
   AppEngine.prototype.hideLoading = function () {
     if (_loadingView) {
       _loadingView.$el.bRemove();
@@ -53,6 +53,10 @@
     return brite.display("MainView", ".AppContent", {}, { emptyParent: true });
   };
 
+  AppEngine.prototype.showDashboard = function () {
+    return brite.display("DashboardView", "#page-wrapper", {}, { emptyParent: true });
+  };
+
   AppEngine.prototype.showUserListView = function (providerId) {
     return brite.display("UserListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
   };
@@ -60,19 +64,19 @@
   AppEngine.prototype.showUserInfoView = function (providerId, userId) {
     return brite.display("UserInfoView", "#page-wrapper", { providerId: providerId, userId: userId }, { emptyParent: true });
   };
-  
+
   AppEngine.prototype.showGroupListView = function (providerId) {
     return brite.display("GroupListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
   };
-  
+
   AppEngine.prototype.showGroupInfoView = function (providerId, groupId) {
     return brite.display("GroupInfoView", "#page-wrapper", { providerId: providerId, groupId: groupId }, { emptyParent: true });
   };
-  
+
   AppEngine.prototype.showRepositoryListView = function (providerId) {
     return brite.display("RepositoryListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
   };
-  
+
   AppEngine.prototype.showRepositoryInfoView = function (providerId, repositoryId) {
     return brite.display("RepositoryInfoView", "#page-wrapper", { providerId: providerId, repositoryId: repositoryId }, { emptyParent: true });
   };
@@ -202,9 +206,9 @@
       }
     });
   };
-  
+
   // Groups
-  
+
   ServiceClient.prototype.getGroupProviders = function () {
     return this.ajax({
       url: "service/",
@@ -214,7 +218,7 @@
       }
     });
   };
-  
+
   ServiceClient.prototype.getGroups = function (providerId, offset, num) {
     return this.ajax({
       url: "service/",
@@ -227,7 +231,7 @@
       }
     });
   };
-  
+
   ServiceClient.prototype.createGroup = function (providerId, name) {
     return this.ajax({
       url: "service/",
@@ -239,7 +243,7 @@
       }
     });
   };
-  
+
   ServiceClient.prototype.deleteGroup = function (providerId, groupId) {
     return this.ajax({
       url: "service/",
@@ -251,9 +255,9 @@
       }
     });
   };
-  
+
   // Repositories
-  
+
   ServiceClient.prototype.getRepositoryProviders = function () {
     return this.ajax({
       url: "service/",
@@ -263,7 +267,7 @@
       }
     });
   };
-  
+
   ServiceClient.prototype.getRepositories = function (providerId, offset, num) {
     return this.ajax({
       url: "service/",
@@ -276,7 +280,7 @@
       }
     });
   };
-  
+
   ServiceClient.prototype.createRepository = function (providerId, name) {
     return this.ajax({
       url: "service/",
@@ -288,7 +292,7 @@
       }
     });
   };
-  
+
   ServiceClient.prototype.deleteRepository = function (providerId, repositoryId) {
     return this.ajax({
       url: "service/",

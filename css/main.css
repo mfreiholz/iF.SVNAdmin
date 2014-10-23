@@ -1,15 +1,11 @@
-html, body, div, p, span {
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+html, body, div, p, span, h1, h2, h3 {
+  font-family: 'Open Sans', sans-serif;
 }
 
 body {
   padding-top: 50px;
-  background: #f3f3f3;
-}
-
-@media(min-width:768px) {
-  body {
-    padding-top: 50px;
-  }
 }
 
 /* Wrappers */
@@ -21,44 +17,11 @@ body {
 }
 
 #page-wrapper {
-  padding: 0 15px;
-  /*min-height: 568px;*/
 }
 
-@media(min-width:768px) {
-  #page-wrapper {
-    position: inherit;
-    margin: 0 0 0 250px;
-    padding: 0 30px;
-    /*min-height: 1300px;*/
-  }
-}
-
-@-moz-document url-prefix() {
+/*@-moz-document url-prefix() {
   fieldset { display: table-cell; }
-}
-
-/* Navigation */
-
-/* ------------------------------------ */
-
-/* Left Side Navigation */
-
-.navbar-fixed-top {
-  background: #ffffff;
-}
-
-@media(min-width:768px) {
-  .navbar-static-side {
-    z-index: 1;
-    position: absolute;
-    width: 250px;
-    margin-top: 51px;
-    border-right: 1px solid #e7e7e7;
-    border-bottom: 1px solid #e7e7e7;
-    /*min-height: 1300px;*/
-  }
-}
+}*/
 
 /* Common styles */
 
