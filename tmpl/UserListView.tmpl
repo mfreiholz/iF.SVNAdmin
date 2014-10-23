@@ -1,79 +1,32 @@
 <script id="tmpl-UserListView" type="text/html">
-<div class="UserListView">
-  <h1><span class="glyphicon glyphicon-user"></span> {{>~tr("Users")}}</h1>
-  <div class="provider-selection-wrapper"></div>
-  <div class="user-table-wrapper"></div>
-</div>
+  <div class="UserListView">
+    <h1><span class="glyphicon glyphicon-group"></span> {{>~tr("Users")}}</h1>
+    <div class="provider-wrapper"></div>
+    <div class="userlist-wrapper"></div>
+  </div>
 </script>
 
-<script id="tmpl-UserListViewProviders" type="text/html">
-<div class="UserListViewProviders">
-  <ul class="nav nav-pills">
-    {{for providers ~current=current}}
-    <li data-id="{{>id}}">
-      <a class="provider-link" data-id="{{>id}}" href="#!/users/{{>id}}">{{>id}}</a>
-    </li>
-    {{/for}}
-  </ul>
-</div>
+<script id="tmpl-UserListView-Providers" type="text/html">
+  <div class="UserListView-Providers">
+    <ul class="nav nav-pills">
+      {{for providers ~current=current}}
+      <li class="provider" data-providerid="{{>id}}">
+        <a class="provider-link" data-providerid="{{>id}}" href="#!/users/{{>id}}">{{>id}}</a>
+      </li>
+      {{/for}}
+    </ul>
+  </div>
 </script>
 
-<script id="tmpl-UserListViewUserTable" type="text/html">
-<div class="UserListViewUserTable">
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h1 class="panel-title">{{>~tr("Existing Users")}}</h1>
-    </div>
-    <div class="panel-body">
-
-      <div class="user-search-wrapper">
-        <div class="input-group">
-          <span class="input-group-addon">Search</span>
-          <input type="text" class="form-control" placeholder="Type user's name, login, ...">
-        </div>
+<script id="tmpl-UserListView-UserList" type="text/html">
+  <div class="UserListView-UserList">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
       </div>
-
-      {{if providerEditable}}
-      <div class="">
-        <button class="btn btn-primary add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
-        <button class="btn btn-danger deleteuser">{{>~tr("Delete")}}</button>
+      <div class="panel-body">
+        <div class="table-wrapper"></div>
       </div>
-      {{/if}}
-
-      <div class="table-responsive">
-        <table class="table table-hover user-table">
-        <thead>
-          <tr>
-            {{if providerEditable}}<th class="col-sm-1"></th>{{/if}}
-            <th class="col-sm-1">#</th>
-            <th class="col-sm-5">{{>~tr("Name")}}</th>
-            <th class="col-sm-4">{{>~tr("Login")}}</th>
-            <th class="col-sm-1"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {{for response.users ~pid=providerId ~offset=offset ~providerEditable=providerEditable}}
-          <tr>
-            {{if ~providerEditable}}<td><input type="checkbox" name="user-selection" data-providerid="{{>~pid}}" data-userid="{{>id}}"></td>{{/if}}
-            <td>{{>(#index + 1 + ~offset)}}</td>
-            <td>{{>displayname}}</td>
-            <td>{{>name}}</td>
-            <td><a class="user-link" href="#!/users/{{>~pid}}/{{>id}}" data-id="{{>id}}">{{>~tr("Details")}}</a></td>
-          </tr>
-          {{/for}}
-        </tbody>
-        </table>
-      </div>
-
-      {{if offset > 0 || response.hasmore}}
-      <ul class="pager">
-        <li class="previous {{if offset == 0}}disabled{{/if}}"><a class="previous-page" href="#" data-offset="{{>offset - num}}" data-num="{{>num}}">&larr; {{>~tr("Previous")}}</a></li>
-        <li class="next {{if !response.hasmore}}disabled{{/if}}"><a class="next-page" href="#" data-offset="{{>offset + num}}" data-num="{{>num}}">{{>~tr("Next")}} &rarr;</a></li>
-      </ul>
-      {{/if}}
     </div>
   </div>
-
-</div>
 </script>
