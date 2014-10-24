@@ -16,16 +16,34 @@
   };
 
   AppEngine.prototype.bootstrap = function () {
-    svnadmin.service.ajax({
-      url: "service/",
-      data: { m: "LoginService", action: "check" }
-    }).done(function (data) {
-      svnadmin.app.showMainView();
-    }).fail(function (jqXHR, textStatus, errorThrown) {
+    var self = this;
+    svnadmin.service.loginCheck().done(function () {
+      self.route();
+    }).fail(function (jqXHR) {
       if (jqXHR.status === 401) {
-        brite.display("LoginView", ".AppContent");
+        self.showLoginView();
+      }
+    });
+  };
+
+  AppEngine.prototype.route = function () {
+    var self = this,
+      url = document.location.href,
+      rxUrl = new RegExp("#!(/[^/]*)(.*)", "i"),
+      match = rxUrl.exec(url),
+      path = match && match.length > 1 ? match[1] : "";
+
+    self.showMainView().done(function () {
+      if (path.indexOf("/dashboard") === 0) {
+        self.showDashboard();
+      } else if (path.indexOf("/repositories") === 0) {
+        self.showRepositoryListView();
+      } else if (path.indexOf("/users") === 0) {
+        self.showUserListView();
+      } else if (path.indexOf("/groups") === 0) {
+        self.showGroupListView();
       } else {
-        alert("Network error!");
+        self.showDashboard();
       }
     });
   };
@@ -47,6 +65,10 @@
       _loadingView.$el.bRemove();
       _loadingView = null;
     }
+  };
+
+  AppEngine.prototype.showLoginView = function () {
+    return brite.display("LoginView", ".AppContent", { emptyParent: true });
   };
 
   AppEngine.prototype.showMainView = function () {
@@ -100,6 +122,16 @@
   };
 
   // Authentication
+
+  ServiceClient.prototype.loginCheck = function () {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "LoginService",
+        action: "check"
+      }
+    });
+  };
 
   ServiceClient.prototype.login = function (username, password) {
     return this.ajax({

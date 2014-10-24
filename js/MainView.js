@@ -7,8 +7,6 @@
     },
 
     postDisplay: function (config, data) {
-      var view = this;
-      view.$el.find(".dashboard-link").trigger("click");
     },
 
     events: {
