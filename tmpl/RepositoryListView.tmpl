@@ -30,22 +30,3 @@
     </div>
   </div>
 </script>
-
-
-
-
-
-
-
-
-<script id="tmpl-DEV" type="text/html">
-  <ul>
-  {{for response.repositories ~providerId=providerId}}
-    <li>
-      {{>(#index + 1)}} - {{>name}} - {{>displayname}}
-      [<a href="#" class="delete-link" data-providerid="{{>~providerId}}" data-repositoryid="{{>id}}">Delete</a>]
-      [<a href="#!/repositories/{{>~providerId}}/{{>id}}" class="info-link" data-providerid="{{>~providerId}}" data-repositoryid="{{>id}}">Info</a>]
-    </li>
-  {{/for}}
-  </ul>
-</script>

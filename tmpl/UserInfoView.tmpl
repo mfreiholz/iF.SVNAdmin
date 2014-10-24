@@ -1,46 +1,25 @@
 <script id="tmpl-UserInfoView" type="text/html">
-<div class="UserInfoView">
-  <h1>User Information</h1>
-  <p>
-    <a role="button" class="btn btn-default users-link" href="#!/users/{{>providerId}}" data-providerid="{{>providerId}}">{{>~tr('Back to overview')}}</a>
-  </p>
-  <div class="groups-wrapper"></div>
-  <div class="roles-wrapper"></div>
-</div>
-</script>
+  <div class="UserInfoView">
+    <h1>User Information</h1>
+    <p><a role="button" class="btn btn-default users-link" href="#!/users/{{>options.providerId}}" data-providerid="{{>options.providerId}}">{{>~tr('Back to overview')}}</a></p>
 
-<script id="tmpl-UserInfoView-Groups" type="text/html">
-<div class="UserInfoView-Groups">
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h1 class="panel-title">{{>~tr("Groups")}}</h1>
+    <!-- Groups -->
+    <div class="panel panel-default groups">
+      <div class="panel-heading">
+        <h1 class="panel-title">{{>~tr("Groups")}}</h1>
+      </div>
+      <div class="panel-body"></div>
     </div>
-    <div class="panel-body">
-      <ul>
-      {{for groups}}
-        <li>ID({{>id}}) NAME({{>name}}) DNAME({{>displayname}})</li>
-      {{else}}
-        <li>{{>~tr('Empty')}}</li>
-      {{/for}}
-      </ul>
-    </div><!-- /.panel-body -->
-  </div><!-- /.panel -->
 
-</div>
-</script>
-
-<script id="tmpl-UserInfoView-Roles" type="text/html">
-<div class"UserInfoView-Roles">
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h1 class="panel-title">{{>~tr("Roles")}}</h1>
+    <!-- Roles -->
+    <div class="panel panel-default roles">
+      <div class="panel-heading">
+        <h1 class="panel-title">{{>~tr("Roles")}}</h1>
+      </div>
+      <div class="panel-body">
+        <p>Content here...</p>
+      </div>
     </div>
-    <div class="panel-body">
-      <p>Content here...</p>
-    </div><!-- /.panel-body -->
-  </div><!-- /.panel -->
 
-</div>
+  </div>
 </script>

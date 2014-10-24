@@ -227,14 +227,42 @@
     });
   };
 
-  ServiceClient.prototype.getGroupsOfUser = function (providerId, userId) {
+  ServiceClient.prototype.getGroupsOfUser = function (providerId, userId, offset, num) {
     return this.ajax({
       url: "service/",
       data: {
         m: "UserService",
         action: "groups",
         providerid: providerId,
-        userid: userId
+        userid: userId,
+        offset: offset,
+        num: num
+      }
+    });
+  };
+
+  ServiceClient.prototype.userAssignGroup = function (providerId, userId, groupId) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "UserService",
+        action: "assigngroup",
+        providerid: providerId,
+        userid: userId,
+        groupid: groupId
+      }
+    });
+  };
+
+  ServiceClient.prototype.userUnassignGroup = function (providerId, userId, groupId) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "UserService",
+        action: "unassigngroup",
+        providerid: providerId,
+        userid: userId,
+        groupid: groupId
       }
     });
   };
@@ -284,6 +312,20 @@
         action: "delete",
         providerid: providerId,
         groupid: groupId
+      }
+    });
+  };
+
+  ServiceClient.prototype.getUsersOfGroup = function (providerId, groupId, offset, num) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "GroupService",
+        action: "users",
+        providerid: providerId,
+        groupid: groupId,
+        offset: offset,
+        num: num
       }
     });
   };

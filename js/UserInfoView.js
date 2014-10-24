@@ -1,46 +1,89 @@
 (function (jQ) {
   "use strict";
-
-  /**
-   * Register View
-   */
   brite.registerView("UserInfoView", {}, {
 
-    create: function (data, config) {
-      var providerId = data.providerId,
-        userId = data.userId;
-      return jQ("#tmpl-UserInfoView").render(data);
+    create: function (data) {
+      var view = this;
+      jQ.extend(view.options, data);
+      return jQ("#tmpl-UserInfoView").render({
+        options: view.options
+      });
     },
 
-    postDisplay: function (data, config) {
-      var view = this,
-        providerId = data.providerId,
-        userId = data.userId,
-        htmlGroups = "",
-        htmlRoles = "";
-
-      // Groups of user.
-      svnadmin.service.getGroupsOfUser(providerId, userId).done(function (response) {
-        htmlGroups = jQ("#tmpl-UserInfoView-Groups").render(response);
-        view.$el.find(".groups-wrapper").html(htmlGroups);
-      });
-
-      // Roles of user.
-      htmlRoles = jQ("#tmpl-UserInfoView-Roles").render();
-      view.$el.find(".roles-wrapper").html(htmlRoles);
+    postDisplay: function () {
+      var view = this;
+      view.showGroups();
     },
 
     events: {
+    },
 
-      "click; .users-link": function (ev) {
-        var view = this,
-          element = jQ(ev.currentTarget),
-          providerId = element.data("providerid");
-        svnadmin.app.showUserListView(providerId);
-      }
+    /////////////////////////////////////////////////////////////////
+    //
+    /////////////////////////////////////////////////////////////////
 
+    options: {
+      providerId: null,
+      userId: null
+    },
+
+    showGroups: function () {
+      var view = this,
+        providerId = view.options.providerId,
+        userId = view.options.userId;
+
+      var options = {
+        showPaging: true,
+        showRowNumber: true,
+        pageSize: 5,
+
+        singleActions: [],
+
+        multiActions: [
+          {
+            id: "unassign",
+            name: tr("Unassign"),
+            callback: function (ids) {
+              var promises = [],
+                i = 0;
+              for (i = 0; i < ids.length; ++i) {
+                promises.push(svnadmin.service.userUnassignGroup(providerId, userId, ids[i]));
+              }
+              return jQ.when.apply(null, promises).done(function () {
+                view.showGroups(providerId);
+              });
+            }
+          }
+        ],
+
+        columns: [
+          { id: "", name: "Name" }
+        ],
+
+        loadMore: function (offset, num) {
+          var def = new jQuery.Deferred();
+          svnadmin.service.getGroupsOfUser(view.options.providerId, view.options.userId, offset, num).done(function (resp) {
+            var obj = {}, i = 0, row = null;
+            obj.hasMore = resp.hasmore;
+            obj.rows = [];
+            for (i = 0; i < resp.groups.length; ++i) {
+              row = {};
+              row.id = resp.groups[i].id;
+              row.cells = [resp.groups[i].displayname];
+              obj.rows.push(row);
+            }
+            def.resolve(obj);
+          }).fail(function () {
+            def.reject();
+          });
+          return def.promise();
+        }
+      };
+      brite.display("BasicTableView", view.$el.find(".groups .panel-body"), { options: options }, { emptyParent: true });
+    },
+
+    showRoles: function () {
     }
 
   });
-
 }(jQuery));
