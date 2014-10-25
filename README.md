@@ -13,3 +13,8 @@ The following file based structure is required to run this development version:
 
 The entire project is based on the ``humble-rest-framework-php``, which is another GitHub project from me.
 It doesn't require any configuration at all. The release builds, will contain the framework in iF.SVNAdmin's ``thirdparty`` folder.
+
+
+Documents
+---------
+Notes in OneNote on OneDrive: http://goo.gl/Ielp1G

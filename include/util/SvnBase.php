@@ -118,19 +118,19 @@ class SvnBase {
     if (!file_exists($basePath)) {
       return null;
     }
-    $ret = array ();
-    $hd = opendir($basePath);
-    while (($file = readdir($hd)) !== false) {
-      if ($file == "." || $file == "..") {
+    $paths = array ();
+    $dirHandle = opendir($basePath);
+    while (($file = readdir($dirHandle)) !== false) {
+      if ($file === "." || $file === "..") {
         continue;
       }
-      $absolute_path = $basePath . "/" . $file;
-      if (self::isRepository($absolute_path)) {
-        $ret[] = $file;
+      $absolutePath = realpath($basePath . "/" . $file);
+      if (self::isRepository($absolutePath)) {
+        $paths[] = $file;
       }
     }
-    closedir($hd);
-    return $ret;
+    closedir($dirHandle);
+    return $paths;
   }
 
   /**

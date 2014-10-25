@@ -12,15 +12,16 @@ class SVNAdminEngine {
 
   /**
    * Cache of all loaded SvnAuthFiles.
+   * We use this global list to ommit multiple file handle on same file.
    * Key=ID; Value=SvnAuthFile Object
    *
-   * @var array<string,SvnAuthFile>
+   * @var array<string, SvnAuthFile>
    */
   private $_authfiles = array ();
 
   /**
    *
-   * @var array<string,Authenticator>
+   * @var array<string, Authenticator>
    */
   private $_authenticators = array ();
 
@@ -30,11 +31,6 @@ class SVNAdminEngine {
    */
   private $_providers = array ();
 
-  /**
-   * Creates a new SVNAdminEngine based on the given configuration.
-   *
-   * @param array $config
-   */
   private function __construct($config) {
     // Init configuration.
     $this->_config = $config;
@@ -66,19 +62,22 @@ class SVNAdminEngine {
     return self::$_instance;
   }
 
-  public function getAuthFileById($id) {
-    if (!isset($this->_authfiles[$id])) {
-      if (!isset($this->_config["authfiles"][$id])) {
-        return null;
-      }
-      $conf = $this->_config["authfiles"][$id];
-      $obj = new SvnAuthFile();
-      if (!$obj->open($conf["file"])) {
-        return null;
-      }
-      $this->_authfile[$id] = $obj;
+  public function getSvnAuthzFile($path) {
+    $path = Elws::normalizeAbsolutePath($path);
+
+    // Get it from cache.
+    if (isset($this->_authfiles[$path])) {
+      return $this->_authfiles[$path];
     }
-    return $this->_authfile[$id];
+
+    // Create file object and add to cache.
+    $obj = new SvnAuthFile();
+    if (!$obj->open($path)) {
+      unset($obj);
+      return null;
+    }
+    $this->_authfiles[$path] = $obj;
+    return $obj;
   }
 
   public function getAuthenticators() {

@@ -1,34 +1,35 @@
 <?php
 return array (
 
-    /**
-     * Common application configuration
-     */
-
     "common" => array (
-        /**
-         * Subversion
-         */
-        "svn_binary_path" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\subversion 1.7.4-1\\svn.exe",
-        "svnadmin_binary_path" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\subversion 1.7.4-1\\svnadmin.exe",
-        "svn_config_directory" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\svn-config-dir",
+        // Absolute path to the "svn" binary.
+        // e.g. Linux: "/usr/bin/svn"
+        // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svn.exe"
+        "svn_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svn.exe",
 
-        /**
-         * Functionality
-         */
-        "allow_repository_deletion" => false
-    ),
+        // Absolute path to the "svnadmin" binary.
+        // e.g. Linux: "/bin/svnadmin"
+        // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svnadmin.exe"
+        "svnadmin_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svnadmin.exe",
 
-    /**
-     * Global accessible SVNAuthFiles
-     * Will be accessible by the SvnAdminEngine by it's ID.
-     */
+        // Absolute path to a custom Subversion user config directory.
+        // Some systems with SElinux permit access to the default config directory.
+        // This directive can be used to define a custom directory on which the application does have access.
+        // e.g.: "<iF.SVNAdmin-Root>/data/svnconfig"
+        "svn_config_directory" => "D:\\Development\\Data\\svn-config-dir",
 
-    "authfiles" => array (
-        "default" => array (
-            // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.passwd"
-            "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz"
-        )
+        // Absolute path to the global Subversion "authz" file. It contains all user permissions
+        // and will also be accessed by Apache or svnserve-deamon.
+        // e.g. Linux: "/opt/subversion/authz"
+        // e.g. Windows: "C:\\Path\\To\\authz"
+        "svn_authz_file" => "D:\\Development\\Data\\dav svn.authz",
+
+        // Indicates whether the function to delete an repository should be available.
+        "repository_deletion_enabled" => false,
+
+        // Indicates whether the repository-delete action should move the repository into a trash folder instead of deleting it.
+        // The trash will provide an "empty trash" function, if "repository_deletion_enabled" is enabled.
+        "repository_deletion_trash_enabled" => false
     ),
 
     /**
@@ -48,14 +49,12 @@ return array (
         array (
             "id" => "authpasswd",
             "class_name" => "PasswdAuthenticator",
-            // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.passwd"
-            "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.passwd"
+            "file" => "D:\\Development\\Data\\dav svn.passwd"
         ),
         array (
             "id" => "authdigest",
             "class_name" => "DigestAuthenticator",
-            // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.digest.passwd",
-            "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.digest.passwd",
+            "file" => "D:\\Development\\Data\\dav svn.digest.passwd",
             "realm" => "myrealm"
         ),
         /*array (
@@ -81,19 +80,16 @@ return array (
         "user" => array (
             "passwdusers" => array (
                 "class_name" => "PasswdUserProvider",
-                // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.passwd"
-                "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.passwd"
+                "file" => "D:\\Development\\Data\\dav svn.passwd"
             ),
             "digestusers" => array (
                 "class_name" => "DigestUserProvider",
-                // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.digest.passwd",
-                "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.digest.passwd",
+                "file" => "D:\\Development\\Data\\dav svn.digest.passwd",
                 "realm" => "myrealm"
             ),
             "digestusers2" => array (
                 "class_name" => "DigestUserProvider",
-                // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.digest.passwd",
-                "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.digest.passwd",
+                "file" => "D:\\Development\\Data\\dav svn.digest.passwd",
                 "realm" => "myrealm2"
             ),
             /*"ldapusers" => array (
@@ -117,8 +113,11 @@ return array (
         "group" => array (
             "svnauthgroups" => array (
                 "class_name" => "SvnAuthGroupProvider",
-                // "file" => "/media/NAS-Development/Projects/iF.SVNAdmin/Data/dav svn.authz"
-                "file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz"
+                "file" => "D:\\Development\\Data\\dav svn.authz"
+            ),
+            "svnauthgroups2" => array (
+                "class_name" => "SvnAuthGroupProvider",
+                "file" => "D:\\Development\\Data\\dav svn 2.authz"
             ),
             /*"ldapgroups" => array (
                 "class_name" => "LdapGroupProvider",
@@ -139,10 +138,15 @@ return array (
         "usergroup" => array (
             "svnauthfile" => array (
                 "class_name" => "SvnAuthUserGroupAssociater",
-                "for_users" => array("passwdusers", "digestusers", "digestusers2"),
-                "for_groups" => array("svnauthgroups"),
-                //"file" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz",
-                "file_id" => "default"
+                "for_users" => array (
+                    "passwdusers",
+                    "digestusers",
+                    "digestusers2"
+                ),
+                "for_groups" => array (
+                    "svnauthgroups"
+                ),
+                "authzfile" => "D:\\Development\\Data\\dav svn.authz"
             )
         ),
 
@@ -150,13 +154,13 @@ return array (
         "repository" => array (
             "svnparentrepos" => array (
                 "class_name" => "SvnParentRepositoryProvider",
-                "path" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\my repos",
-                "authfile" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz"
+                "path" => "D:\\Development\\Data\\my repos",
+                "authzfile" => ""
             ),
             "svnparentrepos2" => array (
                 "class_name" => "SvnParentRepositoryProvider",
-                "path" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\my repos 2",
-                "authfile" => "\\\\DISKSTATION\\Development\\Projects\\iF.SVNAdmin\\Data\\dav svn.authz"
+                "path" => "D:\\Development\\Data\\my repos 2",
+                "authzfile" => "D:\\Development\\Data\\dav svn.authz"
             )
         )
     )

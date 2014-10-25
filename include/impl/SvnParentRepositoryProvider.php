@@ -1,32 +1,44 @@
 <?php
+/**
+ * Manages repositories inside a directory (flat).
+ * Allows to list, create and delete repositories.
+ *
+ * Configurable
+ * ============
+ * `path`
+ *   Absolute path to the directory.
+ * `authzfile` (Optional)
+ *   If given, all repositories will use this AuthzFile for authorization.
+ *   Otherwise each repository will use it's own AuthzFile located in it's `conf/` directory.
+ *
+ */
 class SvnParentRepositoryProvider extends RepositoryProvider {
   private $_engine = null;
   private $_config = null;
-  private $_directoryPath = "";
   private $_editable = false;
+  private $_directoryPath = "";
+  private $_authzFilePath = "";
 
   public function initialize(SVNAdminEngine $engine, $config) {
     $this->_engine = $engine;
     $this->_config = $config;
-    $this->_directoryPath = $config["path"];
     $this->_editable = true;
+    $this->_directoryPath = Elws::normalizeAbsolutePath($config["path"]);
+    $this->_authzFilePath = Elws::normalizeAbsolutePath($config["authzfile"]);
     return true;
   }
 
   public function getRepositories($offset, $num) {
-    $list = new ItemList();
-
     $svn = new SvnBase();
     $repos = $svn->listRepositories($this->_directoryPath);
     $reposCount = count($repos);
 
+    $list = new ItemList();
     $listItems = array ();
     $begin = (int) $offset;
     $end = (int) $num === -1 ? $reposCount : (int) $offset + (int) $num;
     for ($i = $begin; $i < $end && $i < $reposCount; ++$i) {
-      $o = new Repository();
-      $o->initialize(base64_encode($this->_directoryPath . "/" . $repos[$i]), $repos[$i]);
-      $listItems[] = $o;
+      $listItems[] = $this->createRepositoryObject($this->_directoryPath . DIRECTORY_SEPARATOR . $repos[$i]);
     }
     $list->initialize($listItems, $reposCount > $end);
     return $list;
@@ -37,10 +49,7 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
     if (!file_exists($path)) {
       return null;
     }
-    $name = substr($path, strrpos($path, "/"));
-    $o = new Repository();
-    $o->initialize($id, $name);
-    return $o;
+    return $this->createRepositoryObject($path);
   }
 
   public function isEditable() {
@@ -55,15 +64,12 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
     if (!file_exists($this->_directoryPath)) {
       return null;
     }
-    $path = $this->_directoryPath . "/" . $name;
+    $path = $this->_directoryPath . DIRECTORY_SEPARATOR . $name;
     $type = isset($options["type"]) ? $options["type"] : "fsfs";
     if (!$bin->create($path, $type)) {
       return null;
     }
-    $id = base64_encode($path);
-    $o = new Repository();
-    $o->initialize($id, $name);
-    return $o;
+    return $this->createRepositoryObject($path);
   }
 
   public function delete($id) {
@@ -72,6 +78,22 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
       return false;
     }
     return $this->deleteDirectoryRecursive($path);
+  }
+
+  /**
+   * Creates an initializes an repository object by it's absolute path.
+   *
+   * @param string $path
+   * @return Repository
+   */
+  protected function createRepositoryObject($path) {
+    $path = Elws::normalizeAbsolutePath($path);
+    $authzFilePath = Elws::normalizeAbsolutePath($this->getRepositoryAuthzFilePath($path));
+
+    $repo = new Repository();
+    $repo->initialize(base64_encode($path), basename($path));
+    $repo->setAuthzFilePath($authzFilePath);
+    return $repo;
   }
 
   /**
@@ -95,6 +117,24 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
       rmdir($path);
     }
     return true;
+  }
+
+  /**
+   * Gets the path to the SvnAuthFile of the given repository.
+   * If a global AuthzFilePath is given, it will be used for all repositories, otherwise
+   * it falls back to the repository specific one located in "conf" folder.
+   *
+   * @param string $repositoryPath
+   * @return string
+   */
+  protected function getRepositoryAuthzFilePath($repositoryPath) {
+    if (empty($repositoryPath)) {
+      return "";
+    }
+    if (!empty($this->_authzFilePath)) {
+      return $this->_authzFilePath;
+    }
+    return $repositoryPath . DIRECTORY_SEPARATOR . "conf" . DIRECTORY_SEPARATOR . "authz";
   }
 
 }

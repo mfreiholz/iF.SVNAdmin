@@ -3,6 +3,7 @@ class Repository {
   private $_id = null;
   private $_name = null;
   private $_displayName = null;
+  private $_authzFilePath = null;
 
   public function __construct() {
   }
@@ -26,5 +27,14 @@ class Repository {
       return $this->_displayName;
     return $this->_name;
   }
+
+  public function setAuthzFilePath($path) {
+    $this->_authzFilePath = $path;
+  }
+
+  public function getAuthzFilePath() {
+    return $this->_authzFilePath;
+  }
+
 }
 ?>

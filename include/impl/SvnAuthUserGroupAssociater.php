@@ -1,27 +1,27 @@
 <?php
 class SvnAuthUserGroupAssociater extends UserGroupAssociater {
-  private $_authfile = null;
+  private $_authzfile = null;
 
   public function initialize(SVNAdminEngine $engine, $config) {
-    if (isset($config["file"]) && !empty($config["file"])) {
-      $this->_authfile = new SvnAuthFile();
-      if (!$this->_authfile->open($config["file"])) {
-        return false;
-      }
+    if (!isset($config["authzfile"])) {
+      error_log("Missing required parameter 'authzfile'");
+      return false;
     }
-    if (!$this->_authfile && isset($config["file_id"]) && !empty($config["file_id"])) {
-      $this->_authfile = $engine->getAuthFileById($config["file_id"]);
-      if (!$this->_authfile) {
-        return false;
-      }
+
+    $authzFilePath = $config["authzfile"];
+    $this->_authzfile = $engine->getSvnAuthzFile($authzFilePath);
+    if (empty($this->_authzfile)) {
+      error_log("Can not load SvnAuthzFile (path=" . $authzFilePath . ")");
+      return false;
     }
+
     return true;
   }
 
   public function getUsersOfGroup($groupId, $offset = 0, $num = -1) {
     $list = new ItemList();
 
-    $users = $this->_authfile->usersOfGroup($groupId);
+    $users = $this->_authzfile->usersOfGroup($groupId);
     $usersCount = count($users);
 
     $listItems = array ();
@@ -40,7 +40,7 @@ class SvnAuthUserGroupAssociater extends UserGroupAssociater {
   public function getGroupsOfUser($userId, $offset = 0, $num = -1) {
     $list = new ItemList();
 
-    $groups = $this->_authfile->groupsOfUser($userId);
+    $groups = $this->_authzfile->groupsOfUser($userId);
     $groupsCount = count($groups);
 
     $listItems = array ();
@@ -61,17 +61,18 @@ class SvnAuthUserGroupAssociater extends UserGroupAssociater {
   }
 
   public function assign($userId, $groupId) {
-    if ($this->_authfile->addUserToGroup($groupId, $userId)) {
-      return $this->_authfile->save();
+    if ($this->_authzfile->addUserToGroup($groupId, $userId)) {
+      return $this->_authzfile->save();
     }
     return false;
   }
 
   public function unassign($userId, $groupId) {
-    if ($this->_authfile->removeUserFromGroup($userId, $groupId)) {
-      return $this->_authfile->save();
+    if ($this->_authzfile->removeUserFromGroup($userId, $groupId)) {
+      return $this->_authzfile->save();
     }
     return false;
   }
+
 }
 ?>

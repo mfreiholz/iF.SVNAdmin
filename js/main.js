@@ -7,6 +7,8 @@
   **/
   function AppEngine() {
     this.config = {};
+    this.config.tablepagesize = 10;
+    this.config.showtablerownumber = true;
   }
 
   AppEngine.prototype.init = function () {
