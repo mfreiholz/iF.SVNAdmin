@@ -4,6 +4,7 @@ class SVNAdminEngine {
   const GROUP_PROVIDER = "group";
   const USERGROUP_PROVIDER = "usergroup";
   const REPOSITORY_PROVIDER = "repository";
+
   private static $_instance = null;
   private static $_svn = null;
   private static $_svnadmin = null;

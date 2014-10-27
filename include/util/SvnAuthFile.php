@@ -13,6 +13,12 @@
  * @require inifile.func.php
  */
 class SvnAuthFile {
+  const PERM_NONE = "";
+  const PERM_READ = "r";
+  const PERM_READWRITE = "rw";
+
+  const SECTION_GROUP = "group";
+
   public static $PERMISSION_NONE = '';
   public static $PERMISSION_READ = 'r';
   public static $PERMISSION_READWRITE = 'rw';
