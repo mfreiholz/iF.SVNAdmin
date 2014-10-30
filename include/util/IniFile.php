@@ -4,6 +4,7 @@
 class IniFileSection {
   public $comment = "";
   public $name = "";
+  public $items = array ();
 
 }
 
@@ -31,8 +32,45 @@ class IniFile {
    */
   private $_errorString = "";
   private $_filePath = null;
-  private $_items = array ();
+  private $_sections = array ();
   private $_lastComment = "";
+
+  public function getSections() {
+    $names = array ();
+    foreach ($this->_sections as &$obj) {
+      $names[] = $obj->name;
+    }
+    return $names;
+  }
+
+  public function getValue($block, $key, $defaultValue = null) {
+    $val = $defaultValue;
+    $found = false;
+    foreach ($this->_sections as &$section) {
+      if ($section->name === $block) {
+        foreach ($section->items as &$item) {
+          if ($item->key === $key) {
+            $val = $defaultValue;
+            $found = true;
+            break;
+          }
+        }
+      }
+      if ($found) {
+        break;
+      }
+    }
+    return $val;
+  }
+  
+  public function setValue($block, $key, $val) {
+  }
+  
+  public function removeValue($block, $key) {
+  }
+  
+  public function removeSection($block) {
+  }
 
   public function loadFromFile($path) {
     $this->reset();
@@ -61,6 +99,28 @@ class IniFile {
     fclose($stream);
     return $ret;
   }
+  
+  public function writeToFile($path) {
+    if (empty($path)) {
+      $path = $this->_filePath;
+    }
+    if (!file_exists($path)) {
+      if (!touch($path)) {
+        $this->_errorString = "Can not create file. (path=" . $path . ")";
+        return IniFile::FILE_ERROR;
+      }
+    }
+    $fh = fopen($path, "r+");
+    if (!flock($fh, LOCK_EX)) {
+      fclose($fh);
+      $this->_errorString = "Can not aquire lock on file (path=" . $path . ")";
+      return IniFile::FILE_ERROR;
+    }
+    $ret = $this->writeStream($fh);
+    flock($fh, LOCK_UN);
+    fclose($fh);
+    return IniFile::NO_ERROR;
+  }
 
   public function asString() {
     $stream = fopen("php://memory", "r+");
@@ -77,6 +137,7 @@ class IniFile {
 
   private function parseStream($stream) {
     $comment = "";
+    $lastSection = null;
     while (!feof($stream)) {
       $line = fgets($stream);
       $line = trim($line);
@@ -101,8 +162,9 @@ class IniFile {
         $section = new IniFileSection();
         $section->comment = $comment;
         $section->name = substr($line, 1, strlen($line) - 2);
-        $this->_items[] = $section;
+        $this->_sections[] = $section;
         $comment = "";
+        $lastSection = $section;
         continue;
       }
 
@@ -115,7 +177,9 @@ class IniFile {
         if (count($parts) >= 2) {
           $item->value = trim($parts[1]);
         }
-        $this->_items[] = $item;
+        if ($lastSection !== null) {
+          $lastSection->items[] = $item;
+        }
         $comment = "";
         continue;
       }
@@ -125,20 +189,22 @@ class IniFile {
   }
 
   private function writeStream($stream) {
-    foreach ($this->_items as &$obj) {
-      if ($obj instanceof IniFileSection) {
-        fwrite($stream, $obj->comment);
-        if (!empty(trim($obj->comment))) {
-          fwrite($stream, PHP_EOL);
-        }
-        fwrite($stream, "[" . $obj->name . "]");
+    // Sections.
+    foreach ($this->_sections as &$section) {      
+      fwrite($stream, $section->comment);
+      if (!empty(trim($section->comment))) {
         fwrite($stream, PHP_EOL);
-      } else if ($obj instanceof IniFileItem) {
-        fwrite($stream, $obj->comment);
-        if (!empty(trim($obj->comment))) {
+      }
+      fwrite($stream, "[" . $section->name . "]");
+      fwrite($stream, PHP_EOL);
+      
+      // Items.
+      foreach ($section->items as &$item) {
+        fwrite($stream, $item->comment);
+        if (!empty(trim($item->comment))) {
           fwrite($stream, PHP_EOL);
         }
-        fwrite($stream, $obj->key . "=" . $obj->value);
+        fwrite($stream, $item->key . "=" . $item->value);
         fwrite($stream, PHP_EOL);
       }
     }
@@ -146,178 +212,16 @@ class IniFile {
       fwrite($stream, $this->_lastComment);
     }
   }
-
-  /**
-   * Saves the internal hold configuration to disk.
-   * How? First, read the configuration file and save them
-   * into a buffer, but replace the changed configuration values.
-   * Then write it back to file.
-   *
-   * @param
-   *          string Path to the file where the config should be saved.
-   *
-   * @return bool
-   */
-  public function save($path = null) {
-    if (!is_array($this->items)) {
-      return false;
-    }
-
-    if ($path == null) {
-      $path = $this->configFilePath;
-    }
-
-    if (!file_exists($path)) {
-      // try to create the file
-      if (!touch($path)) {
-        throw new Exception('File does not exist and can not create it. ' . $path);
-      }
-    }
-
-    $fh = fopen($path, 'w');
-    flock($fh, LOCK_EX);
-
-    // iterate all sections
-    foreach ($this->items as $section_name => $section_data) {
-      fwrite($fh, "\n[" . $section_name . "]\n");
-
-      if (is_array($section_data)) {
-        // iterate key/value pairs of section
-        foreach ($section_data as $key => $val) {
-          fwrite($fh, $key . '=' . $val . "\n");
-        }
-      }
-    }
-
-    flock($fh, LOCK_UN);
-    fclose($fh);
-    return true;
-  }
-
-  /**
-   * Gets a specified value from config file.
-   *
-   * @param string $section
-   * @param string $key
-   * @param string $defaultValue
-   *          (default=null)
-   *
-   * @return string (value specified by $defaultValue)
-   */
-  public function getValue($section, $key, $defaultValue = null) {
-    if (isset($this->items[$section]) && isset($this->items[$section][$key])) {
-      return $this->items[$section][$key];
-    }
-    return $defaultValue;
-  }
-
-  /**
-   * Gets all existing sections from config file.
-   *
-   * @return array<string>
-   */
-  public function getSections() {
-    $ret = array ();
-    foreach ($this->items as $section => &$noval) {
-      $ret[] = $section;
-    }
-    return $ret;
-  }
-
-  /**
-   * Gets all existing keys from a specific section.
-   *
-   * @param string $section
-   *
-   * @return array<string>
-   */
-  public function getSectionKeys($section) {
-    if (isset($this->items[$section])) {
-      if (is_array($this->items[$section])) {
-        return array_keys($this->items[$section]);
-      } else {
-        // Empty section.
-        return array ();
-      }
-    } else {
-      // Unknown section.
-      return array ();
-    }
-  }
-
-  /**
-   * Sets a specific value to config.
-   *
-   * @param string $section
-   * @param string $key
-   * @param string $value
-   */
-  public function setValue($section, $key, $value) {
-    if (!isset($this->items[$section])) {
-      $this->items[$section] = array ();
-    }
-
-    if (!empty($key)) {
-      $this->items[$section][$key] = $value;
-    }
-  }
-
-  /**
-   * Removes a specific value from config.
-   *
-   * @param string $section
-   * @param string $key
-   */
-  public function removeValue($section, $key) {
-    if (!isset($this->items[$section])) {
-      return true;
-    }
-
-    if (empty($key)) {
-      unset($this->items[$section]);
-    } else {
-      if (!isset($this->items[$section][$key])) {
-        return true;
-      }
-      unset($this->items[$section][$key]);
-    }
-    return true;
-  }
-
-  /**
-   * Gets to know whether a specific section exists.
-   *
-   * @param string $section
-   *
-   * @return bool
-   */
-  public function getSectionExists($section) {
-    return (isset($this->items[$section]));
-  }
-
-  /**
-   *
-   * Enter description here ...
-   *
-   * @param unknown_type $section
-   * @param unknown_type $key
-   */
-  public function getValueExists($section, $key) {
-    if (isset($this->items[$section])) {
-      if (isset($this->items[$section][$key])) {
-        return true;
-      }
-    }
-    return false;
-  }
-
 }
+/**
 
-// TEST
 header("Content-type: text/plain");
 $ini = new IniFile();
-// $ini->loadFromFile("D:/Development/Source/iF.SVNAdmin/data/config.tpl.ini");
-$ini->loadFromString(file_get_contents("D:/Development/Source/iF.SVNAdmin/data/config.tpl.ini"));
-print($ini->asString());
-// print_r($ini);
+$ini->loadFromFile("C:/Sources/iF.SVNAdmin/data/config.tpl.ini");
+//$ini->loadFromString(file_get_contents("C:/Sources/iF.SVNAdmin/data/config.tpl.ini"));
+//$ini->writeToFile("C:/Temp/test.ini");
+//print($ini->asString());
+//print_r($ini);
+
+/**/
 ?>
