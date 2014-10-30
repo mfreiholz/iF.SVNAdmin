@@ -16,17 +16,14 @@ class SvnAuthFile {
   const PERM_NONE = "";
   const PERM_READ = "r";
   const PERM_READWRITE = "rw";
+  const GROUP_SECTION = "groups";
+  const GROUP_SIGN = "@";
+  const ALIAS_SECTION = "aliases";
+  const ALIAS_SIGN = "&";
+  const ALL_USERS_SIGN = "*";
 
-  const SECTION_GROUP = "group";
-
-  public static $PERMISSION_NONE = '';
-  public static $PERMISSION_READ = 'r';
-  public static $PERMISSION_READWRITE = 'rw';
-  private $SIGN_ALL_USERS = '*';
-  private $GROUP_SIGN = '@';
-  private $GROUP_SECTION = 'groups';
-  private $ALIAS_SIGN = '&';
-  private $ALIAS_SECTION = 'aliases';
+  // Errors.
+  const NO_ERROR = 0;
 
   /**
    * Holds the IniFile object which is used to manage
@@ -34,25 +31,13 @@ class SvnAuthFile {
    *
    * @var IniFile
    */
-  private $config = null;
+  private $_config = null;
 
-  /**
-   * Constructor
-   *
-   * @param string $path
-   *          Path to the SVNAuthFile
-   *
-   * @throws Exception
-   */
-  public function __construct($path = null) {
-    if (!empty($path)) {
-      self::open($path);
-    }
+  public function __construct() {
   }
 
   /**
-   * Open the given SVNAuthFile, which contains permissions
-   * of the svn users/groups.
+   * Opens and parses the authz file.
    *
    * @param string $path
    *          Path to the SVNAuthFile
@@ -115,7 +100,7 @@ class SvnAuthFile {
    */
   public function repositories() {
     $arrSections = $this->config->getSections();
-    $ret = array();
+    $ret = array ();
 
     foreach ($arrSections as $section) {
       if ($section != $this->GROUP_SECTION && $section != $this->ALIAS_SECTION && !empty($section))       // empty = keys without section header.
@@ -163,7 +148,7 @@ class SvnAuthFile {
       return $arrUsers;
     }
 
-    return array();
+    return array ();
   }
 
   /**
@@ -189,7 +174,7 @@ class SvnAuthFile {
    */
   public function usersOfRepository($repository) {
     $members = self::membersOfRepository($repository);
-    $users = array();
+    $users = array ();
 
     for ($i = 0; $i < count($members); ++$i) {
       if (strpos($members[$i], $this->GROUP_SIGN) === 0) {
@@ -213,7 +198,7 @@ class SvnAuthFile {
    */
   public function groupsOfRepository($repository) {
     $members = self::membersOfRepository($repository);
-    $groups = array();
+    $groups = array ();
 
     for ($i = 0; $i < count($members); ++$i) {
       if (strpos($members[$i], $this->GROUP_SIGN) === 0) {
@@ -238,7 +223,7 @@ class SvnAuthFile {
    * @return array<string>
    */
   public function groupsOfUser($username) {
-    $ret = array();
+    $ret = array ();
 
     $groups = self::groups();
     foreach ($groups as $g) {
@@ -259,7 +244,7 @@ class SvnAuthFile {
    * @return array<string>
    */
   public function repositoryPathsOfGroup($groupname) {
-    $ret = array();
+    $ret = array ();
 
     $repositories = $this->repositories();
     foreach ($repositories as $repository) {
@@ -280,7 +265,7 @@ class SvnAuthFile {
    * @return array<string>
    */
   public function repositoryPathsOfUser($username) {
-    $ret = array();
+    $ret = array ();
 
     $repositories = $this->repositories();
     foreach ($repositories as $repository) {
@@ -628,7 +613,7 @@ class SvnAuthFile {
    * @return array See method description for details.
    */
   public function permissionsOfUser($username, $resolveGroups = true, $filterRepository = null) {
-    $ret = array();
+    $ret = array ();
 
     // Iterate all repository paths.
     $repositories = $this->repositories();
@@ -641,7 +626,7 @@ class SvnAuthFile {
       // Get the permission of the user.
       $permission = $this->config->getValue($repository, $username);
       if ($permission !== null) {
-        $ret[] = array(
+        $ret[] = array (
             $repository,
             $permission,
             ''
@@ -657,7 +642,7 @@ class SvnAuthFile {
             $g2 = $this->GROUP_SIGN . $g;
             $permission = $this->config->getValue($repository, $g2);
             if ($permission !== null) {
-              $ret[] = array(
+              $ret[] = array (
                   $repository,
                   $permission,
                   $g
@@ -669,7 +654,7 @@ class SvnAuthFile {
         // Get the all-user permissions.
         $permission = $this->config->getValue($repository, $this->SIGN_ALL_USERS);
         if ($permission !== null) {
-          $ret[] = array(
+          $ret[] = array (
               $repository,
               $permission,
               $this->SIGN_ALL_USERS
@@ -703,7 +688,7 @@ class SvnAuthFile {
    * @return array See method description for details.
    */
   public function permissionsOfGroup($groupname, $resolveGroups = true, $filterRepository = null) {
-    $ret = array();
+    $ret = array ();
     $groupname_internal = $this->GROUP_SIGN . $groupname;
 
     // Iterate all repository paths.
@@ -717,7 +702,7 @@ class SvnAuthFile {
       // Get the direct permission of the group.
       $permission = $this->config->getValue($repository, $groupname_internal);
       if ($permission !== null) {
-        $ret[] = array(
+        $ret[] = array (
             $repository,
             $permission,
             ''
@@ -732,5 +717,6 @@ class SvnAuthFile {
 
     return $ret;
   }
+
 }
 ?>
