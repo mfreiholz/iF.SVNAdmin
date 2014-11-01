@@ -42,6 +42,19 @@ class IniFile {
     }
     return $names;
   }
+  
+  public function getSectionKeys($block) {
+    $keys = array ();
+    foreach ($this->_sections as &$section) {
+      if ($section->name === $block) {
+        foreach ($section->items as &$item) {
+          $keys[] = $item->key;
+        }
+        break;
+      }
+    }
+    return $keys;
+  }
 
   public function getValue($block, $key, $defaultValue = null) {
     $val = $defaultValue;
@@ -50,7 +63,7 @@ class IniFile {
       if ($section->name === $block) {
         foreach ($section->items as &$item) {
           if ($item->key === $key) {
-            $val = $defaultValue;
+            $val = $item->value;
             $found = true;
             break;
           }
@@ -64,12 +77,57 @@ class IniFile {
   }
   
   public function setValue($block, $key, $val) {
+    $sectionObj = null;
+    $itemObj = null;
+    foreach ($this->_sections as &$section) {
+      if ($section->name === $block) {
+        $sectionObj = $section;
+        foreach ($section->items as &$item) {
+          if ($item->key === $key) {
+            $itemObj = $item;
+            break;
+          }
+        }
+        break;
+      }
+    }
+    if (!$sectionObj) {
+      $sectionObj = new IniFileSection();
+      $sectionObj->name = $block;
+      $this->_sections[] = $sectionObj;
+    }
+    if (!$itemObj) {
+      $itemObj = new IniFileItem();
+      $itemObj->key = $key;
+      $sectionObj->items[] = $itemObj;
+    }
+    $itemObj->value = $val;
   }
   
   public function removeValue($block, $key) {
+    foreach ($this->_sections as &$section) {
+      if ($section->name === $block) {
+        for ($i = 0; $i < count($section->items); ++$i) {
+          if ($section->items[$i]->key === $key) {
+            unset($section->items[$i]);
+            $section->items = array_values($section->items);
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
   
   public function removeSection($block) {
+    for ($i = 0; $i < count($this->_sections); ++$i) {
+      if ($this->_sections[$i]->name === $block) {
+        unset($this->_sections[$i]);
+        $this->_sections = array_values($this->_sections);
+        return true;
+      }
+    }
+    return false;
   }
 
   public function loadFromFile($path) {
@@ -216,12 +274,32 @@ class IniFile {
 /**
 
 header("Content-type: text/plain");
+
+// Load file.
 $ini = new IniFile();
 $ini->loadFromFile("C:/Sources/iF.SVNAdmin/data/config.tpl.ini");
 //$ini->loadFromString(file_get_contents("C:/Sources/iF.SVNAdmin/data/config.tpl.ini"));
-//$ini->writeToFile("C:/Temp/test.ini");
-//print($ini->asString());
+
+// Retrieve basic information.
+//print_r($ini->getSections());
+//print_r($ini->getSectionKeys("Ldap"));
+//print_r($ini->getValue("Ldap", "BindDN"));
+
+// Set and change values.
+//$ini->setValue("testblock", "testkey", "testval");
+//$ini->setValue("testblock", "testkey", "testval2");
 //print_r($ini);
+
+// Remove value.
+//$ini->removeValue("Common", "FirstStart");
+//print_r($ini);
+
+// Remove section.
+//$ini->removeSection("Translation");
+//print_r($ini);
+
+// Save to disk.
+//$ini->writeToFile("C:/Temp/after.ini");
 
 /**/
 ?>
