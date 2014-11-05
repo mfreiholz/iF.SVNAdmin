@@ -20,22 +20,46 @@ class IniFileItem {
 /**
  */
 class IniFile {
-  /*
-   * Error types
-   */
   const NO_ERROR = 0;
   const FILE_ERROR = 1;
   const PARSE_ERROR = 2;
 
-  /*
-   * Attributes
-   */
   private $_errorString = "";
   private $_filePath = null;
   private $_sections = array ();
   private $_lastComment = "";
-
+  
+  /*
+   * Methods to access the IniFileSection and IniFileItem objects
+   * for advanced INI file processing.
+   */
+  
+  /**
+   * @param $block string
+   * @return IniFileSection
+   */
+  public function getSection($block) {
+    foreach ($this->_sections as &$section) {
+      if ($section->name === $block) {
+        return $section;
+      }
+    }
+    return null;
+  }
+  
+  /**
+   * @return array<IniFileSection>
+   */
   public function getSections() {
+    return $this->_sections;
+  }
+  
+  /*
+   * Methods to directly access values.
+   * Enough for most use cases.
+   */
+
+  public function getSectionNames() {
     $names = array ();
     foreach ($this->_sections as &$obj) {
       $names[] = $obj->name;
@@ -129,6 +153,10 @@ class IniFile {
     }
     return false;
   }
+  
+  /*
+   * Methods to load and save content.
+   */
 
   public function loadFromFile($path) {
     $this->reset();
@@ -281,7 +309,7 @@ $ini->loadFromFile("C:/Sources/iF.SVNAdmin/data/config.tpl.ini");
 //$ini->loadFromString(file_get_contents("C:/Sources/iF.SVNAdmin/data/config.tpl.ini"));
 
 // Retrieve basic information.
-//print_r($ini->getSections());
+//print_r($ini->getSectionNames());
 //print_r($ini->getSectionKeys("Ldap"));
 //print_r($ini->getValue("Ldap", "BindDN"));
 

@@ -3,19 +3,12 @@ class SvnAuthGroupProvider extends GroupProvider {
   private $_authfile = null;
 
   public function initialize(SVNAdminEngine $engine, $config) {
-    $this->_authfile = new SvnAuthFile();
-    try {
-      if (!$this->_authfile->open($config["file"])) {
-        return false;
-      }
-    } catch (Exception $e) {
-      return false;
-    }
-    return true;
+    $this->_authfile = $engine->getSvnAuthzFile($engine->getConfig()["common"]["svn_authz_file"]);
+    return !empty($this->_authfile);
   }
 
   public function getGroups($offset = 0, $num = -1) {
-    $groups = $this->_authfile->groups();
+    $groups = $this->_authfile->getGroups();
     $groupsCount = count($groups);
 
     $list = new ItemList();
@@ -24,7 +17,7 @@ class SvnAuthGroupProvider extends GroupProvider {
     $end = (int) $num === -1 ? $groupsCount : (int) $offset + (int) $num;
     for ($i = $begin; $i < $end && $i < $groupsCount; ++$i) {
       $o = new Group();
-      $o->initialize($groups[$i], $groups[$i]);
+      $o->initialize($groups[$i]->name, $groups[$i]->name);
       $listItems[] = $o;
     }
     $list->initialize($listItems, $groupsCount > $end);

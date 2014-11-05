@@ -62,6 +62,10 @@ class SVNAdminEngine {
     }
     return self::$_instance;
   }
+  
+  public function getConfig() {
+    return $this->_config;
+  }
 
   public function getSvnAuthzFile($path) {
     $path = Elws::normalizeAbsolutePath($path);
@@ -72,8 +76,8 @@ class SVNAdminEngine {
     }
 
     // Create file object and add to cache.
-    $obj = new SvnAuthFile();
-    if (!$obj->open($path)) {
+    $obj = new SvnAuthzFile();
+    if ($obj->loadFromFile($path) !== SvnAuthzFile::NO_ERROR) {
       unset($obj);
       return null;
     }
