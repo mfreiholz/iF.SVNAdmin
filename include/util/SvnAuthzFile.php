@@ -8,6 +8,7 @@ class SvnAuthzFileAlias {
   public function asMemberString() {
     return "&" . $this->alias;
   }
+
 }
 
 /**
@@ -18,6 +19,7 @@ class SvnAuthzFileGroup {
   public function asMemberString() {
     return "@" . $this->name;
   }
+
 }
 
 /**
@@ -28,6 +30,7 @@ class SvnAuthzFileUser {
   public function asMemberString() {
     return $this->name;
   }
+
 }
 
 /**
@@ -45,6 +48,7 @@ class SvnAuthzFilePath {
     $s .= $this->path;
     return $s;
   }
+
 }
 
 /**
@@ -62,7 +66,7 @@ class SvnAuthzFile {
   const PERM_NONE = "";
   const PERM_READ = "r";
   const PERM_READWRITE = "rw";
-  
+
   // Special sections and placeholders.
   const GROUP_SECTION = "groups";
   const GROUP_SIGN = "@";
@@ -74,7 +78,8 @@ class SvnAuthzFile {
   const NO_ERROR = 0;
   const UNKNOWN_ERROR = 1;
   const FILE_ERROR = 2;
-  
+
+  // Attributes.
   private $_errorString = "";
   private $_ini = null;
 
@@ -101,6 +106,7 @@ class SvnAuthzFile {
   }
 
   /**
+   *
    * @return array<SvnAuthzFileAlias>
    */
   public function getAliases() {
@@ -118,6 +124,7 @@ class SvnAuthzFile {
   }
 
   /**
+   *
    * @return array<SvnAuthzFileGroup>
    */
   public function getGroups() {
@@ -134,6 +141,7 @@ class SvnAuthzFile {
   }
 
   /**
+   *
    * @return array<SvnAuthzFilePath>
    */
   public function getPaths() {
@@ -157,6 +165,7 @@ class SvnAuthzFile {
   }
 
   /**
+   *
    * @param string $group
    * @return array<SvnAuthzFileAlias,SvnAuthzFileGroup,SvnAuthzFileUser>
    */
@@ -173,8 +182,9 @@ class SvnAuthzFile {
     }
     return $members;
   }
-  
+
   /**
+   *
    * @param SvnAuthzFilePath $path
    * @return array<SvnAuthzFileAlias,SvnAuthzFileGroup,SvnAuthzFileUser>
    */
@@ -191,37 +201,56 @@ class SvnAuthzFile {
     }
     return $perms;
   }
-  
-  /////////////////////////////////////////////////////////////////////
-  // Creation Methods
-  /////////////////////////////////////////////////////////////////////
-  
+
   public function addAlias(SvnAuthzFileAlias $obj) {
+    $this->_ini->setValue(SvnAuthzFile::ALIAS_SECTION, $obj->alias, $obj->value);
   }
-  
-  public function addGroup(SvnAuthzFileGroup $obj) {
-  }
-  
-  public function addMember() {
-  }
-  
-  /////////////////////////////////////////////////////////////////////
-  // Deletion Methods
-  /////////////////////////////////////////////////////////////////////
-  
+
   public function removeAlias(SvnAuthzFileAlias $obj) {
+    $this->_ini->removeValue(SvnAuthzFile::ALIAS_SECTION, $obj->alias);
+    // Remove from groups.
+    // ...
+    // Remove permissions.
+    // ...
   }
-  
+
+  public function addGroup(SvnAuthzFileGroup $obj) {
+    $exists = false;
+    $section = $this->_ini->getSection(SvnAuthzFile::GROUP_SECTION);
+    if ($section) {
+      foreach ($section->items as &$item) {
+        if ($item->key === $obj->name) {
+          $exists = true;
+          break;
+        }
+      }
+    }
+    if (!$exists) {
+      $this->_ini->setValue(SvnAuthzFile::GROUP_SECTION, $obj->name, "");
+    }
+  }
+
   public function removeGroup(SvnAuthzFileGroup $obj) {
+    $this->_ini->removeValue(SvnAuthzFile::GROUP_SECTION, $obj->name);
+    // Remove from groups.
+    // ...
+    // Remove permissions.
+    // ...
   }
-  
+
+  public function addMember(SvnAuthzFileGroup $group, $memberObj) {
+    $section = $this->_ini->getSection(SvnAuthzFile::GROUP_SECTION);
+    if ($section) {
+
+    }
+  }
+
   public function removeMember() {
   }
 
-  /////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////
   // Private Methods
-  /////////////////////////////////////////////////////////////////////
-  
+  // ///////////////////////////////////////////////////////////////////
   private function createMemberObject($member) {
     $member = trim($member);
     $prefix = substr($member, 0, 1);
@@ -239,25 +268,27 @@ class SvnAuthzFile {
       return $user;
     }
   }
+
 }
 /**
-header("Content-Type: text/plain; charset=utf-8");
-include("IniFile.php");
-
-// Load file.
-$authz = new SvnAuthzFile();
-$authz->loadFromFile("D:/Development/Data/dav svn.authz.backup");
-//print_r($authz->getAliases());
-//print_r($authz->getGroups());
-//print_r($authz->getPaths());
-//print_r($authz->getMembersOfGroup("group_4"));
-
-$obj = new SvnAuthzFilePath();
-$obj->repository = "repo_2_write";
-$obj->path = "/subfolder";
-print_r($authz->getPermissionsOfPath($obj));
-
-//print_r($authz);
-
-/**/
+ * header("Content-Type: text/plain; charset=utf-8");
+ * include("IniFile.php");
+ *
+ * // Load file.
+ * $authz = new SvnAuthzFile();
+ * $authz->loadFromFile("D:/Development/Data/dav svn.authz.backup");
+ * //print_r($authz->getAliases());
+ * //print_r($authz->getGroups());
+ * //print_r($authz->getPaths());
+ * //print_r($authz->getMembersOfGroup("group_4"));
+ *
+ * $obj = new SvnAuthzFilePath();
+ * $obj->repository = "repo_2_write";
+ * $obj->path = "/subfolder";
+ * print_r($authz->getPermissionsOfPath($obj));
+ *
+ * //print_r($authz);
+ *
+ * /*
+ */
 ?>
