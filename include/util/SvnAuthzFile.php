@@ -101,7 +101,7 @@ class SvnAuthzFile {
 
   /**
    * @param string $path Path to the authz file.
-   * @return int
+   * @return int SvnAuthzFile::NO_ERROR, SvnAuthzFile::FILE_ERROR
    */
   public function loadFromFile($path) {
     $ini = new IniFile();
@@ -115,7 +115,7 @@ class SvnAuthzFile {
   /**
    * The file given by $path will be overwritten, if the file arleady exists.
    * @param string $path Path to the authz file.
-   * @return int
+   * @return int SvnAuthzFile::NO_ERROR, SvnAuthzFile::FILE_ERROR, SvnAuthzFile::UNKNOWN_ERROR
    */
   public function writeToFile($path = null) {
     if (!$this->_ini) {
@@ -228,18 +228,22 @@ class SvnAuthzFile {
 
   /**
    * @param SvnAuthzFileAlias $obj The alias to create.
+   * @return SvnAuthzFile::NO_ERROR
    */
   public function addAlias(SvnAuthzFileAlias $obj) {
     $this->_ini->setValue(SvnAuthzFile::ALIAS_SECTION, $obj->alias, $obj->value);
+    return SvnAuthzFile::NO_ERROR;
   }
 
   /**
    * @param SvnAuthzFileAlias $obj
+   * @return SvnAuthzFile::NO_ERROR
    */
   public function removeAlias(SvnAuthzFileAlias $obj) {
     $this->_ini->removeValue(SvnAuthzFile::ALIAS_SECTION, $obj->alias);
     // TODO Remove from groups.
     // TODO Remove permissions.
+    return SvnAuthzFile::NO_ERROR;
   }
 
   /**
@@ -266,11 +270,13 @@ class SvnAuthzFile {
 
   /**
    * @param SvnAuthzFileGroup $obj
+   * @return SvnAuthzFile::NO_ERROR
    */
   public function removeGroup(SvnAuthzFileGroup $obj) {
     $this->_ini->removeValue(SvnAuthzFile::GROUP_SECTION, $obj->name);
     // TODO Remove from groups.
     // TODO Remove permissions.
+    return SvnAuthzFile::NO_ERROR;
   }
 
   /**
@@ -296,7 +302,7 @@ class SvnAuthzFile {
   /**
    * @param SvnAuthzFileGroup $group
    * @param SvnAuthzFileMember $memberObj
-   * @return int Always returns SvnAuthzFile::NO_ERROR
+   * @return int SvnAuthzFile::NO_ERROR
    */
   public function removeMember(SvnAuthzFileGroup $group, SvnAuthzFileMember $memberObj) {
     $value = $this->_ini->getValue(SvnAuthzFile::GROUP_SECTION, $group->name, "");
@@ -318,7 +324,7 @@ class SvnAuthzFile {
    * @param SvnAuthzFilePath $path
    * @param SvnAuthzFileMember $memberObj
    * @param string $perm
-   * @return int
+   * @return int SvnAuthzFile::NO_ERROR
    */
   public function addPermission(SvnAuthzFilePath $path, SvnAuthzFileMember $memberObj, $perm) {
     $section = $this->_ini->getSection($path->asString());
@@ -337,7 +343,7 @@ class SvnAuthzFile {
   /**
    * @param SvnAuthzFilePath $path
    * @param SvnAuthzFileMember $memberObj
-   * @return int
+   * @return int SvnAuthzFile::NO_ERROR
    */
   public function removePermission(SvnAuthzFilePath $path, SvnAuthzFileMember $memberObj) {
     $this->_ini->removeValue($path->asString(), $memberObj->asMemberString());
@@ -362,6 +368,7 @@ class SvnAuthzFile {
       return $user;
     }
   }
+
 }
 /*
 include("IniFile.php");
