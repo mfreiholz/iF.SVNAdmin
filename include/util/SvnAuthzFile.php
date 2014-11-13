@@ -1,7 +1,14 @@
 <?php
 /**
  */
-class SvnAuthzFileAlias {
+abstract class SvnAuthzFileMember {
+  public abstract function asMemberString();
+
+}
+
+/**
+ */
+class SvnAuthzFileAlias extends SvnAuthzFileMember {
   public $alias = "";
   public $value = "";
 
@@ -13,7 +20,7 @@ class SvnAuthzFileAlias {
 
 /**
  */
-class SvnAuthzFileGroup {
+class SvnAuthzFileGroup extends SvnAuthzFileMember {
   public $name = "";
 
   public function asMemberString() {
@@ -24,7 +31,7 @@ class SvnAuthzFileGroup {
 
 /**
  */
-class SvnAuthzFileUser {
+class SvnAuthzFileUser extends SvnAuthzFileMember {
   public $name = "";
 
   public function asMemberString() {
@@ -45,7 +52,11 @@ class SvnAuthzFilePath {
       $s .= $this->repository;
       $s .= ":";
     }
-    $s .= $this->path;
+    if (!empty($path)) {
+      $s .= $this->path;
+    } else {
+      $s .= "/";
+    }
     return $s;
   }
 
@@ -78,14 +89,20 @@ class SvnAuthzFile {
   const NO_ERROR = 0;
   const UNKNOWN_ERROR = 1;
   const FILE_ERROR = 2;
+  const ALREADY_EXISTS = 3;
 
-  // Attributes.
-  private $_errorString = "";
+  /*
+   * @var IniFile
+   */
   private $_ini = null;
 
   public function __construct() {
   }
 
+  /**
+   * @param string $path Path to the authz file.
+   * @return int
+   */
   public function loadFromFile($path) {
     $ini = new IniFile();
     if ($ini->loadFromFile($path) !== IniFile::NO_ERROR) {
@@ -95,6 +112,11 @@ class SvnAuthzFile {
     return SvnAuthzFile::NO_ERROR;
   }
 
+  /**
+   * The file given by $path will be overwritten, if the file arleady exists.
+   * @param string $path Path to the authz file.
+   * @return int
+   */
   public function writeToFile($path = null) {
     if (!$this->_ini) {
       return SvnAuthzFile::UNKNOWN_ERROR;
@@ -105,8 +127,14 @@ class SvnAuthzFile {
     return SvnAuthzFile::NO_ERROR;
   }
 
+  public function toString() {
+    if ($this->_ini) {
+      return $this->_ini->asString();
+    }
+    return "";
+  }
+
   /**
-   *
    * @return array<SvnAuthzFileAlias>
    */
   public function getAliases() {
@@ -124,7 +152,6 @@ class SvnAuthzFile {
   }
 
   /**
-   *
    * @return array<SvnAuthzFileGroup>
    */
   public function getGroups() {
@@ -141,14 +168,13 @@ class SvnAuthzFile {
   }
 
   /**
-   *
    * @return array<SvnAuthzFilePath>
    */
   public function getPaths() {
     $paths = array ();
     $sections = $this->_ini->getSections();
     foreach ($sections as &$section) {
-      if ($section->name === SvnAuthzFile::ALIAS_SECTION || $section->name === SvnAuthzFile::GROUP_SECTION) {
+      if (strcasecmp($section->name, SvnAuthzFile::ALIAS_SECTION) === 0 || strcasecmp($section->name, SvnAuthzFile::GROUP_SECTION) === 0) {
         continue;
       }
       $path = new SvnAuthzFilePath();
@@ -165,13 +191,12 @@ class SvnAuthzFile {
   }
 
   /**
-   *
-   * @param string $group
+   * @param SvnAuthzFileGroup $group
    * @return array<SvnAuthzFileAlias,SvnAuthzFileGroup,SvnAuthzFileUser>
    */
-  public function getMembersOfGroup($group) {
+  public function getMembersOfGroup(SvnAuthzFileGroup $group) {
     $members = array ();
-    $value = $this->_ini->getValue(SvnAuthzFile::GROUP_SECTION, $group, "");
+    $value = $this->_ini->getValue(SvnAuthzFile::GROUP_SECTION, $group->name, "");
     if (empty($value)) {
       return $members;
     }
@@ -184,7 +209,6 @@ class SvnAuthzFile {
   }
 
   /**
-   *
    * @param SvnAuthzFilePath $path
    * @return array<SvnAuthzFileAlias,SvnAuthzFileGroup,SvnAuthzFileUser>
    */
@@ -202,18 +226,27 @@ class SvnAuthzFile {
     return $perms;
   }
 
+  /**
+   * @param SvnAuthzFileAlias $obj The alias to create.
+   */
   public function addAlias(SvnAuthzFileAlias $obj) {
     $this->_ini->setValue(SvnAuthzFile::ALIAS_SECTION, $obj->alias, $obj->value);
   }
 
+  /**
+   * @param SvnAuthzFileAlias $obj
+   */
   public function removeAlias(SvnAuthzFileAlias $obj) {
     $this->_ini->removeValue(SvnAuthzFile::ALIAS_SECTION, $obj->alias);
-    // Remove from groups.
-    // ...
-    // Remove permissions.
-    // ...
+    // TODO Remove from groups.
+    // TODO Remove permissions.
   }
 
+  /**
+   * Creates a new group.
+   * @param SvnAuthzFileGroup $obj
+   * @return int SvnAuthzFile::NO_ERROR, SvnAuthzFile::ALREADY_EXISTS
+   */
   public function addGroup(SvnAuthzFileGroup $obj) {
     $exists = false;
     $section = $this->_ini->getSection(SvnAuthzFile::GROUP_SECTION);
@@ -228,35 +261,96 @@ class SvnAuthzFile {
     if (!$exists) {
       $this->_ini->setValue(SvnAuthzFile::GROUP_SECTION, $obj->name, "");
     }
+    return !$exists ? SvnAuthzFile::NO_ERROR : SvnAuthzFile::ALREADY_EXISTS;
   }
 
+  /**
+   * @param SvnAuthzFileGroup $obj
+   */
   public function removeGroup(SvnAuthzFileGroup $obj) {
     $this->_ini->removeValue(SvnAuthzFile::GROUP_SECTION, $obj->name);
-    // Remove from groups.
-    // ...
-    // Remove permissions.
-    // ...
+    // TODO Remove from groups.
+    // TODO Remove permissions.
   }
 
-  public function addMember(SvnAuthzFileGroup $group, $memberObj) {
-    $section = $this->_ini->getSection(SvnAuthzFile::GROUP_SECTION);
-    if ($section) {
-
+  /**
+   * @param SvnAuthzFileGroup $group
+   * @param SvnAuthzFileMember $memberObj
+   * @return int SvnAuthzFile::NO_ERROR, SvnAuthzFile::ALREADY_EXISTS
+   */
+  public function addMember(SvnAuthzFileGroup $group, SvnAuthzFileMember $memberObj) {
+    $value = $this->_ini->getValue(SvnAuthzFile::GROUP_SECTION, $group->name, "");
+    $membersParts = explode(",", $value);
+    foreach ($membersParts as &$member) {
+      $member = trim($member);
+      if ($member === $memberObj->asMemberString()) {
+        return SvnAuthzFile::ALREADY_EXISTS;
+      }
     }
+    $membersParts[] = $memberObj->asMemberString();
+    $value = join(",", $membersParts);
+    $this->_ini->setValue(SvnAuthzFile::GROUP_SECTION, $group->name, $value);
+    return SvnAuthzFile::NO_ERROR;
   }
 
-  public function removeMember() {
+  /**
+   * @param SvnAuthzFileGroup $group
+   * @param SvnAuthzFileMember $memberObj
+   * @return int Always returns SvnAuthzFile::NO_ERROR
+   */
+  public function removeMember(SvnAuthzFileGroup $group, SvnAuthzFileMember $memberObj) {
+    $value = $this->_ini->getValue(SvnAuthzFile::GROUP_SECTION, $group->name, "");
+    $membersParts = explode(",", $value);
+    $members = array();
+    foreach ($membersParts as &$member) {
+      $member = trim($member);
+      if ($member === $memberObj->asMemberString()) {
+        continue;
+      }
+      $members[] = $member;
+    }
+    $value = join(",", $members);
+    $this->_ini->setValue(SvnAuthzFile::GROUP_SECTION, $group->name, $value);
+    return SvnAuthzFile::NO_ERROR;
   }
 
-  // ///////////////////////////////////////////////////////////////////
-  // Private Methods
-  // ///////////////////////////////////////////////////////////////////
+  /**
+   * @param SvnAuthzFilePath $path
+   * @param SvnAuthzFileMember $memberObj
+   * @param string $perm
+   * @return int
+   */
+  public function addPermission(SvnAuthzFilePath $path, SvnAuthzFileMember $memberObj, $perm) {
+    $section = $this->_ini->getSection($path->asString());
+    if ($section) {
+      foreach ($section->items as &$item) {
+        if ($item->key === $memberObj->asMemberString()) {
+          $item->value = $perm;
+          return SvnAuthzFile::NO_ERROR;
+        }
+      }
+    }
+    $this->_ini->setValue($path->asString(), $memberObj->asMemberString(), $perm);
+    return SvnAuthzFile::NO_ERROR;
+  }
+
+  /**
+   * @param SvnAuthzFilePath $path
+   * @param SvnAuthzFileMember $memberObj
+   * @return int
+   */
+  public function removePermission(SvnAuthzFilePath $path, SvnAuthzFileMember $memberObj) {
+    $this->_ini->removeValue($path->asString(), $memberObj->asMemberString());
+    return SvnAuthzFile::NO_ERROR;
+  }
+
   private function createMemberObject($member) {
     $member = trim($member);
     $prefix = substr($member, 0, 1);
     if ($prefix === SvnAuthzFile::ALIAS_SIGN) {
       $alias = new SvnAuthzFileAlias();
       $alias->alias = substr($member, 1);
+      $alias->value = $this->_ini->getValue(SvnAuthzFile::ALIAS_SECTION, $alias->alias);
       return $alias;
     } else if ($prefix === SvnAuthzFile::GROUP_SIGN) {
       $group = new SvnAuthzFileGroup();
@@ -268,27 +362,74 @@ class SvnAuthzFile {
       return $user;
     }
   }
-
 }
-/**
- * header("Content-Type: text/plain; charset=utf-8");
- * include("IniFile.php");
- *
- * // Load file.
- * $authz = new SvnAuthzFile();
- * $authz->loadFromFile("D:/Development/Data/dav svn.authz.backup");
- * //print_r($authz->getAliases());
- * //print_r($authz->getGroups());
- * //print_r($authz->getPaths());
- * //print_r($authz->getMembersOfGroup("group_4"));
- *
- * $obj = new SvnAuthzFilePath();
- * $obj->repository = "repo_2_write";
- * $obj->path = "/subfolder";
- * print_r($authz->getPermissionsOfPath($obj));
- *
- * //print_r($authz);
- *
- * /*
- */
+/*
+include("IniFile.php");
+header("Content-Type: text/plain; charset=utf-8");
+
+// Load file.
+$authz = new SvnAuthzFile();
+$authz->loadFromFile("D:/Development/Data/dav svn.authz.backup");
+
+//print_r($authz->getAliases());
+//print_r($authz->getGroups());
+//print_r($authz->getPaths());
+//print_r($authz->getMembersOfGroup("group_3"));
+
+//$obj = new SvnAuthzFilePath();
+//$obj->repository = "repo_2_write";
+//$obj->path = "/subfolder";
+//print_r($authz->getPermissionsOfPath($obj));
+
+//$obj = new SvnAuthzFileAlias();
+//$obj->alias = "jsterff";
+//$obj->value = "CN=Jan Sterff,OU=Users,DC=insanefactory,DC=com";
+//$authz->addAlias($obj);
+
+//$obj = new SvnAuthzFileAlias();
+//$obj->alias = "mfreiholz";
+//$authz->removeAlias($obj);
+
+//$obj = new SvnAuthzFileGroup();
+//$obj->name = "testgroup01";
+//$authz->addGroup($obj);
+
+//$obj = new SvnAuthzFileGroup();
+//$obj->name = "all_users";
+//$authz->removeGroup($obj);
+
+//$group = new SvnAuthzFileGroup();
+//$group->name = "all_users";
+//$user = new SvnAuthzFileUser();
+//$user->name = "usermember1";
+//$alias = new SvnAuthzFileAlias();
+//$alias->alias = "mfreiholz";
+//$authz->addMember($group, $user);
+//$authz->addMember($group, $user);
+//$authz->addMember($group, $alias);
+//$authz->addMember($group, $alias);
+//$authz->addMember($group, $group);
+//$authz->addMember($group, $group);
+//$authz->removeMember($group, $user);
+//$authz->removeMember($group, $alias);
+//$authz->removeMember($group, $group);
+
+//$path = new SvnAuthzFilePath();
+//$path->repository = "";
+//$path->path = "";
+//$user = new SvnAuthzFileUser();
+//$user->name = "manuel";
+//$group = new SvnAuthzFileGroup();
+//$group->name = "all_users";
+//$alias = new SvnAuthzFileAlias();
+//$alias->alias = "mfreiholz";
+//$authz->addPermission($path, $group, SvnAuthzFile::PERM_NONE);
+//$authz->addPermission($path, $user, SvnAuthzFile::PERM_NONE);
+//$authz->addPermission($path, $user, SvnAuthzFile::PERM_READ);
+//$authz->addPermission($path, $alias, SvnAuthzFile::PERM_READWRITE);
+//$authz->removePermission($path, $group);
+
+//print_r($authz);
+print($authz->toString());
+*/
 ?>
