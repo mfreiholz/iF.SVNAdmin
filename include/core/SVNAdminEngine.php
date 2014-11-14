@@ -8,26 +8,24 @@ class SVNAdminEngine {
   private static $_instance = null;
   private static $_svn = null;
   private static $_svnadmin = null;
+
   private $_config = null;
   private $_classPaths = array ();
 
   /**
-   * Cache of all loaded SvnAuthFiles.
-   * We use this global list to ommit multiple file handle on same file.
-   * Key=ID; Value=SvnAuthFile Object
-   *
+   * Cache of all loaded SvnAuthzFiles.
+   * Use this global list to omit multiple file handle on same file.
+   * Key=Custom ID or path to file; Value=SvnAuthFile Object
    * @var array<string, SvnAuthFile>
    */
-  private $_authfiles = array ();
+  private $_authzFiles = array ();
 
   /**
-   *
    * @var array<string, Authenticator>
    */
   private $_authenticators = array ();
 
   /**
-   *
    * @var array
    */
   private $_providers = array ();
@@ -43,14 +41,14 @@ class SVNAdminEngine {
         SVNADMIN_BASE_DIR . "/include/impl",
         SVNADMIN_BASE_DIR . "/include/util"
     );
-    spl_autoload_register(__NAMESPACE__ . "\SVNAdminEngine::classLoader");
+    spl_autoload_register(__NAMESPACE__ . "\\SVNAdminEngine::classLoader");
   }
 
   private function classLoader($className) {
     foreach ($this->_classPath as $path) {
       $fp = $path . "/" . $className . ".php";
       if (file_exists($fp)) {
-        include_once ($fp);
+        include_once($fp);
         break;
       }
     }
@@ -67,12 +65,15 @@ class SVNAdminEngine {
     return $this->_config;
   }
 
-  public function getSvnAuthzFile($path) {
+  public function getSvnAuthzFile($path = "") {
+    if (empty($path)) {
+      $path = $this->_config["common"]["svn_authz_file"];
+    }
     $path = Elws::normalizeAbsolutePath($path);
 
     // Get it from cache.
-    if (isset($this->_authfiles[$path])) {
-      return $this->_authfiles[$path];
+    if (isset($this->_authzFiles[$path])) {
+      return $this->_authzFiles[$path];
     }
 
     // Create file object and add to cache.
@@ -81,7 +82,7 @@ class SVNAdminEngine {
       unset($obj);
       return null;
     }
-    $this->_authfiles[$path] = $obj;
+    $this->_authzFiles[$path] = $obj;
     return $obj;
   }
 
@@ -172,6 +173,9 @@ class SVNAdminEngine {
     return $this->getProvider(SVNAdminEngine::USERGROUP_PROVIDER, $foundId);
   }
 
+  /**
+   * @return SvnClient
+   */
   public function getSvn() {
     if (!static::$_svn) {
       static::$_svn = new SvnClient($this->_config["common"]["svn_binary_path"]);
@@ -179,6 +183,9 @@ class SVNAdminEngine {
     return static::$_svn;
   }
 
+  /**
+   * @return SvnAdmin
+   */
   public function getSvnAdmin() {
     if (!static::$_svnadmin) {
       static::$_svnadmin = new SvnAdmin($this->_config["common"]["svnadmin_binary_path"]);

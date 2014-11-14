@@ -51,14 +51,9 @@
           singleActions: [
             {
               id: "permissions",
-              getName: function (id) { return tr("Permissions"); },
-              getLink: function (id) { return "#!/repositories/" + providerId + "/" + id + "/permissions"; },
-              callback: function (id) {
-                var def = new jQ.Deferred();
-                def.resolve();
-                window.alert("Show permissions of repository.\nprovider=" + providerId + "\nrepositoryid=" + id);
-                return def.promise();
-              }
+              getName: function (id) { return tr("Info"); },
+              getLink: function (id) { return "#!/repositories/" + providerId + "/" + id + "/info"; },
+              callback: function (id) { return svnadmin.app.showRepositoryInfoView(providerId, id); }
             }
           ],
 
@@ -111,12 +106,3 @@
   });
 
 }(jQuery));
-
-/*"click; .info-link": function (ev) {
-        var view = this,
-          element = jQ(ev.currentTarget),
-          providerId = element.data("providerid"),
-          repositoryId = element.data("repositoryid");
-        //svnadmin.app.showRepositoryInfoView(providerId, repositoryId);
-        alert("Show info: " + providerId + " / " + repositoryId);
-      },*/

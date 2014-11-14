@@ -12,6 +12,10 @@ class RepositoryService extends WebModule {
         return $this->processCreate($request, $response);
       case "delete":
         return $this->processDelete($request, $response);
+      case "browse":
+        break;
+      case "paths":
+        break;
     }
     return false;
   }
@@ -119,7 +123,6 @@ class RepositoryService extends WebModule {
   public function processDelete(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
     $id = $request->getParameter("repositoryid");
-
     if (empty($providerId) || empty($id)) {
       $response->fail(500);
       $response->write2json(array (
@@ -129,7 +132,6 @@ class RepositoryService extends WebModule {
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-
     if (empty($provider) || !$provider->isEditable()) {
       $response->fail(500);
       $response->write2json(array (
@@ -145,7 +147,37 @@ class RepositoryService extends WebModule {
       ));
       return true;
     }
+    return true;
+  }
 
+  public function processBrowse(WebRequest $request, WebResponse $response) {
+    return true;
+  }
+
+  public function processPaths(WebRequest $request, WebResponse $response) {
+    $providerId = $request->getParameter("providerid");
+    $repositoryId = $request->getParameter("repositoryid");
+    if (empty($providerId) || empty($repositoryId)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Invalid parameters."
+      ));
+    }
+
+    $engine = SVNAdminEngine::getInstance();
+    $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+    $authz = $provider->getSvnAuthz();
+    if (empty($provider) || !$provider->isEditable() || empty($authz)) {
+      $response->fail(500);
+      $response->write2json(array (
+          "message" => "Invalid provider '" . $providerId . "'."
+      ));
+      return true;
+    }
+
+
+    $json = new stdClass();
+    $response->done2json($json);
     return true;
   }
 

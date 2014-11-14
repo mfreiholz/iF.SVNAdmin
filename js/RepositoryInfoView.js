@@ -10,6 +10,7 @@
 
     postDisplay: function (data) {
       var view = this;
+      svnadmin.service.getRepositoryPaths(view.options.providerId, view.options.repositoryId);
     },
 
     events: {

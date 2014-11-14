@@ -24,7 +24,7 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
     $this->_config = $config;
     $this->_editable = true;
     $this->_directoryPath = Elws::normalizeAbsolutePath($config["path"]);
-    $this->_authzFilePath = Elws::normalizeAbsolutePath($config["authzfile"]);
+    $this->_authzFilePath = Elws::normalizeAbsolutePath($config["svn_authz_file"]);
     return true;
   }
 
@@ -78,6 +78,10 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
       return false;
     }
     return $this->deleteDirectoryRecursive($path);
+  }
+
+  public function getSvnAuthz($repositoryId) {
+    return SVNAdminEngine::getInstance()->getSvnAuthzFile();
   }
 
   /**

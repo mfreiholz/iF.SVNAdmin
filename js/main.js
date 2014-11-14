@@ -381,6 +381,18 @@
     });
   };
 
+  ServiceClient.prototype.getRepositoryPaths = function (providerId, repositoryId) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "PathService",
+        action: "paths",
+        providerid: providerId,
+        repositoryid: repositoryId
+      }
+    });
+  };
+
   window.svnadmin = window.svnadmin || {};
   window.svnadmin.service = window.svnadmin.service || new ServiceClient();
 }(jQuery));

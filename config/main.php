@@ -155,12 +155,12 @@ return array (
             "svnparentrepos" => array (
                 "class_name" => "SvnParentRepositoryProvider",
                 "path" => "D:\\Development\\Data\\my repos",
-                "authzfile" => ""
+                "svn_authz_file" => ""
             ),
             "svnparentrepos2" => array (
                 "class_name" => "SvnParentRepositoryProvider",
                 "path" => "D:\\Development\\Data\\my repos 2",
-                "authzfile" => "D:\\Development\\Data\\dav svn.authz"
+                "svn_authz_file" => ""
             )
         )
     )

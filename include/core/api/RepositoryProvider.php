@@ -25,5 +25,9 @@ class RepositoryProvider {
     return false;
   }
 
+  public function getSvnAuthz($repositoryId) {
+    return null;
+  }
+
 }
 ?>
