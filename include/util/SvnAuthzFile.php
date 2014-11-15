@@ -168,9 +168,10 @@ class SvnAuthzFile {
   }
 
   /**
+   * @param string $repositoryFilter If given the returning array contains only paths which matches the repository name.
    * @return array<SvnAuthzFilePath>
    */
-  public function getPaths() {
+  public function getPaths($repositoryFilter = null) {
     $paths = array ();
     $sections = $this->_ini->getSections();
     foreach ($sections as &$section) {
@@ -184,6 +185,11 @@ class SvnAuthzFile {
         $path->path = substr($section->name, $pos + 1);
       } else {
         $path->path = $section->name;
+      }
+      // Filter by repository.
+      if (!empty($repositoryFilter) && $path->repository !== $repositoryFilter /*&& !empty($path->repository)*/) {
+        unset($path);
+        continue;
       }
       $paths[] = $path;
     }
@@ -210,7 +216,7 @@ class SvnAuthzFile {
 
   /**
    * @param SvnAuthzFilePath $path
-   * @return array<SvnAuthzFileAlias,SvnAuthzFileGroup,SvnAuthzFileUser>
+   * @return array<SvnAuthzFilePermission>
    */
   public function getPermissionsOfPath(SvnAuthzFilePath $path) {
     $perms = array ();

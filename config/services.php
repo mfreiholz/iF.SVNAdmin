@@ -9,7 +9,7 @@ return array (
         "default_encoding" => "UTF-8",
 
         // Default "Content-Type", if not set by module.
-        "default_content_type" => "text/html",
+        "default_content_type" => "application/json",
 
         // Directory which contains the modules.
         "module_directory" => "../include/service/"

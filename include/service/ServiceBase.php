@@ -22,4 +22,28 @@ class ServiceBase extends WebModule {
     return true;
   }
 
+  protected function processErrorInternal(WebRequest $request, WebResponse $response) {
+    $response->fail(500);
+    $response->write2json(array("message" => "Internal error"));
+    return true;
+  }
+
+  protected function processErrorCustom(WebRequest $request, WebResponse $response, $message) {
+    $response->fail(500);
+    $response->write2json(array("message" => $message));
+    return true;
+  }
+
+  protected function processErrorMissingParameters(WebRequest $request, WebResponse $response) {
+    $response->fail(500);
+    $response->write2json(array("message" => "Missing parameters"));
+    return true;
+  }
+
+  protected function processErrorInvalidProvider(WebRequest $request, WebResponse $response, $providerId) {
+    $response->fail(500);
+    $response->write2json(array("message" => "Invalid provider (providerid=" . $providerId . ")"));
+    return true;
+  }
+
 }

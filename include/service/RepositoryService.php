@@ -1,5 +1,5 @@
 <?php
-class RepositoryService extends WebModule {
+class RepositoryService extends ServiceBase {
 
   public function processRequest(WebRequest $request, WebResponse $response) {
     $action = $request->getParameter("action");
@@ -13,9 +13,9 @@ class RepositoryService extends WebModule {
       case "delete":
         return $this->processDelete($request, $response);
       case "browse":
-        break;
+        return $this->processBrowse($request, $response);
       case "paths":
-        break;
+        return $this->processPaths($request, $response);
     }
     return false;
   }
@@ -23,15 +23,14 @@ class RepositoryService extends WebModule {
   public function processProviders(WebRequest $request, WebResponse $response) {
     $engine = SVNAdminEngine::getInstance();
     $providers = $engine->getKnownProviders(SVNAdminEngine::REPOSITORY_PROVIDER);
-
-    $respProviders = array ();
+    $jsonProviders = array ();
     foreach ($providers as &$prov) {
-      $respProv = new stdClass();
-      $respProv->id = $prov->id;
-      $respProv->editable = null;
-      $respProviders[] = $respProv;
+      $jsonProv = new stdClass();
+      $jsonProv->id = $prov->id;
+      $jsonProv->editable = null;
+      $jsonProviders[] = $jsonProv;
     }
-    $response->done2json($respProviders);
+    $response->done2json($jsonProviders);
     return true;
   }
 
@@ -39,24 +38,14 @@ class RepositoryService extends WebModule {
     $providerId = $request->getParameter("providerid");
     $offset = $request->getParameter("offset", 0);
     $num = $request->getParameter("num", 10);
-
     if (empty($providerId)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Missing parameter 'providerid'."
-      ));
-      return true;
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-
     if (empty($provider)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid provider '" . $providerId . "'."
-      ));
-      return true;
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $itemList = $provider->getRepositories($offset, $num);
@@ -81,33 +70,19 @@ class RepositoryService extends WebModule {
     $providerId = $request->getParameter("providerid");
     $name = $request->getParameter("name");
     $options = $request->getParameter("options");
-
     if (empty($providerId) || empty($name)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid parameters."
-      ));
-      return true;
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-
     if (empty($provider) || !$provider->isEditable()) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid provider '" . $providerId . "'."
-      ));
-      return true;
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $repo = $provider->create($name, $options);
     if (empty($repo)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Internal error."
-      ));
-      return true;
+      return $this->processErrorInternal($request, $response);
     }
 
     $json = new stdClass();
@@ -124,57 +99,71 @@ class RepositoryService extends WebModule {
     $providerId = $request->getParameter("providerid");
     $id = $request->getParameter("repositoryid");
     if (empty($providerId) || empty($id)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid parameters."
-      ));
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
     if (empty($provider) || !$provider->isEditable()) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid provider '" . $providerId . "'."
-      ));
-      return true;
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     if (!$provider->delete($id)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Can not delete repository (id=" . $id . ")"
-      ));
-      return true;
+      return $this->processErrorInternal($request, $response);
     }
     return true;
   }
 
   public function processBrowse(WebRequest $request, WebResponse $response) {
-    return true;
+    return false;
   }
 
   public function processPaths(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
     $repositoryId = $request->getParameter("repositoryid");
     if (empty($providerId) || empty($repositoryId)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid parameters."
-      ));
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    $authz = $provider->getSvnAuthz();
-    if (empty($provider) || !$provider->isEditable() || empty($authz)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid provider '" . $providerId . "'."
-      ));
-      return true;
+    if (empty($provider)) {
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
+    $repository = $provider->findRepository($repositoryId);
+    $authz = $provider->getSvnAuthz($repositoryId);
+    $paths = $authz->getPaths($repository->getName());
+
+    $json = new stdClass();
+    $json->paths = array();
+    foreach ($paths as &$path) {
+      $json->paths[] = $path->path;
+    }
+    $response->done2json($json);
+    return true;
+  }
+
+  public function processPathPermissions(WebRequest $request, WebResponse $response) {
+    $providerId = $request->getParameter("providerid");
+    $repositoryId = $request->getParameter("repositoryid");
+    $path = $request->getParameter("path");
+    if (empty($providerId) || empty($repositoryId)) {
+      return $this->processErrorMissingParameters($request, $response);
+    }
+
+    $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+    if (empty($provider)) {
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
+    }
+
+    $repository = $provider->findRepository($repositoryId);
+    $authz = $provider->getSvnAuthz($repositoryId);
+
+    $pathObj = new SvnAuthzFilePath();
+    $pathObj->repository = $repository->getName();
+    $pathObj->path = $path;
+    $permissions = $authz->getPermissionsOfPath($pathObj);
 
     $json = new stdClass();
     $response->done2json($json);
@@ -182,4 +171,3 @@ class RepositoryService extends WebModule {
   }
 
 }
-?>

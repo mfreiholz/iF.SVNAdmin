@@ -10,7 +10,6 @@
  * `authzfile` (Optional)
  *   If given, all repositories will use this AuthzFile for authorization.
  *   Otherwise each repository will use it's own AuthzFile located in it's `conf/` directory.
- *
  */
 class SvnParentRepositoryProvider extends RepositoryProvider {
   private $_engine = null;
