@@ -16,6 +16,8 @@ class RepositoryService extends ServiceBase {
         return $this->processBrowse($request, $response);
       case "paths":
         return $this->processPaths($request, $response);
+      case "permissions":
+        return $this->processPathPermissions($request, $response);
     }
     return false;
   }
@@ -138,7 +140,9 @@ class RepositoryService extends ServiceBase {
     $json = new stdClass();
     $json->paths = array();
     foreach ($paths as &$path) {
-      $json->paths[] = $path->path;
+      $obj = new stdClass();
+      $obj->path = $path->path;
+      $json->paths[] = $obj;
     }
     $response->done2json($json);
     return true;
@@ -159,13 +163,16 @@ class RepositoryService extends ServiceBase {
 
     $repository = $provider->findRepository($repositoryId);
     $authz = $provider->getSvnAuthz($repositoryId);
-
-    $pathObj = new SvnAuthzFilePath();
-    $pathObj->repository = $repository->getName();
-    $pathObj->path = $path;
-    $permissions = $authz->getPermissionsOfPath($pathObj);
+    $permissions = $authz->getPermissionsOfPath(SvnAuthzFilePath::create($repository->getName(), $path));
 
     $json = new stdClass();
+    $json->permissions = array();
+    foreach ($permissions as &$permission) {
+      $jsonPerm = new stdClass();
+      $jsonPerm->member = $permission->member->asMemberString();
+      $jsonPerm->permission = $permission->permission;
+      $json->permissions[] = $jsonPerm;
+    }
     $response->done2json($json);
     return true;
   }

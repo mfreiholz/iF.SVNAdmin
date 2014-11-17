@@ -46,6 +46,13 @@ class SvnAuthzFilePath {
   public $repository = "";
   public $path = "";
 
+  public static function create($repository, $path) {
+    $o = new SvnAuthzFilePath();
+    $o->repository = $repository;
+    $o->path = $path;
+    return $o;
+  }
+
   public function asString() {
     $s = "";
     if (!empty($this->repository)) {
