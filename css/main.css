@@ -17,6 +17,7 @@ body {
 }
 
 #page-wrapper {
+  padding-top: 30px;
 }
 
 /*@-moz-document url-prefix() {

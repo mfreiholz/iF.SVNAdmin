@@ -50,7 +50,7 @@
 
           singleActions: [
             {
-              id: "permissions",
+              id: "info",
               getName: function (id) { return tr("Info"); },
               getLink: function (id) { return "#!/repositories/" + providerId + "/" + id + "/info"; },
               callback: function (id) { return svnadmin.app.showRepositoryInfoView(providerId, id); }

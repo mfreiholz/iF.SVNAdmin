@@ -1,6 +1,5 @@
 <script id="tmpl-GroupListView" type="text/html">
   <div class="GroupListView">
-    <h1>{{>~tr("Groups")}}</h1>
     <div class="provider-wrapper"></div>
     <div class="grouplist-wrapper"></div>
   </div>
@@ -22,10 +21,13 @@
   <div class="GroupListView-GroupList">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+        <h1 class="panel-title">{{>~tr("Groups")}}</h1>
       </div>
       <div class="panel-body">
         <div class="table-wrapper"></div>
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
       </div>
     </div>
   </div>

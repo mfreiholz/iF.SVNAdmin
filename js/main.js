@@ -385,12 +385,20 @@
     return this.ajax({
       url: "service/",
       data: {
-        m: "PathService",
+        m: "RepositoryService",
         action: "paths",
         providerid: providerId,
         repositoryid: repositoryId
       }
     });
+  };
+
+  ServiceClient.prototype.createRepositoryPath = function (providerId, repositoryId, path) {
+    return null;
+  };
+
+  ServiceClient.prototype.deleteRepositoryPath = function (providerId, repositoryId, path) {
+    return null;
   };
 
   window.svnadmin = window.svnadmin || {};

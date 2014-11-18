@@ -335,6 +335,24 @@ class SvnAuthzFile {
 
   /**
    * @param SvnAuthzFilePath $path
+   * @return int SvnAuthzFile::NO_ERROR
+   */
+  public function addPath(SvnAuthzFilePath $path) {
+    // TODO Implement!
+    return SvnAuthzFile::NO_ERROR;
+  }
+
+  /**
+   * @param SvnAuthzFilePath $path
+   * @return int SvnAuthzFile::NO_ERROR
+   */
+  public function removePath(SvnAuthzFilePath $path) {
+    // TODO Implement!
+    return SvnAuthzFile::NO_ERROR;
+  }
+
+  /**
+   * @param SvnAuthzFilePath $path
    * @param SvnAuthzFileMember $memberObj
    * @param string $perm
    * @return int SvnAuthzFile::NO_ERROR

@@ -1,6 +1,5 @@
 <script id="tmpl-UserListView" type="text/html">
   <div class="UserListView">
-    <h1>{{>~tr("Users")}}</h1>
     <div class="provider-wrapper"></div>
     <div class="userlist-wrapper"></div>
   </div>
@@ -22,10 +21,13 @@
   <div class="UserListView-UserList">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+        <h1 class="panel-title">{{>~tr("Users")}}</h1>
       </div>
       <div class="panel-body">
         <div class="table-wrapper"></div>
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
       </div>
     </div>
   </div>

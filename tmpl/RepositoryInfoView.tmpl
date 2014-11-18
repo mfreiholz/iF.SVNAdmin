@@ -1,15 +1,22 @@
 <script id="tmpl-RepositoryInfoView" type="text/html">
   <div class="RepositoryInfoView">
-    <h1>{{>~tr('Repository')}}</h1>
     <p><a role="button" class="btn btn-default repositories-link" href="#!/repositories/{{>options.providerId}}" data-providerid="{{>options.providerId}}">{{>~tr('Back to overview')}}</a></p>
+    <div class="paths-wrapper"></div>
+  </div>
+</script>
 
-    <!-- Paths -->
+<script id="tmpl-RepositoryInfoView-PathList" type="text/html">
+  <div class="RepositoryInfoView-PathList">
     <div class="panel panel-default paths">
       <div class="panel-heading">
         <h1 class="panel-title">{{>~tr("Paths")}}</h1>
       </div>
-      <div class="panel-body"></div>
+      <div class="panel-body">
+        <div class="table-wrapper"></div>
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-default add-link" data-providerid="{{>options.providerId}}" data-repositoryid="{{>options.repositoryId}}">{{>~tr("Add")}}</button>
+      </div>
     </div>
-
   </div>
 </script>
