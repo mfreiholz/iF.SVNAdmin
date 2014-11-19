@@ -23,6 +23,8 @@ class IniFile {
   const NO_ERROR = 0;
   const FILE_ERROR = 1;
   const PARSE_ERROR = 2;
+  const ALREADY_EXISTS = 3;
+  const NOT_FOUND = 4;
 
   private $_errorString = "";
   private $_filePath = null;
@@ -35,6 +37,13 @@ class IniFile {
    */
   
   /**
+   * @return array<IniFileSection>
+   */
+  public function getSections() {
+    return $this->_sections;
+  }
+
+  /**
    * @param $block string
    * @return IniFileSection
    */
@@ -46,12 +55,37 @@ class IniFile {
     }
     return null;
   }
-  
+
   /**
-   * @return array<IniFileSection>
+   * @param $block
+   * @param string $comment
+   * @return int IniFile::NO_ERROR, IniFile::ALREADY_EXISTS
    */
-  public function getSections() {
-    return $this->_sections;
+  public function addSection($block, $comment = "") {
+    $obj = $this->getSection($block);
+    if (!empty($obj)) {
+      return IniFile::ALREADY_EXISTS;
+    }
+    $obj = new IniFileSection();
+    $obj->comment = $comment;
+    $obj->name = $block;
+    $this->_sections[] = $obj;
+    return IniFile::NO_ERROR;
+  }
+
+  /**
+   * @param $block
+   * @return int IniFile::NO_ERROR, IniFile::NOT_FOUND
+   */
+  public function removeSection($block) {
+    for ($i = 0; $i < count($this->_sections); ++$i) {
+      if ($this->_sections[$i]->name === $block) {
+        unset($this->_sections[$i]);
+        $this->_sections = array_values($this->_sections);
+        return IniFile::NO_ERROR;
+      }
+    }
+    return IniFile::NOT_FOUND;
   }
   
   /*
@@ -138,17 +172,6 @@ class IniFile {
             return true;
           }
         }
-      }
-    }
-    return false;
-  }
-  
-  public function removeSection($block) {
-    for ($i = 0; $i < count($this->_sections); ++$i) {
-      if ($this->_sections[$i]->name === $block) {
-        unset($this->_sections[$i]);
-        $this->_sections = array_values($this->_sections);
-        return true;
       }
     }
     return false;

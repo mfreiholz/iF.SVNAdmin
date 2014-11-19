@@ -18,6 +18,10 @@ class RepositoryService extends ServiceBase {
         return $this->processPaths($request, $response);
       case "permissions":
         return $this->processPathPermissions($request, $response);
+      case "addpath":
+        return $this->processPathCreate($request, $response);
+      case "deletepath":
+        return $this->processPathDelete($request, $response);
     }
     return false;
   }
@@ -196,7 +200,37 @@ class RepositoryService extends ServiceBase {
       return true;
     }
 
+    $o = new SvnAuthzFilePath();
+    $o->repository = $repository->getName();
+    $o->path = $path;
+    $authz->addPath($o);
+    return true;
+  }
 
+  public function processPathDelete(WebRequest $request, WebResponse $response) {
+    $providerId = $request->getParameter("providerid");
+    $repositoryId = $request->getParameter("repositoryid");
+    $path = $request->getParameter("path");
+    if (empty($providerId) || empty($repositoryId)) {
+      return $this->processErrorMissingParameters($request, $response);
+    }
+
+    $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+    if (empty($provider)) {
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
+    }
+
+    $repository = $provider->findRepository($repositoryId);
+    $authz = $provider->getSvnAuthz($repositoryId);
+    if (empty($repository) || empty($authz)) {
+      return true;
+    }
+
+    $o = new SvnAuthzFilePath();
+    $o->repository = $repository->getName();
+    $o->path = $path;
+    $authz->removePath($o);
+    return true;
   }
 
 }

@@ -59,7 +59,10 @@ class SvnAuthzFilePath {
       $s .= $this->repository;
       $s .= ":";
     }
-    if (!empty($path)) {
+    if (!empty($this->path)) {
+      if (strpos($this->path, "/") !== 0) {
+        $s .= "/";
+      }
       $s .= $this->path;
     } else {
       $s .= "/";
@@ -338,7 +341,7 @@ class SvnAuthzFile {
    * @return int SvnAuthzFile::NO_ERROR
    */
   public function addPath(SvnAuthzFilePath $path) {
-    // TODO Implement!
+    $this->_ini->addSection($path->asString());
     return SvnAuthzFile::NO_ERROR;
   }
 
@@ -347,7 +350,7 @@ class SvnAuthzFile {
    * @return int SvnAuthzFile::NO_ERROR
    */
   public function removePath(SvnAuthzFilePath $path) {
-    // TODO Implement!
+    $this->_ini->removeSection($path->asString());
     return SvnAuthzFile::NO_ERROR;
   }
 
@@ -407,7 +410,7 @@ header("Content-Type: text/plain; charset=utf-8");
 
 // Load file.
 $authz = new SvnAuthzFile();
-$authz->loadFromFile("D:/Development/Data/dav svn.authz.backup");
+$authz->loadFromFile("D:/Development/Data/dav svn.authz");
 
 //print_r($authz->getAliases());
 //print_r($authz->getGroups());
@@ -467,7 +470,13 @@ $authz->loadFromFile("D:/Development/Data/dav svn.authz.backup");
 //$authz->addPermission($path, $alias, SvnAuthzFile::PERM_READWRITE);
 //$authz->removePermission($path, $group);
 
+$path = new SvnAuthzFilePath();
+$path->repository = "repo_test";
+$path->path = "folder";
+$authz->addPath($path);
+$authz->removePath($path);
+
 //print_r($authz);
-print($authz->toString());
+//print($authz->toString());
 */
 ?>
