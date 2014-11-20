@@ -219,7 +219,7 @@ class IniFile {
         return IniFile::FILE_ERROR;
       }
     }
-    $fh = fopen($path, "r+");
+    $fh = fopen($path, "w");
     if (!flock($fh, LOCK_EX)) {
       fclose($fh);
       $this->_errorString = "Can not aquire lock on file (path=" . $path . ")";
@@ -232,7 +232,7 @@ class IniFile {
   }
 
   public function asString() {
-    $stream = fopen("php://memory", "r+");
+    $stream = fopen("php://memory", "w+");
     $this->writeStream($stream);
     rewind($stream);
     $str = stream_get_contents($stream);
@@ -299,25 +299,29 @@ class IniFile {
 
   private function writeStream($stream) {
     // Sections.
-    foreach ($this->_sections as &$section) {      
+    foreach ($this->_sections as &$section) {
+      $com = trim($section->comment);
       fwrite($stream, $section->comment);
-      if (!empty(trim($section->comment))) {
+      if (!empty($com)) {
         fwrite($stream, PHP_EOL);
       }
       fwrite($stream, "[" . $section->name . "]");
       fwrite($stream, PHP_EOL);
-      
+
       // Items.
       foreach ($section->items as &$item) {
+        $com = trim($item->comment);
         fwrite($stream, $item->comment);
-        if (!empty(trim($item->comment))) {
+        if (!empty($com)) {
           fwrite($stream, PHP_EOL);
         }
         fwrite($stream, $item->key . "=" . $item->value);
         fwrite($stream, PHP_EOL);
       }
     }
-    if (!empty($this->_lastComment)) {
+
+    $com = trim($this->_lastComment);
+    if (!empty($com)) {
       fwrite($stream, $this->_lastComment);
     }
   }

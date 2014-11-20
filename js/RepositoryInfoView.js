@@ -14,6 +14,19 @@
     },
 
     events: {
+      "click; .add-link": function (ev) {
+        var view = this,
+          element = jQ(ev.currentTarget),
+          providerId = element.data("providerid"),
+          repositoryId = element.data("repositoryid");
+        brite.display("PathAddView", "body", {
+          providerId: providerId,
+          repositoryId: repositoryId,
+          onSubmitted: function () {
+            view.showPaths(providerId, repositoryId);
+          }
+        }, { emptyParent: false });
+      }
     },
 
     ///////////////////////////////////////////////////////////////////
@@ -55,7 +68,7 @@
                 promises.push(svnadmin.service.deleteRepositoryPath(providerId, repositoryId, ids[i]));
               }
               return jQ.when.apply(null, promises).done(function () {
-                view.showRepositoryInfoView(providerId, repositoryId);
+                view.showPaths(providerId, repositoryId);
               });
             }
           }

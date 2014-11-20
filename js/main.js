@@ -394,11 +394,29 @@
   };
 
   ServiceClient.prototype.createRepositoryPath = function (providerId, repositoryId, path) {
-    return null;
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "addpath",
+        providerid: providerId,
+        repositoryid: repositoryId,
+        path: path
+      }
+    });
   };
 
   ServiceClient.prototype.deleteRepositoryPath = function (providerId, repositoryId, path) {
-    return null;
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "deletepath",
+        providerid: providerId,
+        repositoryid: repositoryId,
+        path: path
+      }
+    });
   };
 
   window.svnadmin = window.svnadmin || {};

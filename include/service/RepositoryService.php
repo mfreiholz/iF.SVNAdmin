@@ -197,13 +197,14 @@ class RepositoryService extends ServiceBase {
     $repository = $provider->findRepository($repositoryId);
     $authz = $provider->getSvnAuthz($repositoryId);
     if (empty($repository) || empty($authz)) {
-      return true;
+      return $this->processErrorInternal($request, $response);
     }
 
-    $o = new SvnAuthzFilePath();
-    $o->repository = $repository->getName();
-    $o->path = $path;
+    $o = SvnAuthzFilePath::create($repository->getName(), $path);
     $authz->addPath($o);
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+      return $this->processErrorInternal($request, $response);
+    }
     return true;
   }
 
@@ -230,6 +231,9 @@ class RepositoryService extends ServiceBase {
     $o->repository = $repository->getName();
     $o->path = $path;
     $authz->removePath($o);
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+      return $this->processErrorInternal($request, $response);
+    }
     return true;
   }
 

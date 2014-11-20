@@ -86,6 +86,14 @@ class SVNAdminEngine {
     return $obj;
   }
 
+  public function commitSvnAuthzFile(SvnAuthzFile $authz) {
+    if (empty($authz)) {
+      return false;
+    }
+    // TODO Backup file before overwriting it!
+    return $authz->writeToFile() === SvnAuthzFile::NO_ERROR;
+  }
+
   public function getAuthenticators() {
     if (empty($this->_authenticators)) {
       foreach ($this->_config["authenticators"] as &$authConfig) {

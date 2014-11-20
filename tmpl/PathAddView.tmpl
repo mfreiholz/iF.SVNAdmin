@@ -1,0 +1,32 @@
+<script id="tmpl-PathAddView" type="text/html">
+<div class="PathAddView" data-providerid="{{>options.providerId}}" data-repositoryid="{{>options.repositoryId}}">
+
+  <div class="modal fade" id="pathaddmodal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{>~tr("Close")}}</span></button>
+          <h4 class="modal-title">{{>~tr("Add")}}</h4>
+        </div>
+        <div class="modal-body">
+
+          <form role="form">
+            <div class="form-group">
+              <label for="path">{{>~tr("Path")}}</label>
+              <input class="form-control" type="text" name="path" required>
+              <p class="help-block">{{>~tr("Valid characters: A-Z, 0-9, Dash (-), Underline (_)")}}</p>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary submit">{{>~tr("Add")}}</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</script>

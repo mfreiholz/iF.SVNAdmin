@@ -50,6 +50,9 @@ class SvnAuthzFilePath {
     $o = new SvnAuthzFilePath();
     $o->repository = $repository;
     $o->path = $path;
+    if (!empty($o->path) && $o->path !== "/" && substr($o->path, strlen($path)-1, 1) === "/") {
+      $o->path = substr($o->path, 0, strlen($o->path) - 1);
+    }
     return $o;
   }
 
@@ -471,12 +474,12 @@ $authz->loadFromFile("D:/Development/Data/dav svn.authz");
 //$authz->removePermission($path, $group);
 
 $path = new SvnAuthzFilePath();
-$path->repository = "repo_test";
-$path->path = "folder";
-$authz->addPath($path);
+$path->repository = "repo-x_dash";
+$path->path = "test2";
+//$authz->addPath($path);
 $authz->removePath($path);
 
 //print_r($authz);
-//print($authz->toString());
+print($authz->toString());
+//$authz->writeToFile();
 */
-?>
