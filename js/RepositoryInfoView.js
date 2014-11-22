@@ -14,6 +14,12 @@
     },
 
     events: {
+
+      "click; .refresh-link": function (ev) {
+        var view = this;
+        view.showPaths(view.options.providerId, view.options.repositoryId);
+      },
+
       "click; .add-link": function (ev) {
         var view = this,
           element = jQ(ev.currentTarget),
@@ -27,6 +33,7 @@
           }
         }, { emptyParent: false });
       }
+
     },
 
     ///////////////////////////////////////////////////////////////////
@@ -81,6 +88,15 @@
         loadMore: function (offset, num) {
           var def = new jQuery.Deferred();
           svnadmin.service.getRepositoryPaths(providerId, repositoryId).done(function (resp) {
+            resp.paths.sort(function (l, r) {
+              if (l.path < r.path) {
+                return -1;
+              } else if (l.path > r.path) {
+                return 1;
+              }
+              return 0;
+            });
+
             var obj = {}, i = 0, row = null;
             obj.hasMore = false;
             obj.rows = [];

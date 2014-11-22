@@ -1,6 +1,9 @@
 <script id="tmpl-RepositoryInfoView" type="text/html">
   <div class="RepositoryInfoView">
-    <p><a role="button" class="btn btn-default repositories-link" href="#!/repositories/{{>options.providerId}}" data-providerid="{{>options.providerId}}">{{>~tr('Back to overview')}}</a></p>
+    <p>
+      <a role="button" class="btn btn-default repositories-link" href="#!/repositories/{{>options.providerId}}" data-providerid="{{>options.providerId}}">{{>~tr('Back to overview')}}</a>
+      <a role="button" class="btn btn-default refresh-link" data-providerid="{{>options.providerId}}" data-repositoryid="{{>options.repositoryId}}"><span class="glyphicon glyphicon-refresh"></span></a>
+    </p>
     <div class="paths-wrapper"></div>
   </div>
 </script>
