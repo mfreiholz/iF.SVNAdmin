@@ -20,9 +20,10 @@
         svnadmin.app.showDashboard();
       },
       "click; .repositories-link": function (ev) {
-        var view = this;
+        var view = this,
+          providerId = jQ(ev.currentTarget).data("providerid");
         view.setActiveNavLink(ev.currentTarget.className);
-        svnadmin.app.showRepositoryListView(undefined);
+        svnadmin.app.showRepositoryListView(providerId);
       },
       "click; .users-link": function (ev) {
         var view = this;
@@ -38,6 +39,14 @@
         var view = this;
         view.setActiveNavLink(ev.currentTarget.className);
         svnadmin.app.logout();
+      },
+      "click; .repositoryinfo-link": function (ev) {
+        var view = this,
+          element = jQuery(ev.currentTarget),
+          providerId = element.data("providerid"),
+          repositoryId = element.data("repositoryid");
+        view.setActiveNavLink("repository-link");
+        svnadmin.app.showRepositoryInfoView(providerId, repositoryId);
       }
     },
 

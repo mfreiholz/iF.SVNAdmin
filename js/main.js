@@ -39,7 +39,11 @@
       if (path.indexOf("/dashboard") === 0) {
         self.showDashboard();
       } else if (path.indexOf("/repositories") === 0) {
-        self.showRepositoryListView();
+        self.showRepositoryListView(self.getParameter("providerid"));
+      } else if (path.indexOf("/repositoryinfo") === 0) {
+        self.showRepositoryInfoView(self.getParameter("providerid"), self.getParameter("repositoryid"));
+      } else if (path.indexOf("/pathpermissions") === 0) {
+        self.showPathPermissions(self.getParameter("providerid"), self.getParameter("repositoryid"), self.getParameter("path"));
       } else if (path.indexOf("/users") === 0) {
         self.showUserListView();
       } else if (path.indexOf("/groups") === 0) {
@@ -48,6 +52,45 @@
         self.showDashboard();
       }
     });
+  };
+
+  AppEngine.prototype.getParameter = function (name, defaultValue) {
+    var url = window.location.href;
+    var pos = -1;
+    var val = "",
+      v = "";
+    if ((pos = url.indexOf(name + "=")) !== -1) {
+      var pos2 = url.indexOf("#", pos);
+      if (pos2 === -1) {
+        pos2 = url.indexOf("&", pos);
+      }
+      if (pos2 === -1) {
+        v = url.substr(pos + name.length + 1);
+      } else {
+        v = url.substr(pos + name.length + 1, pos2 - (pos + name.length + 1));
+      }
+      if (v !== "") {
+        val = v;
+      }
+    }
+    if (typeof v !== "undefined" && v !== "") {
+      return decodeURIComponent(v);
+    }
+    return defaultValue;
+  };
+
+  AppEngine.prototype.createUrlParameterString = function (obj) {
+    var buff = "",
+      k = "";
+    for (k in obj) {
+      if (obj.hasOwnProperty(k)) {
+        if (buff !== "") {
+          buff += "&";
+        }
+        buff += k + "=" + encodeURIComponent(obj[k]);
+      }
+    }
+    return buff;
   };
 
   AppEngine.prototype.logout = function () {
@@ -103,6 +146,10 @@
 
   AppEngine.prototype.showRepositoryInfoView = function (providerId, repositoryId) {
     return brite.display("RepositoryInfoView", "#page-wrapper", { providerId: providerId, repositoryId: repositoryId }, { emptyParent: true });
+  };
+
+  AppEngine.prototype.showPathPermissions = function (providerId, repositoryId, path) {
+    return brite.display("PathPermissionsView", "#page-wrapper", { providerId: providerId, repositoryId: repositoryId, path: path }, { emptyParent: true });
   };
 
   window.svnadmin = window.svnadmin || {};

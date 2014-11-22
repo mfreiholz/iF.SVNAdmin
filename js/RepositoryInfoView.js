@@ -10,30 +10,26 @@
 
     postDisplay: function (data) {
       var view = this;
+      view.showBasics();
       view.showPaths(view.options.providerId, view.options.repositoryId);
     },
 
     events: {
-
       "click; .refresh-link": function (ev) {
         var view = this;
+        view.showBasics();
         view.showPaths(view.options.providerId, view.options.repositoryId);
       },
-
       "click; .add-link": function (ev) {
-        var view = this,
-          element = jQ(ev.currentTarget),
-          providerId = element.data("providerid"),
-          repositoryId = element.data("repositoryid");
+        var view = this;
         brite.display("PathAddView", "body", {
-          providerId: providerId,
-          repositoryId: repositoryId,
+          providerId: view.options.providerId,
+          repositoryId: view.options.repositoryId,
           onSubmitted: function () {
-            view.showPaths(providerId, repositoryId);
+            view.showPaths(view.options.providerId, view.options.repositoryId);
           }
         }, { emptyParent: false });
       }
-
     },
 
     ///////////////////////////////////////////////////////////////////
@@ -43,6 +39,13 @@
     options: {
       providerId: "",
       repositoryId: ""
+    },
+
+    showBasics: function () {
+      var view = this;
+      jQuery(".basics-wrapper").html(jQuery("#tmpl-RepositoryInfoView-Basics").render({
+        options: view.options
+      }));
     },
 
     showPaths: function (providerId, repositoryId) {
@@ -59,8 +62,10 @@
           {
             id: "permissions",
             getName: function (id) { return tr("Permissions"); },
-            getLink: function (id) { return ""; },
-            callback: function (id) { return null; }
+            getLink: function (id) { return "#!/pathpermissions?" + svnadmin.app.createUrlParameterString({ providerid: view.options.providerId, repositoryid: view.options.repositoryId, path: id }); },
+            callback: function (id) {
+              return svnadmin.app.showPathPermissions(providerId, repositoryId, id);
+            }
           }
         ],
 

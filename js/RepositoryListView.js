@@ -12,7 +12,11 @@
       svnadmin.service.getRepositoryProviders().done(function (resp) {
         var html = jQ("#tmpl-RepositoryListView-Providers").render({ providers: resp });
         view.$el.find(".provider-wrapper").html(html);
-        view.showRepositories(resp[0].id);
+        if (typeof data.providerId !== "undefined") {
+          view.showRepositories(data.providerId);
+        } else {
+          view.showRepositories(resp[0].id);
+        }
       });
     },
 
@@ -52,7 +56,7 @@
             {
               id: "info",
               getName: function (id) { return tr("Info"); },
-              getLink: function (id) { return "#!/repositories/" + providerId + "/" + id + "/info"; },
+              getLink: function (id) { return "#!/repositoryinfo?" + svnadmin.app.createUrlParameterString({providerid: providerId, repositoryid: id}); },
               callback: function (id) { return svnadmin.app.showRepositoryInfoView(providerId, id); }
             }
           ],

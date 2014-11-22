@@ -1,16 +1,33 @@
 <script id="tmpl-RepositoryInfoView" type="text/html">
   <div class="RepositoryInfoView">
     <p>
-      <a role="button" class="btn btn-default repositories-link" href="#!/repositories/{{>options.providerId}}" data-providerid="{{>options.providerId}}">{{>~tr('Back to overview')}}</a>
-      <a role="button" class="btn btn-default refresh-link" data-providerid="{{>options.providerId}}" data-repositoryid="{{>options.repositoryId}}"><span class="glyphicon glyphicon-refresh"></span></a>
+      <a role="button" class="btn btn-default repositories-link" href="#!/repositories?providerid={{url:options.providerId}}" data-providerid="{{>options.providerId}}"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <button class="btn btn-default refresh-link"><span class="glyphicon glyphicon-refresh"></span></button>
     </p>
+    <div class="basics-wrapper"></div>
     <div class="paths-wrapper"></div>
+  </div>
+</script>
+
+<script id="tmpl-RepositoryInfoView-Basics" type="text/html">
+  <div class="RepositoryInfoView-Basics">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title">{{>~tr("Basics")}}</h1>
+      </div>
+      <div class="panel-body">
+        <dl>
+          <dt>{{>~tr('Revision')}}</dt><dd>r9999</dd>
+          <dt>{{>~tr('Size')}}</dt><dd>999.00 MB</dd>
+        </dl>
+      </div>
+    </div>
   </div>
 </script>
 
 <script id="tmpl-RepositoryInfoView-PathList" type="text/html">
   <div class="RepositoryInfoView-PathList">
-    <div class="panel panel-default paths">
+    <div class="panel panel-default">
       <div class="panel-heading">
         <h1 class="panel-title">{{>~tr("Paths")}}</h1>
       </div>
@@ -18,7 +35,7 @@
         <div class="table-wrapper"></div>
       </div>
       <div class="panel-footer">
-        <button class="btn btn-default add-link" data-providerid="{{>options.providerId}}" data-repositoryid="{{>options.repositoryId}}">{{>~tr("Add")}}</button>
+        <button class="btn btn-default add-link">{{>~tr("Add")}}</button>
       </div>
     </div>
   </div>
