@@ -659,6 +659,14 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		if ($maxTime != 0 && $maxTime < 300) {
 			@ini_set('max_execution_time', 300);
 		}
+    
+    // Check connection before doing the update.
+    $connector = new \IF_AbstractLdapConnector();
+    if (!$connector->connect($this->host_address, 0, $this->host_protocol_version)) {
+      throw new \Exception("Can not connect.", 0);
+    } else if (!$connector->bind($this->bind_dn, $this->bind_password)) {
+      throw new \Exception("Can not connect. Authentication failed.");
+    }
 
 		try {
 			// @todo Backup file.
