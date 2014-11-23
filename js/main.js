@@ -428,6 +428,21 @@
     });
   };
 
+  ServiceClient.prototype.browseRepository = function () {
+  };
+
+  ServiceClient.prototype.getRepositoryInfo = function (providerId, repositoryId) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "info",
+        providerid: providerId,
+        repositoryid: repositoryId
+      }
+    });
+  };
+
   ServiceClient.prototype.getRepositoryPaths = function (providerId, repositoryId) {
     return this.ajax({
       url: "service/",

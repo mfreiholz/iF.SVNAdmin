@@ -14,6 +14,8 @@ class RepositoryService extends ServiceBase {
         return $this->processDelete($request, $response);
       case "browse":
         return $this->processBrowse($request, $response);
+      case "info":
+        return $this->processInfo($request, $response);
       case "paths":
         return $this->processPaths($request, $response);
       case "permissions":
@@ -122,6 +124,24 @@ class RepositoryService extends ServiceBase {
 
   public function processBrowse(WebRequest $request, WebResponse $response) {
     return false;
+  }
+
+  public function processInfo(WebRequest $request, WebResponse $response) {
+    $providerId = $request->getParameter("providerid");
+    $repositoryId = $request->getParameter("repositoryid");
+    if (empty($providerId) || empty($repositoryId)) {
+      return $this->processErrorMissingParameters($request, $response);
+    }
+
+    $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+    if (empty($provider)) {
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
+    }
+
+    $json = new stdClass();
+    $json->entry = $provider->getInfo($repositoryId);
+    $response->done2json($json);
+    return true;
   }
 
   public function processPaths(WebRequest $request, WebResponse $response) {

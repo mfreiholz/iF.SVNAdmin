@@ -1,176 +1,96 @@
 <?php
 /**
- * Base class for subversion commandline utils.
- *
- * The class supports some global defines as configuration:
- *
- * - SvnBase_ConfigDir: Path to the subversion configuration directory.
- * Has been introduced for the bug, if the server can't acces the configuration
- * of subversion. (Fixes error: "svnadmin: Can't open file '/root/.subversion/servers': Permission denied")
- *
- * @author Manuel Freiholz (Gainwar)
- * @copyright insaneFactory.com
  */
 class SvnBase {
-  static $ALL_OK = 0;
-  static $ERR_UNKNOWN = 1;
-  static $ERR_PERMISSION = 2;
-  static $ERR_PATH = 4;
-  static $ERR_EXECUTION = 8;
-  static $ERR_PARAMETER_VALIDATION = 16;
+  const NO_ERROR = 0;
+  const ERROR_UNKNOWN = 1;
 
-  /**
-   * *****************************************************************
-   * Basic command line parameters for all commands.
-   * ****************************************************************
-   */
-
-  /**
-   * Indicates whether the remote server certificate should be trusted.
-   *
-   * @var bool
-   */
-  protected $_trust_server_cert = false;
-
-  /**
-   * Indicates whether interactive prompts should be disabled/enabled.
-   *
-   * @var bool
-   */
-  protected $_non_interactive = false;
-
-  /**
-   * The _username which should be used for each command.
-   *
-   * @var string
-   */
+  protected $_isWindowsServer = false;
+  protected $_configDirectory = "";
   protected $_username = "";
-
-  /**
-   * The _password which should be used for each command.
-   *
-   * @var string
-   */
   protected $_password = "";
 
-  /**
-   * The optional ".subversion" directory of svn-client which should be used.
-   *
-   * @var string
-   */
-  protected $_config_directory = "";
-
-  /**
-   * *****************************************************************
-   * Additional information.
-   * ****************************************************************
-   */
-
-  /**
-   * Indicates whether the current server system is based on MS Windows.
-   *
-   * @var bool
-   */
-  protected $is_windows_server = false;
-
   public function __construct() {
-    // Find out whether the system is based on MS Windows.
-    $soft = PHP_OS;
-    $soft = strtoupper($soft);
-
-    if (stripos($soft, "WIN") !== FALSE) {
-      $this->is_windows_server = true;
-    }
-
-    // Handle define: SvnBase_ConfigDir
-    if (defined("SvnBase_ConfigDir")) {
-      $this->_config_directory = SvnBase_ConfigDir;
+    // Find out whether the system is based on Microsoft Windows.
+    $os = PHP_OS;
+    $os = strtoupper($os);
+    if (stripos($os, "WIN") !== FALSE) {
+      $this->_isWindowsServer = true;
     }
   }
 
   public function setConfigDirectory($path) {
-    $this->_config_directory = $path;
+    $this->_configDirectory = $path;
   }
 
-  public function getConfigDirectory() {
-    return $this->_config_directory;
+  public function setUsername($username) {
+    $this->_username = $username;
   }
 
-  /**
-   * Checks whether the folder at the given location is a repository.
-   *
-   * @param string $path
-   *          Absolute path to a repository directory.
-   * @return bool
-   */
+  public function setPassword($password) {
+    $this->_password = $password;
+  }
+
   public function isRepository($path) {
-    return is_dir($path);
+    if (empty($path)) {
+      return false;
+    } else if (!is_dir($path)) {
+      return false;
+    } else if (!is_dir($path . DIRECTORY_SEPARATOR . "conf")) {
+      return false;
+    } else if (!is_dir($path . DIRECTORY_SEPARATOR . "db")) {
+      return false;
+    } else if (!is_dir($path . DIRECTORY_SEPARATOR . "hooks")) {
+      return false;
+    }
+    return true;
   }
 
-  /**
-   * Gets a list with all available repositories in the given base path.
-   *
-   * @param $basePath The
-   *          SVNParentPath of the repositories.
-   * @return array<string> List of absolute paths to repositories or "null" in error case.
-   */
-  public function listRepositories($basePath) {
-    if (!file_exists($basePath)) {
-      return null;
+  public function listRepositories($basePath, array &$paths) {
+    if (!is_dir($basePath)) {
+      error_log("Invalid directory path (path=" . $basePath .")");
+      return SvnBase::ERROR_UNKNOWN;
     }
-    $paths = array ();
-    $dirHandle = opendir($basePath);
-    while (($file = readdir($dirHandle)) !== false) {
-      if ($file === "." || $file === "..") {
+    $dh = opendir($basePath);
+    while (($fileName = readdir($dh)) !== false) {
+      if ($fileName === "." || $fileName === "..") {
         continue;
       }
-      $absolutePath = realpath($basePath . "/" . $file);
-      if (self::isRepository($absolutePath)) {
-        $paths[] = $file;
+      $absolutePath = realpath($basePath . DIRECTORY_SEPARATOR . $fileName);
+      if (!self::isRepository($absolutePath)) {
+        continue;
       }
+      $paths[] = $fileName;
     }
-    closedir($dirHandle);
-    return $paths;
+    closedir($dh);
+    return SvnBase::NO_ERROR;
   }
 
-  /**
-   * Encodes the given string <code>$s</code> to <code>$dest_enc</code> (default UTF-8).
-   *
-   * @param string $s
-   * @param string $dest_enc
-   *          Example: UTF-8, ISO-88....
-   * @return string
-   */
-  function encode_string($str, $dest_enc = "UTF-8") {
+  protected function encodeString($str, $dest = "UTF-8") {
     if (function_exists("mb_detect_encoding") && function_exists("mb_convert_encoding")) {
-      $str = mb_convert_encoding($str, $dest_enc, mb_detect_encoding($str));
+      $str = mb_convert_encoding($str, $dest, mb_detect_encoding($str));
     }
     return $str;
   }
 
   /**
-   * Prepares a path (URI) for command line usage.
-   * Does the following steps.
+   * Prepares the given URI/path for command line usage.
+   * If $uri is a basic local path, this function converts it to an correct URI.
    *
-   * <ul>
-   * <li>Replace backslash with slash (\ => /)</li>
-   * <li>Encode the input string <code>$uri</code> with UTF-8</li>
-   * <li><i>(Windows only)</i> Add one leading slash and two leading backslashes for network drive mappings.</li>
-   * <li>Prepend a "file://", if no other protocol is given.</li>
-   * </ul>
-   *
-   * This function does <b>NOT</b> add " at the start+end of the given <code>$uri</code>,
-   * because spaces are per cent encoded as %20.
+   * - Replaces local directory separators (e.g. \) with normal slash (/).
+   * - Encodes the $uri with UTF-8 charset. TODO Is it really required.
+   * - Windows only: Prepends one slash for local drives and two slashes for network drive mappings.
+   * - Prepends "file://", if no other protocol has been defined.
    *
    * @param string $uri
    * @return string
    */
-  function encode_url_path($uri) {
+  public function prepareRepositoryURI($uri) {
     // Replace \ against /
     $uri = str_replace(DIRECTORY_SEPARATOR, "/", $uri);
 
     // Encode to UTF-8.
-    $uri = self::encode_string($uri, "UTF-8");
+    $uri = $this->encodeString($uri);
 
     // Use per cent encoding for url path.
     // Skip encoding of 'svn+ssh://' part.
@@ -185,13 +105,12 @@ class SvnBase {
     $uri = str_replace("%3A", ":", $uri); // Subversion bug?
 
     // Quick fix for Windows share names.
-    if ($this->is_windows_server) {
+    if ($this->_isWindowsServer) {
       // If the $uri now starts with "//", it points to a network share.
       // We must replace the first two "//" with "\\".
       if (substr($uri, 0, 2) == "//") {
         $uri = '\\' . substr($uri, 2);
       }
-
       if (substr($uri, 0, 10) == "file://///") {
         $uri = "file:///\\\\" . substr($uri, 10);
       }
@@ -204,87 +123,98 @@ class SvnBase {
       else
         $uri = "file:///" . $uri;
     }
-
     return $uri;
   }
 
   /**
-   * Prepares a path (URI) for command line usage.
-   * Does the following steps.
+   * Prepares a local repository path for command line usage.
    *
-   * <ul>
-   * <li>Replace backslash with slash (\ => /)</li>
-   * <li>Encode the input string <code>$uri</code> with UTF-8</li>
-   * <li><i>(Windows only)</i> Add one leading slash and two leading backslashes for network drive mappings.</li>
-   * <li>Add leading and trailing slashes.</li>
-   * </ul>
-   *
-   * @param unknown_type $local_path
+   * - Replaces local directory separators (e.g. \) with normal slash (/).
+   * - Encodes the $uri with UTF-8 charset. TODO Is it really required.
+   * - Windows only: Prepends one slash for local drives and two slashes for network drive mappings.
    */
-  function encode_local_path($local_path) {
-    $local_path = str_replace(DIRECTORY_SEPARATOR, "/", $local_path);
-    $local_path = self::encode_string($local_path);
+  public function prepareRepositoryPath($path) {
+    $path = str_replace(DIRECTORY_SEPARATOR, "/", $path);
+    $path = $this->encodeString($path);
 
     // Quick fix for Windows share names.
-    if ($this->is_windows_server) {
+    if ($this->_isWindowsServer) {
       // If the $uri now starts with "//", it points to a network share.
       // We must replace the first two "//" with "\\".
-      if (substr($local_path, 0, 2) == "//") {
-        $local_path = '\\\\' . substr($local_path, 2);
+      if (substr($path, 0, 2) == "//") {
+        $path = '\\\\' . substr($path, 2);
       }
     }
-
-    // Add leading and trailing quotes.
-    $local_path = '"' . $local_path . '"';
-    return $local_path;
+    return $path;
   }
 
   /**
    * Creates the commandline command which can be used for execution.
    * This function also escapes the shell arguments given by <code>$args</code>.
    *
-   * <p>
-   * <b>Note:</b> The <code>$repo_path</code> parameter should be UTF-8 encoded.
-   * (see <code>encode_path(...)</code>)
-   * </p>
+   * Example of a command:
+   * "<executable>" <command> <args> "<repository path>"
+   * "/usr/bin/svn" info --xml --non-interactive --trust-server-cert "/opt/svn/repo"
    *
-   * @param string $exe
-   *          The absolute file path to the *.exe file. (svn.exe or svnadmin.exe)
-   * @param string $command
-   * @param string $repo_path
-   * @param array $args
-   * @param bool $asXml
+   * @param string $executable Absolute path to the binary.
+   * @param string $command The binaries command.
+   * @param string $pathOrUri The absolute local path or local/remote URL.
+   * @param bool $asXml Indicates whether the response of the command should be in XML format.
    * @return string
    */
-  function create_svn_command($exe, $command, $repo_path, $args = null, $asXml = true) {
-    $cmd = "\"" . $exe . "\" " . $command;
+  public function prepareCommand($executable, $command, $pathOrUri, $asXml = false) {
+    $cmd = '"' . $executable . '"';
+    $cmd.= ' ' . $command;
 
-    if ($asXml === true)
-      $cmd .= " --xml";
+    // Default arguments.
+    $cmd.= ' --non-interactive';
+    $cmd.= ' --trust-server-cert';
+    $cmd.= ' --no-auth-cache';
 
-    if ($this->_non_interactive)
-      $cmd .= " --non-interactive";
-
-    if ($this->_trust_server_cert)
-      $cmd .= " --trust-server-cert";
-
-    if (!empty($this->_username))
-      $cmd .= " --_username " . $this->_username;
-
-    if (!empty($this->_password))
-      $cmd .= " --_password " . $this->_password;
-
-      // Handle custom args.
-    if (!empty($args)) {
-      foreach ($args as $key => &$val) {
-        $cmd .= " " . $key;
-        if (!empty($val))
-          $cmd .= " " . $val; // old line: $cmd.= " ".escapeshellarg($val);
-      }
+    // Optional arguments.
+    if ($asXml) {
+      $cmd.= ' --xml';
     }
-    $cmd .= " " . $repo_path;
-    return '' . $cmd . '';
+    if (!empty($this->_configDirectory)) {
+      $cmd.= ' --config-dir ' . escapeshellarg($this->_configDirectory);
+    }
+    if (!empty($this->_username)) {
+      $cmd.= ' --username ' . escapeshellarg($this->_username);
+    }
+    if (!empty($this->_password)) {
+      $cmd.= ' --password ' . escapeshellarg($this->_password);
+    }
+
+    $cmd.= ' "' . $pathOrUri . '"'; // TODO Use escapeshellarg()??
+    return $cmd;
   }
 
+  /**
+   * @param string $command Command to be executed.
+   * @param string $stdout Will contain the process output.
+   * @param string $stderr Will contain the process error output.
+   * @param int $exitCode Will contain the process return code.
+   * @return int
+   */
+  public function executeCommand($command, &$stdout, &$stderr, &$exitCode) {
+    $descriptorspec = array(
+        0 => array("pipe", "r"), // STDIN
+        1 => array("pipe", "w"), // STDOUT
+        2 => array("pipe", "w")  // STDERR
+    );
+    $process = proc_open('"' . $command . '"', $descriptorspec, $pipes);
+    if (!is_resource($process)) {
+      return SvnBase::ERROR_UNKNOWN;
+    }
+    $stdout = stream_get_contents($pipes[1]);
+    $stderr = stream_get_contents($pipes[2]);
+    fclose($pipes[0]);
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    $exitCode = (int) proc_close($process);
+    if ($exitCode !== 0) {
+      return SvnBase::ERROR_UNKNOWN;
+    }
+    return SvnBase::NO_ERROR;
+  }
 }
-?>

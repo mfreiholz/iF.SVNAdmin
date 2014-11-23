@@ -59,4 +59,13 @@ class RepositoryProvider {
     return null;
   }
 
+  /**
+   * Gets an array with undefined variable information about the repository.
+   * @param $id
+   * @return array
+   */
+  public function getInfo($id) {
+    return array();
+  }
+
 }

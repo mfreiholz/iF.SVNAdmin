@@ -43,9 +43,12 @@
 
     showBasics: function () {
       var view = this;
-      jQuery(".basics-wrapper").html(jQuery("#tmpl-RepositoryInfoView-Basics").render({
-        options: view.options
-      }));
+      svnadmin.service.getRepositoryInfo(view.options.providerId, view.options.repositoryId).done(function (resp) {
+        jQuery(".basics-wrapper").html(jQuery("#tmpl-RepositoryInfoView-Basics").render({
+          options: view.options,
+          response: resp
+        }));
+      });
     },
 
     showPaths: function (providerId, repositoryId) {

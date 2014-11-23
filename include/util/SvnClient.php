@@ -1,53 +1,94 @@
 <?php
-class IF_SVNList {
-  public $path = "";
-  public $entries = array ();
-  public $curEntry = null;
-
-}
-class IF_SVNListEntry {
-  public $rev = 1;
+/**
+ */
+class SvnClientEntry {
+  public $kind = "";
+  public $name = "";
+  public $revision = -1;
   public $author = "";
   public $date = "";
-  public $size = 0;
-  public $name = "";
-  public $isdir = false;
-
 }
 
 /**
  * Provides functionality of the "svn.exe" executable by using the
  * executable and parsing the output.
  *
- * @author Manuel Freiholz, insaneFactory
+ * This class uses PHP's SimpleXml parser.
  */
 class SvnClient extends SvnBase {
-  protected $_svnExe = null;
-  protected $_curList = null;
-  protected $_curTag = "";
+  protected $_executable = null;
 
-  /**
-   * @param string $svn_exe
-   *          Absolute path to the "svn.exe" binary.
-   */
-  public function __construct($svn_exe) {
+  public function __construct($executable) {
     parent::__construct();
-    $this->_trust_server_cert = true;
-    $this->_non_interactive = true;
-    $this->_svnExe = $svn_exe;
+    $this->_executable = $executable;
+  }
+
+  public function svnInfo($path) {
+    // Execute command.
+    $pathUrl = $this->prepareRepositoryURI($path);
+    $command = $this->prepareCommand($this->_executable, "info", $pathUrl, true);
+    if ($this->executeCommand($command, $stdout, $stderr, $exitCode) !== SvnBase::NO_ERROR) {
+      return null;
+    }
+
+    // Parse XML.
+    try {
+      $xml = new SimpleXMLElement($stdout);
+      $xmlEntry = $xml->entry[0];
+      if ($xmlEntry) {
+        $entry = new SvnClientEntry();
+        $entry->kind = (string) $xmlEntry["kind"];
+        $entry->name = (string) $xmlEntry["path"];
+        $entry->revision = (int) $xmlEntry->commit["revision"];
+        $entry->author = (string) $xmlEntry->commit->author;
+        $entry->date = (string) $xmlEntry->commit->date;
+        return $entry;
+      }
+    } catch (Exception $ex) {
+      error_log($ex->getMessage());
+    }
+    return null;
+  }
+
+  public function svnList($path) {
+    // Execute command.
+    $pathUrl = $this->prepareRepositoryURI($path);
+    $command = $this->prepareCommand($this->_executable, "list", $pathUrl, true);
+    if (!$this->executeCommand($command, $stdout, $stderr, $exitCode) !== SvnBase::NO_ERROR) {
+      return null;
+    }
+
+    // Parse XML.
+    try {
+      $xml = new SimpleXMLElement($stdout);
+      $entries = array();
+      foreach ($xml->list[0]->entry as $xmlEntry) {
+        $entry = new SvnClientEntry();
+        $entry->kind = (string) $xmlEntry["kind"];
+        $entry->name = (string) $xmlEntry->name;
+        $entry->revision = (int) $xmlEntry->commit["revision"];
+        $entry->author = (string) $xmlEntry->commit->author;
+        $entry->date = (string) $xmlEntry->commit->date;
+        $entries[] = $entry;
+      }
+      return $entries;
+    } catch (Exception $ex) {
+      error_log($ex->getMessage());
+    }
+    return null;
   }
 
   /**
    * Creates a new directory in repository.
    *
-   * @param array $path
+   * @param array $paths
    *          Absolute path to the new directory (multiple)
    * @param bool $parents
-   *          Indiciates whether parents should be created, too.
+   *          Indicates whether parents should be created, too.
    * @param string $commitMessage
    * @return bool
    */
-  public function svn_mkdir(array $paths, $parents = true, $commitMessage = "Created folder.") {
+  /*public function svn_mkdir(array $paths, $parents = true, $commitMessage = "Created folder.") {
     if (empty($paths)) {
       return false;
     }
@@ -79,7 +120,7 @@ class SvnClient extends SvnBase {
     $return_var = 0;
     exec($command, $output, $return_var);
     return $return_var === 0;
-  }
+  }*/
 
   /**
    * Gets a list of directory entries in the specified repository path.
@@ -90,7 +131,7 @@ class SvnClient extends SvnBase {
    *          (optional)
    * @return IF_SVNList
    */
-  public function svn_list($path, &$outList = null) {
+  /*public function svn_list($path, &$outList = null) {
     if (empty($path)) {
       return null;
     }
@@ -173,7 +214,7 @@ class SvnClient extends SvnBase {
       $outList = $this->_curList;
 
     return $this->_curList;
-  }
+  }*/
 
   // ///
   //

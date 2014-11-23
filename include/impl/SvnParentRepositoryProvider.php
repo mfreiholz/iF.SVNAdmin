@@ -29,7 +29,10 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
 
   public function getRepositories($offset, $num) {
     $svn = new SvnBase();
-    $repos = $svn->listRepositories($this->_directoryPath);
+    $repos = array();
+    if ($svn->listRepositories($this->_directoryPath, $repos) !== SvnBase::NO_ERROR) {
+      return new ItemList();
+    }
     $reposCount = count($repos);
 
     $list = new ItemList();
@@ -81,6 +84,24 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
 
   public function getSvnAuthz($repositoryId) {
     return SVNAdminEngine::getInstance()->getSvnAuthzFile();
+  }
+
+  public function getInfo($id) {
+    $path = base64_decode($id);
+    if (!SVNAdminEngine::getInstance()->getSvn()->isRepository($path)) {
+      return array();
+    }
+    $entry = SVNAdminEngine::getInstance()->getSvn()->svnInfo($path);
+    if (empty($entry)) {
+      return array();
+    }
+    return array(
+      "kind" => $entry->kind,
+      "name" => $entry->name,
+      "revision" => $entry->revision,
+      "author" => $entry->author,
+      "date" => $entry->date
+    );
   }
 
   /**
