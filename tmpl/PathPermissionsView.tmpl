@@ -4,38 +4,22 @@
       <a role="button" class="btn btn-default repositoryinfo-link" href="#!/repositoryinfo?providerid={{url:options.providerId}}&repositoryid={{url:options.repositoryId}}" data-providerid="{{>options.providerId}}" data-repositoryid="{{>options.repositoryId}}"><span class="glyphicon glyphicon-chevron-left"></span></a>
       <button class="btn btn-default refresh-link"><span class="glyphicon glyphicon-refresh"></span></button>
     </p>
-    <div class="users-wrapper"></div>
-    <div class="groups-wrapper"></div>
+    <div class="members-wrapper"></div>
   </div>
 </script>
 
-<script id="tmpl-PathPermissionsView-Users" type="text/html">
-  <div class="PathPermissionsView-Users">
+<script id="tmpl-PathPermissionsView-Members" type="text/html">
+  <div class="PathPermissionsView-Members">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h1 class="panel-title">{{>~tr("Users")}}</h1>
+        <h1 class="panel-title">{{>~tr("Assigned permissions")}}</h1>
       </div>
       <div class="panel-body">
         <div class="table-wrapper"></div>
       </div>
       <div class="panel-footer">
-        <button class="btn btn-default add-user-link" data-providerid="{{>options.providerId}}" data-repositoryid="{{>options.repositoryId}}" data-path="{{>options.path}}">{{>~tr("Add")}}</button>
-      </div>
-    </div>
-  </div>
-</script>
-
-<script id="tmpl-PathPermissionsView-Groups" type="text/html">
-  <div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h1 class="panel-title">{{>~tr("Groups")}}</h1>
-      </div>
-      <div class="panel-body">
-        <div class="table-wrapper"></div>
-      </div>
-      <div class="panel-footer">
-        <button class="btn btn-default add-group-link" data-providerid="{{>options.providerId}}" data-repositoryid="{{>options.repositoryId}}" data-path="{{>options.path}}">{{>~tr("Add")}}</button>
+        <button class="btn btn-default assign-user-link">{{>~tr("Assign user")}}</button>
+        <button class="btn btn-default assign-group-link">{{>~tr("Assign group")}}</button>
       </div>
     </div>
   </div>

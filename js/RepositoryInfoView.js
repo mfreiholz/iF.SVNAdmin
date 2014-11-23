@@ -59,7 +59,6 @@
       var options = {
         showPaging: false,
         showRowNumber: svnadmin.app.config.showtablerownumber,
-        pageSize: svnadmin.app.config.tablepagesize,
 
         singleActions: [
           {

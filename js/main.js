@@ -93,6 +93,17 @@
     return buff;
   };
 
+  AppEngine.prototype.translatePermission = function (perm) {
+    if (perm === "") {
+      return tr("No Access");
+    } else if (perm === "r") {
+      return tr("Read access");
+    } else if (perm === "rw") {
+      return tr("Read-/Write access");
+    }
+    return perm;
+  };
+
   AppEngine.prototype.logout = function () {
     svnadmin.service.logout().always(function () {
       window.location.reload();
@@ -451,6 +462,19 @@
         action: "paths",
         providerid: providerId,
         repositoryid: repositoryId
+      }
+    });
+  };
+
+  ServiceClient.prototype.getRepositoryPathPermissions = function (providerId, repositoryId, path) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "permissions",
+        providerid: providerId,
+        repositoryid: repositoryId,
+        path: path
       }
     });
   };
