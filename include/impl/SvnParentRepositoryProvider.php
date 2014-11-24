@@ -68,7 +68,7 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
     }
     $path = $this->_directoryPath . DIRECTORY_SEPARATOR . $name;
     $type = isset($options["type"]) ? $options["type"] : "fsfs";
-    if (!$bin->create($path, $type)) {
+    if ($bin->svnCreate($path, $type) !== SvnBase::NO_ERROR) {
       return null;
     }
     return $this->createRepositoryObject($path);

@@ -1,80 +1,24 @@
 <?php
 /**
- * Provides functionality of the "svnadmin.exe" executable by using the
- * executable and parsing the output.
- *
- * @author Manuel Freiholz, insaneFactory
  */
 class SvnAdmin extends SvnBase {
-  /**
-   * Path to the "svnadmin.exe" binary.
-   *
-   * @var string
-   */
-  private $_m_svnadmin = NULL;
+  protected $_executable = null;
 
-  /**
-   *
-   * @param string $svn_admin_binary
-   *          Absolute path to "svnadmin" executable.
-   */
-  public function __construct($svn_admin_binary) {
+  public function __construct($executable) {
     parent::__construct();
-    $this->_trust_server_cert = false;
-    $this->_non_interactive = false;
-    $this->_m_svnadmin = $svn_admin_binary;
+    $this->_executable = $executable;
   }
 
-  /**
-   * Creates a new empty repository.
-   *
-   * @param string $path
-   *          Absolute path to the new repository
-   * @param string $type
-   *          Repository type: fsfs=file system(default); bdb=berkley db (not recommended)
-   * @return bool
-   */
-  public function create($path, $type = "fsfs") {
-    if (empty($path) || file_exists($path)) {
-      return false;
+  public function svnCreate($path, $type = "fsfs") {
+    // Execute command.
+    $localPath = $this->prepareRepositoryPath($path);
+    $command = $this->prepareCommand($this->_executable, "create", $localPath, array("--fs-type" => $type));
+    if ($this->executeCommand($command, $stdout, $stderr, $exitCode) !== SvnBase::NO_ERROR) {
+      return SvnBase::ERROR_COMMAND;
     }
-
-    // Validate repository name.
-    $pattern = '/^([a-z0-9\_\-.]+)$/i';
-    $repo_name = basename($path);
-
-    if (!preg_match($pattern, $repo_name)) {
-      return false;
-      // throw new IF_SVNException('Invalid repository name: ' . $repo_name . ' (Allowed pattern: ' . $pattern . ')');
-    }
-
-    $args = array ();
-    if (!empty($this->_config_directory)) {
-      $args["--config-dir"] = escapeshellarg($this->_config_directory);
-    }
-
-    if (!empty($type)) {
-      $args["--fs-type"] = escapeshellarg($type);
-    }
-
-    $cmd = self::create_svn_command($this->_m_svnadmin, "create", self::encode_local_path($path), $args, false);
-
-    $output = null;
-    $exitCode = 0;
-    exec($cmd, $output, $exitCode);
-    // if ($exitCode != 0) {
-    // throw new Exception('Command=' . $cmd . '; Return=' . $exitCode . '; Output=' . $output . ';');
-    // }
-    return $exitCode === 0;
+    return SvnBase::NO_ERROR;
   }
 
-  /**
-   * Deletes the repository at the given path.
-   *
-   * @param string $path
-   *          Path to the repository.
-   * @return bool
-   */
   public function delete($path) {
     $files = glob($path . "/*"/*, GLOB_MARK*/); // GLOB_MARK = Adds a ending slash to directory paths.
     foreach ($files as $f) {
@@ -85,11 +29,9 @@ class SvnAdmin extends SvnBase {
         unlink($f);
       }
     }
-
     if (is_dir($path)) {
       rmdir($path);
     }
-
     return true;
   }
 
@@ -104,7 +46,7 @@ class SvnAdmin extends SvnBase {
    *          Otherwise... not implemented.
    * @return bool
    */
-  public function dump($path, $file = NULL) {
+  /*public function dump($path, $file = NULL) {
     if (empty($path)) {
       return false; // throw new IF_SVNException('Empty path parameter for dump() command.');
     }
@@ -127,7 +69,7 @@ class SvnAdmin extends SvnBase {
       passthru($cmd);
     }
     return true;
-  }
+  }*/
 
 }
 ?>

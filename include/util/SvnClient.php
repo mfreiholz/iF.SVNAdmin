@@ -21,12 +21,15 @@ class SvnClient extends SvnBase {
   public function __construct($executable) {
     parent::__construct();
     $this->_executable = $executable;
+    $this->_globalArguments["--non-interactive"] = null;
+    $this->_globalArguments["--trust-server-cert"] = null;
+    $this->_globalArguments["--no-auth-cache"] = null;
   }
 
   public function svnInfo($path) {
     // Execute command.
     $pathUrl = $this->prepareRepositoryURI($path);
-    $command = $this->prepareCommand($this->_executable, "info", $pathUrl, true);
+    $command = $this->prepareCommand($this->_executable, "info", $pathUrl, array("--xml" => null));
     if ($this->executeCommand($command, $stdout, $stderr, $exitCode) !== SvnBase::NO_ERROR) {
       return null;
     }
@@ -53,7 +56,7 @@ class SvnClient extends SvnBase {
   public function svnList($path) {
     // Execute command.
     $pathUrl = $this->prepareRepositoryURI($path);
-    $command = $this->prepareCommand($this->_executable, "list", $pathUrl, true);
+    $command = $this->prepareCommand($this->_executable, "list", $pathUrl, array("--xml" => null));
     if (!$this->executeCommand($command, $stdout, $stderr, $exitCode) !== SvnBase::NO_ERROR) {
       return null;
     }

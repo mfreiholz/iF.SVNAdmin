@@ -2,7 +2,7 @@
 // Configure error handling.
 error_reporting(-1);
 ini_set("log_errors", 1);
-ini_set("error_log", realpath("../") . "/config/error.log");
+ini_set("error_log", realpath("../") . "/data/error.log");
 
 function errorHandler($errno, $errstr, $errfile = "", $errline = 0, array $errcontext = null) {
   switch ($errno) {
@@ -28,8 +28,6 @@ function errorHandler($errno, $errstr, $errfile = "", $errline = 0, array $errco
 }
 set_error_handler("errorHandler");
 
-
-
 ///////////////////////////////////////////////////////////////////////
 // Application Code Starts Here
 ///////////////////////////////////////////////////////////////////////
@@ -40,6 +38,7 @@ define("HRF_AUTO_LOAD_BASE_DIR", "../../humble-rest-framework-php/src");
 require_once(HRF_AUTO_LOAD_BASE_DIR . "/autoload.php");
 
 define("SVNADMIN_BASE_DIR", realpath("../"));
+define("SVNADMIN_DATA_DIR", realpath("../data"));
 require_once("../include/core/SVNAdminEngine.php");
 
 // Create Engine with custom configuration.

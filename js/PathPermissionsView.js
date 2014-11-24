@@ -17,6 +17,12 @@
       "click; .refresh-link": function (ev) {
         var view = this;
         view.showMembers();
+      },
+      "click; .assign-user-link": function (ev) {
+        var view = this;
+      },
+      "click; .assign-group-link": function (ev) {
+        var view = this;
       }
     },
 

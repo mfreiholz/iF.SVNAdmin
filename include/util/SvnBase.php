@@ -4,11 +4,13 @@
 class SvnBase {
   const NO_ERROR = 0;
   const ERROR_UNKNOWN = 1;
+  const ERROR_COMMAND = 2;
 
   protected $_isWindowsServer = false;
   protected $_configDirectory = "";
   protected $_username = "";
   protected $_password = "";
+  protected $_globalArguments = array();
 
   public function __construct() {
     // Find out whether the system is based on Microsoft Windows.
@@ -94,14 +96,14 @@ class SvnBase {
 
     // Use per cent encoding for url path.
     // Skip encoding of 'svn+ssh://' part.
-    $parts = explode("/", $uri);
+    /*$parts = explode("/", $uri);
     $partsCount = count($parts);
     for ($i = 0; $i < $partsCount; $i++) {
       if ($i != 0 || $parts[$i] != 'svn+ssh:') {
         $parts[$i] = rawurlencode($parts[$i]);
       }
     }
-    $uri = implode("/", $parts);
+    $uri = implode("/", $parts);*/
     $uri = str_replace("%3A", ":", $uri); // Subversion bug?
 
     // Quick fix for Windows share names.
@@ -130,7 +132,7 @@ class SvnBase {
    * Prepares a local repository path for command line usage.
    *
    * - Replaces local directory separators (e.g. \) with normal slash (/).
-   * - Encodes the $uri with UTF-8 charset. TODO Is it really required.
+   * - Encodes the $uri with UTF-8 charset. TODO Is it really required to encode it with UTF-8 before?
    * - Windows only: Prepends one slash for local drives and two slashes for network drive mappings.
    */
   public function prepareRepositoryPath($path) {
@@ -159,22 +161,30 @@ class SvnBase {
    * @param string $executable Absolute path to the binary.
    * @param string $command The binaries command.
    * @param string $pathOrUri The absolute local path or local/remote URL.
-   * @param bool $asXml Indicates whether the response of the command should be in XML format.
+   * @param array $customArguments
    * @return string
    */
-  public function prepareCommand($executable, $command, $pathOrUri, $asXml = false) {
+  public function prepareCommand($executable, $command, $pathOrUri, $customArguments = array()) {
     $cmd = '"' . $executable . '"';
     $cmd.= ' ' . $command;
 
-    // Default arguments.
-    $cmd.= ' --non-interactive';
-    $cmd.= ' --trust-server-cert';
-    $cmd.= ' --no-auth-cache';
+    // Global arguments.
+    foreach ($this->_globalArguments as $key=>$val) {
+      $cmd.= ' ' . $key;
+      if (!empty($val)) {
+        $cmd.= ' ' . escapeshellarg($val);
+      }
+    }
+
+    // Custom arguments.
+    foreach ($customArguments as $key=>$val) {
+      $cmd.= ' ' . $key;
+      if (!empty($val)) {
+        $cmd.= ' ' . escapeshellarg($val);
+      }
+    }
 
     // Optional arguments.
-    if ($asXml) {
-      $cmd.= ' --xml';
-    }
     if (!empty($this->_configDirectory)) {
       $cmd.= ' --config-dir ' . escapeshellarg($this->_configDirectory);
     }
@@ -185,11 +195,13 @@ class SvnBase {
       $cmd.= ' --password ' . escapeshellarg($this->_password);
     }
 
-    $cmd.= ' "' . $pathOrUri . '"'; // TODO Use escapeshellarg()??
+    $cmd.= ' ' . escapeshellarg($pathOrUri);
     return $cmd;
   }
 
   /**
+   * TODO Windows can not handle the UTF-8 output from STDOUT. Workaround: Pipe output to temporary file.
+   * TODO Linux might require to set custom environment for proc_open: $env = array("LANG" => "en_US.UTF-8");
    * @param string $command Command to be executed.
    * @param string $stdout Will contain the process output.
    * @param string $stderr Will contain the process error output.
@@ -198,12 +210,13 @@ class SvnBase {
    */
   public function executeCommand($command, &$stdout, &$stderr, &$exitCode) {
     $descriptorspec = array(
-        0 => array("pipe", "r"), // STDIN
-        1 => array("pipe", "w"), // STDOUT
-        2 => array("pipe", "w")  // STDERR
+      0 => array("pipe", "r"), // STDIN
+      1 => array("pipe", "w"), // STDOUT
+      2 => array("pipe", "w")  // STDERR
     );
     $process = proc_open('"' . $command . '"', $descriptorspec, $pipes);
     if (!is_resource($process)) {
+      error_log("Subversion command failed (command=" . $command . "; err=proc_open didn't return a resource handle)");
       return SvnBase::ERROR_UNKNOWN;
     }
     $stdout = stream_get_contents($pipes[1]);
@@ -213,8 +226,11 @@ class SvnBase {
     fclose($pipes[2]);
     $exitCode = (int) proc_close($process);
     if ($exitCode !== 0) {
+      error_log("Subversion command failed (command=" . $command . "; stderr=" . $stderr . "; stdout=" . $stdout . ")");
       return SvnBase::ERROR_UNKNOWN;
     }
+    //error_log("Subversion command: " . $command);
+    //error_log("OUTPUT: " . $stdout);
     return SvnBase::NO_ERROR;
   }
 }

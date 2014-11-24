@@ -35,7 +35,7 @@ class SVNAdminEngine {
     $this->_config = $config;
 
     // Setup class loading.
-    $this->_classPath = array (
+    $this->_classPaths = array (
         SVNADMIN_BASE_DIR . "/include/core/api",
         SVNADMIN_BASE_DIR . "/include/core/entity",
         SVNADMIN_BASE_DIR . "/include/impl",
@@ -45,7 +45,7 @@ class SVNAdminEngine {
   }
 
   private function classLoader($className) {
-    foreach ($this->_classPath as $path) {
+    foreach ($this->_classPaths as $path) {
       $fp = $path . "/" . $className . ".php";
       if (file_exists($fp)) {
         include_once($fp);
@@ -187,6 +187,10 @@ class SVNAdminEngine {
   public function getSvn() {
     if (!static::$_svn) {
       static::$_svn = new SvnClient($this->_config["common"]["svn_binary_path"]);
+      $configDir = $this->_config["common"]["svn_config_directory"];
+      if (!empty($configDir)) {
+        static::$_svn->setConfigDirectory($configDir);
+      }
     }
     return static::$_svn;
   }
@@ -197,6 +201,10 @@ class SVNAdminEngine {
   public function getSvnAdmin() {
     if (!static::$_svnadmin) {
       static::$_svnadmin = new SvnAdmin($this->_config["common"]["svnadmin_binary_path"]);
+      $configDir = $this->_config["common"]["svn_config_directory"];
+      if (!empty($configDir)) {
+        static::$_svnadmin->setConfigDirectory($configDir);
+      }
     }
     return static::$_svnadmin;
   }

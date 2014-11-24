@@ -16,7 +16,7 @@ return array (
         // Some systems with SElinux permit access to the default config directory.
         // This directive can be used to define a custom directory on which the application does have access.
         // e.g.: "<iF.SVNAdmin-Root>/data/svnconfig"
-        "svn_config_directory" => "D:\\Development\\Data\\svn-config-dir",
+        "svn_config_directory" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svnconfig",
 
         // Absolute path to the global Subversion "authz" file. It contains all user permissions
         // and will also be accessed by Apache or svnserve-deamon.
