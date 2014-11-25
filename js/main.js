@@ -505,6 +505,35 @@
     });
   };
 
+  ServiceClient.prototype.assignRepositoryPath = function (providerId, repositoryId, path, memberId, permission) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "assignpath",
+        providerid: providerId,
+        repositoryid: repositoryId,
+        path: path,
+        memberid: memberId,
+        permission: permission
+      }
+    });
+  };
+
+  ServiceClient.prototype.unassignRepositoryPath = function (providerId, repositoryId, path, memberId) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "RepositoryService",
+        action: "unassignpath",
+        providerid: providerId,
+        repositoryid: repositoryId,
+        path: path,
+        memberid: memberId
+      }
+    });
+  };
+
   window.svnadmin = window.svnadmin || {};
   window.svnadmin.service = window.svnadmin.service || new ServiceClient();
 }(jQuery));

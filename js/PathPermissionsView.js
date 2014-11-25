@@ -51,9 +51,9 @@
             callback: function (ids) {
               var promises = [],
                 i = 0;
-              /*for (i = 0; i < ids.length; ++i) {
-                promises.push(svnadmin.service.deleteRepositoryPath(providerId, repositoryId, ids[i]));
-              }*/
+              for (i = 0; i < ids.length; ++i) {
+                promises.push(svnadmin.service.unassignRepositoryPath(view.options.providerId, view.options.repositoryId, view.options.path, ids[i]));
+              }
               return jQuery.when.apply(null, promises).done(function () {
                 view.showMembers();
               });

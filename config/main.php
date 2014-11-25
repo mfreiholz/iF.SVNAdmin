@@ -22,7 +22,7 @@ return array (
         // and will also be accessed by Apache or svnserve-deamon.
         // e.g. Linux: "/opt/subversion/authz"
         // e.g. Windows: "C:\\Path\\To\\authz"
-        "svn_authz_file" => "D:\\Development\\Data\\dav svn.authz",
+        "svn_authz_file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "subversion.authz",
 
         // Number of backups to store of each Subversion "authz" file.
         // The system creates a backup for every action, e.g.: Deleting five users generates five backups.
