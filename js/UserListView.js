@@ -12,7 +12,11 @@
       svnadmin.service.getUserProviders().done(function (resp) {
         var html = jQ("#tmpl-UserListView-Providers").render({ providers: resp });
         view.$el.find(".provider-wrapper").html(html);
-        view.showUsers(resp[0].id);
+        if (typeof data.providerId !== "undefined") {
+          view.showUsers(data.providerId);
+        } else {
+          view.showUsers(resp[0].id);
+        }
       });
     },
 
@@ -52,7 +56,7 @@
           {
             id: "info",
             getName: function (id) { return tr("Info"); },
-            getLink: function (id) { return "#!/users/" + providerId + "/" + id + "/info"; },
+            getLink: function (id) { return "#!/userinfo?" + svnadmin.app.createUrlParameterString({providerid: providerId, userid: id}); },
             callback: function (id) { return svnadmin.app.showUserInfoView(providerId, id); }
           }
         ],
@@ -106,73 +110,3 @@
   });
 
 }(jQuery));
-/*
-
-  function showUsers(providerId, offset, num) {
-    if (!providerId) {
-      return;
-    }
-    offset = !offset ? 0 : offset;
-    num = !num ? 10 : num;
-    _providerId = providerId;
-    jQ(".UserListViewProviders li").removeClass("active");
-
-    return svnadmin.service.getUsers(providerId, offset, num).done(function (data) {
-      jQ(".UserListViewProviders li[data-id=" + providerId + "]").addClass("active");
-      jQ(".user-table-wrapper").html(jQ("#tmpl-UserListViewUserTable").render({
-        response: data,
-        providerId: providerId,
-        providerEditable: data.editable,
-        offset: offset,
-        num: num
-      }));
-    }).fail(function () {
-      alert("FAIL: Can not fetch users.");
-    });
-  }
-
-
-      "click; a.user-link": function (ev) {
-        var view = this,
-          element = jQ(ev.currentTarget),
-          userId = element.data("id");
-        svnadmin.app.showUserInfoView(_providerId, userId);
-      },
-
-      "click; button.deleteuser": function (ev) {
-        var view = this,
-          checkedElements = jQ("input[name=user-selection]:checked"),
-          defs = [],
-          i = 0;
-        for (i = 0; i < checkedElements.length; ++i) {
-          var elem = jQ(checkedElements[i]);
-          var providerId = elem.data("providerid");
-          var userId = elem.data("userid");
-          defs.push(svnadmin.service.deleteUser(providerId, userId));
-        }
-        jQ.when(defs).done(function () {
-          showUsers(_providerId);
-        }).fail(function () {
-          alert("ERROR");
-        });
-      },
-
-      "click; li:not(.disabled) a.previous-page": function (ev) {
-        var view = this,
-          ele = jQ(ev.currentTarget),
-          offset = ele.data("offset"),
-          num = ele.data("num");
-        showUsers(_providerId, offset, num);
-        return ev.preventDefault();
-      },
-
-      "click; li:not(.disabled) a.next-page:not(.disabled)": function (ev) {
-        var view = this,
-          ele = jQ(ev.currentTarget),
-          offset = ele.data("offset"),
-          num = ele.data("num");
-        showUsers(_providerId, offset, num);
-        return ev.preventDefault();
-      }
-
-*/

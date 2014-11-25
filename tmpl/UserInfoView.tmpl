@@ -1,7 +1,9 @@
 <script id="tmpl-UserInfoView" type="text/html">
   <div class="UserInfoView">
-    <h1>User Information</h1>
-    <p><a role="button" class="btn btn-default users-link" href="#!/users/{{>options.providerId}}" data-providerid="{{>options.providerId}}">{{>~tr('Back to overview')}}</a></p>
+    <p>
+      <a role="button" class="btn btn-default users-link" href="#!/users?providerid={{url:options.providerId}}" data-providerid="{{>options.providerId}}"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <button class="btn btn-default refresh-link"><span class="glyphicon glyphicon-refresh"></span></button>
+    </p>
 
     <!-- Groups -->
     <div class="panel panel-default groups">

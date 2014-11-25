@@ -3,18 +3,12 @@ class SvnAuthUserGroupAssociater extends UserGroupAssociater {
   private $_authzfile = null;
 
   public function initialize(SVNAdminEngine $engine, $config) {
-    if (!isset($config["authzfile"])) {
-      error_log("Missing required parameter 'authzfile'");
-      return false;
-    }
-
     $authzFilePath = $config["authzfile"];
     $this->_authzfile = $engine->getSvnAuthzFile($authzFilePath);
     if (empty($this->_authzfile)) {
       error_log("Can not load SvnAuthzFile (path=" . $authzFilePath . ")");
       return false;
     }
-
     return true;
   }
 
@@ -40,16 +34,16 @@ class SvnAuthUserGroupAssociater extends UserGroupAssociater {
   public function getGroupsOfUser($userId, $offset = 0, $num = -1) {
     $list = new ItemList();
 
-    $groups = $this->_authzfile->groupsOfUser($userId);
+    $memberObj = $this->_authzfile->createMemberObject($userId);
+    $groups = $this->_authzfile->getGroupsOfMember($memberObj);
     $groupsCount = count($groups);
 
     $listItems = array ();
     $begin = $offset;
     $end = (int) $num === -1 ? $groupsCount : (int) $offset + (int) $num;
     for ($i = $begin; $i < $end && $i < $groupsCount; ++$i) {
-      $groupname = $groups[$i];
       $obj = new Group();
-      $obj->initialize($groupname, $groupname);
+      $obj->initialize($groups[$i]->name, $groups[$i]->name);
       $listItems[] = $obj;
     }
     $list->initialize($listItems, $groupsCount > $end);
@@ -68,10 +62,15 @@ class SvnAuthUserGroupAssociater extends UserGroupAssociater {
   }
 
   public function unassign($userId, $groupId) {
-    if ($this->_authzfile->removeUserFromGroup($userId, $groupId)) {
-      return $this->_authzfile->save();
+    $memberObj = $this->_authzfile->createMemberObject($userId);
+    $groupObj = SvnAuthzFileGroup::create($groupId);
+    if ($this->_authzfile->removeMember($groupObj, $memberObj) !== SvnAuthzFile::NO_ERROR) {
+      return false;
     }
-    return false;
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($this->_authzfile)) {
+      return false;
+    }
+    return true;
   }
 
 }

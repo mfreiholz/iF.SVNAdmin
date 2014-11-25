@@ -23,6 +23,12 @@ class SvnAuthzFileAlias extends SvnAuthzFileMember {
 class SvnAuthzFileGroup extends SvnAuthzFileMember {
   public $name = "";
 
+  public static function create($name) {
+    $obj = new SvnAuthzFileGroup();
+    $obj->name = $name;
+    return $obj;
+  }
+
   public function asMemberString() {
     return "@" . $this->name;
   }
@@ -229,6 +235,26 @@ class SvnAuthzFile {
       $members[] = $obj;
     }
     return $members;
+  }
+
+  /**
+   * @param SvnAuthzFileMember $member
+   * @return array<SvnAuthzFileGroup>
+   */
+  public function getGroupsOfMember(SvnAuthzFileMember $member) {
+    $groups = array();
+    $memberString = $member->asMemberString();
+    $allGroups = $this->getGroups();
+    foreach ($allGroups as &$groupObj) {
+      $members = $this->getMembersOfGroup($groupObj);
+      foreach ($members as &$memberObj) {
+        if ($memberObj->asMemberString() === $memberString) {
+          $groups[] = $groupObj;
+          break;
+        }
+      }
+    }
+    return $groups;
   }
 
   /**

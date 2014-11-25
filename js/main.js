@@ -45,7 +45,9 @@
       } else if (path.indexOf("/pathpermissions") === 0) {
         self.showPathPermissions(self.getParameter("providerid"), self.getParameter("repositoryid"), self.getParameter("path"));
       } else if (path.indexOf("/users") === 0) {
-        self.showUserListView();
+        self.showUserListView(self.getParameter("providerid"));
+      } else if (path.indexOf("/userinfo") === 0) {
+        self.showUserInfoView(self.getParameter("providerid"), self.getParameter("userid"));
       } else if (path.indexOf("/groups") === 0) {
         self.showGroupListView();
       } else {

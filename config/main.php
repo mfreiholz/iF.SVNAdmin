@@ -151,7 +151,7 @@ return array (
                 "for_groups" => array (
                     "svnauthgroups"
                 ),
-                "authzfile" => "D:\\Development\\Data\\dav svn.authz"
+                "authzfile" => ""
             )
         ),
 
