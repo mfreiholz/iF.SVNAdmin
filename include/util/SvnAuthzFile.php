@@ -112,6 +112,10 @@ class SvnAuthzFile {
   public function __construct() {
   }
 
+  public function getFilePath() {
+    return $this->_ini->getFilePath();
+  }
+
   /**
    * @param string $path Path to the authz file.
    * @return int SvnAuthzFile::NO_ERROR, SvnAuthzFile::FILE_ERROR
@@ -387,7 +391,7 @@ class SvnAuthzFile {
     return SvnAuthzFile::NO_ERROR;
   }
 
-  private function createMemberObject($member) {
+  public function createMemberObject($member) {
     $member = trim($member);
     $prefix = substr($member, 0, 1);
     if ($prefix === SvnAuthzFile::ALIAS_SIGN) {

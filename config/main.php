@@ -24,6 +24,11 @@ return array (
         // e.g. Windows: "C:\\Path\\To\\authz"
         "svn_authz_file" => "D:\\Development\\Data\\dav svn.authz",
 
+        // Number of backups to store of each Subversion "authz" file.
+        // The system creates a backup for every action, e.g.: Deleting five users generates five backups.
+        // Setting this configuration to 0 disables the backup functionality.
+        "svn_authz_file_backup_count" => 25,
+
         // Indicates whether the function to delete an repository should be available.
         "repository_deletion_enabled" => false,
 

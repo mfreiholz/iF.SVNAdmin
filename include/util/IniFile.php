@@ -30,6 +30,10 @@ class IniFile {
   private $_filePath = null;
   private $_sections = array ();
   private $_lastComment = "";
+
+  public function getFilePath() {
+    return $this->_filePath;
+  }
   
   /*
    * Methods to access the IniFileSection and IniFileItem objects

@@ -90,7 +90,33 @@ class SVNAdminEngine {
     if (empty($authz)) {
       return false;
     }
-    // TODO Backup file before overwriting it!
+    // Copy to backup directory before overwriting it.
+    $srcFilePath = $authz->getFilePath();
+    $dstDirPath = SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "authz-backup" . DIRECTORY_SEPARATOR . md5($srcFilePath);
+    if (!is_dir($dstDirPath) && !mkdir($dstDirPath, 0777, true)) {
+      error_log("Can not create backup directory (path=" . $dstDirPath . ")");
+    } else {
+      $dt = new DateTime("now", new DateTimeZone("UTC"));
+      $dstFileName = $dt->format("Y-m-d H-i-s") . substr((string)microtime(), 1, 8) . ".authz";
+      $dstFilePath = $dstDirPath . DIRECTORY_SEPARATOR . $dstFileName;
+      if (!copy($srcFilePath, $dstFilePath)) {
+        error_log("Can not copy authz file to backup directory (path=" . $dstFilePath . ")");
+      }
+      // Delete old backups.
+      $backupCount = (int) $this->_config["common"]["svn_authz_file_backup_count"];
+      if ($backupCount > 0) {
+        $entries = Elws::listDirectory($dstDirPath);
+        rsort($entries, SORT_STRING);
+        while (count($entries) > $backupCount) {
+          $fileName = array_pop($entries);
+          $filePath = realpath($dstDirPath . DIRECTORY_SEPARATOR . $fileName);
+          if (!unlink($filePath)) {
+            error_log("Can not delete old backup file (path=" . $filePath . ")");
+          }
+        }
+      }
+    }
+    // Save changes.
     return $authz->writeToFile() === SvnAuthzFile::NO_ERROR;
   }
 
