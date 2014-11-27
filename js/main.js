@@ -13,7 +13,7 @@
 
   AppEngine.prototype.init = function () {
     brite.viewDefaultConfig.loadTmpl = true;
-    brite.viewDefaultConfig.loadCss = true;
+    brite.viewDefaultConfig.loadCss = false;
     brite.viewDefaultConfig.loadJs = true;
   };
 

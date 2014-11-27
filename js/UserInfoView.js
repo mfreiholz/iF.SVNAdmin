@@ -16,6 +16,10 @@
     },
 
     events: {
+      "click; .refresh-link": function (ev) {
+        var view = this;
+        view.showGroups();
+      }
     },
 
     /////////////////////////////////////////////////////////////////
@@ -23,8 +27,8 @@
     /////////////////////////////////////////////////////////////////
 
     options: {
-      providerId: null,
-      userId: null
+      providerId: "",
+      userId: ""
     },
 
     showGroups: function () {
@@ -36,16 +40,13 @@
         showPaging: true,
         showRowNumber: true,
         pageSize: 5,
-
         singleActions: [],
-
         multiActions: [
-          {
+          /*{
             id: "unassign",
             name: tr("Unassign"),
             callback: function (ids) {
-              var promises = [],
-                i = 0;
+              var promises = [], i = 0;
               for (i = 0; i < ids.length; ++i) {
                 promises.push(svnadmin.service.userUnassignGroup(providerId, userId, ids[i]));
               }
@@ -53,13 +54,11 @@
                 view.showGroups(providerId);
               });
             }
-          }
+          }*/
         ],
-
         columns: [
           { id: "", name: "Name" }
         ],
-
         loadMore: function (offset, num) {
           var def = new jQuery.Deferred();
           svnadmin.service.getGroupsOfUser(view.options.providerId, view.options.userId, offset, num).done(function (resp) {
