@@ -3,7 +3,7 @@ class SvnAuthGroupProvider extends GroupProvider {
   private $_authz = null;
 
   public function initialize(SVNAdminEngine $engine, $config) {
-    $this->_authz = $engine->getSvnAuthzFile($engine->getConfig()["common"]["svn_authz_file"]);
+    $this->_authz = $engine->getSvnAuthzFile($config["svn_authz_file"]);
     return !empty($this->_authz);
   }
 

@@ -118,11 +118,11 @@ return array (
         "group" => array (
             "svnauthgroups" => array (
                 "class_name" => "SvnAuthGroupProvider",
-                "file" => "D:\\Development\\Data\\dav svn.authz"
+                "svn_authz_file" => ""
             ),
             "svnauthgroups2" => array (
                 "class_name" => "SvnAuthGroupProvider",
-                "file" => "D:\\Development\\Data\\dav svn 2.authz"
+                "svn_authz_file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "subversion2.authz"
             ),
             /*"ldapgroups" => array (
                 "class_name" => "LdapGroupProvider",

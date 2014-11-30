@@ -49,7 +49,9 @@
       } else if (path.indexOf("/userinfo") === 0) {
         self.showUserInfoView(self.getParameter("providerid"), self.getParameter("userid"));
       } else if (path.indexOf("/groups") === 0) {
-        self.showGroupListView();
+        self.showGroupListView(self.getParameter("providerid"));
+      } else if (path.indexOf("/groupinfo") === 0) {
+        self.showGroupInfoView(self.getParameter("providerid"), self.getParameter("groupid"));
       } else {
         self.showDashboard();
       }

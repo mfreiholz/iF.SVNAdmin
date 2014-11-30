@@ -10,7 +10,7 @@
     <ul class="nav nav-pills">
       {{for providers ~current=current}}
       <li class="provider" data-providerid="{{>id}}">
-        <a class="provider-link" data-providerid="{{>id}}" href="#!/groups/{{>id}}">{{>id}}</a>
+        <a class="provider-link" data-providerid="{{>id}}" href="#!/groups?providerid={{url:id}}">{{>id}}</a>
       </li>
       {{/for}}
     </ul>

@@ -12,7 +12,11 @@
       svnadmin.service.getGroupProviders().done(function (resp) {
         var html = jQ("#tmpl-GroupListView-Providers").render({ providers: resp });
         view.$el.find(".provider-wrapper").html(html);
-        view.showGroups(resp[0].id);
+        if (typeof data.providerId !== "undefined") {
+          view.showGroups(data.providerId);
+        } else {
+          view.showGroups(resp[0].id);
+        }
       });
     },
 
@@ -52,7 +56,7 @@
           {
             id: "info",
             getName: function (id) { return tr("Info"); },
-            getLink: function (id) { return "#!/groups/" + providerId + "/" + id + "/info"; },
+            getLink: function (id) { return "#!/groupinfo?" + svnadmin.app.createUrlParameterString({ providerid: providerId, groupid: id }); },
             callback: function (id) { return svnadmin.app.showGroupInfoView(providerId, id); }
           }
         ],
