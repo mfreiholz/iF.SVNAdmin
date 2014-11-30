@@ -25,7 +25,11 @@ class SvnAuthzFileGroup extends SvnAuthzFileMember {
 
   public static function create($name) {
     $obj = new SvnAuthzFileGroup();
-    $obj->name = $name;
+    if (strpos($name, "@") === 0) {
+      $obj->name = substr($name, 1);
+    } else {
+      $obj->name = $name;
+    }
     return $obj;
   }
 

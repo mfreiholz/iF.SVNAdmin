@@ -57,11 +57,11 @@
           }*/
         ],
         columns: [
-          { id: "", name: "Name" }
+          { id: "", name: tr("Name") }
         ],
         loadMore: function (offset, num) {
           var def = new jQuery.Deferred();
-          svnadmin.service.getGroupsOfUser(view.options.providerId, view.options.userId, offset, num).done(function (resp) {
+          svnadmin.service.getGroupsOfMember(view.options.providerId, view.options.userId, offset, num).done(function (resp) {
             var obj = {}, i = 0, row = null;
             obj.hasMore = resp.hasmore;
             obj.rows = [];

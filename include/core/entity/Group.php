@@ -30,5 +30,13 @@ class Group {
     }
     return $this->_id;
   }
+
+  public static function create($id, $name, $displayName = null) {
+    $o = new Group();
+    $o->_id = $id;
+    $o->_name = $name;
+    $o->_displayName = $displayName;
+    return $o;
+  }
 }
 ?>

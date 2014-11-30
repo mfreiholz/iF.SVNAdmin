@@ -1,9 +1,9 @@
 <?php
 class SVNAdminEngine {
+  const REPOSITORY_PROVIDER = "repository";
   const USER_PROVIDER = "user";
   const GROUP_PROVIDER = "group";
-  const USERGROUP_PROVIDER = "usergroup";
-  const REPOSITORY_PROVIDER = "repository";
+  const GROUPMEMBER_PROVIDER = "groupmember";
 
   private static $_instance = null;
   private static $_svn = null;
@@ -11,6 +11,8 @@ class SVNAdminEngine {
 
   private $_config = null;
   private $_classPaths = array ();
+  private $_authenticators = array ();
+  private $_providers = array ();
 
   /**
    * Cache of all loaded SvnAuthzFiles.
@@ -20,21 +22,10 @@ class SVNAdminEngine {
    */
   private $_authzFiles = array ();
 
-  /**
-   * @var array<string, Authenticator>
-   */
-  private $_authenticators = array ();
-
-  /**
-   * @var array
-   */
-  private $_providers = array ();
-
   private function __construct($config) {
     // Init configuration.
     $this->_config = $config;
-
-    // Setup class loading.
+    // Setup dynamic class loading.
     $this->_classPaths = array (
         SVNADMIN_BASE_DIR . "/include/core/api",
         SVNADMIN_BASE_DIR . "/include/core/entity",
@@ -163,13 +154,13 @@ class SVNAdminEngine {
     return $ret;
   }
 
-  public function getAssociaterForUsers($providerId) {
-    $type = SVNAdminEngine::USERGROUP_PROVIDER;
-    // Search the Associator.
+  public function getGroupMemberAssociater($forProviderId) {
+    $type = SVNAdminEngine::GROUPMEMBER_PROVIDER;
+    // Search the associator.
     $foundId = null;
     foreach ($this->_config["providers"][$type] as $id => $conf) {
-      foreach ($conf["for_users"] as $userProviderId) {
-        if ($providerId === $userProviderId) {
+      foreach ($conf["for_provider"] as $pid) {
+        if ($pid === $forProviderId) {
           $foundId = $id;
           break;
         }
@@ -182,10 +173,10 @@ class SVNAdminEngine {
     if ($foundId === null) {
       return null;
     }
-    return $this->getProvider(SVNAdminEngine::USERGROUP_PROVIDER, $foundId);
+    return $this->getProvider(SVNAdminEngine::GROUPMEMBER_PROVIDER, $foundId);
   }
 
-  public function getAssociaterForGroups($providerId) {
+  /*public function getAssociaterForGroups($providerId) {
     $type = SVNAdminEngine::USERGROUP_PROVIDER;
     // Search the Associator.
     $foundId = null;
@@ -205,7 +196,7 @@ class SVNAdminEngine {
       return null;
     }
     return $this->getProvider(SVNAdminEngine::USERGROUP_PROVIDER, $foundId);
-  }
+  }*/
 
   /**
    * @return SvnClient

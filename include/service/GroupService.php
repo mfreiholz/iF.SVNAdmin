@@ -12,14 +12,14 @@ class GroupService extends ServiceBase {
         return $this->processCreate($request, $response);
       case "delete":
         return $this->processDelete($request, $response);
-      case "info":
-        break;
-      case "users":
-        return $this->processUsers($request, $response);
-      case "assignuser":
-        return $this->processAssignUnassignUser($request, $response, true);
-      case "unassignuser":
-        return $this->processAssignUnassignUser($request, $response, false);
+      case "members":
+        return $this->processMembers($request, $response);
+      case "membergroups":
+        return $this->processMemberGroups($request, $response);
+      case "memberassign":
+        return $this->processMemberAssignOrUnassign($request, $response, true);
+      case "memberunassign":
+        return $this->processMemberAssignOrUnassign($request, $response, false);
     }
     return parent::processRequest($request, $response);
   }
@@ -28,14 +28,12 @@ class GroupService extends ServiceBase {
     $engine = SVNAdminEngine::getInstance();
     $providers = $engine->getKnownProviders(SVNAdminEngine::GROUP_PROVIDER);
 
-    $respProviders = array ();
+    $json = array ();
     foreach ($providers as &$prov) {
-      $respProv = new stdClass();
-      $respProv->id = $prov->id;
-      $respProv->editable = null;
-      $respProviders[] = $respProv;
+      $json[] = JsonSerializer::fromProvider($prov);
     }
-    $response->done2json($respProviders);
+
+    $response->done2json($json);
     return true;
   }
 
@@ -43,39 +41,24 @@ class GroupService extends ServiceBase {
     $providerId = $request->getParameter("providerid");
     $offset = $request->getParameter("offset", 0);
     $num = $request->getParameter("num", 10);
-
     if (empty($providerId)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Missing parameter 'providerid'."
-      ));
-      return true;
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::GROUP_PROVIDER, $providerId);
-
     if (empty($provider)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid provider '" . $providerId . "'."
-      ));
-      return true;
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $list = $provider->getGroups($offset, $num);
     $items = $list->getItems();
 
     $json = new stdClass();
-    $json->editable = $provider->isEditable();
     $json->hasmore = $list->hasMore();
     $json->groups = array ();
     foreach ($items as &$group) {
-      $jsonGroup = new stdClass();
-      $jsonGroup->id = $group->getId();
-      $jsonGroup->name = $group->getName();
-      $jsonGroup->displayname = $group->getDisplayName();
-      $json->groups[] = $jsonGroup;
+      $json->groups[] = JsonSerializer::fromGroup($group);
     }
     $response->done2json($json);
     return true;
@@ -84,177 +67,124 @@ class GroupService extends ServiceBase {
   public function processCreate(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
     $name = $request->getParameter("name");
-
     if (empty($providerId) || empty($name)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid parameters."
-      ));
-      return true;
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::GROUP_PROVIDER, $providerId);
-
     if (empty($provider)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid provider '" . $providerId . "'."
-      ));
-      return true;
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $group = $provider->create($name);
     if ($group === null) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Internal error."
-      ));
-      return true;
+      return $this->processErrorInternal($request, $response);
     }
 
     $json = new stdClass();
-    $jsonGroup = new stdClass();
-    $jsonGroup->id = $group->getId();
-    $jsonGroup->name = $group->getName();
-    $jsonGroup->displayname = $group->getDisplayName();
-    $json->group = $jsonGroup;
-
+    $json->group = JsonSerializer::fromGroup($group);
     $response->done2json($json);
     return true;
   }
 
   public function processDelete(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
-    $id = $request->getParameter("groupid");
-
-    if (empty($providerId) || empty($id)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid parameters."
-      ));
-      return true;
+    $groupId = $request->getParameter("groupid");
+    if (empty($providerId) || empty($groupId)) {
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::GROUP_PROVIDER, $providerId);
-
     if (empty($provider)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid provider '" . $providerId . "'."
-      ));
-      return true;
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
-    if (!$provider->delete($id)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Internal error."
-      ));
-      return true;
+    if (!$provider->delete($groupId)) {
+      return $this->processErrorInternal($request, $response);
     }
-
-    $response->write2json(array (
-        "status" => 0
-    ));
     return true;
   }
 
-  public function processInfo(WebRequest $request, WebResponse $response) {
-    return true;
-  }
-
-  public function processUsers(WebRequest $request, WebResponse $response) {
+  public function processMembers(WebRequest $request, WebResponse $response) {
     $providerId = $request->getParameter("providerid");
-    $id = $request->getParameter("groupid");
+    $groupId = $request->getParameter("groupid");
     $offset = $request->getParameter("offset", 0);
     $num = $request->getParameter("num", 10);
-
-    if (empty($providerId) || empty($id)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid parameters."
-      ));
-      return true;
+    if (empty($providerId) || empty($groupId)) {
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
-    $provider = $engine->getAssociaterForGroups($providerId);
-
+    $provider = $engine->getGroupMemberAssociater($providerId);
     if (empty($provider)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Internal error."
-      ));
-      return true;
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
-    $itemList = $provider->getUsersOfGroup($id, $offset, $num);
-    $users = $itemList->getItems();
+    $itemList = $provider->getMembersOfGroup($groupId, $offset, $num);
+    $members = $itemList->getItems();
 
     $json = new stdClass();
-    $json->editable = $provider->isEditable();
     $json->hasmore = $itemList->hasMore();
-    $json->users = array ();
-    foreach ($users as &$user) {
-      $jsonUser = new stdClass();
-      $jsonUser->id = $user->getId();
-      $jsonUser->name = $user->getName();
-      $jsonUser->displayname = $user->getDisplayName();
-      $json->users[] = $jsonUser;
+    $json->members = array ();
+    foreach ($members as &$member) {
+      $json->members[] = JsonSerializer::fromGroupMember($member);
     }
     $response->done2json($json);
     return true;
   }
 
-  public function processAssignUnassignUser(WebRequest $request, WebResponse $response, $assignOrUnassign) {
-    $doAssign = $assignOrUnassign;
-    $doUnassign = !$assignOrUnassign;
-    $groupProviderId = $request->getParameter("providerid");
-    $userId = $request->getParameter("userid");
-    $groupId = $request->getParameter("groupid");
-
-    if (empty($groupProviderId) || empty($userId) || empty($groupId)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Invalid parameters."
-      ));
-      return true;
+  public function processMemberGroups(WebRequest $request, WebResponse $response) {
+    $providerId = $request->getParameter("providerid");
+    $memberId = $request->getParameter("memberid");
+    $offset = $request->getParameter("offset", 0);
+    $num = $request->getParameter("num", 10);
+    if (empty($providerId) || empty($memberId)) {
+      return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
-    $provider = $engine->getAssociaterForGroups($groupProviderId);
-
+    $provider = $engine->getGroupMemberAssociater($providerId);
     if (empty($provider)) {
-      $response->fail(500);
-      $response->write2json(array (
-          "message" => "Internal error."
-      ));
-      return true;
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
-    if ($doAssign) {
-      if (!$provider->assign($userId, $groupId)) {
-        $response->fail(500);
-        $response->write2json(array (
-            "message" => "Internal error."
-        ));
-        return true;
-      }
-    } else if ($doUnassign) {
-      if (!$provider->unassign($userId, $groupId)) {
-        $response->fail(500);
-        $response->write2json(array (
-            "message" => "Internal error."
-        ));
-        return true;
-      }
+    $itemList = $provider->getGroupsOfMember($memberId, $offset, $num);
+    $groups = $itemList->getItems();
+
+    $json = new stdClass();
+    $json->hasmore = $itemList->hasMore();
+    $json->groups = array();
+    foreach ($groups as &$group) {
+      $json->groups[] = JsonSerializer::fromGroup($group);
+    }
+    $response->done2json($json);
+    return true;
+  }
+
+  public function processMemberAssignOrUnassign(WebRequest $request, WebResponse $response, $assignOrUnassign) {
+    $providerId = $request->getParameter("providerid");
+    $groupId = $request->getParameter("groupId");
+    $memberId = $request->getParameter("memberId");
+    if (empty($providerId) || empty($groupId) || empty($memberId)) {
+      return $this->processErrorMissingParameters($request, $response);
     }
 
-    $response->write2json(array (
-        "status" => 0
-    ));
+    $provider = SVNAdminEngine::getInstance()->getGroupMemberAssociater($providerId);
+    if (empty($provider)) {
+      return $this->processErrorInvalidProvider($request, $response, $providerId);
+    }
+
+    if ($assignOrUnassign) {
+      if (!$provider->assign($groupId, $memberId)) {
+        return $this->processErrorInternal($request, $response);
+      }
+    } else {
+      if (!$provider->unassign($groupId, $memberId)) {
+        return $this->processErrorInternal($request, $response);
+      }
+    }
     return true;
   }
 

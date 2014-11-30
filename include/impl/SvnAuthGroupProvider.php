@@ -1,14 +1,14 @@
 <?php
 class SvnAuthGroupProvider extends GroupProvider {
-  private $_authfile = null;
+  private $_authz = null;
 
   public function initialize(SVNAdminEngine $engine, $config) {
-    $this->_authfile = $engine->getSvnAuthzFile($engine->getConfig()["common"]["svn_authz_file"]);
-    return !empty($this->_authfile);
+    $this->_authz = $engine->getSvnAuthzFile($engine->getConfig()["common"]["svn_authz_file"]);
+    return !empty($this->_authz);
   }
 
   public function getGroups($offset = 0, $num = -1) {
-    $groups = $this->_authfile->getGroups();
+    $groups = $this->_authz->getGroups();
     $groupsCount = count($groups);
 
     $list = new ItemList();
@@ -16,9 +16,7 @@ class SvnAuthGroupProvider extends GroupProvider {
     $begin = (int) $offset;
     $end = (int) $num === -1 ? $groupsCount : (int) $offset + (int) $num;
     for ($i = $begin; $i < $end && $i < $groupsCount; ++$i) {
-      $o = new Group();
-      $o->initialize($groups[$i]->name, $groups[$i]->name);
-      $listItems[] = $o;
+      $listItems[] = SvnAuthzHelper::createGroupObject($groups[$i]);
     }
     $list->initialize($listItems, $groupsCount > $end);
     return $list;
@@ -32,23 +30,27 @@ class SvnAuthGroupProvider extends GroupProvider {
     if (empty($name)) {
       return null;
     }
-    if (!$this->_authfile->createGroup($name)) {
+    $authzGroup = SvnAuthzFileGroup::create($name);
+    if ($this->_authz->addGroup($authzGroup) !== SvnAuthzFile::NO_ERROR) {
       return null;
     }
-    $this->_authfile->save();
-    $o = new Group();
-    $o->initialize($name, $name);
-    return $o;
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($this->_authz)) {
+      return null;
+    }
+    return SvnAuthzHelper::createGroupObject($authzGroup);
   }
 
   public function delete($id) {
     if (empty($id)) {
       return false;
     }
-    if (!$this->_authfile->deleteGroup($id)) {
+    $authzGroup = SvnAuthzFileGroup::create($id);
+    if ($this->_authz->removeGroup($authzGroup) !== SvnAuthzFile::NO_ERROR) {
       return false;
     }
-    $this->_authfile->save();
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($this->_authz)) {
+      return false;
+    }
     return true;
   }
 

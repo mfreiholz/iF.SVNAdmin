@@ -12,7 +12,7 @@
 
     postDisplay: function () {
       var view = this;
-      view.showUsers();
+      view.showMembers();
     },
 
     events: {
@@ -27,7 +27,7 @@
       groupId: null
     },
 
-    showUsers: function () {
+    showMembers: function () {
       var view = this;
       var options = {
         showPaging: true,
@@ -36,18 +36,19 @@
         singleActions: [],
         multiActions: [],
         columns: [
-          { id: "", name: "Name" }
+          { id: "", name: tr("Name") },
+          { id: "", name: tr("Type") }
         ],
         loadMore: function (offset, num) {
           var def = new jQuery.Deferred();
-          svnadmin.service.getUsersOfGroup(view.options.providerId, view.options.groupId, offset, num).done(function (resp) {
+          svnadmin.service.getMembersOfGroup(view.options.providerId, view.options.groupId, offset, num).done(function (resp) {
             var obj = {}, i = 0, row = null;
             obj.hasMore = resp.hasmore;
             obj.rows = [];
-            for (i = 0; i < resp.users.length; ++i) {
+            for (i = 0; i < resp.members.length; ++i) {
               row = {};
-              row.id = resp.users[i].id;
-              row.cells = [resp.users[i].displayname];
+              row.id = resp.members[i].id;
+              row.cells = [resp.members[i].displayname, resp.members[i].type];
               obj.rows.push(row);
             }
             def.resolve(obj);
@@ -57,7 +58,7 @@
           return def.promise();
         }
       };
-      brite.display("BasicTableView", view.$el.find(".users .panel-body"), { options: options });
+      brite.display("BasicTableView", view.$el.find(".members .panel-body"), { options: options });
     },
 
     showRoles: function () {

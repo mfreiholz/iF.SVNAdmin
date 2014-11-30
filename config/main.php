@@ -139,8 +139,16 @@ return array (
             )*/
         ),
 
+        "groupmember" => array(
+          "svnauthzgroupmembers" => array(
+            "class_name" => "SvnAuthzGroupMemberAssociater",
+            "for_provider" => array("svnauthgroups", "passwdusers"),
+            "svn_authz_file" => ""
+          )
+        ),
+
         // User<->Group association
-        "usergroup" => array (
+        /*"usergroup" => array (
             "svnauthfile" => array (
                 "class_name" => "SvnAuthUserGroupAssociater",
                 "for_users" => array (
@@ -153,7 +161,7 @@ return array (
                 ),
                 "authzfile" => ""
             )
-        ),
+        ),*/
 
         // Repositories
         "repository" => array (
