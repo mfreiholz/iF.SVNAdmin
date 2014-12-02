@@ -142,7 +142,7 @@ class SVNAdminEngine {
       if (isset($this->_config["providers"][$type][$id])) {
         $config = $this->_config["providers"][$type][$id];
         $className = $config["class_name"];
-        $obj = new $className();
+        $obj = new $className($id);
         if ($obj->initialize($this, $config)) {
           $this->_providers[$type][$id] = $obj;
           $ret = $obj;
@@ -174,6 +174,42 @@ class SVNAdminEngine {
       return null;
     }
     return $this->getProvider(SVNAdminEngine::GROUPMEMBER_PROVIDER, $foundId);
+  }
+
+  public function startMultiProviderSearch($type, array $providerIds, $query) {
+    if (empty($type)) {
+      return null;
+    }
+    $providers = array();
+    if (empty($providerIds)) {
+     foreach ($this->getKnownProviders($type) as $info) {
+       $prov = $this->getProvider($type, $info->id);
+       if (!empty($prov)) {
+         $providers[] = $prov;
+       }
+     }
+    } else {
+      foreach ($providerIds as $id) {
+        $prov = $this->getProvider($type, $id);
+        if (!empty($prov)) {
+          $providers[] = $prov;
+        }
+      }
+    }
+    if (empty($providers)) {
+      error_log("No valid providers for search.");
+      return null;
+    }
+
+    $list = new ItemList();
+    foreach ($providers as &$prov) {
+      $searchResultList = $prov->search($query);
+      foreach ($searchResultList->getItems() as &$item) {
+        $item->providerid = $prov->getId();
+      }
+      $list->append($searchResultList);
+    }
+    return $list;
   }
 
   /*public function getAssociaterForGroups($providerId) {

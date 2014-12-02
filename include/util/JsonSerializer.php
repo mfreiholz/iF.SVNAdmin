@@ -13,6 +13,9 @@ class JsonSerializer {
     $j->id = $user->getId();
     $j->name = $user->getName();
     $j->displayname = $user->getDisplayName();
+    if (property_exists($user, "providerid")) {
+      $j->providerid = $user->providerid;
+    }
     return $j;
   }
 
@@ -21,6 +24,9 @@ class JsonSerializer {
     $j->id = $group->getId();
     $j->name = $group->getName();
     $j->displayname = $group->getDisplayName();
+    if (property_exists($group, "providerid")) {
+      $j->providerid = $group->providerid;
+    }
     return $j;
   }
 
@@ -38,7 +44,9 @@ class JsonSerializer {
     $j->hasmore = $itemList->hasMore();
     $j->items = array();
     foreach ($itemList->getItems() as &$item) {
-      if ($item instanceof Group) {
+      if ($item instanceof User) {
+        $j->items[] = JsonSerializer::fromUser($item);
+      } else if ($item instanceof Group) {
         $j->items[] = JsonSerializer::fromGroup($item);
       } else if ($item instanceof GroupMember) {
         $j->items[] = JsonSerializer::fromGroupMember($item);

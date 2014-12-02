@@ -33,9 +33,11 @@
         svnadmin.app.showUserListView(providerId);
       },
       "click; .groups-link": function (ev) {
-        var view = this;
+        var view = this,
+          element = jQuery(ev.currentTarget),
+          providerId = element.data("providerid");
         view.setActiveNavLink(ev.currentTarget.className);
-        svnadmin.app.showGroupListView(undefined);
+        svnadmin.app.showGroupListView(providerId);
       },
       "click; .logout-link": function (ev) {
         var view = this;

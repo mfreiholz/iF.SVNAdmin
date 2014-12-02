@@ -8,6 +8,8 @@ class UserService extends ServiceBase {
         return $this->processProviders($request, $response);
       case "list":
         return $this->processList($request, $response);
+      case "search":
+        return $this->processSearch($request, $response);
       case "create":
         return $this->processCreate($request, $response);
       case "delete":
@@ -53,6 +55,26 @@ class UserService extends ServiceBase {
     foreach ($users as &$user) {
       $json->users[] = JsonSerializer::fromUser($user);
     }
+    $response->done2json($json);
+    return true;
+  }
+
+  public function processSearch(WebRequest $request, WebResponse $response) {
+    $providerId = $request->getParameter("providerid");
+    $query = $request->getParameter("query");
+    $offset = $request->getParameter("offset", 0);
+    $num = $request->getParameter("num", 10);
+    if (empty($query)) {
+      return $this->processErrorMissingParameters($request, $response);
+    }
+
+    $list = SVNAdminEngine::getInstance()->startMultiProviderSearch(SVNAdminEngine::USER_PROVIDER,empty($providerId) ? array() : array($providerId), $query);
+    if (empty($list)) {
+      return $this->processErrorInternal($request, $response);
+    }
+
+    $json = new stdClass();
+    $json->list = JsonSerializer::fromItemList($list);
     $response->done2json($json);
     return true;
   }

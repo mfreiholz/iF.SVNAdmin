@@ -16,6 +16,12 @@
     },
 
     events: {
+      
+      "click; .refresh-link": function (ev) {
+        var view = this;
+        view.showMembers();
+      }
+      
     },
 
     /////////////////////////////////////////////////////////////////
@@ -58,7 +64,7 @@
           return def.promise();
         }
       };
-      brite.display("BasicTableView", view.$el.find(".members .panel-body"), { options: options });
+      brite.display("BasicTableView", view.$el.find(".members .panel-body"), { options: options }, {emptyParent: true });
     },
 
     showRoles: function () {

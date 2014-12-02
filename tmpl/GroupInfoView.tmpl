@@ -1,7 +1,9 @@
 <script id="tmpl-GroupInfoView" type="text/html">
   <div class="GroupInfoView">
-    <h1>Group Information</h1>
-    <p><a role="button" class="btn btn-default groups-link" href="#!/groups/{{>options.providerId}}" data-providerid="{{>options.providerId}}">{{>~tr('Back to overview')}}</a></p>
+    <p>
+      <a role="button" class="btn btn-default groups-link" href="#!/groups?providerid={{url:options.providerId}}" data-providerid="{{>options.providerId}}"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <button class="btn btn-default refresh-link"><span class="glyphicon glyphicon-refresh"></span></button>
+    </p>
 
     <!-- Members -->
     <div class="panel panel-default members">

@@ -1,15 +1,37 @@
 <?php
-class UserProvider {
+abstract class UserProvider extends Provider {
 
-  public function initialize(SVNAdminEngine $engine, $config) {
+  public function __construct($id) {
+    parent::__construct($id);
   }
 
-  public function getUsers($offset = 0, $num = -1) {
-    return new ItemList();
-  }
+  /**
+   * @param int $offset
+   * @param int $num
+   * @return ItemList
+   */
+  public abstract function getUsers($offset = 0, $num = -1);
 
-  public function findUser($id) {
-    return null;
+  /**
+   * @param $id
+   * @return User or NULL
+   */
+  public abstract function findUser($id);
+
+  public function search($query, $offset = 0, $num = -1) {
+    $list = new ItemList();
+    $foundUsers = array();
+    foreach ($this->getUsers()->getItems() as &$user) {
+      if (stripos($user->getId(), $query) !== false) {
+        $foundUsers[] = $user;
+      } else if (stripos($user->getName(), $query) !== false) {
+        $foundUsers[] = $user;
+      } else if (stripos($user->getDisplayName(), $query) !== false) {
+        $foundUsers[] = $user;
+      }
+    }
+    $list->initialize($foundUsers, false);
+    return $list;
   }
 
   public function isEditable() {
@@ -26,10 +48,6 @@ class UserProvider {
 
   public function changePassword($id, $password) {
     return false;
-  }
-
-  public function search($query, $offset = 0, $num = 10) {
-    return new ItemList();
   }
 
 }
