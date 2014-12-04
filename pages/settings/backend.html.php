@@ -56,6 +56,17 @@ $(document).ready(function(){
     "#LdapGroupTestResult");
   });
 
+  $('#AdDomainControllerDetect').click(function(){
+      getSettings("AdDomainControllerDetect", {AdDomainName: $("#AdDomainName").val()}, "#AdDomainController");
+  });
+
+  $('#AdConnectionTest').click(function() {
+    testSettings("AdConnection",
+        {AdDomainController: $("#AdDomainController").val(),
+         AdBindUser: $("#AdBindUser").val(), AdBindPassword: $("#AdBindPassword").val()},
+        "#AdConnectionTestResult");
+  });
+
 });
 </script>
 
@@ -361,6 +372,71 @@ $(document).ready(function(){
       </td>
     </tr>
   </tbody>
+</table>
+<br>
+
+<!-- AD connection -->
+<table class="datatable settings" id="tbl_adconnection">
+    <colgroup>
+        <col width="50%">
+        <col width="50%">
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2"><?php Translate("AD connection information"); ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><?php Translate("Domain name"); ?><br><small><b><?php Translate("Example"); ?>:</b> <?php PrintStringValue("AdDomainNameEx"); ?></small></td>
+        <td><input type="text" name="AdDomainName" id="AdDomainName" value="<?php PrintStringValue("AdDomainName"); ?>"></td>
+    </tr>
+    <tr>
+        <td><?php Translate("Domain controller"); ?><br><small><b><?php Translate("Example"); ?>:</b> <?php PrintStringValue("AdDomainControllerEx"); ?></small></td>
+        <td>
+            <input type="text" name="AdDomainController" id="AdDomainController" value="<?php PrintStringValue("AdDomainController"); ?>">
+            <input type="button" id="AdDomainControllerDetect" value="<?php Translate("Detect"); ?>">
+            <span id="AdDomainControllerDetectResult" style="display:none;"></span>
+        </td>
+    </tr>
+    <tr>
+        <td><?php Translate("Bind user"); ?><br><small><b><?php Translate("Example"); ?>:</b> <?php PrintStringValue("AdBindUserEx"); ?></small></td>
+        <td><input type="text" name="AdBindUser" id="AdBindUser" value="<?php PrintStringValue("AdBindUser"); ?>"></td>
+    </tr>
+    <tr>
+        <td><?php Translate("Bind password"); ?><br><small><b><?php Translate("Example"); ?>:</b> <?php PrintStringValue("AdBindPasswordEx"); ?></small></td>
+        <td>
+            <input type="password" name="AdBindPassword" id="AdBindPassword" value="<?php PrintStringValue("AdBindPassword"); ?>">
+            <input type="button" id="AdConnectionTest" value="<?php Translate("Test"); ?>">
+            <span id="AdConnectionTestResult" style="display:none;"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+
+
+<!-- AD Group provider -->
+<table class="datatable settings" id="tbl_adgroup">
+    <colgroup>
+        <col width="50%">
+        <col width="50%">
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2"><?php Translate("AD group provider information"); ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><?php Translate("Filter"); ?><br><small><b><?php Translate("Example"); ?>:</b> <?php PrintStringValue("AdGroupFilterEx"); ?></small></td>
+        <td><input type="text" name="AdGroupFilter" id="AdGroupFilter" value="<?php PrintStringValue("AdGroupFilter"); ?>"></td>
+    </tr>
+    <tr>
+        <td><?php Translate("Strict mode"); ?></td>
+        <td><input type="checkbox" name="AdGroupStrictMode" id="AdGroupStrictMode" <?php if (GetBoolValue("AdGroupStrictMode")) { echo "checked"; }; ?>></td>
+    </tr>
+    </tbody>
 </table>
 <br>
 
