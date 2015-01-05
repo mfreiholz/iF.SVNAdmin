@@ -20,9 +20,19 @@
       },
       "click; .assign-user-link": function (ev) {
         var view = this;
+        // Show search dialog.
+        brite.display("BasicSearchDialogView", "body", {
+          options: {
+          }
+        }, { emptyParent: false });
       },
       "click; .assign-group-link": function (ev) {
         var view = this;
+        // Show search dialog.
+        brite.display("BasicSearchDialogView", "body", {
+          options: {
+          }
+        }, { emptyParent: false });
       }
     },
 

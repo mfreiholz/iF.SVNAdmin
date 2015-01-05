@@ -68,7 +68,7 @@ class UserService extends ServiceBase {
       return $this->processErrorMissingParameters($request, $response);
     }
 
-    $list = SVNAdminEngine::getInstance()->startMultiProviderSearch(SVNAdminEngine::USER_PROVIDER,empty($providerId) ? array() : array($providerId), $query);
+    $list = SVNAdminEngine::getInstance()->startMultiProviderSearch(SVNAdminEngine::USER_PROVIDER, empty($providerId) ? array() : array($providerId), $query);
     if (empty($list)) {
       return $this->processErrorInternal($request, $response);
     }

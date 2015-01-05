@@ -266,6 +266,20 @@
     });
   };
 
+  ServiceClient.prototype.searchUsers = function (providerId, query, offset, num) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "UserService",
+        action: "search",
+        providerid: providerId,
+        query: query,
+        offset: offset,
+        num: num
+      }
+    });
+  };
+
   ServiceClient.prototype.createUser = function (providerId, name, password) {
     return this.ajax({
       url: "service/",

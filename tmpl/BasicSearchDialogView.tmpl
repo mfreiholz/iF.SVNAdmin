@@ -10,15 +10,21 @@
           </div>
           <div class="modal-body">
             <form role="form">
+
               <div class="form-group">
-                <label for="name">{{>~tr("Name")}}</label>
-                <input class="form-control" type="text" name="name" required>
-                <p class="help-block">TODO: Help here!</p>
+                <div class="input-group">
+                  <input class="form-control" type="text" name="name" required>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                  </span>
+                </div>
               </div>
+
               <div class="form-group">
-                <select name="result" style="height:200px" multiple>
+                <select multiple class="form-control" name="result" size="8">
                 </select>
               </div>
+
             </form>
           </div>
           <div class="modal-footer">
