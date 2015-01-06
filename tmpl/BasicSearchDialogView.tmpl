@@ -13,16 +13,14 @@
 
               <div class="form-group">
                 <div class="input-group">
-                  <input class="form-control" type="text" name="name" required>
+                  <input class="form-control" type="text" name="searchquery" required>
                   <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    <button class="btn btn-default search-link" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                   </span>
                 </div>
               </div>
 
-              <div class="form-group">
-                <select multiple class="form-control" name="result" size="8">
-                </select>
+              <div class="form-group searchresultcontainer">
               </div>
 
             </form>
@@ -36,4 +34,16 @@
     </div>
 
   </div>
+</script>
+
+<script id="tmpl-BasicSearchDialogView-Result" type="text/html">
+  <select multiple class="form-control" name="result" size="8">
+    {{for rows}}
+      <option value="{{>id}}">{{>id}}</option>
+    {{/for}}
+  </select>
+</script>
+
+<script id="tmpl-BasicSearchDialogView-ResultItem" type="text/html">
+  <option value="{{>id}}">{{>id}}</option>
 </script>

@@ -13,12 +13,54 @@
     postDisplay: function () {
       var view = this;
       view.showGroups();
+      view.showRoles();
     },
 
     events: {
       "click; .refresh-link": function (ev) {
         var view = this;
         view.showGroups();
+        view.showRoles();
+      },
+      "click; .assigngroup-link": function (ev) {
+        var view = this;
+        brite.display("BasicSearchDialogView", "body", {
+          searchMore: function (query, offset, limit) {
+            var def = new jQ.Deferred();
+            svnadmin.service.searchGroups("", query, offset, limit)
+              .done(function (data) {
+                var res = {};
+                res.hasMore = false;
+                res.rows = [];
+                for (var i = 0; i < data.list.items.length; ++i) {
+                  var row = {};
+                  row.id = data.list.items[i].id;
+                  res.rows.push(row);
+                }
+                def.resolve(res);
+              })
+              .fail(function () {
+                def.reject();
+              });
+            return def.promise();
+          },
+          onSubmitted: function (ids) {
+            alert("ids=" + JSON.stringify(ids));
+            var defs = [];
+            for (var i = 0; i < ids.length; ++i) {
+              // Assign user to selected groups.
+              var def = svnadmin.service.groupMemberAssign(view.options.providerId, ids[i], view.options.userId);
+              defs.push(def);
+            }
+            jQ.when.apply(null, defs)
+              .done(function () {
+                view.showGroups();
+              })
+              .fail(function () {
+                alert("Error...");
+              });
+          }
+        }, { emptyParent: false });
       }
     },
 

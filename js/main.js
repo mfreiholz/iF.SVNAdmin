@@ -330,6 +330,20 @@
     });
   };
 
+  ServiceClient.prototype.searchGroups = function (providerId, query, offset, num) {
+    return this.ajax({
+      url: "service/",
+      data: {
+        m: "GroupService",
+        action: "search",
+        providerid: providerId,
+        query: query,
+        offset: offset,
+        num: num
+      }
+    });
+  };
+
   ServiceClient.prototype.createGroup = function (providerId, name) {
     return this.ajax({
       url: "service/",

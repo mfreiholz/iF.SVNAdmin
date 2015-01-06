@@ -22,6 +22,10 @@ class SvnAuthGroupProvider extends GroupProvider {
     return $list;
   }
 
+  public function findGroup($id) {
+    return null;
+  }
+
   public function isEditable() {
     return true;
   }

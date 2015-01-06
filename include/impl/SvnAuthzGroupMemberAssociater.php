@@ -61,11 +61,27 @@ class SvnAuthzGroupMemberAssociater extends GroupMemberAssociater {
   }
 
   public function assign($groupId, $memberId) {
-    return false;
+    $authzGroup = SvnAuthzFileGroup::create($groupId);
+    $authzMember = $this->_authz->createMemberObject($memberId);
+    if ($this->_authz->addMember($authzGroup, $authzMember) !== SvnAuthzFile::NO_ERROR) {
+      return false;
+    }
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($this->_authz)) {
+      return false;
+    }
+    return true;
   }
 
   public function unassign($groupId, $memberId) {
-    return false;
+    $authzGroup = SvnAuthzFileGroup::create($groupId);
+    $authzMember = $this->_authz->createMemberObject($memberId);
+    if ($this->_authz->removeMember($authzGroup, $authzMember) !== SvnAuthzFile::NO_ERROR) {
+      return false;
+    }
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($this->_authz)) {
+      return false;
+    }
+    return true;
   }
 
   protected function createGroupMemberFromAuthzFileMember(SvnAuthzFileMember $authzMember) {

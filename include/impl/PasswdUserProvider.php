@@ -5,7 +5,7 @@ class PasswdUserProvider extends UserProvider {
   public function initialize(SVNAdminEngine $engine, $config) {
     $this->_passwd = new Htpasswd($config["file"]);
     if (!$this->_passwd->init()) {
-      $this->_passwd->error();
+      error_log("Can not load PASSWD file (path=" . $config["file"] . "; error=" . $this->_passwd->error() . ")");
       return false;
     }
     return true;
