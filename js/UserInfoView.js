@@ -29,10 +29,10 @@
             var def = new jQ.Deferred();
             svnadmin.service.searchGroups("", query, offset, limit)
               .done(function (data) {
-                var res = {};
+                var res = {}, i = 0;
                 res.hasMore = false;
                 res.rows = [];
-                for (var i = 0; i < data.list.items.length; ++i) {
+                for (i = 0; i < data.list.items.length; ++i) {
                   var row = {};
                   row.id = data.list.items[i].id;
                   res.rows.push(row);
@@ -45,9 +45,8 @@
             return def.promise();
           },
           onSubmitted: function (ids) {
-            alert("ids=" + JSON.stringify(ids));
-            var defs = [];
-            for (var i = 0; i < ids.length; ++i) {
+            var defs = [], i = 0;
+            for (i = 0; i < ids.length; ++i) {
               // Assign user to selected groups.
               var def = svnadmin.service.groupMemberAssign(view.options.providerId, ids[i], view.options.userId);
               defs.push(def);
@@ -58,6 +57,7 @@
               })
               .fail(function () {
                 alert("Error...");
+                view.showGroups();
               });
           }
         }, { emptyParent: false });
@@ -84,19 +84,19 @@
         pageSize: 5,
         singleActions: [],
         multiActions: [
-          /*{
+          {
             id: "unassign",
             name: tr("Unassign"),
             callback: function (ids) {
-              var promises = [], i = 0;
+              var defs = [], i = 0;
               for (i = 0; i < ids.length; ++i) {
-                promises.push(svnadmin.service.userUnassignGroup(providerId, userId, ids[i]));
+                defs.push(svnadmin.service.groupMemberUnassign(view.options.providerId, ids[i], view.options.userId));
               }
-              return jQ.when.apply(null, promises).done(function () {
+              return jQ.when.apply(null, defs).done(function () {
                 view.showGroups(providerId);
               });
             }
-          }*/
+          }
         ],
         columns: [
           { id: "", name: tr("Name") }

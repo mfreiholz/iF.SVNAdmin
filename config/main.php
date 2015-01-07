@@ -142,7 +142,7 @@ return array (
         "groupmember" => array(
           "svnauthzgroupmembers" => array(
             "class_name" => "SvnAuthzGroupMemberAssociater",
-            "for_provider" => array("svnauthgroups", "passwdusers"),
+            "for_provider" => array("svnauthgroups", "passwdusers", "digestusers", "digestusers2"),
             "svn_authz_file" => ""
           )
         ),
