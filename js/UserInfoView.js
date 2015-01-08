@@ -13,19 +13,17 @@
     postDisplay: function () {
       var view = this;
       view.showGroups();
-      view.showRoles();
     },
 
     events: {
       "click; .refresh-link": function (ev) {
         var view = this;
         view.showGroups();
-        view.showRoles();
       },
       "click; .assigngroup-link": function (ev) {
         var view = this;
         brite.display("BasicSearchDialogView", "body", {
-          searchMore: function (query, offset, limit) {
+          onSearchMore: function (query, offset, limit) {
             var def = new jQ.Deferred();
             svnadmin.service.searchGroups("", query, offset, limit)
               .done(function (data) {
@@ -121,9 +119,6 @@
         }
       };
       brite.display("BasicTableView", view.$el.find(".groups .panel-body"), { options: options }, { emptyParent: true });
-    },
-
-    showRoles: function () {
     }
 
   });

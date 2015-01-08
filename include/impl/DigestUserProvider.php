@@ -1,5 +1,5 @@
 <?php
-class DigestUserProvider extends UserProvider {
+class DigestUserProvider extends SearchableUserProvider {
   private $_passwd = null;
 
   public function initialize(SVNAdminEngine $engine, $config) {

@@ -360,7 +360,7 @@ class LdapConnector {
         return utf8_encode($str);
       }
     }
-    return $data;
+    return $str;
   }
 
   public function ensureUtf8Decoding($str) {
@@ -371,6 +371,12 @@ class LdapConnector {
         return $str;
       }
     }
+    return $str;
+  }
+}
+
+if (!function_exists("ldap_escape")) {
+  function ldap_escape($str) {
     return $str;
   }
 }

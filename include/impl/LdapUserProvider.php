@@ -39,6 +39,28 @@ class LdapUserProvider extends UserProvider {
     return new User();
   }
 
+  public function search($query, $offset = 0, $limit = -1) {
+    $list = new ItemList();
+
+    $queryFilter = $this->_config["attributes"][0] . '=*' . ldap_escape($query) . '*';
+    $searchFilter = '(&(' . $queryFilter . ')' . $this->_config["search_filter"] . ')';
+
+    $loginAttribute = strtolower($this->_config["attributes"][0]);
+    $entries = $this->_connector->objectSearch($this->_config["search_base_dn"], $searchFilter, $this->_config["attributes"], $offset, 50);
+    $entriesCount = count($entries);
+
+    $listItems = array ();
+    $end = $entriesCount < $limit || $limit === -1 ? $entriesCount : $limit;
+    for ($i = 0; $i < $end; ++$i) {
+      $entry = $entries[$i];
+      $u = new User();
+      $u->initialize($entry->dn, $entry->$loginAttribute, $this->formatDisplayName($this->_config["display_name_format"], $entry));
+      $listItems[] = $u;
+    }
+    $list->initialize($listItems, $entriesCount > $limit);
+    return $list;
+  }
+
   protected function formatDisplayName($format, $entry) {
     if (empty($format) || empty($entry))
       return null;

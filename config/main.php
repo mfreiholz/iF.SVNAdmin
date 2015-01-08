@@ -65,11 +65,11 @@ return array (
         /*array (
             "id" => "authldap",
             "class_name" => "LdapAuthenticator",
-            "host_url" => "ldap://192.168.178.24:389/",
+            "host_url" => "ldap://h2377348.stratoserver.net:389/",
             "protocol_version" => 3,
             "bind_dn" => "CN=ADReadUser,CN=Users,DC=insanefactory,DC=com",
             "bind_password" => "ADReadUser",
-            "search_base_dn" => "OU=iFSVNAdmin,DC=insanefactory,DC=com",
+            "search_base_dn" => "OU=iF.SVNAdmin,DC=insanefactory,DC=com",
             "search_filter" => "(&(objectClass=person)(objectClass=user))",
             "attribute" => "sAMAccountName"
         )*/
@@ -97,21 +97,21 @@ return array (
                 "file" => "D:\\Development\\Data\\dav svn.digest.passwd",
                 "realm" => "myrealm2"
             ),
-            /*"ldapusers" => array (
+            "ldapusers" => array (
                 "class_name" => "LdapUserProvider",
-                "host_url" => "ldap://192.168.178.24:389/",
+                "host_url" => "ldap://h2377348.stratoserver.net:389/",
                 "protocol_version" => 3,
                 "bind_dn" => "CN=ADReadUser,CN=Users,DC=insanefactory,DC=com",
-                "bind_password" => "ADReadUser",
-                "search_base_dn" => "OU=iFSVNAdmin,DC=insanefactory,DC=com",
+                "bind_password" => "abcABC123!\"§",
+                "search_base_dn" => "OU=iF.SVNAdmin,DC=insanefactory,DC=com",
                 "search_filter" => "(&(objectClass=person)(objectClass=user))",
                 "attributes" => array (
                     "sAMAccountName",
                     "givenName",
                     "sn"
                 ),
-                "display_name_format" => "%givenName %sn (%sAMAccountName)"
-            )*/
+                "display_name_format" => "%givenName %sn"
+            )
         ),
 
         // Groups
@@ -142,7 +142,7 @@ return array (
         "groupmember" => array(
           "svnauthzgroupmembers" => array(
             "class_name" => "SvnAuthzGroupMemberAssociater",
-            "for_provider" => array("svnauthgroups", "passwdusers", "digestusers", "digestusers2"),
+            "for_provider" => array("svnauthgroups", "svnauthgroups2", "passwdusers", "digestusers", "digestusers2"),
             "svn_authz_file" => ""
           )
         ),

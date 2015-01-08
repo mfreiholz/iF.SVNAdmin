@@ -1,5 +1,5 @@
 <?php
-class PasswdUserProvider extends UserProvider {
+class PasswdUserProvider extends SearchableUserProvider {
   private $_passwd = null;
 
   public function initialize(SVNAdminEngine $engine, $config) {

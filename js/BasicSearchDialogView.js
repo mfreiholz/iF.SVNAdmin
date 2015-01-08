@@ -35,7 +35,7 @@
     ///////////////////////////////////////////////////////////////////
 
     options: {
-      searchMore: function (query, offset, limit) {
+      onSearchMore: function (query, offset, limit) {
         var def = new jQuery.Deferred();
         def.resolve({
           hasMore: false,
@@ -46,7 +46,7 @@
         });
       },
       onSubmitted: function () {
-      },
+      }
     },
 
     searchMore: function () {
@@ -58,7 +58,7 @@
       searchResultContainer.html("...");
 
       // Execute search.
-      view.options.searchMore(query, 0, -1)
+      view.options.onSearchMore(query, 0, -1)
         .done(function (data) {
           var html = jQuery("#tmpl-BasicSearchDialogView-Result").render(data);
           searchResultContainer.html(html);

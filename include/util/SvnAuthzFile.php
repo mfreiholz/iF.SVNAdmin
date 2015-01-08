@@ -347,6 +347,7 @@ class SvnAuthzFile {
       }
     }
     $membersParts[] = $memberObj->asMemberString();
+    $membersParts = array_filter($membersParts); // Removes empty elements from array.
     $value = join(",", $membersParts);
     $this->_ini->setValue(SvnAuthzFile::GROUP_SECTION, $group->name, $value);
     return SvnAuthzFile::NO_ERROR;
