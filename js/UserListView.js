@@ -51,7 +51,6 @@
         showPaging: true,
         showRowNumber: true,
         pageSize: 5,
-
         singleActions: [
           {
             id: "info",
@@ -60,12 +59,14 @@
             callback: function (id) { return svnadmin.app.showUserInfoView(providerId, id); }
           }
         ],
-
         multiActions: [
           {
             id: "delete",
             name: tr("Delete"),
             callback: function (ids) {
+              if (!window.confirm(tr("Are you sure?"))) {
+                return new jQuery.Deferred().resolve().promise();
+              }
               var promises = [],
                 i = 0;
               for (i = 0; i < ids.length; ++i) {
