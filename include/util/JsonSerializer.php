@@ -4,7 +4,7 @@ class JsonSerializer {
   public static function fromProvider($provider) {
     $j = new stdClass();
     $j->id = $provider->id;
-    $j->editable = false;
+    $j->editable = $provider->editable;
     return $j;
   }
 

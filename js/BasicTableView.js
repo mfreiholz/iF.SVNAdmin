@@ -4,10 +4,56 @@
 
     create: function (data, config) {
       var view = this;
+      
+      // Options and callbacks.
+      view.options = {
+        showSearch: false,
+        showPaging: false,
+        showRowNumber: false,
+        pageSize: 25,
+        singleActions: [
+          /*{
+            id: "",
+            getName: function (id) { return ""; },
+            getLink: function (id) { return ""; },
+            onActivated: function (id) { return null; }
+          }*/
+        ],
+        multiActions: [
+          /*{
+            id: "",
+            name: "",
+            onActivated: function (ids) { return null; }
+          }*/
+        ],
+        columns: [
+          { id: "", name: "Column 1" },
+          { id: "", name: "Column 2" },
+          { id: "", name: "Column 3" }
+        ],
+        loadMore: function (offset, num) {
+          var def = new jQ.Deferred();
+          def.resolve({
+            hasMore: true,
+            rows: [
+              { id: 0, cells: ["Value " + (1 + offset), "Value " + (2 + offset), "Value " + (3 + offset)] },
+              { id: 1, cells: ["Value " + (4 + offset), "Value " + (5 + offset), "Value " + (6 + offset)] },
+              { id: 2, cells: ["Value " + (7 + offset), "Value " + (8 + offset), "Value " + (9 + offset)] }
+            ]
+          });
+          return def.promise();
+        },
+        search: function (query, offset, num) {
+          var def = new jQ.Deferred();
+          def.resolve({
+            hasMore: false,
+            rows: []
+          });
+          return def.promise();
+        }
+      };
       jQ.extend(view.options, data.options);
-      return jQ("#tmpl-BasicTableView").render({
-        options: view.options
-      });
+      return jQ("#tmpl-BasicTableView").render({ options: view.options });
     },
 
     postDisplay: function (data, config) {
@@ -16,7 +62,6 @@
     },
 
     events: {
-
       "keypress; .search-query": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
@@ -28,7 +73,6 @@
         }
         view.loadMoreResults(query, 0);
       },
-
       "click; li:not(.disabled) a.previous-page": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
@@ -36,7 +80,6 @@
         view.loadMoreRows(offset);
         return ev.preventDefault();
       },
-
       "click; li:not(.disabled) a.next-page:not(.disabled)": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
@@ -44,7 +87,6 @@
         view.loadMoreRows(offset);
         return ev.preventDefault();
       },
-
       "click; .single-action": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
@@ -53,7 +95,6 @@
           prom = view.invokeSingleAction(actionId, rowId);
         //return ev.preventDefault();
       },
-
       "click; .multi-action": function (ev) {
         var view = this,
           ele = jQ(ev.currentTarget),
@@ -61,65 +102,12 @@
           prom = view.invokeMultiAction(actionId);
         return ev.preventDefault();
       }
-
     },
 
     ///////////////////////////////////////////////////////////////////
     // Custom properties
     // The "options" object defines the public API of the table logic.
     ///////////////////////////////////////////////////////////////////
-
-    options: {
-      showSearch: false,
-      showPaging: false,
-      showRowNumber: false,
-      pageSize: 10,
-
-      singleActions: [
-        {
-          id: "",
-          getName: function (id) { return ""; },
-          getLink: function (id) { return ""; },
-          onActivated: function (id) { return null; }
-        }
-      ],
-
-      multiActions: [
-        {
-          id: "",
-          name: "",
-          onActivated: function (ids) { return null; }
-        }
-      ],
-
-      columns: [
-        { id: "", name: "Column 1" },
-        { id: "", name: "Column 2" },
-        { id: "", name: "Column 3" }
-      ],
-
-      loadMore: function (offset, num) {
-        var def = new jQ.Deferred();
-        def.resolve({
-          hasMore: true,
-          rows: [
-            { id: 0, cells: ["Value " + (1 + offset), "Value " + (2 + offset), "Value " + (3 + offset)] },
-            { id: 1, cells: ["Value " + (4 + offset), "Value " + (5 + offset), "Value " + (6 + offset)] },
-            { id: 2, cells: ["Value " + (7 + offset), "Value " + (8 + offset), "Value " + (9 + offset)] }
-          ]
-        });
-        return def.promise();
-      },
-
-      search: function (query, offset, num) {
-        var def = new jQ.Deferred();
-        def.resolve({
-          hasMore: false,
-          rows: []
-        });
-        return def.promise();
-      }
-    },
 
     loadMoreRows: function (offset) {
       var view = this,

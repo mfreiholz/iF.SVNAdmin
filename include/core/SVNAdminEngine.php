@@ -129,8 +129,11 @@ class SVNAdminEngine {
     $ret = array ();
     $configs = $this->_config["providers"][$type];
     foreach ($configs as $id => &$config) {
+      $className = $config["class_name"];
+      $obj = new $className($id);
       $c = new stdClass();
       $c->id = $id;
+      $c->editable = $obj->isEditable();
       $ret[] = $c;
     }
     return $ret;
