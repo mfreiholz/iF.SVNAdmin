@@ -5,12 +5,12 @@ return array (
         // Absolute path to the "svn" binary.
         // e.g. Linux: "/usr/bin/svn"
         // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svn.exe"
-        "svn_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svn.exe",
+        "svn_binary_path" => "/usr/bin/svn",
 
         // Absolute path to the "svnadmin" binary.
         // e.g. Linux: "/bin/svnadmin"
         // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svnadmin.exe"
-        "svnadmin_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svnadmin.exe",
+        "svnadmin_binary_path" => "/usr/bin/svnadmin",
 
         // Absolute path to a custom Subversion user config directory.
         // Some systems with SElinux permit access to the default config directory.
@@ -54,12 +54,12 @@ return array (
         array (
             "id" => "authpasswd",
             "class_name" => "PasswdAuthenticator",
-            "file" => "D:\\Development\\Data\\dav svn.passwd"
+            "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "dav svn.passwd"
         ),
         array (
             "id" => "authdigest",
             "class_name" => "DigestAuthenticator",
-            "file" => "D:\\Development\\Data\\dav svn.digest.passwd",
+            "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "dav svn.digest.passwd",
             "realm" => "myrealm"
         ),
         /*array (
@@ -85,17 +85,12 @@ return array (
         "user" => array (
             "passwdusers" => array (
                 "class_name" => "PasswdUserProvider",
-                "file" => "D:\\Development\\Data\\dav svn.passwd"
+                "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "dav svn.passwd"
             ),
             "digestusers" => array (
                 "class_name" => "DigestUserProvider",
-                "file" => "D:\\Development\\Data\\dav svn.digest.passwd",
+                "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "dav svn.digest.passwd",
                 "realm" => "myrealm"
-            ),
-            "digestusers2" => array (
-                "class_name" => "DigestUserProvider",
-                "file" => "D:\\Development\\Data\\dav svn.digest.passwd",
-                "realm" => "myrealm2"
             ),
             "ldapusers" => array (
                 "class_name" => "LdapUserProvider",
@@ -147,32 +142,16 @@ return array (
           )
         ),
 
-        // User<->Group association
-        /*"usergroup" => array (
-            "svnauthfile" => array (
-                "class_name" => "SvnAuthUserGroupAssociater",
-                "for_users" => array (
-                    "passwdusers",
-                    "digestusers",
-                    "digestusers2"
-                ),
-                "for_groups" => array (
-                    "svnauthgroups"
-                ),
-                "authzfile" => ""
-            )
-        ),*/
-
         // Repositories
         "repository" => array (
             "svnparentrepos" => array (
                 "class_name" => "SvnParentRepositoryProvider",
-                "path" => "D:\\Development\\Data\\my repos",
+                "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos",
                 "svn_authz_file" => ""
             ),
             "svnparentrepos2" => array (
                 "class_name" => "SvnParentRepositoryProvider",
-                "path" => "D:\\Development\\Data\\my repos 2",
+                "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos 2",
                 "svn_authz_file" => ""
             )
         )
