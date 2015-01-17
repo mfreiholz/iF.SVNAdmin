@@ -23,12 +23,10 @@ class UserService extends ServiceBase {
   public function processProviders(WebRequest $request, WebResponse $response) {
     $engine = SVNAdminEngine::getInstance();
     $providers = $engine->getKnownProviders(SVNAdminEngine::USER_PROVIDER);
-
     $json = array ();
     foreach ($providers as &$prov) {
       $json[] = JsonSerializer::fromProvider($prov);
     }
-
     $response->done2json($json);
     return true;
   }

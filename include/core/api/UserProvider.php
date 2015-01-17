@@ -13,22 +13,12 @@ abstract class UserProvider extends Provider {
   public abstract function getUsers($offset = 0, $num = -1);
 
   /**
-   * @param $id
-   * @return User or NULL
-   */
-  public abstract function findUser($id);
-
-  /**
    * @param $query
    * @param int $offset
    * @param int $limit
    * @return mixed
    */
   public abstract function search($query, $offset = 0, $limit = -1);
-
-  public function isEditable() {
-    return false;
-  }
 
   public function create($name, $password) {
     return null;

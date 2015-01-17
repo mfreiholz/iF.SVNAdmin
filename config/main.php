@@ -83,18 +83,28 @@ return array (
 
     "providers" => array (
 
-        // Users
+        // User backends
+        // =============
         "user" => array (
+
+            // The PasswdUserProvider manages users of a simple "passwd" file.
             "passwdusers" => array (
                 "class_name" => "PasswdUserProvider",
-                "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "dav svn.passwd"
+                "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.passwd"
             ),
+
+            // The DigestUserProvider manages users of a "digest" passwd file.
+            // realm = The realm of the users.
             "digestusers" => array (
                 "class_name" => "DigestUserProvider",
-                "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "dav svn.digest.passwd",
+                "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.digest.passwd",
                 "realm" => "myrealm"
             ),
-            "ldapusers" => array (
+
+            // The LdapUserProvider READS users from a local or remote LDAP (Active Directory, OpenLDAP) server.
+            // The providers doesn't provide any CREATE- or DELETE- functionality.
+            // NOTE: DO NOT USE IT YET - IN DEVELOPMENT
+            /*"ldapusers" => array (
                 "class_name" => "LdapUserProvider",
                 "host_url" => "ldap://h2377348.stratoserver.net:389/",
                 "protocol_version" => 3,
@@ -108,11 +118,15 @@ return array (
                     "sn"
                 ),
                 "display_name_format" => "%givenName %sn"
-            )
+            )*/
         ),
 
-        // Groups
+        // Group backends
+        // ==============
         "group" => array (
+
+            // The SvnAuthGroupProvider manages groups from a "authz" file.
+            // svn_authz_file = If empty, it will use the default configured "common/svn_authz_file".
             "svnauthgroups" => array (
                 "class_name" => "SvnAuthGroupProvider",
                 "svn_authz_file" => ""
@@ -123,11 +137,11 @@ return array (
             ),
             /*"ldapgroups" => array (
                 "class_name" => "LdapGroupProvider",
-                "host_url" => "ldap://192.168.178.24:389/",
+                "host_url" => "ldap://h2377348.stratoserver.net:389/",
                 "protocol_version" => 3,
                 "bind_dn" => "CN=ADReadUser,CN=Users,DC=insanefactory,DC=com",
-                "bind_password" => "ADReadUser",
-                "search_base_dn" => "OU=iFSVNAdmin,DC=insanefactory,DC=com",
+                "bind_password" => "abcABC123!\"§",
+                "search_base_dn" => "OU=iF.SVNAdmin,DC=insanefactory,DC=com",
                 "search_filter" => "(objectClass=group)",
                 "attributes" => array (
                     "sAMAccountName"

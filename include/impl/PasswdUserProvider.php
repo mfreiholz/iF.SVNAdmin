@@ -2,6 +2,11 @@
 class PasswdUserProvider extends SearchableUserProvider {
   private $_passwd = null;
 
+  public function __construct($id) {
+    parent::__construct($id);
+    $this->_flags[] = Provider::FLAG_EDITABLE;
+  }
+
   public function initialize(SVNAdminEngine $engine, $config) {
     $this->_passwd = new Htpasswd($config["file"]);
     if (!$this->_passwd->init()) {
@@ -12,11 +17,9 @@ class PasswdUserProvider extends SearchableUserProvider {
   }
 
   public function getUsers($offset = 0, $num = -1) {
-    $list = new ItemList();
-
     $users = $this->_passwd->getUserList();
     $usersCount = count($users);
-
+    $list = new ItemList();
     $listItems = array ();
     $begin = (int) $offset;
     $end = (int) $num === -1 ? $usersCount : (int) $offset + (int) $num;
@@ -30,24 +33,13 @@ class PasswdUserProvider extends SearchableUserProvider {
     return $list;
   }
 
-  public function findUser($id) {
-    if (!$this->_passwd->userExits($id)) {
-      return null;
-    }
-    $obj = new User();
-    $obj->initialize($id, $id);
-    return $obj;
-  }
-
-  public function isEditable() {
-    return true;
-  }
-
   public function create($name, $password) {
     if (!$this->_passwd->createUser($name, $password)) {
+      error_log("Can not create user (message=" . $this->_passwd->error() . ")");
       return null;
     }
     if (!$this->_passwd->writeToFile()) {
+      error_log("Can not write file (message=" . $this->_passwd->error() . ")");
       return null;
     }
     $o = new User();

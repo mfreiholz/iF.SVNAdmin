@@ -3,6 +3,11 @@ class LdapUserProvider extends UserProvider {
   private $_config = null;
   private $_connector = null;
 
+  public function __construct($id) {
+    parent::__construct($id);
+    $this->_flags[] = Provider::FLAG_REQUIRES_SYNC;
+  }
+
   public function initialize(SVNAdminEngine $engine, $config) {
     $conn = new LdapConnector();
     if (!$conn->connect($config["host_url"], 0, $config["protocol_version"])) {
@@ -17,26 +22,21 @@ class LdapUserProvider extends UserProvider {
   }
 
   public function getUsers($offset = 0, $num = -1) {
-    $list = new ItemList();
-
     $loginAttribute = strtolower($this->_config["attributes"][0]);
     $entries = $this->_connector->objectSearch($this->_config["search_base_dn"], $this->_config["search_filter"], $this->_config["attributes"], $offset, $num + 1);
     $entriesCount = count($entries);
 
+    $list = new ItemList();
     $listItems = array ();
     $end = $entriesCount < $num ? $entriesCount : $num;
     for ($i = 0; $i < $end; ++$i) {
       $entry = $entries[$i];
       $u = new User();
-      $u->initialize($entry->dn, $entry->$loginAttribute, $this->formatDisplayName($this->_config["display_name_format"], $entry));
+      $u->initialize(/*$entry->dn*/$entry->$loginAttribute, $entry->$loginAttribute, $this->formatDisplayName($this->_config["display_name_format"], $entry));
       $listItems[] = $u;
     }
     $list->initialize($listItems, $entriesCount > $num);
     return $list;
-  }
-
-  public function findUser($id) {
-    return new User();
   }
 
   public function search($query, $offset = 0, $limit = -1) {
@@ -54,7 +54,7 @@ class LdapUserProvider extends UserProvider {
     for ($i = 0; $i < $end; ++$i) {
       $entry = $entries[$i];
       $u = new User();
-      $u->initialize($entry->dn, $entry->$loginAttribute, $this->formatDisplayName($this->_config["display_name_format"], $entry));
+      $u->initialize(/*$entry->dn*/$entry->$loginAttribute, $entry->$loginAttribute, $this->formatDisplayName($this->_config["display_name_format"], $entry));
       $listItems[] = $u;
     }
     $list->initialize($listItems, $entriesCount > $limit);

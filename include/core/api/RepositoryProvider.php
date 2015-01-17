@@ -1,71 +1,43 @@
 <?php
-class RepositoryProvider {
-
-  /**
-   * @param SVNAdminEngine $engine
-   * @param array $config
-   * @return bool
-   */
-  public function initialize(SVNAdminEngine $engine, $config) {
-    return true;
-  }
+abstract class RepositoryProvider extends Provider {
 
   /**
    * @param int $offset
    * @param int $num
    * @return array
    */
-  public function getRepositories($offset, $num) {
-    return array ();
-  }
+  public abstract function getRepositories($offset, $num);
 
   /**
    * @param string $id
    * @return Repository
    */
-  public function findRepository($id) {
-    return null;
-  }
-
-  /**
-   * @return bool
-   */
-  public function isEditable() {
-    return false;
-  }
+  public abstract function findRepository($id);
 
   /**
    * @param string $name
    * @param array $options
    * @return Repository
    */
-  public function create($name, $options = array ()) {
-    return null;
-  }
+  public abstract function create($name, $options = array());
 
   /**
    * @param string $id
    * @return bool
    */
-  public function delete($id) {
-    return false;
-  }
+  public abstract function delete($id);
 
   /**
    * @param $id
    * @return SvnAuthzFile
    */
-  public function getSvnAuthz($id) {
-    return null;
-  }
+  public abstract function getSvnAuthz($id);
 
   /**
    * Gets an array with undefined variable information about the repository.
    * @param $id
    * @return array
    */
-  public function getInfo($id) {
-    return array();
-  }
+  public abstract function getInfo($id);
 
 }

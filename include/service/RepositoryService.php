@@ -35,14 +35,11 @@ class RepositoryService extends ServiceBase {
   public function processProviders(WebRequest $request, WebResponse $response) {
     $engine = SVNAdminEngine::getInstance();
     $providers = $engine->getKnownProviders(SVNAdminEngine::REPOSITORY_PROVIDER);
-    $jsonProviders = array ();
+    $json = array ();
     foreach ($providers as &$prov) {
-      $jsonProv = new stdClass();
-      $jsonProv->id = $prov->id;
-      $jsonProv->editable = null;
-      $jsonProviders[] = $jsonProv;
+      $json[] = JsonSerializer::fromProvider($prov);
     }
-    $response->done2json($jsonProviders);
+    $response->done2json($json);
     return true;
   }
 
@@ -61,19 +58,19 @@ class RepositoryService extends ServiceBase {
     }
 
     $itemList = $provider->getRepositories($offset, $num);
-    $repos = $itemList->getItems();
 
     $json = new stdClass();
-    $json->editable = $provider->isEditable();
-    $json->hasmore = $itemList->hasMore();
-    $json->repositories = array ();
-    foreach ($repos as &$repo) {
-      $o = new stdClass();
-      $o->id = $repo->getId();
-      $o->name = $repo->getName();
-      $o->displayname = $repo->getDisplayName();
-      $json->repositories[] = $o;
-    }
+    $json->list = JsonSerializer::fromItemList($itemList);
+    //$json->hasmore = $itemList->hasMore();
+    //$json->repositories = array ();
+    //foreach ($repos as &$repo) {
+      //$json->repositories[] = JsonSerializer::fromRepository($repo);
+      //$o = new stdClass();
+      //$o->id = $repo->getId();
+      //$o->name = $repo->getName();
+      //$o->displayname = $repo->getDisplayName();
+      //$json->repositories[] = $o;
+    //}
     $response->done2json($json);
     return true;
   }
@@ -88,7 +85,7 @@ class RepositoryService extends ServiceBase {
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider) || !$provider->isEditable()) {
+    if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
@@ -116,7 +113,7 @@ class RepositoryService extends ServiceBase {
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider) || !$provider->isEditable()) {
+    if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 

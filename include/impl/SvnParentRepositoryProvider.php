@@ -14,14 +14,17 @@
 class SvnParentRepositoryProvider extends RepositoryProvider {
   private $_engine = null;
   private $_config = null;
-  private $_editable = false;
   private $_directoryPath = "";
   private $_authzFilePath = "";
+
+  public function __construct($id) {
+    parent::__construct($id);
+    $this->_flags[] = Provider::FLAG_EDITABLE;
+  }
 
   public function initialize(SVNAdminEngine $engine, $config) {
     $this->_engine = $engine;
     $this->_config = $config;
-    $this->_editable = true;
     $this->_directoryPath = Elws::normalizeAbsolutePath($config["path"]);
     $this->_authzFilePath = Elws::normalizeAbsolutePath($config["svn_authz_file"]);
     return true;
@@ -52,10 +55,6 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
       return null;
     }
     return $this->createRepositoryObject($path);
-  }
-
-  public function isEditable() {
-    return $this->_editable;
   }
 
   public function create($name, $options = array ("type" => "fsfs")) {

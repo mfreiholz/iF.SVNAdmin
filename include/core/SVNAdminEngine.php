@@ -133,7 +133,7 @@ class SVNAdminEngine {
       $obj = new $className($id);
       $c = new stdClass();
       $c->id = $id;
-      $c->editable = $obj->isEditable();
+      $c->editable = $obj->hasFlag(Provider::FLAG_EDITABLE);
       $ret[] = $c;
     }
     return $ret;

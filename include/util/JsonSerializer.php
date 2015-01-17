@@ -3,8 +3,24 @@ class JsonSerializer {
 
   public static function fromProvider($provider) {
     $j = new stdClass();
-    $j->id = $provider->id;
-    $j->editable = $provider->editable;
+    if ($provider instanceof Provider) {
+      $j->id = $provider->getId();
+      $j->editable = $provider->hasFlag(Provider::FLAG_EDITABLE);
+    } else {
+      $j->id = $provider->id;
+      $j->editable = $provider->editable;
+    }
+    return $j;
+  }
+
+  public static function fromRepository(Repository $repo) {
+    $j = new stdClass();
+    $j->id = $repo->getId();
+    $j->name = $repo->getName();
+    $j->displayname = $repo->getDisplayName();
+    if (property_exists($repo, "providerid")) {
+      $j->providerid = $repo->providerid;
+    }
     return $j;
   }
 
@@ -44,7 +60,9 @@ class JsonSerializer {
     $j->hasmore = $itemList->hasMore();
     $j->items = array();
     foreach ($itemList->getItems() as &$item) {
-      if ($item instanceof User) {
+      if ($item instanceof Repository) {
+        $j->items[] = JsonSerializer::fromRepository($item);
+      } else if ($item instanceof User) {
         $j->items[] = JsonSerializer::fromUser($item);
       } else if ($item instanceof Group) {
         $j->items[] = JsonSerializer::fromGroup($item);

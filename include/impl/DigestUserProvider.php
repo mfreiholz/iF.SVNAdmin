@@ -2,6 +2,11 @@
 class DigestUserProvider extends SearchableUserProvider {
   private $_passwd = null;
 
+  public function __construct($id) {
+    parent::__construct($id);
+    $this->_flags[] = Provider::FLAG_EDITABLE;
+  }
+
   public function initialize(SVNAdminEngine $engine, $config) {
     $this->_passwd = new Htdigest($config["file"], $config["realm"]);
     if (!$this->_passwd->init()) {
@@ -28,19 +33,6 @@ class DigestUserProvider extends SearchableUserProvider {
     }
     $list->initialize($listItems, $usersCount > $end);
     return $list;
-  }
-
-  public function findUser($id) {
-    if (!$this->_passwd->userExits($id)) {
-      return null;
-    }
-    $obj = new User();
-    $obj->initialize($id, $id);
-    return $obj;
-  }
-
-  public function isEditable() {
-    return true;
   }
 
   public function create($name, $password) {
