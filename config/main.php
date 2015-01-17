@@ -5,12 +5,14 @@ return array (
         // Absolute path to the "svn" binary.
         // e.g. Linux: "/usr/bin/svn"
         // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svn.exe"
-        "svn_binary_path" => "/usr/bin/svn",
+        //"svn_binary_path" => "/usr/bin/svn",
+        "svn_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svn.exe",
 
         // Absolute path to the "svnadmin" binary.
         // e.g. Linux: "/bin/svnadmin"
         // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svnadmin.exe"
-        "svnadmin_binary_path" => "/usr/bin/svnadmin",
+        //"svnadmin_binary_path" => "/usr/bin/svnadmin",
+        "svnadmin_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svnadmin.exe",
 
         // Absolute path to a custom Subversion user config directory.
         // Some systems with SElinux permit access to the default config directory.

@@ -19,6 +19,13 @@
         var view = this;
         view.searchMore();
       },
+      "keypress; input[name='searchquery']": function (ev) {
+        var view = this;
+        if (ev.keyCode === 13) {
+          view.searchMore();
+          ev.preventDefault();
+        }
+      },
       "click; .submit": function (ev) {
         var view = this;
         view.$el.find("form").submit();
