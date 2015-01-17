@@ -110,16 +110,13 @@
     ///////////////////////////////////////////////////////////////////
 
     loadMoreRows: function (offset) {
-      var view = this,
-        prom = null;
-      if (typeof view.options.loadMore === "function") {
-        prom = view.options.loadMore(offset, view.options.pageSize).done(function (resp) {
+      var view = this;
+      return view.options.loadMore(offset, view.options.pageSize)
+        .done(function (resp) {
           view.renderRows(resp, offset);
           view.renderPager(offset, resp.hasMore);
           view.renderMultiActions();
         });
-      }
-      return null;
     },
 
     loadMoreResults: function (query, offset) {

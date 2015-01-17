@@ -21,7 +21,7 @@
       },
       "keypress; input[name='searchquery']": function (ev) {
         var view = this;
-        if (ev.keyCode === 13) {
+        if (ev.keyCode === 13 || ev.which === 13) {
           view.searchMore();
           ev.preventDefault();
         }
