@@ -79,7 +79,7 @@
           var def = new jQuery.Deferred();
           svnadmin.service.getRepositories(providerId, offset, num).done(function (resp) {
             var obj = {}, i = 0, row = null;
-            obj.hasMore = resp.hasmore;
+            obj.hasMore = resp.list.hasmore;
             obj.rows = [];
             for (i = 0; i < resp.list.items.length; ++i) {
               row = {};

@@ -4,6 +4,10 @@
 
     create: function (data) {
       var view = this;
+      view.options = {
+        providerId: "",
+        repositoryId: ""
+      };
       jQuery.extend(view.options, data);
       return jQuery("#tmpl-RepositoryInfoView").render({ options: view.options });
     },
@@ -33,13 +37,6 @@
     },
 
     ///////////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////////
-
-    options: {
-      providerId: "",
-      repositoryId: ""
-    },
 
     showBasics: function () {
       var view = this;
