@@ -73,14 +73,18 @@
             id: "delete",
             name: tr("Delete"),
             callback: function (ids) {
+              if (!window.confirm(tr("Are you sure?"))) {
+                return new jQuery.Deferred().resolve().promise();
+              }
               var promises = [],
                 i = 0;
               for (i = 0; i < ids.length; ++i) {
                 promises.push(svnadmin.service.deleteRepositoryPath(providerId, repositoryId, ids[i]));
               }
-              return jQ.when.apply(null, promises).done(function () {
-                view.showPaths(providerId, repositoryId);
-              });
+              return jQ.when.apply(null, promises)
+                .always(function () {
+                  view.showPaths(providerId, repositoryId);
+                });
             }
           }
         ],

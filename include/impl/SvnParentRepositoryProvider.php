@@ -37,6 +37,7 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
       return new ItemList();
     }
     $reposCount = count($repos);
+    sort($repos);
 
     $list = new ItemList();
     $listItems = array ();
@@ -132,7 +133,7 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
       if (is_dir($f)) {
         $this->deleteDirectoryRecursive($f);
       } else {
-        chmod($f, 0777);
+        //chmod($f, 0777);
         unlink($f);
       }
     }
