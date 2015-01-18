@@ -214,7 +214,14 @@ class SvnBase {
       1 => array("pipe", "w"), // STDOUT
       2 => array("pipe", "w")  // STDERR
     );
-    $process = proc_open('"' . $command . '"', $descriptorspec, $pipes);
+    if ($this->_isWindowsServer) {
+      $process = proc_open('"' . $command . '"', $descriptorspec, $pipes);
+    } else {
+      $env = array(
+        "LANG" => "en_US.UTF-8"
+      );
+      $process = proc_open('' . $command . '', $descriptorspec, $pipes, NULL, $env);
+    }
     if (!is_resource($process)) {
       error_log("Subversion command failed (command=" . $command . "; err=proc_open didn't return a resource handle)");
       return SvnBase::ERROR_UNKNOWN;
