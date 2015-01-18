@@ -61,16 +61,6 @@ class RepositoryService extends ServiceBase {
 
     $json = new stdClass();
     $json->list = JsonSerializer::fromItemList($itemList);
-    //$json->hasmore = $itemList->hasMore();
-    //$json->repositories = array ();
-    //foreach ($repos as &$repo) {
-      //$json->repositories[] = JsonSerializer::fromRepository($repo);
-      //$o = new stdClass();
-      //$o->id = $repo->getId();
-      //$o->name = $repo->getName();
-      //$o->displayname = $repo->getDisplayName();
-      //$json->repositories[] = $o;
-    //}
     $response->done2json($json);
     return true;
   }
@@ -117,6 +107,24 @@ class RepositoryService extends ServiceBase {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
+    // Delete all permissions (optional).
+    if (true) {
+      try {
+        $repository = $provider->findRepository($id);
+        $authz = $provider->getSvnAuthz($id);
+        $paths = $authz->getPaths($repository->getName());
+        foreach ($paths as &$path) {
+          $authz->removePath($path);
+        }
+        if (count($paths) > 0) {
+          SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz);
+        }
+      } catch (Exception $e) {
+        error_log("Error during purge of all repository permissions (repositoryid=" . $id . ")");
+      }
+    }
+
+    // Delete repository.
     if (!$provider->delete($id)) {
       return $this->processErrorInternal($request, $response);
     }

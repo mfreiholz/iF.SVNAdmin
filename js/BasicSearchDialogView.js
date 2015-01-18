@@ -4,6 +4,20 @@
 
     create: function (data, config) {
       var view = this;
+      view.options = {
+        showPermissionSelection: false,
+        onSearchMore: function (query, offset, limit) {
+          /*var def = new jQuery.Deferred();
+          def.resolve({
+            hasMore: false,
+            rows: [
+              { id: 0 },
+              { id: 1 }
+            ]
+          });*/
+        },
+        onSubmitted: function () {}
+      };
       jQuery.extend(view.options, data);
       return jQuery("#tmpl-BasicSearchDialogView").render(view.options);
     },
@@ -32,29 +46,19 @@
       },
       "submit; form": function (ev) {
         var view = this,
-          selection = view.getSelection();
+          selection = view.getSelection(),
+          permission = view.getPermission();
         ev.preventDefault();
         view.$el.find("#basicsearchmodal").modal("hide");
-        view.options.onSubmitted(selection);
+        if (view.options.showPermissionSelection) {
+          view.options.onSubmitted(selection, permission);
+        } else {
+          view.options.onSubmitted(selection);
+        }
       }
     },
 
     ///////////////////////////////////////////////////////////////////
-
-    options: {
-      onSearchMore: function (query, offset, limit) {
-        var def = new jQuery.Deferred();
-        def.resolve({
-          hasMore: false,
-          rows: [
-            { id: 0 },
-            { id: 1 }
-          ]
-        });
-      },
-      onSubmitted: function () {
-      }
-    },
 
     searchMore: function () {
       var view = this,
@@ -78,10 +82,16 @@
     getSelection: function () {
       var view = this,
         selection = [];
-      jQuery("select option:selected").each(function () {
+      jQuery("select[name='result'] option:selected").each(function () {
         selection.push(jQuery(this).val());
       });
       return selection;
+    },
+    
+    getPermission: function () {
+      var view = this,
+        perm = jQuery("select[name='permission'] option:selected").val();
+      return perm;
     }
 
   });

@@ -166,6 +166,70 @@
   AppEngine.prototype.showPathPermissions = function (providerId, repositoryId, path) {
     return brite.display("PathPermissionsView", "#page-wrapper", { providerId: providerId, repositoryId: repositoryId, path: path }, { emptyParent: true });
   };
+  
+  AppEngine.prototype.showUserSearchDialog = function (showPermissions, onSubmittedCallback) {
+    brite.display(
+      "BasicSearchDialogView",
+      "body",
+      {
+        showPermissionSelection: showPermissions,
+        onSearchMore: function (query, offset, limit) {
+          var def = new jQuery.Deferred();
+          svnadmin.service.searchUsers("", query, offset, limit)
+            .done(function (data) {
+              var res = {}, i = 0;
+              res.hasMore = false;
+              res.rows = [];
+              for (i = 0; i < data.list.items.length; ++i) {
+                var row = {};
+                row.id = data.list.items[i].id;
+                row.object = data.list.items[i];
+                res.rows.push(row);
+              }
+              def.resolve(res);
+            })
+            .fail(function () {
+              def.reject();
+            });
+          return def.promise();
+        },
+        onSubmitted: onSubmittedCallback
+      },
+      { emptyParent: false }
+    );
+  };
+  
+  AppEngine.prototype.showGroupSearchDialog = function (showPermissions, onSubmitCallback) {
+    brite.display(
+      "BasicSearchDialogView",
+      "body",
+      {
+        showPermissionSelection: showPermissions,
+        onSearchMore: function (query, offset, limit) {
+          var def = new jQuery.Deferred();
+          svnadmin.service.searchGroups("", query, offset, limit)
+            .done(function (data) {
+              var res = {}, i = 0;
+              res.hasMore = false;
+              res.rows = [];
+              for (i = 0; i < data.list.items.length; ++i) {
+                var row = {};
+                row.id = data.list.items[i].id;
+                row.object = data.list.items[i];
+                res.rows.push(row);
+              }
+              def.resolve(res);
+            })
+            .fail(function () {
+              def.reject();
+            });
+          return def.promise();
+        },
+        onSubmitted: onSubmitCallback
+      },
+      { emptyParent: false }
+    );
+  };
 
   window.svnadmin = window.svnadmin || {};
   window.svnadmin.app = window.svnadmin.app || new AppEngine();

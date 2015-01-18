@@ -4,6 +4,11 @@
 
     create: function (data, config) {
       var view = this;
+      view.options = {
+        providerId: "",
+        repositoryId: "",
+        path: ""
+      };
       jQuery.extend(view.options, data);
       return jQuery("#tmpl-PathPermissionsView").render({ options: view.options });
     },
@@ -20,31 +25,43 @@
       },
       "click; .assign-user-link": function (ev) {
         var view = this;
-        // Show search dialog.
-        brite.display("BasicSearchDialogView", "body", {
-          options: {
+        svnadmin.app.showUserSearchDialog(true, function (ids, perm) {
+          var defs = [], i = 0;
+          for (i = 0; i < ids.length; ++i) {
+            var def = svnadmin.service.assignRepositoryPath(view.options.providerId, view.options.repositoryId, view.options.path, ids[i], perm);
+            defs.push(def);
           }
-        }, { emptyParent: false });
+          jQuery.when.apply(null, defs)
+            .done(function () {
+              view.showMembers();
+            })
+            .fail(function () {
+              alert("Error...");
+              view.showMembers();
+            });
+        });
       },
       "click; .assign-group-link": function (ev) {
         var view = this;
-        // Show search dialog.
-        brite.display("BasicSearchDialogView", "body", {
-          options: {
+        svnadmin.app.showGroupSearchDialog(true, function (ids, perm) {
+          var defs = [], i = 0;
+          for (i = 0; i < ids.length; ++i) {
+            var def = svnadmin.service.assignRepositoryPath(view.options.providerId, view.options.repositoryId, view.options.path, ids[i], perm);
+            defs.push(def);
           }
-        }, { emptyParent: false });
+          jQuery.when.apply(null, defs)
+            .done(function () {
+              view.showMembers();
+            })
+            .fail(function () {
+              alert("Error...");
+              view.showMembers();
+            });
+        });
       }
     },
 
     ///////////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////////
-
-    options: {
-      providerId: "",
-      repositoryId: "",
-      path: ""
-    },
 
     showMembers: function () {
       var view = this;

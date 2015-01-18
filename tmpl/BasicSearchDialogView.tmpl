@@ -19,9 +19,20 @@
                   </span>
                 </div>
               </div>
-
+              
               <div class="form-group searchresultcontainer">
               </div>
+              
+              {{if showPermissionSelection}}
+              <div class="form-group">
+                <label for="permission">{{>~tr('Permission')}}</label>
+                <select class="form-control" name="permission">
+                  <option value="">{{>~tr('No permission')}}</option>
+                  <option value="r">{{>~tr('Read only')}}</option>
+                  <option value="rw">{{>~tr('Read & Write')}}</option>
+                </select>
+              </div>
+              {{/if}}
 
             </form>
           </div>
