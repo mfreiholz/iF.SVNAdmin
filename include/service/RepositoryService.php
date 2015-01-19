@@ -251,8 +251,17 @@ class RepositoryService extends ServiceBase {
     }
 
     $repository = $provider->findRepository($repositoryId);
+    if (empty($repository)) {
+      return $this->processErrorInternal($request, $response);
+    }
     $authz = $provider->getSvnAuthz($repositoryId);
     $permissions = $authz->getPermissionsOfPath(SvnAuthzFilePath::create($repository->getName(), $path));
+    usort($permissions, function ($a, $b) {
+      if ($a->member->asMemberString() === $b->member->asMemberString()) {
+        return 0;
+      }
+      return ($a->member->asMemberString() < $b->member->asMemberString()) ? -1 : 1;
+    });
 
     $json = new stdClass();
     $json->permissions = array();

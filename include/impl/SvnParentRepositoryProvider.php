@@ -53,6 +53,7 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
   public function findRepository($id) {
     $path = base64_decode($id);
     if (!file_exists($path)) {
+      error_log("Can not find repository (id=" . $id . "; path=" . $path . ")");
       return null;
     }
     return $this->createRepositoryObject($path);

@@ -11,6 +11,10 @@ class ItemList {
     $this->_hasMore = $hasMore;
   }
 
+  public function appendItem($item) {
+    $this->_items[] = $item;
+  }
+
   public function append(ItemList $list) {
     foreach ($list->getItems() as $item) {
       $this->_items[] = $item;

@@ -16,12 +16,14 @@
         <h1 class="panel-title">{{>~tr("Basics")}}</h1>
       </div>
       <div class="panel-body">
-        <dl>
-          <dt>{{>~tr('Name')}}</dt><dd>{{>response.entry.name}}</dd>
-          <dt>{{>~tr('Revision')}}</dt><dd>r{{>response.entry.revision}}</dd>
-          <dt>{{>~tr('Author')}}</dt><dd>{{>response.entry.author}}</dd>
-          <dt>{{>~tr('Date')}}</dt><dd>{{>response.entry.date}}</dd>
-        </dl>
+        <div class="row">
+          <div class="col-md-4"><b>{{>~tr('Name')}}</b><br>{{>response.entry.name}}</div>
+          <div class="col-md-4"><b>{{>~tr('Revision')}}</b><br>r{{>response.entry.revision}}</div>
+          <div class="col-md-4"><b>{{>~tr('Author')}}</b><br>{{>response.entry.author}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-4"><b>{{>~tr('Date')}}</b><br>{{>response.entry.date}}</div>
+        </div>
       </div>
     </div>
   </div>

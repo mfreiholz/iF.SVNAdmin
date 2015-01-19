@@ -15,14 +15,20 @@
       <h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> System</h1>
     </div>
     <div class="panel-body">
-      {{>response.os}}
-      {{>response.osversion}}
-      {{>response.machine}}
-      {{>response.hostname}}
-      {{>response.php.versionname}}
-      {{>response.php.memorypeakusage}}
-      {{>response.php.memoryusage}}
-      {{>response.php.sapiname}}
+      <div class="row">
+        <div class="col-md-4"><b>{{>~tr('OS')}}</b><br>{{>response.os}}</div>
+        <div class="col-md-4"><b>{{>~tr('OS Version')}}</b><br>{{>response.osversion}}</div>
+        <div class="col-md-4"><b>{{>~tr('Machine Type')}}</b><br>{{>response.machine}}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><b>{{>~tr('Hostname')}}</b><br>{{>response.hostname}}</div>
+        <div class="col-md-4"><b>{{>~tr('PHP Version')}}</b><br>{{>response.php.versionname}}</div>
+        <div class="col-md-4"><b>{{>~tr('PHP Memory Peak Usage')}}</b><br>{{>response.php.memorypeakusage}}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"><b>{{>~tr('PHP Memory Usage')}}</b><br>{{>response.php.memoryusage}}</div>
+        <div class="col-md-4"><b>{{>~tr('PHP SAPI Name')}}</b><br>{{>response.php.sapiname}}</div>
+      </div>
     </div>
   </div>
 </div>
@@ -35,10 +41,10 @@
       <h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> File System</h1>
     </div>
     <div class="panel-body">
-      <dl>
-        <dt>{{>~tr("Free disk space")}}</dt><dd>{{>~formatSize(response.diskfreespace)}}</dd>
-        <dt>{{>~tr("Total disk space")}}</dt><dd>{{>~formatSize(response.disktotalspace)}}</dd>
-      </dl>
+      <div class="row">
+        <div class="col-md-4"><b>{{>~tr("Free disk space")}}</b><br>{{>~formatSize(response.diskfreespace)}}</div>
+        <div class="col-md-4"><b>{{>~tr("Total disk space")}}</b><br>{{>~formatSize(response.disktotalspace)}}</div>
+      </div>
     </div>
   </div>
 </div>

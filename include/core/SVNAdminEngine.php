@@ -205,12 +205,16 @@ class SVNAdminEngine {
     }
 
     $list = new ItemList();
-    foreach ($providers as &$prov) {
-      $searchResultList = $prov->search($query);
-      foreach ($searchResultList->getItems() as &$item) {
-        $item->providerid = $prov->getId();
+    if ($type === SVNAdminEngine::USER_PROVIDER && (empty($query) || $query === "*")) {
+      $list->appendItem(UserProvider::getWildcardUser());
+    } else {
+      foreach ($providers as &$prov) {
+        $searchResultList = $prov->search($query);
+        foreach ($searchResultList->getItems() as &$item) {
+          $item->providerid = $prov->getId();
+        }
+        $list->append($searchResultList);
       }
-      $list->append($searchResultList);
     }
     return $list;
   }

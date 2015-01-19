@@ -5,6 +5,12 @@ abstract class UserProvider extends Provider {
     parent::__construct($id);
   }
 
+  public static function getWildcardUser() {
+    $o = new User();
+    $o->initialize("*", "*", "Everyone (*)");
+    return $o;
+  }
+
   /**
    * @param int $offset
    * @param int $num

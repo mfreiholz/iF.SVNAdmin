@@ -10,7 +10,7 @@
         path: ""
       };
       jQuery.extend(view.options, data);
-      return jQuery("#tmpl-PathPermissionsView").render({ options: view.options });
+      return jQuery("#tmpl-PathPermissionsView").render(view.options);
     },
 
     postDisplay: function (data, config) {
