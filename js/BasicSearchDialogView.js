@@ -64,9 +64,13 @@
       var view = this,
         query = view.$el.find("input[name='searchquery']").val(),
         searchResultContainer = view.$el.find(".searchresultcontainer");
+      
+      if (query === "") {
+        return;
+      }
 
       // Show loading progress.
-      searchResultContainer.html("...");
+      searchResultContainer.html(tr("Searching..."));
 
       // Execute search.
       view.options.onSearchMore(query, 0, -1)
@@ -74,8 +78,8 @@
           var html = jQuery("#tmpl-BasicSearchDialogView-Result").render(data);
           searchResultContainer.html(html);
         })
-        .fail(function () {
-          alert("Error during search.");
+        .fail(function (jqXHR, textStatus, errorThrown) {
+          searchResultContainer.html("ERROR: " + textStatus + "; " + errorThrown);
         });
     },
 

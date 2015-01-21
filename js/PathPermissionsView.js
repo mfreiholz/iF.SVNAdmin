@@ -76,6 +76,9 @@
             id: "unassign",
             name: tr("Unassign"),
             callback: function (ids) {
+              if (!window.confirm(tr("Are you sure?"))) {
+                return new jQuery.Deferred().resolve().promise();
+              }
               var promises = [],
                 i = 0;
               for (i = 0; i < ids.length; ++i) {
