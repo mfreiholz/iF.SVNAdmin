@@ -86,7 +86,7 @@ class UserService extends ServiceBase {
     }
 
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::USER_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
@@ -109,7 +109,7 @@ class UserService extends ServiceBase {
     }
 
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::USER_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 

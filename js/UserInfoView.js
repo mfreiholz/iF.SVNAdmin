@@ -86,6 +86,9 @@
             id: "unassign",
             name: tr("Unassign"),
             callback: function (ids) {
+              if (!window.confirm(tr("Are you sure?"))) {
+                return new jQuery.Deferred().resolve().promise();
+              }
               var defs = [], i = 0;
               for (i = 0; i < ids.length; ++i) {
                 defs.push(svnadmin.service.groupMemberUnassign(view.options.providerId, ids[i], view.options.userId));

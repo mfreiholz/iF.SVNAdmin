@@ -1,7 +1,7 @@
 <?php
-return array (
+return array(
 
-    "common" => array (
+    "common" => array(
         // Absolute path to the "svn" binary.
         // e.g. Linux: "/usr/bin/svn"
         // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svn.exe"
@@ -44,8 +44,8 @@ return array (
      * The authentication mechanism may use multiple Authenticators.
      */
 
-    "authenticators" => array (
-        array (
+    "authenticators" => array(
+        array(
             "id" => "authstatic",
             "class_name" => "StaticAuthenticator",
             "users" => array (
@@ -53,18 +53,18 @@ return array (
                 "static_user" => "static_user"
             )
         ),
-        array (
+        array(
             "id" => "authpasswd",
             "class_name" => "PasswdAuthenticator",
             "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.passwd"
         ),
-        array (
+        array(
             "id" => "authdigest",
             "class_name" => "DigestAuthenticator",
             "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.digest.passwd",
             "realm" => "myrealm"
         ),
-        /*array (
+        /*array(
             "id" => "authldap",
             "class_name" => "LdapAuthenticator",
             "host_url" => "ldap://h2377348.stratoserver.net:389/",
@@ -81,21 +81,21 @@ return array (
      * Data Providers
      */
 
-    "providers" => array (
+    "providers" => array(
 
-        // User backends
-        // =============
-        "user" => array (
+        // User backend
+        // ============
+        "user" => array(
 
             // The PasswdUserProvider manages users of a simple "passwd" file.
-            "passwdusers" => array (
+            "passwdusers" => array(
                 "class_name" => "PasswdUserProvider",
                 "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.passwd"
             ),
 
             // The DigestUserProvider manages users of a "digest" passwd file.
             // realm = The realm of the users.
-            "digestusers" => array (
+            "digestusers" => array(
                 "class_name" => "DigestUserProvider",
                 "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.digest.passwd",
                 "realm" => "myrealm"
@@ -104,7 +104,7 @@ return array (
             // The LdapUserProvider READS users from a local or remote LDAP (Active Directory, OpenLDAP) server.
             // The providers doesn't provide any CREATE- or DELETE- functionality.
             // NOTE: DO NOT USE IT YET - IN DEVELOPMENT
-            /*"ldapusers" => array (
+            /*"ldapusers" => array(
                 "class_name" => "LdapUserProvider",
                 "host_url" => "ldap://h2377348.stratoserver.net:389/",
                 "protocol_version" => 3,
@@ -119,23 +119,22 @@ return array (
                 ),
                 "display_name_format" => "%givenName %sn"
             )*/
+
         ),
 
-        // Group backends
-        // ==============
-        "group" => array (
+        // Group backend
+        // =============
+        "group" => array(
 
             // The SvnAuthGroupProvider manages groups from a "authz" file.
-            // svn_authz_file = If empty, it will use the default configured "common/svn_authz_file".
-            "svnauthgroups" => array (
+            // svn_authz_file = If empty, it will use the default configured authz file from above common-section (recommended)
+            "svnauthgroups" => array(
                 "class_name" => "SvnAuthGroupProvider",
                 "svn_authz_file" => ""
             ),
-            "svnauthgroups2" => array (
-                "class_name" => "SvnAuthGroupProvider",
-                "svn_authz_file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "subversion2.authz"
-            ),
-            /*"ldapgroups" => array (
+
+            // NOTE: DO NOT USE IT YET - IN DEVELOPMENT
+            /*"ldapgroups" => array(
                 "class_name" => "LdapGroupProvider",
                 "host_url" => "ldap://h2377348.stratoserver.net:389/",
                 "protocol_version" => 3,
@@ -148,28 +147,43 @@ return array (
                 ),
                 "display_name_format" => ""
             )*/
+
         ),
 
+        // Group member association logic
+        // ==============================
         "groupmember" => array(
-          "svnauthzgroupmembers" => array(
-            "class_name" => "SvnAuthzGroupMemberAssociater",
-            "for_provider" => array("svnauthgroups", "svnauthgroups2", "passwdusers", "digestusers", "digestusers2"),
-            "svn_authz_file" => ""
-          )
+
+            // Associates the members by the subversion authz-file.
+            // for_provider = List of provider ID's, which uses this logic.
+            // svn_authz_file = If empty, it will use the default configured authz file from above common-section (recommended)
+            "svnauthzgroupmembers" => array(
+                "class_name" => "SvnAuthzGroupMemberAssociater",
+                "for_provider" => array("svnauthgroups", "passwdusers", "digestusers"),
+                "svn_authz_file" => ""
+            )
+
         ),
 
-        // Repositories
-        "repository" => array (
-            "svnparentrepos" => array (
+        // Repository backend
+        // ==================
+        "repository" => array(
+
+            // The SvnParentRepositoryProvider provides multiple repositories from a single directory.
+            // Recursive directory structures are not supported by this backend logic, only flat structures are allowed.
+            // svn_authz_file = Used to store permissions. If empty, it will use the default configured authz file from above common-section (recommended)
+            "svnparentrepos" => array(
                 "class_name" => "SvnParentRepositoryProvider",
                 "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos",
                 "svn_authz_file" => ""
             ),
-            "svnparentrepos2" => array (
+
+            "svnparentrepos2" => array(
                 "class_name" => "SvnParentRepositoryProvider",
                 "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos 2",
                 "svn_authz_file" => ""
             )
+
         )
     )
 );
