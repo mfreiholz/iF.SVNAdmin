@@ -37,9 +37,11 @@ class DigestUserProvider extends SearchableUserProvider {
 
   public function create($name, $password) {
     if (!$this->_passwd->createUser($name, $password)) {
+      error_log("Can not create user (message=" . $this->_passwd->error() . "; name=" . $name . ")");
       return null;
     }
     if (!$this->_passwd->writeToFile()) {
+      error_log("Can not write file (message=" . $this->_passwd->error() . ")");
       return null;
     }
     $o = new User();

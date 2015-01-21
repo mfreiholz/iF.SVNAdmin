@@ -56,6 +56,8 @@ class Htdigest {
         return "The user already exists.";
       case 11:
         return "The user does not exist.";
+      case 12:
+        return "Invalid characters in name.";
       default:
         return "No error occured.";
     }
@@ -81,11 +83,18 @@ class Htdigest {
    * @param string $username
    * @param string $password
    * @param bool $crypt
+   * @return bool
    */
   public function createUser($username, $password, $crypt = true) {
     if (self::userExists($username)) {
       // The user already exists.
       $this->m_errno = 10;
+      return false;
+    }
+
+    // Validate username.
+    if (preg_match('/:/', $username) === 1) {
+      $this->m_errno = 12;
       return false;
     }
 
