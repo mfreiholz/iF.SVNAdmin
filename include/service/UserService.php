@@ -45,14 +45,9 @@ class UserService extends ServiceBase {
     }
 
     $itemList = $provider->getUsers($offset, $num);
-    $users = $itemList->getItems();
 
     $json = new stdClass();
-    $json->hasmore = $itemList->hasMore();
-    $json->users = array ();
-    foreach ($users as &$user) {
-      $json->users[] = JsonSerializer::fromUser($user);
-    }
+    $json->list = JsonSerializer::fromItemList($itemList);
     $response->done2json($json);
     return true;
   }
@@ -111,6 +106,18 @@ class UserService extends ServiceBase {
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::USER_PROVIDER, $providerId);
     if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
+    }
+
+    // TODO Remove group associations.
+    if (true) {
+    }
+
+    // TODO Remove direct permissions.
+    if (true) {
+    }
+
+    // TODO Remove role associations.
+    if (true) {
     }
 
     if (!$provider->delete($userId)) {

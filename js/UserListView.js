@@ -79,12 +79,12 @@
           var def = new jQuery.Deferred();
           svnadmin.service.getUsers(providerId, offset, num).done(function (resp) {
             var obj = {}, i = 0, row = null;
-            obj.hasMore = resp.hasmore;
+            obj.hasMore = resp.list.hasmore;
             obj.rows = [];
-            for (i = 0; i < resp.users.length; ++i) {
+            for (i = 0; i < resp.list.items.length; ++i) {
               row = {};
-              row.id = resp.users[i].id;
-              row.cells = [resp.users[i].displayname, resp.users[i].name];
+              row.id = resp.list.items[i].id;
+              row.cells = [resp.list.items[i].displayname, resp.list.items[i].name];
               obj.rows.push(row);
             }
             def.resolve(obj);

@@ -264,6 +264,7 @@
   ServiceClient.prototype.login = function (username, password) {
     return this.ajax({
       url: "service/",
+      type: "POST",
       data: {
         m: "LoginService",
         action: "login",
@@ -347,6 +348,7 @@
   ServiceClient.prototype.createUser = function (providerId, name, password) {
     return this.ajax({
       url: "service/",
+      type: "POST",
       data: {
         m: "UserService",
         action: "create",
