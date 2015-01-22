@@ -97,6 +97,12 @@
       };
       
       if (provider.editable) {
+        options.singleActions.push({
+          id: "changepassword",
+          getName: function (id) { return tr("Change password"); },
+          getLink: function (id) { return window.location.href; },
+          callback: function (id) { return svnadmin.app.showUserChangePasswordView(provider.id, id); }
+        });
         options.multiActions = [
           {
             id: "delete",

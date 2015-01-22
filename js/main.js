@@ -146,6 +146,10 @@
   AppEngine.prototype.showUserInfoView = function (providerId, userId) {
     return brite.display("UserInfoView", "#page-wrapper", { providerId: providerId, userId: userId }, { emptyParent: true });
   };
+  
+  AppEngine.prototype.showUserChangePasswordView = function (providerId, userId) {
+    return brite.display("UserChangePasswordView", "body", { providerId: providerId, userId: userId }, { emptyParent: false });
+  };
 
   AppEngine.prototype.showGroupListView = function (providerId) {
     return brite.display("GroupListView", "#page-wrapper", { providerId: providerId }, { emptyParent: true });
@@ -367,6 +371,20 @@
         action: "delete",
         providerid: providerId,
         userid: userId
+      }
+    });
+  };
+  
+  ServiceClient.prototype.changePassword = function (providerId, userId, password) {
+    return this.ajax({
+      url: "service/",
+      type: "POST",
+      data: {
+        m: "UserService",
+        action: "changepassword",
+        providerid: providerId,
+        userid: userId,
+        password: password
       }
     });
   };
