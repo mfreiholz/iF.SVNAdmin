@@ -106,12 +106,12 @@
           var def = new jQuery.Deferred();
           svnadmin.service.getGroupsOfMember(view.options.providerId, view.options.userId, offset, num).done(function (resp) {
             var obj = {}, i = 0, row = null;
-            obj.hasMore = resp.hasmore;
+            obj.hasMore = resp.list.hasmore;
             obj.rows = [];
-            for (i = 0; i < resp.groups.length; ++i) {
+            for (i = 0; i < resp.list.items.length; ++i) {
               row = {};
-              row.id = resp.groups[i].id;
-              row.cells = [resp.groups[i].displayname];
+              row.id = resp.list.items[i].id;
+              row.cells = [resp.list.items[i].displayname];
               obj.rows.push(row);
             }
             def.resolve(obj);

@@ -113,6 +113,7 @@ class SvnAuthzFile {
   const UNKNOWN_ERROR = 1;
   const FILE_ERROR = 2;
   const ALREADY_EXISTS = 3;
+  const INVALID_NAME_ERROR = 4;
 
   /*
    * @var IniFile
@@ -305,6 +306,10 @@ class SvnAuthzFile {
    * @return int SvnAuthzFile::NO_ERROR, SvnAuthzFile::ALREADY_EXISTS
    */
   public function addGroup(SvnAuthzFileGroup $obj) {
+    // Validate name.
+    if (preg_match('/=/', $obj->name) === 1) {
+      return SvnAuthzFile::INVALID_NAME_ERROR;
+    }
     $exists = false;
     $section = $this->_ini->getSection(SvnAuthzFile::GROUP_SECTION);
     if ($section) {

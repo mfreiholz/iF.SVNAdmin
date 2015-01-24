@@ -27,7 +27,9 @@
         <div class="table-wrapper"></div>
       </div>
       <div class="panel-footer">
-        <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+      {{if provider.editable}}
+        <button class="btn btn-default add-link" data-providerid="{{>provider.id}}">{{>~tr("Add")}}</button>
+      {{/if}}
       </div>
     </div>
   </div>

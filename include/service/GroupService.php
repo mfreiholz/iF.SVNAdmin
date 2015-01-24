@@ -53,15 +53,10 @@ class GroupService extends ServiceBase {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
-    $list = $provider->getGroups($offset, $num);
-    $items = $list->getItems();
+    $itemList = $provider->getGroups($offset, $num);
 
     $json = new stdClass();
-    $json->hasmore = $list->hasMore();
-    $json->groups = array ();
-    foreach ($items as &$group) {
-      $json->groups[] = JsonSerializer::fromGroup($group);
-    }
+    $json->list = JsonSerializer::fromItemList($itemList);
     $response->done2json($json);
     return true;
   }
@@ -123,6 +118,14 @@ class GroupService extends ServiceBase {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
+    // TODO Remove user assignments.
+    if (true) {
+    }
+
+    // TODO Remove permissions.
+    if (true) {
+    }
+
     if (!$provider->delete($groupId)) {
       return $this->processErrorInternal($request, $response);
     }
@@ -173,14 +176,9 @@ class GroupService extends ServiceBase {
     }
 
     $itemList = $provider->getGroupsOfMember($memberId, $offset, $num);
-    $groups = $itemList->getItems();
 
     $json = new stdClass();
-    $json->hasmore = $itemList->hasMore();
-    $json->groups = array();
-    foreach ($groups as &$group) {
-      $json->groups[] = JsonSerializer::fromGroup($group);
-    }
+    $json->list = JsonSerializer::fromItemList($itemList);
     $response->done2json($json);
     return true;
   }

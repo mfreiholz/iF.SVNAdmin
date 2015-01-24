@@ -2,6 +2,11 @@
 class SvnAuthGroupProvider extends GroupProvider {
   private $_authz = null;
 
+  public function __construct($id) {
+    parent::__construct($id);
+    $this->_flags[] = Provider::FLAG_EDITABLE;
+  }
+
   public function initialize(SVNAdminEngine $engine, $config) {
     $this->_authz = $engine->getSvnAuthzFile($config["svn_authz_file"]);
     return !empty($this->_authz);
@@ -10,7 +15,6 @@ class SvnAuthGroupProvider extends GroupProvider {
   public function getGroups($offset = 0, $num = -1) {
     $groups = $this->_authz->getGroups();
     $groupsCount = count($groups);
-
     $list = new ItemList();
     $listItems = array ();
     $begin = (int) $offset;
@@ -22,16 +26,9 @@ class SvnAuthGroupProvider extends GroupProvider {
     return $list;
   }
 
-  public function findGroup($id) {
-    return null;
-  }
-
-  public function isEditable() {
-    return true;
-  }
-
   public function create($name) {
     if (empty($name)) {
+      error_log("Can create group with empty name.");
       return null;
     }
     $authzGroup = SvnAuthzFileGroup::create($name);

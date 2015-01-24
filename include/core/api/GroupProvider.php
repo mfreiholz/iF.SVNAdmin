@@ -12,12 +12,6 @@ abstract class GroupProvider extends Provider {
    */
   public abstract function getGroups($offset = 0, $num = -1);
 
-  /**
-   * @param $id
-   * @return Group
-   */
-  public abstract function findGroup($id);
-
   public function search($query, $offset = 0, $num = -1) {
     $list = new ItemList();
     $foundEntities = array();
@@ -32,10 +26,6 @@ abstract class GroupProvider extends Provider {
     }
     $list->initialize($foundEntities, false);
     return $list;
-  }
-
-  public function isEditable() {
-    return false;
   }
 
   public function create($name) {
