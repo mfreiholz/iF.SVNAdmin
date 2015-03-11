@@ -820,6 +820,8 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 				// Users.
 				foreach ($svnAuthFile->usersOfRepository($r) as $u)
 				{
+          if ($u === "*")
+            continue; // #87 Do not check for * user in LDAP..
 					if (!$this->userExists(new \svnadmin\core\entities\User($u, $u)))
 					{
 						// The user has direct AccessPath permissions but does
