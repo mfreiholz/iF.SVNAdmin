@@ -15,4 +15,8 @@ Documentation about installation and configuration can be found on the project h
 
 Who is responsible for this crap?
 ---------------------------------
-&copy; 2009-2012 Manuel Freiholz, [insaneFactory.com](http://www.insanefactory.com/)
+Manuel Freiholz (<ifsvnadmin@insanefactory.com>), [insaneFactory.com](http://www.insanefactory.com/)
+
+In case you feel happy with the application, got a lot of money to waste and don't know where to put it... you might consider to spend it on my Amazon wish list.
+
+[Manuel's Amazon wish list](http://www.amazon.de/registry/wishlist/JPUP61UZKHQ0)
