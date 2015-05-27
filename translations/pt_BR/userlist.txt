@@ -1,0 +1,2 @@
+"User management","Gestão dos usuarios"
+"Here you can see a list of all users which can be authenticated by your subversion server.","Aqui você pode ver a lista de usuários que podem autenticar no seu servidor de subversion."

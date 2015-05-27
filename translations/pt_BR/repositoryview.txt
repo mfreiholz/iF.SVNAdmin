@@ -1,0 +1,5 @@
+"Repository browsing","Navegação do repositório"
+"Add access path","Adicionar pasta de acesso"
+"File name","Nome do arquivo"
+"Author","Autor"
+"Revision","Revisão"

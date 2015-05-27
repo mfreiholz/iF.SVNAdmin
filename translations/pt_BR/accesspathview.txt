@@ -1,0 +1,3 @@
+"Assigned users and groups to this access-path.","Associa usuários e grupos a esta pasta de acesso."
+"Assigned users","Usuários associados"
+"Assigned groups","Grupos associados"
