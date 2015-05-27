@@ -5,13 +5,13 @@
 
 <?php foreach (GetArrayValue('RepositoryParentList') as $rp) : ?>
 
-	<h2><?php Translate('Location'); ?>: <?php print($rp->description); ?><br><small>(<?php print($rp->path); ?>)</small></h2>
+	<h2><?php Translate('Location'); ?>: <?php print(Translate($rp->description)); ?><br><small>(<?php print($rp->path); ?>)</small></h2>
 
 	<?php HtmlFilterBox('repolist_' . $rp->identifier); ?>
 
 	<form action="repositorylist.php" method="POST">
 		<input type="hidden" name="pi" value="<?php print($rp->getEncodedIdentifier()); ?>">
-		
+
 		<table id="repolist_<?php print($rp->identifier); ?>" class="datatable">
 
 		<thead>
