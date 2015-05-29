@@ -42,6 +42,13 @@ namespace svnadmin\core\interfaces
     public function getGroupsOfUser( $objUser );
 
     /**
+     * Gets the associated groups of the given subgroup.
+     * @param $objSubgroup
+     * @return array
+     */
+    public function getGroupsOfSubgroup( $objSubgroup );
+
+    /**
      * Gets the associated users of the given group.
      * @param $objGroup
      * @return array
@@ -53,7 +60,7 @@ namespace svnadmin\core\interfaces
      * @param $objGroup
      * @return array
      */
-    public function getSubgroupsOfGroup( $objGroup );    
+    public function getSubgroupsOfGroup( $objGroup );
 
     /**
      * Checks whether the user is in group.
@@ -62,6 +69,14 @@ namespace svnadmin\core\interfaces
      * @return bool
      */
     public function isUserInGroup( $objUser, $objGroup );
+
+    /**
+     * Checks whether the subgroup is in group.
+     * @param User $objUser
+     * @param Group $objGroup
+     * @return bool
+     */
+    public function isSubgroupInGroup( $objSubgroup, $objGroup );
   }
 }
 ?>

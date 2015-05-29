@@ -329,6 +329,30 @@ class IF_SVNAuthFileC
 	}
 
 	/**
+	 * Gets all groups of which the group is a member.
+	 *
+	 * @param string $groupname
+	 *
+	 * @return array<string>
+	 */
+	public function groupsOfSubgroup($groupname)
+	{
+		$ret = array();
+
+		$groups = self::groups();
+		foreach ($groups as $g)
+		{
+			$subgroups = self::groupsOfGroup($g);
+			if (in_array($groupname, $subgroups))
+			{
+				$ret[] = $g;
+			}
+		}
+
+		return $ret;
+	}
+
+	/**
 	 * Gets all repository paths which got a specific group as member.
 	 *
 	 * @param string $groupname
@@ -584,6 +608,25 @@ class IF_SVNAuthFileC
 		$users = $this->usersOfGroup($groupname);
 
 		if (in_array($username, $users))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether the subgroups is in the given group.
+	 *
+	 * @param string $groupname
+	 * @param string $subgroupname
+	 *
+	 * @return bool
+	 */
+	public function isSubgroupInGroup($groupname, $subgroupname)
+	{
+		$groups = $this->groupsOfGroup($groupname);
+
+		if (in_array($subgroupname, $groups))
 		{
 			return true;
 		}
@@ -950,9 +993,9 @@ class IF_SVNAuthFileC
 		array_walk($groups, function(&$item){
 			$item = '@'.$item;
 		});
-		
+
 		$string = join(',', array_merge($groups, $users));
 		return $string;
-	}	
+	}
 }
 ?>

@@ -60,7 +60,7 @@ namespace svnadmin\core\interfaces
     public function removeUserFromGroup( $objUser, $objGroup );
 
     /**
-     * Removes the user from group.
+     * Removes the group from group.
      * @param $objSubgroup
      * @param $objGroup
      * @return bool
@@ -73,6 +73,13 @@ namespace svnadmin\core\interfaces
      * @param return bool
      */
     public function removeUserFromAllGroups( $objUser );
+
+    /**
+     * Removes the group from all groups where he is associated.
+     * @param Group $objSubgroup
+     * @param return bool
+     */
+    public function removeSubgroupFromAllGroups( $objSubgroup );
   }
 }
 ?>
