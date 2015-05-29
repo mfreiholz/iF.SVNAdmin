@@ -172,7 +172,7 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::getUsersOfGroup()
 	 */
 	public function getUsersOfGroup($objGroup)
-    {
+	{
 		$retArray = array();
 		$userNamesArray = $this->m_authfile->usersOfGroup( $objGroup->name );
 
@@ -184,6 +184,28 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 				$userObj->id = $userNamesArray[$i];
 				$userObj->name = $userNamesArray[$i];
 				array_push( $retArray, $userObj );
+			}
+		}
+		return $retArray;
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupViewProvider::getSubgroupsOfGroup()
+	 */
+	public function getSubgroupsOfGroup($objGroup)
+	{
+		$retArray = array();
+		$groupNamesArray = $this->m_authfile->groupsOfGroup( $objGroup->name );
+
+		if( is_array($groupNamesArray) )
+		{
+			for( $i=0; $i<count($groupNamesArray); $i++ )
+			{
+				$groupObj = new \svnadmin\core\entities\Group();
+				$groupObj->id = $groupNamesArray[$i];
+				$groupObj->name = $groupNamesArray[$i];
+				array_push( $retArray, $groupObj );
 			}
 		}
 		return $retArray;
@@ -241,6 +263,15 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 	public function removeUserFromGroup( $objUser, $objGroup )
 	{
 		return $this->m_authfile->removeUserFromGroup( $objUser->name, $objGroup->name );
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupEditProvider::removeSubgroupFromGroup()
+	 */
+	public function removeSubgroupFromGroup( $objSubgroup, $objGroup )
+	{
+		return $this->m_authfile->removeSubgroupFromGroup( $objSubgroup->name, $objGroup->name );
 	}
 
 	/**

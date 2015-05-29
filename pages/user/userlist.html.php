@@ -39,7 +39,7 @@ $(document).ready(function(){
 	    <?php } ?>
 	  </th>
 	  <th>
-	  	<?php Translate("User"); ?>
+	  	<?php Translate("Users"); ?>
 	  </th>
 	</tr>
 	</thead>

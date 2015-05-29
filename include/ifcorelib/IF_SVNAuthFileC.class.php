@@ -189,6 +189,8 @@ class IF_SVNAuthFileC
 					unset($arrUsers[$i]);
 			}
 
+			$arrUsers = array_values($arrUsers);
+
 			return $arrUsers;
 		}
 
@@ -218,6 +220,8 @@ class IF_SVNAuthFileC
 				else
 					unset($arrGroups[$i]);
 			}
+
+			$arrGroups = array_values($arrGroups);
 
 			return $arrGroups;
 		}
@@ -522,7 +526,8 @@ class IF_SVNAuthFileC
 		$users[] = $username;
 
 		// Set changes to config.
-		$this->config->setValue($this->GROUP_SECTION, $groupname, ($groups ? '@' . join(',@', $groups) . ',' : '') . join(',', $users));
+		$userString = self::convertGroupsUsersToString($groups, $users);
+		$this->config->setValue($this->GROUP_SECTION, $groupname, $userString);
 		return true;
 	}
 
@@ -561,7 +566,8 @@ class IF_SVNAuthFileC
 		$groups[] = $subgroupname;
 
 		// Set changes to config.
-		$this->config->setValue($this->GROUP_SECTION, $groupname, '@' . join(',@', $groups) . ($users ? ',' . join(',', $users) : ''));
+		$userString = self::convertGroupsUsersToString($groups, $users);
+		$this->config->setValue($this->GROUP_SECTION, $groupname, $userString);
  		return true;
 	}
 
@@ -604,12 +610,46 @@ class IF_SVNAuthFileC
 			// Remove the user from array.
 			unset($groupUsers[$pos]);
 
-			$userString = join( ",", $groupUsers);
+			$groups = $this->groupsOfGroup($groupname);
+
+			$userString = self::convertGroupsUsersToString($groups, $groupUsers);
 			$this->config->setValue($this->GROUP_SECTION, $groupname, $userString);
 		}
 		else
 		{
 			// User is not in group.
+			return true;
+		}
+		return true;
+	}
+
+	/**
+	 * Removes the given group from group.
+	 *
+	 * @param string $subgroupname
+	 * @param string $groupname
+	 *
+	 * @return bool
+	 */
+	public function removeSubgroupFromGroup($subgroupname, $groupname)
+	{
+		$groupGroups = $this->groupsOfGroup($groupname);
+
+		// Search the user in array.
+		$pos = array_search($subgroupname, $groupGroups);
+		if ($pos !== FALSE)
+		{
+			// Remove the group from array.
+			unset($groupGroups[$pos]);
+
+			$users = $this->usersOfGroup($groupname);
+
+			$userString = self::convertGroupsUsersToString($groupGroups, $users);
+			$this->config->setValue($this->GROUP_SECTION, $groupname, $userString);
+		}
+		else
+		{
+			// Group is not in group.
 			return true;
 		}
 		return true;
@@ -892,5 +932,27 @@ class IF_SVNAuthFileC
 
 		return $ret;
 	}
+
+	/**
+	 * Convert list of groups and users to string to associate a group.
+	 *
+	 * @param array $groups
+	 * @param array $users
+	 * @return string
+	 * @see http://svnbook.red-bean.com/en/1.7/svn.serverconfig.pathbasedauthz.html
+	 */
+	private static function convertGroupsUsersToString(array $groups, array $users)
+	{
+		if (!$groups && !$users)
+			return '';
+
+		// anonymous functions works on PHP 5.3 or higher
+		array_walk($groups, function(&$item){
+			$item = '@'.$item;
+		});
+		
+		$string = join(',', array_merge($groups, $users));
+		return $string;
+	}	
 }
 ?>
