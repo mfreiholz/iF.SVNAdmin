@@ -1,0 +1,2 @@
+"Group management","Gestão dos grupos"
+"Here you can see a list of all groups, which are defined in your subversion configuration.","Aqui você pode ver todos os grupos que são definidos em sua configuração do subversion."
