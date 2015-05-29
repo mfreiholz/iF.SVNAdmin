@@ -8,13 +8,16 @@ $(document).ready(function(){
   $("#selectallgroups").click(function(){
     selectAll(this, "selgroups[]");
   });
+  $("#selectallsubgroups").click(function(){
+    selectAll(this, "selsubgroups[]");
+  });
 });
 </script>
 
-<h1><?php Translate("User &lt;&gt; Group assignment"); ?></h1>
+<h1><?php Translate("User and Group &lt;&gt; Group assignment"); ?></h1>
 <p class="hdesc"><?php Translate("Here you can assign users to groups."); ?></p>
 
-<form action="usergroupassign.php" method="POST">
+<form action="groupassign.php" method="POST">
   <table width="100%">
 
     <tbody>
@@ -35,6 +38,25 @@ $(document).ready(function(){
             <tr>
               <td><input type="checkbox" name="selusers[]" value="<?php print($u->name); ?>"></td>
               <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+          </table>
+
+          <?php HtmlFilterBox("subgrouplist", 1); ?>
+
+          <table id="subgrouplist" class="datatable">
+            <thead>
+            <tr>
+              <th width="20"><input type="checkbox" id="selectallsubgroups"></th>
+              <th><?php Translate("Group"); ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach(GetArrayValue("GroupList") as $g) : ?>
+            <tr>
+              <td><input type="checkbox" name="selsubgroups[]" value="<?php print($g->name); ?>"></td>
+              <td><a href="groupview.php?groupname=<?php print($g->getEncodedName()); ?>"><?php print($g->name); ?></a></td>
             </tr>
             <?php endforeach; ?>
             </tbody>

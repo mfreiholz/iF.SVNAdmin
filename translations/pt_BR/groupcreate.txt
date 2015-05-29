@@ -4,3 +4,4 @@
 "Group name","Nome do grupo"
 "Valid group names are","Nomes válidos para o grupo são"
 "Invalid group names are","Nomes inválidos para o grupo são"
+"Invalid group name", "Nome de grupo inválido"

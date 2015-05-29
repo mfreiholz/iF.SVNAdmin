@@ -2,3 +2,4 @@
 "Username","Usuario"
 "Password","Senha"
 "You are now logged out.","Agora você está desconectado."
+"Wrong user/password combination.","Usuário ou senha incorretos"

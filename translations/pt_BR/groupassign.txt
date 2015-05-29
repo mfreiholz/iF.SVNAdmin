@@ -1,0 +1,7 @@
+"User and Group &lt;&gt; Group assignment","Usuários e grupos &lt;&gt; Associar aos Grupos"
+"Here you can assign users to groups.","Aqui você pode associar os usuários aos grupos."
+"The group %0 is now a member of group %1","O grupo %0 agora é membro do grupo %1"
+"Can not add group %0 as member of group %1.","Não foi possível adicionar %0 como membro do grupo %1."
+"Can not add group %0 as member of group %1, is same group.", "Não foi possível adicionar %0 como membro do grupo %1, é o mesmo grupo."
+"The user %0 is now a member of group %1","O usuário %0 agora é membro do grupo %1"
+"Can not add user %0 as member of group %1.","Não foi possível %0 como membro do grupo %1."

@@ -26,7 +26,7 @@
       <ul class="ddm-sub">
       <?php if (HasAccess(ACL_MOD_GROUP, ACL_ACTION_VIEW)){?><li><a href="grouplist.php"><?php Translate("List"); ?></a></li><?php } ?>
       <?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_ADD)){?><li><a href="groupcreate.php"><?php Translate("Add"); ?></a></li><?php } ?>
-      <?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_ASSIGN)){?><li><a href="usergroupassign.php"><?php Translate("Memberships"); ?></a></li><?php } ?>
+      <?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_ASSIGN)){?><li><a href="groupassign.php"><?php Translate("Memberships"); ?></a></li><?php } ?>
       </ul>
     </li>
     <?php } ?>

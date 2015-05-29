@@ -27,13 +27,13 @@ if (!$appEngine->isUserViewActive() || !$appEngine->isGroupViewActive() || !$app
 $appEngine->checkUserAuthentication(true, ACL_MOD_GROUP, ACL_ACTION_ASSIGN);
 
 // Load language.
-$appTR->loadModule("usergroupassign");
+$appTR->loadModule("groupassign");
 
 // Form request.
 $assign = check_request_var('assign');
 if($assign)
 {
-  $appEngine->handleAction('assign_usertogroup');
+  $appEngine->handleAction('assign_togroup');
 }
 
 // User list.
@@ -46,7 +46,7 @@ if ($appEngine->isUserViewActive() && $appEngine->checkUserAuthentication(false,
   $o = new \svnadmin\core\entities\User;
   $o->id = '*';
   $o->name = '*';
-  
+
   $users = remove_item_by_value($users, $o, true);
   usort($users, array('\svnadmin\core\entities\User',"compare"));
 }

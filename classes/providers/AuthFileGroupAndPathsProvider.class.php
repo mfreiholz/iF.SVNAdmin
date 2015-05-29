@@ -227,6 +227,15 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 
 	/**
 	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupEditProvider::assignSubgroupToGroup()
+	 */
+	public function assignSubgroupToGroup( $objSubgroup, $objGroup )
+	{
+		return $this->m_authfile->addSubgroupToGroup( $objGroup->name, $objSubgroup->name );
+	}
+
+	/**
+	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupEditProvider::removeUserFromGroup()
 	 */
 	public function removeUserFromGroup( $objUser, $objGroup )

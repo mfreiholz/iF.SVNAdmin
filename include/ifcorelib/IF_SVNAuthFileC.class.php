@@ -107,10 +107,10 @@ class IF_SVNAuthFileC
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Gets all existing aliases.
-	 * 
+	 *
 	 * @return array <string>
 	 */
 	public function aliases()
@@ -148,13 +148,13 @@ class IF_SVNAuthFileC
 
 		return $ret;
 	}
-	
+
 	/**
 	 * Resolves the given alias to its real value.
-	 * 
+	 *
 	 * @param string $alias
-	 * 
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	public function getAliasValue($alias)
 	{
@@ -183,10 +183,43 @@ class IF_SVNAuthFileC
 
 			for ($i = 0; $i < $arrUsersLen; ++$i)
 			{
-				$arrUsers[$i] = trim($arrUsers[$i]);
+				if (strpos($arrUsers[$i], '@') === false)
+					$arrUsers[$i] = trim($arrUsers[$i]);
+				else
+					unset($arrUsers[$i]);
 			}
 
 			return $arrUsers;
+		}
+
+		return array();
+	}
+
+	/**
+	 * Gets all subgroups of the given group.
+	 *
+	 * @param string $group
+	 *
+	 * @return array<string>
+	 */
+	public function groupsOfGroup($group)
+	{
+		$groupString = $this->config->getValue($this->GROUP_SECTION, $group);
+
+		if ($groupString != null)
+		{
+			$arrGroups = explode(',', $groupString);
+			$arrGroupsLen = count($arrGroups);
+
+			for ($i = 0; $i < $arrGroupsLen; ++$i)
+			{
+				if(strpos($arrGroups[$i], '@') !== false)
+					$arrGroups[$i] = str_replace('@', '', trim($arrGroups[$i]));
+				else
+					unset($arrGroups[$i]);
+			}
+
+			return $arrGroups;
 		}
 
 		return array();
@@ -469,9 +502,11 @@ class IF_SVNAuthFileC
 			return false;
 		}
 
-		// Get current users.
+		// Get current users and groups.
 		$users = $this->usersOfGroup($groupname);
-		if (!is_array($users))
+		$groups = $this->groupsOfGroup($groupname);
+
+		if (!is_array($users) || !is_array($groups))
 		{
 			return false;
 		}
@@ -487,8 +522,47 @@ class IF_SVNAuthFileC
 		$users[] = $username;
 
 		// Set changes to config.
-		$this->config->setValue($this->GROUP_SECTION, $groupname, join(',', $users));
+		$this->config->setValue($this->GROUP_SECTION, $groupname, ($groups ? '@' . join(',@', $groups) . ',' : '') . join(',', $users));
 		return true;
+	}
+
+	/**
+	 * Adds the subgroup to group.
+	 *
+	 * @param string $groupname
+	 * @param string $subgroupname
+	 *
+	 * @return bool
+	 */
+	public function addSubgroupToGroup($groupname, $subgroupname)
+	{
+		if (!self::groupExists($groupname) || !self::groupExists($subgroupname))
+		{
+			return false;
+		}
+
+		// Get current users and groups.
+		$users = $this->usersOfGroup($groupname);
+		$groups = $this->groupsOfGroup($groupname);
+
+		if (!is_array($users) || !is_array($groups))
+		{
+			return false;
+		}
+
+		// NOTE: Its no longer an error when the subgroup is already in group!!!
+		// Check whether the subgroup is already in group.
+		if (in_array($subgroupname, $groups))
+		{
+			return true;
+		}
+
+		// Add subgroup to groups array.
+		$groups[] = $subgroupname;
+
+		// Set changes to config.
+		$this->config->setValue($this->GROUP_SECTION, $groupname, '@' . join(',@', $groups) . ($users ? ',' . join(',', $users) : ''));
+ 		return true;
 	}
 
 	/**
