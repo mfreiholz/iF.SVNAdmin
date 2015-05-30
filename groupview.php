@@ -21,7 +21,7 @@ include("include/config.inc.php");
 
 if (!$appEngine->isGroupViewActive() && !$appEngine->isAccessPathViewActive())
   $appEngine->forwardInvalidModule(true);
-  
+
 $appEngine->checkUserAuthentication(true, ACL_MOD_GROUP, ACL_ACTION_VIEW);
 
 $appTR->loadModule("groupview");
@@ -29,15 +29,16 @@ $appTR->loadModule("groupview");
 // Action handling.
 if (check_request_var('unassign'))
 {
-  $appEngine->handleAction('unassign_usergroup');
+  $appEngine->handleAction('unassign_fromgroup');
 }
 if (check_request_var('unassign_permission'))
 {
   $appEngine->handleAction('unassign_permission');
 }
-if (check_request_var('assign_usergroup'))
+if (check_request_var('assign_usergroup') || check_request_var('assign_subgroupgroup'))
 {
-	$appEngine->handleAction("assign_usertogroup");
+  $appTR->loadModule("groupassign");
+  $appEngine->handleAction("assign_togroup");
 }
 
 // Get required variables.
@@ -54,7 +55,9 @@ $allusers=null;
 if ($appEngine->isGroupViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_GROUP, ACL_ACTION_VIEW))
 {
   $users = $appEngine->getGroupViewProvider()->getUsersOfGroup( $oGroup );
+  $groups = $appEngine->getGroupViewProvider()->getSubgroupsOfGroup( $oGroup );
   usort( $users, array('\svnadmin\core\entities\User',"compare") );
+  usort( $groups, array('\svnadmin\core\entities\Group',"compare") );
   
   // All users except the already assigned users.
   if ($appEngine->isUserViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_GROUP, ACL_ACTION_ASSIGN))
@@ -67,6 +70,16 @@ if ($appEngine->isGroupViewActive() && $appEngine->checkUserAuthentication(false
     	if_array_remove_object_element($allusers, $users[$i], "name");
     }
     $allusers = array_values($allusers);
+
+    $allgroups = $appEngine->getGroupViewProvider()->getGroups();
+    usort($allgroups, array('\svnadmin\core\entities\Group',"compare"));
+    $len = count($groups);
+    for ($i=0; $i<$len; $i++)
+    {
+      if_array_remove_object_element($allgroups, $groups[$i], "name");
+    }
+    if_array_remove_object_element($allgroups, $oGroup, "name");
+    $allgroups = array_values($allgroups);
   }
 }
 
@@ -81,7 +94,9 @@ if ($appEngine->isAccessPathViewActive() && $appEngine->checkUserAuthentication(
 SetValue("GroupName", $groupname);
 SetValue("GroupNameEncoded", rawurlencode($groupname));
 SetValue("UserList", $users);
+SetValue("GroupList", $groups);
 SetValue("AllUserList", $allusers);
+SetValue("AllGroupList", $allgroups);
 SetValue("AccessPathList", $paths);
 ProcessTemplate("group/groupview.html.php");
 ?>

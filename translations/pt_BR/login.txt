@@ -1,0 +1,5 @@
+"You must login to get access to the application.","Você precisa fazer login para acessar o aplicativo"
+"Username","Usuario"
+"Password","Senha"
+"You are now logged out.","Agora você está desconectado."
+"Wrong user/password combination.","Usuário ou senha incorretos"

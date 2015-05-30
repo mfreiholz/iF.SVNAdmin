@@ -1,0 +1,27 @@
+"Roles of user","Regras do usuario"
+"Please choose","Por favor selecione"
+"You have to select at least one user and one role.","Você deve pelo menos selecionar um usuário e uma regra."
+
+"Administrator","Administrador"
+"Web application administrator.","Administrador do aplicativo."
+
+"User","Usuário"
+"Can login and change the own password.","Pode fazer login e alterar a própria senha."
+
+"User-Group-Manager","Gestor de grupos de usuários"
+"Create/Delete users and groups and manages memberships and change passwords of users.","Cria e deleta usuários e grupos, gerencia as associações e altera as senhas dos usuários."
+
+"Access-Path-Manager","Gestor de pastas de acesso"
+"Create/Delete Access-Paths and manages user and group permissions.","Cria e remove pastas de acesso e gerencia permissões de usuários e grupos."
+
+"Repository-Creator","Criador de repositórios"
+"Can create new repositories, but NOT delete.","Pode somente criar novos repositórios, mas NÃO remover."
+
+"Repository-Manager","Gestor de repositórios"
+"Create/Delete repositories.","Cria e remove repositórios."
+
+"Role-Manager","Gestor de permissões"
+"Assign and unassign web application roles to users.","Associa e desassocia permissões do aplicativo aos usuários."
+
+"Update-Manager","Gestor de atualizações"
+"Can synchronize the user data from provider with the SVNAuthFile.","Pode sincronizar dados dos usuários de um provedor com o SVNAuthFile."

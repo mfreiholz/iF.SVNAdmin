@@ -1,0 +1,7 @@
+"Create group","Criar grupo"
+"Create a new group to grant access to the repositories for a range of users.","Cria um novo grupo para prover acesso ao repositórios aos usuários associados."
+"New group data","Novo dado de grupo"
+"Group name","Nome do grupo"
+"Valid group names are","Nomes válidos para o grupo são"
+"Invalid group names are","Nomes inválidos para o grupo são"
+"Invalid group name", "Nome de grupo inválido"

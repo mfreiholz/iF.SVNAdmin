@@ -1,0 +1,4 @@
+"Group management","Gestão dos grupos"
+"Here you can see a list of all groups, which are defined in your subversion configuration.","Aqui você pode ver todos os grupos que são definidos em sua configuração do subversion."
+"Deleted group %0 successfully.","Grupo %0 removido com sucesso."
+"Can not remove group %0.","Não foi possível remover o grupo %0."

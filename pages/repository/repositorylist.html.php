@@ -19,7 +19,7 @@
 				<th width="22"></th>
 				<th width="20"></th>
 				<th>
-					<?php Translate("Repository"); ?>
+					<?php Translate("Repositories"); ?>
 				</th>
 				<?php if (GetBoolValue("ShowOptions")) : ?>
 				<th width="150">

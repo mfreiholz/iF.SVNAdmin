@@ -169,10 +169,32 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 
 	/**
 	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupViewProvider::getGroupsOfSubgroup()
+	 */
+	public function getGroupsOfSubgroup($objSubgroup)
+	{
+		$retArray = array();
+		$groupNamesArray = $this->m_authfile->getGroupsOfSubgroup( $objSubgroup->name );
+
+		if( is_array($groupNamesArray) )
+		{
+			for( $i=0; $i<count($groupNamesArray); $i++ )
+			{
+				$groupObj = new \svnadmin\core\entities\Group;
+				$groupObj->id = $groupNamesArray[$i];
+				$groupObj->name = $groupNamesArray[$i];
+				array_push( $retArray, $groupObj );
+			}
+		}
+		return $retArray;
+	}
+
+	/**
+	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::getUsersOfGroup()
 	 */
 	public function getUsersOfGroup($objGroup)
-    {
+	{
 		$retArray = array();
 		$userNamesArray = $this->m_authfile->usersOfGroup( $objGroup->name );
 
@@ -191,11 +213,42 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 
 	/**
 	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupViewProvider::getSubgroupsOfGroup()
+	 */
+	public function getSubgroupsOfGroup($objGroup)
+	{
+		$retArray = array();
+		$groupNamesArray = $this->m_authfile->groupsOfGroup( $objGroup->name );
+
+		if( is_array($groupNamesArray) )
+		{
+			for( $i=0; $i<count($groupNamesArray); $i++ )
+			{
+				$groupObj = new \svnadmin\core\entities\Group();
+				$groupObj->id = $groupNamesArray[$i];
+				$groupObj->name = $groupNamesArray[$i];
+				array_push( $retArray, $groupObj );
+			}
+		}
+		return $retArray;
+	}
+
+	/**
+	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::isUserInGroup()
 	 */
 	public function isUserInGroup($objUser, $objGroup)
 	{
 		return $this->m_authfile->isUserInGroup( $objGroup->name, $objUser->name );
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupViewProvider::isSubgroupInGroup()
+	 */
+	public function isSubgroupInGroup($objSubgroup, $objGroup)
+	{
+		return $this->m_authfile->isSubgroupInGroup( $objGroup->name, $objSubgroup->name );
 	}
 
 	/**
@@ -227,11 +280,29 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 
 	/**
 	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupEditProvider::assignSubgroupToGroup()
+	 */
+	public function assignSubgroupToGroup( $objSubgroup, $objGroup )
+	{
+		return $this->m_authfile->addSubgroupToGroup( $objGroup->name, $objSubgroup->name );
+	}
+
+	/**
+	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupEditProvider::removeUserFromGroup()
 	 */
 	public function removeUserFromGroup( $objUser, $objGroup )
 	{
 		return $this->m_authfile->removeUserFromGroup( $objUser->name, $objGroup->name );
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupEditProvider::removeSubgroupFromGroup()
+	 */
+	public function removeSubgroupFromGroup( $objSubgroup, $objGroup )
+	{
+		return $this->m_authfile->removeSubgroupFromGroup( $objSubgroup->name, $objGroup->name );
 	}
 
 	/**
@@ -244,6 +315,21 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 		for( $i=0; $i<count($groups); $i++ )
 		{
 			$this->m_authfile->removeUserFromGroup( $objUser->name, $groups[$i] );
+		}
+		return true;
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupEditProvider::removeSubgroupFromAllGroups()
+	 */
+	public function removeSubgroupFromAllGroups( $objSubgroup )
+	{
+		$groups = $this->m_authfile->groupsOfSubgroup($objSubgroup->name);
+
+		for( $i=0; $i<count($groups); $i++ )
+		{
+			$this->m_authfile->removeSubgroupFromGroup( $objSubgroup->name, $groups[$i] );
 		}
 		return true;
 	}

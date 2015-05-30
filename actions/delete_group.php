@@ -41,7 +41,7 @@ else
       $g->id = $selected[$i];
       $g->name = $selected[$i];
 
-      if ($appEngine->deleteGroup($g))
+      if ($appEngine->getGroupEditProvider()->removeSubgroupFromAllGroups($g) && $appEngine->deleteGroup($g))
       {
         $appEngine->addMessage(tr("Deleted group %0 successfully.", array($g->name)));
       }

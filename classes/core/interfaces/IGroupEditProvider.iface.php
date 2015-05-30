@@ -34,23 +34,38 @@ namespace svnadmin\core\interfaces
      * @return bool
      */
     public function deleteGroup( $objGroup );
-    
+
     /**
      * Assigns the user to group.
      * @param $objUser
      * @param $objGroup
-     * @return bool         
+     * @return bool
      */
     public function assignUserToGroup( $objUser, $objGroup );
-    
+
+    /**
+     * Assigns the subgroup to group.
+     * @param $objSubgroup
+     * @param $objGroup
+     * @return bool
+     */
+    public function assignSubgroupToGroup( $objSubgroup, $objGroup );
+
     /**
      * Removes the user from group.
      * @param $objUser
      * @param $objGroup
      * @return bool
-     */                
+     */
     public function removeUserFromGroup( $objUser, $objGroup );
 
+    /**
+     * Removes the group from group.
+     * @param $objSubgroup
+     * @param $objGroup
+     * @return bool
+     */
+    public function removeSubgroupFromGroup( $objSubgroup, $objGroup );
 
     /**
      * Removes the user from all groups where he is associated.
@@ -58,6 +73,13 @@ namespace svnadmin\core\interfaces
      * @param return bool
      */
     public function removeUserFromAllGroups( $objUser );
+
+    /**
+     * Removes the group from all groups where he is associated.
+     * @param Group $objSubgroup
+     * @param return bool
+     */
+    public function removeSubgroupFromAllGroups( $objSubgroup );
   }
 }
 ?>

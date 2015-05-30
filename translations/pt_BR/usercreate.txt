@@ -1,0 +1,6 @@
+"Create user","Criar usuario"
+"Create a new user to grant access to the repositories.","Criar um novo usuário para poder conceder acesso aos repositórios"
+"New user data","Novo dado de usuário"
+"Username","Nome do usuario"
+"Password","Senha"
+"Re-type password","Redigite a senha"

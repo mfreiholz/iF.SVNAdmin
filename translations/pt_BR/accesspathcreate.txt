@@ -1,0 +1,7 @@
+"Create access-path","Criar pasta de acesso"
+"Create a new access-path to grant access to users and groups.","Criar uma nova pasta de acesso para conceder acesso a usuários e grupos."
+"New access-path data","Nova pasta de acesso"
+"Path","Pasta"
+"Syntax","Sintáxe"
+"An "/" as access path holds permissions over all repositories.","Um "/" como pasta de acesso define permissões sobre todos os repositórios."
+"Browse...","Navegar..."
