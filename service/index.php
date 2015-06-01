@@ -34,7 +34,7 @@ set_error_handler("errorHandler");
 
 // Define the relative or absolute path to the framework's base directory,
 // before including the "autoload.php" from the directory.
-define("HRF_AUTO_LOAD_BASE_DIR", "../../humble-rest-framework-php/src");
+define("HRF_AUTO_LOAD_BASE_DIR", "../thirdparty/humblerest/src");
 require_once(HRF_AUTO_LOAD_BASE_DIR . "/autoload.php");
 
 define("SVNADMIN_BASE_DIR", realpath("../"));

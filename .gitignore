@@ -2,4 +2,4 @@
 .project
 .settings/
 .idea/
-data/
+data/*

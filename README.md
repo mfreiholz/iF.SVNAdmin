@@ -1,19 +1,21 @@
-iF.SVNAdmin - REBUILD
-=====================
-IN DEVELOPMENT - Do not use!
+# iF.SVNAdmin V2 (Rebuild)
 
+## Setup
 
-Development
------------
-The following file based structure is required to run this development version:
+Checkout sources:
 
-- WWW-Root/
- - svnadmin/
- - humble-rest-framework-php/ (https://github.com/mfreiholz/humble-rest-framework-php)
+```bash
+git clone https://github.com/mfreiholz/iF.SVNAdmin.git
+git checkout svnadmin-v2
+git submodule init
+git submodule update
+```
 
-The entire project is based on the ``humble-rest-framework-php``, which is another GitHub project from me.
-It doesn't require any configuration at all. The release builds, will contain the framework in iF.SVNAdmin's ``thirdparty`` folder.
+Set directory permissions of `data` directory to 777:
 
+```bash
+chmod -R 777 data/
+```
 
 Documents
 ---------
