@@ -1,0 +1,3 @@
+[submodule "thirdparty/humblerest"]
+	path = thirdparty/humblerest
+	url = https://github.com/mfreiholz/humble-rest-framework-php.git
