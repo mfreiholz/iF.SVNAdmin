@@ -3,8 +3,9 @@
   var _loadingView = null;
 
   /**
-    Main class to manage the GUI and all of it's requirements.
-  **/
+   * Main class to manage the GUI and all of it's requirements.
+   * @constructor
+   */
   function AppEngine() {
     this.config = {};
     this.config.tablepagesize = 10;
@@ -13,7 +14,7 @@
 
   AppEngine.prototype.init = function () {
     brite.viewDefaultConfig.loadTmpl = true;
-    brite.viewDefaultConfig.loadCss = false;
+    brite.viewDefaultConfig.loadCss = true;
     brite.viewDefaultConfig.loadJs = true;
   };
 
@@ -115,9 +116,10 @@
   };
 
   AppEngine.prototype.showLoading = function () {
-    return brite.display("LoadingView", "body").done(function (view) {
-      _loadingView = view;
-    });
+    return brite.display("LoadingView", "body")
+      .done(function (view) {
+        _loadingView = view;
+      });
   };
 
   AppEngine.prototype.hideLoading = function () {
@@ -136,7 +138,22 @@
   };
 
   AppEngine.prototype.showDashboard = function () {
-    return brite.display("DashboardView", "#page-wrapper", {}, { emptyParent: true });
+    var self = this,
+      def = new jQ.Deferred();
+    self.showLoading()
+      .done(function () {
+        brite.display("DashboardView", "#page-wrapper", {}, { emptyParent: true })
+          .done(function () {
+            def.resolve();
+          })
+          .fail(function () {
+            def.reject();
+          })
+          .always(function () {
+            self.hideLoading();
+          });
+      });
+    return def.promise();
   };
 
   AppEngine.prototype.showUserListView = function (providerId) {

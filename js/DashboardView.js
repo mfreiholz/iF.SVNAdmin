@@ -4,24 +4,35 @@
   brite.registerView("DashboardView", {}, {
   
     create: function (config, data) {
-      return jQ("#tmpl-DashboardView").render();
-    },
+      var view = this,
+        def = new jQ.Deferred(),
+        promises = [],
+        p = null;
 
-    postDisplay: function (config, data) {
       // Load system info.
-      svnadmin.service.getSystemInfo().done(function (data) {
+      p = svnadmin.service.getSystemInfo().done(function (data) {
         var html = jQ("#tmpl-SystemInfoPanelView").render({ response: data });
-        jQ(".system-info-wrapper").html(html);
+        return html;
       });
-      
+      promises.push(p);
+
       // Load file system info.
-      svnadmin.service.getFileSystemInfo().done(function (data) {
+      p = svnadmin.service.getFileSystemInfo().done(function (data) {
         var html = jQ("#tmpl-FileSystemInfoPanelView").render({ response: data });
-        jQ(".filesystem-info-wrapper").html(html);
+        return html;
       });
-    },
-    
-    events: {
+      promises.push(p);
+
+      jQ.when.apply(this, promises)
+        .done(function (res1, res2) {
+          var html = jQ("#tmpl-DashboardView").render({ response: jQ.extend({}, res1[0], res2[0]) });
+          def.resolve(html);
+        })
+        .fail(function () {
+          def.reject();
+        });
+
+      return def.promise();
     }
   
   });

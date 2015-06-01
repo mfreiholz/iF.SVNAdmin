@@ -1,13 +1,25 @@
 .LoadingView {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 50px auto 0 auto;
+  position: fixed;
+  top: 70px;
+  text-align: center;
+  width: 100%;
   z-index: 99;
 }
 
-.LoadingView div.content-background {
-  width: 128px;
+.LoadingView .container {
+  background: #ffffff;
+  border: 1px solid #2c3e50;
+  padding: 30px;
+  width: 350px;
+}
+
+.LoadingView .indicator {
+  background: url("../img/loading_128.png") no-repeat;
   height: 128px;
-  background: white url("../img/loading_128.png") no-repeat;
+  margin: 0 auto;
+  width: 128px;
+}
+
+.LoadingView .status {
+  margin-top: 30px;
 }
