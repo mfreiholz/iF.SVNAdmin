@@ -13,7 +13,7 @@ class PasswdUserProvider extends SearchableUserProvider
   public function initialize(SVNAdminEngine $engine, $config)
   {
     $this->_passwd = new Htpasswd($config["file"]);
-    if (!file_exists($config["file"]) && !mkdir($config["file"], 0777, true))
+    if (!file_exists($config["file"]) && !touch($config["file"]))
     {
       error_log("Can not load or create user file (path=" . $config["file"] . ")");
       return false;
