@@ -32,7 +32,7 @@ return array(
         "svn_authz_file_backup_count" => 25,
 
         // Indicates whether the function to delete an repository should be available.
-        "repository_deletion_enabled" => false,
+        "repository_deletion_enabled" => true,
 
         // Indicates whether the repository-delete action should move the repository into a trash folder instead of deleting it.
         // The trash will provide an "empty trash" function, if "repository_deletion_enabled" is enabled.
@@ -45,25 +45,25 @@ return array(
      */
 
     "authenticators" => array(
-        array(
+        /*array(
             "id" => "authstatic",
             "class_name" => "StaticAuthenticator",
             "users" => array (
                 "static_admin" => "static_admin",
                 "static_user" => "static_user"
             )
-        ),
-        array(
+        ),*/
+        /*array(
             "id" => "authpasswd",
             "class_name" => "PasswdAuthenticator",
             "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.passwd"
-        ),
-        array(
+        ),*/
+        /*array(
             "id" => "authdigest",
             "class_name" => "DigestAuthenticator",
             "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.digest.passwd",
             "realm" => "myrealm"
-        ),
+        ),*/
         /*array(
             "id" => "authldap",
             "class_name" => "LdapAuthenticator",

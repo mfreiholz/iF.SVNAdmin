@@ -66,7 +66,7 @@
         singleActions: [
           {
             id: "info",
-            getName: function (id) { return tr("Info"); },
+            getName: function (id) { return tr("Info & Permissions"); },
             getLink: function (id) { return "#!/repositoryinfo?" + svnadmin.app.createUrlParameterString({providerid: providerId, repositoryid: id}); },
             callback: function (id) { return svnadmin.app.showRepositoryInfoView(providerId, id); }
           }

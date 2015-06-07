@@ -1,9 +1,13 @@
 <?php
-class RepositoryService extends ServiceBase {
 
-  public function processRequest(WebRequest $request, WebResponse $response) {
+class RepositoryService extends ServiceBase
+{
+
+  public function processRequest(WebRequest $request, WebResponse $response)
+  {
     $action = $request->getParameter("action");
-    switch ($action) {
+    switch ($action)
+    {
       case "providers":
         return $this->processProviders($request, $response);
       case "list":
@@ -32,28 +36,33 @@ class RepositoryService extends ServiceBase {
     return false;
   }
 
-  public function processProviders(WebRequest $request, WebResponse $response) {
+  public function processProviders(WebRequest $request, WebResponse $response)
+  {
     $engine = SVNAdminEngine::getInstance();
     $providers = $engine->getKnownProviders(SVNAdminEngine::REPOSITORY_PROVIDER);
-    $json = array ();
-    foreach ($providers as &$prov) {
+    $json = array();
+    foreach ($providers as &$prov)
+    {
       $json[] = JsonSerializer::fromProvider($prov);
     }
     $response->done2json($json);
     return true;
   }
 
-  public function processRepositoryList(WebRequest $request, WebResponse $response) {
+  public function processRepositoryList(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $offset = $request->getParameter("offset", 0);
     $num = $request->getParameter("num", 10);
-    if (empty($providerId)) {
+    if (empty($providerId))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
@@ -65,22 +74,26 @@ class RepositoryService extends ServiceBase {
     return true;
   }
 
-  public function processCreate(WebRequest $request, WebResponse $response) {
+  public function processCreate(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $name = $request->getParameter("name");
     $options = $request->getParameter("options");
-    if (empty($providerId) || empty($name)) {
+    if (empty($providerId) || empty($name))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
+    if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $repo = $provider->create($name, $options);
-    if (empty($repo)) {
+    if (empty($repo))
+    {
       return $this->processErrorInternal($request, $response);
     }
 
@@ -94,56 +107,70 @@ class RepositoryService extends ServiceBase {
     return true;
   }
 
-  public function processDelete(WebRequest $request, WebResponse $response) {
+  public function processDelete(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $id = $request->getParameter("repositoryid");
-    if (empty($providerId) || empty($id)) {
+    if (empty($providerId) || empty($id))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
+    if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     // Delete all permissions (optional).
-    if (true) {
-      try {
+    if (true)
+    {
+      try
+      {
         $repository = $provider->findRepository($id);
         $authz = $provider->getSvnAuthz($id);
         $paths = $authz->getPaths($repository->getName());
-        foreach ($paths as &$path) {
+        foreach ($paths as &$path)
+        {
           $authz->removePath($path);
         }
-        if (count($paths) > 0) {
+        if (count($paths) > 0)
+        {
           SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz);
         }
-      } catch (Exception $e) {
+      }
+      catch (Exception $e)
+      {
         error_log("Error during purge of all repository permissions (repositoryid=" . $id . ")");
       }
     }
 
     // Delete repository.
-    if (!$provider->delete($id)) {
+    if (!$provider->delete($id))
+    {
       return $this->processErrorInternal($request, $response);
     }
     return true;
   }
 
-  public function processBrowse(WebRequest $request, WebResponse $response) {
+  public function processBrowse(WebRequest $request, WebResponse $response)
+  {
     return false;
   }
 
-  public function processInfo(WebRequest $request, WebResponse $response) {
+  public function processInfo(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $repositoryId = $request->getParameter("repositoryid");
-    if (empty($providerId) || empty($repositoryId)) {
+    if (empty($providerId) || empty($repositoryId))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
@@ -153,16 +180,19 @@ class RepositoryService extends ServiceBase {
     return true;
   }
 
-  public function processPaths(WebRequest $request, WebResponse $response) {
+  public function processPaths(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $repositoryId = $request->getParameter("repositoryid");
-    if (empty($providerId) || empty($repositoryId)) {
+    if (empty($providerId) || empty($repositoryId))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $engine = SVNAdminEngine::getInstance();
     $provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
@@ -172,7 +202,8 @@ class RepositoryService extends ServiceBase {
 
     $json = new stdClass();
     $json->paths = array();
-    foreach ($paths as &$path) {
+    foreach ($paths as &$path)
+    {
       $obj = new stdClass();
       $obj->path = $path->path;
       $json->paths[] = $obj;
@@ -181,49 +212,58 @@ class RepositoryService extends ServiceBase {
     return true;
   }
 
-  public function processPathCreate(WebRequest $request, WebResponse $response) {
+  public function processPathCreate(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $repositoryId = $request->getParameter("repositoryid");
     $path = $request->getParameter("path");
-    if (empty($providerId) || empty($repositoryId)) {
+    if (empty($providerId) || empty($repositoryId))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $repository = $provider->findRepository($repositoryId);
     $authz = $provider->getSvnAuthz($repositoryId);
-    if (empty($repository) || empty($authz)) {
+    if (empty($repository) || empty($authz))
+    {
       return $this->processErrorInternal($request, $response);
     }
 
     $o = SvnAuthzFilePath::create($repository->getName(), $path);
     $authz->addPath($o);
-    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz))
+    {
       return $this->processErrorInternal($request, $response);
     }
     return true;
   }
 
-  public function processPathDelete(WebRequest $request, WebResponse $response) {
+  public function processPathDelete(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $repositoryId = $request->getParameter("repositoryid");
     $path = $request->getParameter("path");
-    if (empty($providerId) || empty($repositoryId)) {
+    if (empty($providerId) || empty($repositoryId))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $repository = $provider->findRepository($repositoryId);
     $authz = $provider->getSvnAuthz($repositoryId);
-    if (empty($repository) || empty($authz)) {
+    if (empty($repository) || empty($authz))
+    {
       return true;
     }
 
@@ -231,33 +271,40 @@ class RepositoryService extends ServiceBase {
     $o->repository = $repository->getName();
     $o->path = $path;
     $authz->removePath($o);
-    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz))
+    {
       return $this->processErrorInternal($request, $response);
     }
     return true;
   }
 
-  public function processPathPermissions(WebRequest $request, WebResponse $response) {
+  public function processPathPermissions(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $repositoryId = $request->getParameter("repositoryid");
     $path = $request->getParameter("path");
-    if (empty($providerId) || empty($repositoryId)) {
+    if (empty($providerId) || empty($repositoryId))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $repository = $provider->findRepository($repositoryId);
-    if (empty($repository)) {
+    if (empty($repository))
+    {
       return $this->processErrorInternal($request, $response);
     }
     $authz = $provider->getSvnAuthz($repositoryId);
     $permissions = $authz->getPermissionsOfPath(SvnAuthzFilePath::create($repository->getName(), $path));
-    usort($permissions, function ($a, $b) {
-      if ($a->member->asMemberString() === $b->member->asMemberString()) {
+    usort($permissions, function ($a, $b)
+    {
+      if ($a->member->asMemberString() === $b->member->asMemberString())
+      {
         return 0;
       }
       return ($a->member->asMemberString() < $b->member->asMemberString()) ? -1 : 1;
@@ -265,7 +312,8 @@ class RepositoryService extends ServiceBase {
 
     $json = new stdClass();
     $json->permissions = array();
-    foreach ($permissions as &$permission) {
+    foreach ($permissions as &$permission)
+    {
       $jsonPerm = new stdClass();
       $jsonPerm->member = Elws::createMemberEntity($permission->member->asMemberString());
       $jsonPerm->permission = $permission->permission;
@@ -275,60 +323,70 @@ class RepositoryService extends ServiceBase {
     return true;
   }
 
-  public function processPathAssign(WebRequest $request, WebResponse $response) {
+  public function processPathAssign(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $repositoryId = $request->getParameter("repositoryid");
     $path = $request->getParameter("path");
     $memberId = $request->getParameter("memberid");
     $permission = $request->getParameter("permission");
-    if (empty($providerId) || empty($repositoryId) || empty($path) || empty($memberId)) {
+    if (empty($providerId) || empty($repositoryId) || empty($path) || empty($memberId))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $repository = $provider->findRepository($repositoryId);
     $authz = $provider->getSvnAuthz($repositoryId);
-    if (empty($repository) || empty($authz)) {
+    if (empty($repository) || empty($authz))
+    {
       return $this->processErrorCustom($request, $response, "Unknown repository");
     }
 
     $authzPath = SvnAuthzFilePath::create($repository->getName(), $path);
     $authzMember = $authz->createMemberObject($memberId);
     $authz->addPermission($authzPath, $authzMember, $permission);
-    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz))
+    {
       return $this->processErrorInternal($request, $response);
     }
     return true;
   }
 
-  public function processPathUnassign(WebRequest $request, WebResponse $response) {
+  public function processPathUnassign(WebRequest $request, WebResponse $response)
+  {
     $providerId = $request->getParameter("providerid");
     $repositoryId = $request->getParameter("repositoryid");
     $path = $request->getParameter("path");
     $memberId = $request->getParameter("memberid");
-    if (empty($providerId) || empty($repositoryId) || empty($path) || empty($memberId)) {
+    if (empty($providerId) || empty($repositoryId) || empty($path) || empty($memberId))
+    {
       return $this->processErrorMissingParameters($request, $response);
     }
 
     $provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-    if (empty($provider)) {
+    if (empty($provider))
+    {
       return $this->processErrorInvalidProvider($request, $response, $providerId);
     }
 
     $repository = $provider->findRepository($repositoryId);
     $authz = $provider->getSvnAuthz($repositoryId);
-    if (empty($repository) || empty($authz)) {
+    if (empty($repository) || empty($authz))
+    {
       return $this->processErrorCustom($request, $response, "Unknown repository");
     }
 
     $authzPath = SvnAuthzFilePath::create($repository->getName(), $path);
     $authzMember = $authz->createMemberObject($memberId);
     $authz->removePermission($authzPath, $authzMember);
-    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+    if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz))
+    {
       return $this->processErrorInternal($request, $response);
     }
     return true;

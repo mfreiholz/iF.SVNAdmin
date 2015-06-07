@@ -9,7 +9,7 @@ class Elws {
     if (empty($path)) {
       return $path;
     }
-    $path = realpath($path);
+    //$path = realpath($path);
     $path = str_replace("\\", "/", $path);
     return $path;
   }

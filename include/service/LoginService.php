@@ -1,21 +1,36 @@
 <?php
-class LoginService extends WebModule {
 
-  public function processRequest(WebRequest $request, WebResponse $response) {
+class LoginService extends WebModule
+{
+
+  public function processRequest(WebRequest $request, WebResponse $response)
+  {
     $action = $request->getParameter("action", "login");
-    if ($action === "check") {
+    if ($action === "check")
+    {
       return $this->processCheck($request, $response);
-    } else if ($action === "login") {
+    }
+    else if ($action === "login")
+    {
       return $this->processLogin($request, $response);
-    } else if ($action === "logout") {
+    }
+    else if ($action === "logout")
+    {
       return $this->processLogout($request, $response);
     }
     return false;
   }
 
-  public function processCheck(WebRequest $request, WebResponse $response) {
+  public function processCheck(WebRequest $request, WebResponse $response)
+  {
+    // If there is no Authenticator configured, everyone has access.
+    $authenticators = SVNAdminEngine::getInstance()->getAuthenticators();
+    if (empty($authenticators))
+      return true;
+
     session_start();
-    if (!isset($_SESSION["username"])) {
+    if (!isset($_SESSION["username"]))
+    {
       $response->fail(401);
       session_destroy();
       return false;
@@ -23,7 +38,8 @@ class LoginService extends WebModule {
     return true;
   }
 
-  public function processLogin(WebRequest $request, WebResponse $response) {
+  public function processLogin(WebRequest $request, WebResponse $response)
+  {
     $appEngine = SVNAdminEngine::getInstance();
     $username = $request->getParameter("username");
     $password = $request->getParameter("password");
@@ -31,15 +47,18 @@ class LoginService extends WebModule {
     $authOk = false;
     $authId = null;
     $authenticators = $appEngine->getAuthenticators();
-    foreach ($authenticators as $id => &$authenticator) {
-      if ($authenticator->authenticate($username, $password)) {
+    foreach ($authenticators as $id => &$authenticator)
+    {
+      if ($authenticator->authenticate($username, $password))
+      {
         $authOk = true;
         $authId = $id;
         break;
       }
     }
 
-    if (!$authOk) {
+    if (!$authOk)
+    {
       $response->fail(401);
       return true;
     }
@@ -57,10 +76,12 @@ class LoginService extends WebModule {
     return true;
   }
 
-  public function processLogout(WebRequest $request, WebResponse $response) {
+  public function processLogout(WebRequest $request, WebResponse $response)
+  {
     session_start();
     session_destroy();
   }
 
 }
+
 ?>
