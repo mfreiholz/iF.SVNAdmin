@@ -2,4 +2,7 @@
 .project
 .settings/
 .idea/
+
+# DATA directory
 data/*
+!data/index.html
