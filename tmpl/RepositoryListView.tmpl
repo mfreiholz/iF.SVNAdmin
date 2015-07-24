@@ -5,7 +5,7 @@
 			<ul class="nav nav-tabs">
 				{{for providers ~p=provider}}
 				<li role="presentation" class="{{if ~p.id == id}}active{{/if}}">
-					<a href="#!/repositories?providerid={{url:id}}">{{>id}}</a>
+					<a href="#!/repositories?providerid={{url:id}}">{{>name}}</a>
 				</li>
 				{{/for}}
 			</ul>

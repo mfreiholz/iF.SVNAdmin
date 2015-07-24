@@ -42,18 +42,18 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
 		$begin = (int)$offset;
 		$end = (int)$num === -1 ? $reposCount : (int)$offset + (int)$num;
 		for ($i = $begin; $i < $end && $i < $reposCount; ++$i) {
-			$listItems[] = $this->createRepositoryObject($this->_directoryPath . DIRECTORY_SEPARATOR . $repos[$i]);
+			$listItems[] = $this->createRepositoryObject($repos[$i]);
 		}
 		$list->initialize($listItems, $reposCount > $end);
 		return $list;
 	}
 
 	public function findRepository($id) {
-		$path = base64_decode($id);
+		$path = $this->_directoryPath . DIRECTORY_SEPARATOR . $id;
 		if (!file_exists($path)) {
 			throw new ProviderException("Can not find repository (id=" . $id . "; path=" . $path . ")");
 		}
-		return $this->createRepositoryObject($path);
+		return $this->createRepositoryObject($id);
 	}
 
 	public function create($name, $options = array("type" => "fsfs")) {
@@ -63,11 +63,11 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
 		$path = $this->_directoryPath . DIRECTORY_SEPARATOR . $name;
 		$type = isset($options["type"]) ? $options["type"] : "fsfs";
 		$this->_engine->getSvnAdmin()->svnCreate($path, $type);
-		return $this->createRepositoryObject($path);
+		return $this->createRepositoryObject($name);
 	}
 
 	public function delete($id) {
-		$path = base64_decode($id);
+		$path = $this->_directoryPath . DIRECTORY_SEPARATOR . $id;
 		if (empty($path) || !file_exists($path) || !$this->_engine->getSvn()->isRepository($path)) {
 			return false;
 		}
@@ -79,7 +79,7 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
 	}
 
 	public function getInfo($id) {
-		$path = base64_decode($id);
+		$path = $this->_directoryPath . DIRECTORY_SEPARATOR . $id;
 		if (!SVNAdminEngine::getInstance()->getSvn()->isRepository($path)) {
 			return array();
 		}
@@ -87,22 +87,28 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
 		if (empty($entry)) {
 			return array();
 		}
-		return array("kind" => $entry->kind, "name" => $entry->name, "revision" => $entry->revision, "author" => $entry->author, "date" => $entry->date);
+		return array(
+			"kind" => $entry->kind,
+			"name" => $entry->name,
+			"revision" => $entry->revision,
+			"author" => $entry->author,
+			"date" => $entry->date
+		);
 	}
 
 	/**
-	 * Creates and initializes an repository object by it's absolute path.
+	 * Creates and initializes an repository object by it's name.
 	 *
-	 * @param string $path
+	 * @param string $name
 	 *
 	 * @return Repository
 	 */
-	protected function createRepositoryObject($path) {
-		$path = Elws::normalizeAbsolutePath($path);
+	protected function createRepositoryObject($name) {
+		$path = Elws::normalizeAbsolutePath($this->_directoryPath . DIRECTORY_SEPARATOR . $name);
 		$authzFilePath = Elws::normalizeAbsolutePath($this->getRepositoryAuthzFilePath($path));
 
 		$repo = new Repository();
-		$repo->initialize(base64_encode($path), basename($path));
+		$repo->initialize($name, $name, $name);
 		$repo->setAuthzFilePath($authzFilePath);
 		return $repo;
 	}
@@ -111,23 +117,23 @@ class SvnParentRepositoryProvider extends RepositoryProvider {
 	 * Deletes an entire directory recursively.
 	 * Note: GLOB_MARK = Adds a ending slash to directory paths.
 	 *
-	 * @param string $path
+	 * @param string $dir
 	 *
 	 * @return boolean
 	 */
-	protected function deleteDirectoryRecursive($path) {
-		$files = glob($path . "/*");
-		foreach ($files as $f) {
-			if (is_dir($f)) {
-				$this->deleteDirectoryRecursive($f);
+	protected function deleteDirectoryRecursive($dir) {
+		if (is_dir($dir)) {
+			$objects = scandir($dir);
+			foreach ($objects as $object) {
+				if ($object != "." && $object != "..") {
+					if (filetype($dir . "/" . $object) == "dir")
+						$this->deleteDirectoryRecursive($dir . "/" . $object);
+					else
+						unlink($dir . "/" . $object);
+				}
 			}
-			else {
-				//chmod($f, 0777);
-				unlink($f);
-			}
-		}
-		if (is_dir($path)) {
-			rmdir($path);
+			reset($objects);
+			rmdir($dir);
 		}
 		return true;
 	}

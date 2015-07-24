@@ -54,7 +54,7 @@ class SvnBase {
 		else if (!is_dir($path)) {
 			return false;
 		}
-		else if (!is_dir($path . DIRECTORY_SEPARATOR . "conf")) {
+		/*else if (!is_dir($path . DIRECTORY_SEPARATOR . "conf")) {
 			return false;
 		}
 		else if (!is_dir($path . DIRECTORY_SEPARATOR . "db")) {
@@ -62,7 +62,7 @@ class SvnBase {
 		}
 		else if (!is_dir($path . DIRECTORY_SEPARATOR . "hooks")) {
 			return false;
-		}
+		}*/
 		return true;
 	}
 

@@ -137,6 +137,7 @@ class SVNAdminEngine {
 			$obj = new $className($id);
 			$c = new stdClass();
 			$c->id = $id;
+			$c->name = isset($config["name"]) ? $config["name"] : $id;
 			$c->editable = $obj->hasFlag(Provider::FLAG_EDITABLE);
 			$ret[] = $c;
 		}
