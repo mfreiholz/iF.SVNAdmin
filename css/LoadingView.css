@@ -1,25 +1,25 @@
 .LoadingView {
-  position: fixed;
-  top: 70px;
-  text-align: center;
-  width: 100%;
-  z-index: 99;
+	position: fixed;
+	top: 70px;
+	text-align: center;
+	width: 100%;
+	z-index: 99;
 }
 
 .LoadingView .container {
-  background: #ffffff;
-  border: 1px solid #2c3e50;
-  padding: 30px;
-  width: 350px;
+	background: #ffffff;
+	border: 1px solid #337ab7;
+	padding: 30px;
+	width: 350px;
 }
 
 .LoadingView .indicator {
-  background: url("../img/loading_128.png") no-repeat;
-  height: 128px;
-  margin: 0 auto;
-  width: 128px;
+	background: url("../img/loading_128.png") no-repeat;
+	height: 128px;
+	margin: 0 auto;
+	width: 128px;
 }
 
 .LoadingView .status {
-  margin-top: 30px;
+	margin-top: 30px;
 }

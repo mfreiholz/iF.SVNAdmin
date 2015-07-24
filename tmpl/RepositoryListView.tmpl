@@ -1,36 +1,87 @@
 <script id="tmpl-RepositoryListView" type="text/html">
-  <div class="RepositoryListView">
-    <div class="provider-wrapper"></div>
-    <div class="repositorylist-wrapper"></div>
-  </div>
+	<div class="RepositoryListView">
+
+		<div class="providers">
+			<ul class="nav nav-tabs">
+				{{for providers ~p=provider}}
+				<li role="presentation" class="{{if ~p.id == id}}active{{/if}}">
+					<a href="#!/repositories?providerid={{url:id}}">{{>id}}</a>
+				</li>
+				{{/for}}
+			</ul>
+		</div>
+
+		{{if provider.editable}}
+		<p class="options">
+			<div class="btn-toolbar" role="toolbar">
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-primary NewRepositoryLink">{{>~tr('Create')}}</button>
+				</div>
+			</div>
+		</p>
+		{{/if}}
+
+		<p class="list">
+			{{for repositories ~provider=provider tmpl="#tmpl-RepositoryListView-RepositoryListItem"/}}
+			{{if repositories.length <= 0}}
+			<div class="alert alert-info">{{>~tr('No data yet.')}}</div>
+			{{/if}}
+		</p>
+
+	</div>
 </script>
 
-<script id="tmpl-RepositoryListView-Providers" type="text/html">
-  <div class="RepositoryListView-Providers">
-    <ul class="nav nav-pills">
-      {{for providers ~current=current}}
-      <li class="provider" data-providerid="{{>id}}">
-        <a class="provider-link" data-providerid="{{>id}}" href="#!/repositories?providerid={{url:id}}">{{>id}}</a>
-      </li>
-      {{/for}}
-    </ul>
-  </div>
+<script id="tmpl-RepositoryListView-RepositoryListItem" type="text/html">
+	<div class="RepositoryListView-RepositoryListItem">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				{{if ~provider.editable}}
+				<button class="btn btn-danger btn-sm pull-right DeleteRepositoryLink" data-id="{{>id}}">{{>~tr('Delete')}}</button>
+				{{/if}}
+				<a class="title">{{>displayname}}</a>
+				<p class="description">Show description from from $REPO/conf/info.conf here.</p>
+			</div>
+		</div>
+	</div>
 </script>
 
-<script id="tmpl-RepositoryListView-RepositoryList" type="text/html">
-  <div class="RepositoryListView-RepositoryList">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h1 class="panel-title">{{>~tr("Repositories")}}</h1>
-      </div>
-      <div class="panel-body">
-        <div class="table-wrapper"></div>
-      </div>
-      <div class="panel-footer">
-        {{if provider.editable}}
-          <button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
-        {{/if}}
-      </div>
-    </div>
-  </div>
+<!---------------------- OLD ------------------------->
+
+<script id="tmpl-RepositoryListView_OLD" type="text/html">
+	<div class="RepositoryListView">
+		<div class="provider-wrapper"></div>
+		<div class="repositorylist-wrapper"></div>
+	</div>
+</script>
+
+<script id="tmpl-RepositoryListView-Providers_OLD" type="text/html">
+	{{if providers.length > 1}}
+	<div class="RepositoryListView-Providers">
+		<ul class="nav nav-pills">
+			{{for providers ~current=current}}
+			<li class="provider" data-providerid="{{>id}}">
+				<a class="provider-link" data-providerid="{{>id}}" href="#!/repositories?providerid={{url:id}}">{{>id}}</a>
+			</li>
+			{{/for}}
+		</ul>
+	</div>
+	{{/if}}
+</script>
+
+<script id="tmpl-RepositoryListView-RepositoryList_OLD" type="text/html">
+	<div class="RepositoryListView-RepositoryList">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h1 class="panel-title">{{>~tr("Repositories")}}</h1>
+			</div>
+			<div class="panel-body">
+				<div class="table-wrapper"></div>
+			</div>
+			<div class="panel-footer">
+				{{if provider.editable}}
+				<button class="btn btn-default add-link" data-providerid="{{>providerId}}">{{>~tr("Add")}}</button>
+				{{/if}}
+			</div>
+		</div>
+	</div>
 </script>

@@ -1,53 +1,51 @@
 <script id="tmpl-DashboardView" type="text/html">
-<div class="DashboardView">
-  <h1>Dashboard</h1>
-  <div class="system-info-wrapper">
-    {{include tmpl="#tmpl-SystemInfoPanelView"/}}
-  </div>
-  <div class="filesystem-info-wrapper">
-    {{include tmpl="#tmpl-FileSystemInfoPanelView"/}}
-  </div>
-</div>
+	<div class="DashboardView">
+		{{:systemInfoHtml}}
+		{{:fileSystemInfoHtml}}
+	</div>
 </script>
 
 <script id="tmpl-SystemInfoPanelView" type="text/html">
-<div class="SystemInfoPanelView">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> System</h1>
-    </div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-md-4"><b>{{>~tr('OS')}}</b><br>{{>response.os}}</div>
-        <div class="col-md-4"><b>{{>~tr('OS Version')}}</b><br>{{>response.osversion}}</div>
-        <div class="col-md-4"><b>{{>~tr('Machine Type')}}</b><br>{{>response.machine}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-4"><b>{{>~tr('Hostname')}}</b><br>{{>response.hostname}}</div>
-        <div class="col-md-4"><b>{{>~tr('PHP Version')}}</b><br>{{>response.php.versionname}}</div>
-        <div class="col-md-4"><b>{{>~tr('PHP Memory Peak Usage')}}</b><br>{{>response.php.memorypeakusage}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-4"><b>{{>~tr('PHP Memory Usage')}}</b><br>{{>response.php.memoryusage}}</div>
-        <div class="col-md-4"><b>{{>~tr('PHP SAPI Name')}}</b><br>{{>response.php.sapiname}}</div>
-      </div>
-    </div>
-  </div>
-</div>
+	<div class="SystemInfoPanelView">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> {{>~tr('System')}}</h1>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-4"><b>{{>~tr('OS')}}</b><br>{{>os}}</div>
+					<div class="col-md-4"><b>{{>~tr('OS Version')}}</b><br>{{>osversion}}</div>
+					<div class="col-md-4"><b>{{>~tr('Machine Type')}}</b><br>{{>machine}}</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4"><b>{{>~tr('Hostname')}}</b><br>{{>hostname}}</div>
+					<div class="col-md-4"><b>{{>~tr('PHP Version')}}</b><br>{{>php.versionname}}</div>
+					<div class="col-md-4"><b>{{>~tr('PHP Memory Peak Usage')}}</b><br>{{>php.memorypeakusage}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4"><b>{{>~tr('PHP Memory Usage')}}</b><br>{{>php.memoryusage}}</div>
+					<div class="col-md-4"><b>{{>~tr('PHP SAPI Name')}}</b><br>{{>php.sapiname}}</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
 
 <script id="tmpl-FileSystemInfoPanelView" type="text/html">
-<div class="FileSystemInfoPanelView">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> File System</h1>
-    </div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-md-4"><b>{{>~tr("Free disk space")}}</b><br>{{>~formatSize(response.diskfreespace)}}</div>
-        <div class="col-md-4"><b>{{>~tr("Total disk space")}}</b><br>{{>~formatSize(response.disktotalspace)}}</div>
-      </div>
-    </div>
-  </div>
-</div>
+	<div class="FileSystemInfoPanelView">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h1 class="panel-title"><span class="glyphicon glyphicon-user"></span> {{>~tr('File System')}}</h1>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-4"><b>{{>~tr('Free disk space')}}</b><br>{{>~formatSize(diskfreespace)}}
+					</div>
+					<div class="col-md-4"><b>{{>~tr('Total disk space')}}</b><br>{{>~formatSize(disktotalspace)}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>
