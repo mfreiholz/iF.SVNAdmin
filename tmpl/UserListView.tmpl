@@ -44,8 +44,10 @@
 					<td>{{>#index + 1}}</td>
 					<td><a>{{>displayname}}</a></td>
 					<td>
-						<button class="btn btn-default btn-xs ChangePasswordLink" data-id="{{>id}}">{{>~tr('Change Password')}}</button>
-						<button class="btn btn-danger btn-xs DeleteUserLink" data-id="{{>id}}">{{>~tr('Delete')}}</button>
+						{{if ~provider.editable}}
+						<button class="btn btn-default btn-sm ChangePasswordLink" data-id="{{>id}}">{{>~tr('Change Password')}}</button>
+						<button class="btn btn-danger btn-sm DeleteUserLink" data-id="{{>id}}">{{>~tr('Delete')}}</button>
+						{{/if}}
 					</td>
 				</tr>
 				{{/for}}
