@@ -54,7 +54,7 @@
 				ev.preventDefault();
 				brite.display('RepositoryAddView', 'body', {
 					providerId: view.prov.id,
-					submitted: function () {
+					onSubmit: function () {
 						svnadmin.app.showRepositoryListView(view.prov.id);
 					}
 				}, {emptyParent: false});

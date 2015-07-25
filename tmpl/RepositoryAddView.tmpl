@@ -1,31 +1,35 @@
 <script id="tmpl-RepositoryAddView" type="text/html">
-<div class="RepositoryAddView" data-providerid="{{>providerId}}">
+	<div class="RepositoryAddView">
 
-  <div class="modal fade" id="repositoryaddmodal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{>~tr("Close")}}</span></button>
-          <h4 class="modal-title">{{>~tr("Add")}}</h4>
-        </div>
-        <div class="modal-body">
+		<div class="modal fade" id="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">{{>~tr("Close")}}</span>
+						</button>
+						<h4 class="modal-title">{{>~tr("New Repository")}}</h4>
+					</div>
+					<div class="modal-body">
 
-          <form role="form">
-            <div class="form-group">
-              <label for="name">{{>~tr("Name")}}</label>
-              <input class="form-control" type="text" name="name" required>
-              <p class="help-block">{{:~tr('The repository name may contain any character, which is allowed as a folder name on your system.')}}</p>
-            </div>
-          </form>
+						<form role="form">
+							<div class="form-group">
+								<label for="name">{{>~tr("Name")}}</label>
+								<input class="form-control" type="text" name="name" required>
 
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary submit">{{>~tr("Add")}}</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+								<p class="help-block">{{:~tr('The repository name may contain any character, which is allowed as a folder name on your system.')}}</p>
+							</div>
+						</form>
 
-      </div>
-    </div>
-  </div>
-</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary submit">{{>~tr("Create")}}</button>
+						<button type="button" class="btn btn-default cancel" data-dismiss="modal">{{>~tr("Cancel")}}</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
 </script>
