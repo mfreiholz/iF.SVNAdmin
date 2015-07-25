@@ -13,27 +13,22 @@
  *   Otherwise each repository will use it's own AuthzFile located in it's `conf/` directory.
  */
 class SvnParentRepositoryProvider extends RepositoryProvider {
-	private $_engine = null;
-	private $_config = null;
 	private $_directoryPath = "";
 	private $_authzFilePath = "";
 
-	public function __construct($id) {
-		parent::__construct($id);
+	public function __construct($id, $config, $engine) {
+		parent::__construct($id, $config, $engine);
 		$this->_flags[] = Provider::FLAG_EDITABLE;
-	}
-
-	public function initialize(SVNAdminEngine $engine, $config) {
-		$this->_engine = $engine;
-		$this->_config = $config;
 		$this->_directoryPath = Elws::normalizeAbsolutePath($config["path"]);
 		$this->_authzFilePath = Elws::normalizeAbsolutePath($config["svn_authz_file"]);
+	}
+
+	public function initialize() {
 		return true;
 	}
 
 	public function getRepositories($offset, $num) {
-		$svn = $this->_engine->getSvn();
-		$repos = $svn->listRepositories($this->_directoryPath);
+		$repos = $this->_engine->getSvn()->listRepositories($this->_directoryPath);
 		$reposCount = count($repos);
 		sort($repos);
 

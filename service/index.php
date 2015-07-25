@@ -1,32 +1,42 @@
 <?php
-// Configure error handling.
+///////////////////////////////////////////////////////////////////////
+// Error Handling
+///////////////////////////////////////////////////////////////////////
+
 error_reporting(-1);
 ini_set("log_errors", 1);
 ini_set("error_log", realpath("../") . "/data/error.log");
 
 function errorHandler($errno, $errstr, $errfile = "", $errline = 0, array $errcontext = null) {
-  switch ($errno) {
-    case E_USER_ERROR:
-      break;
-    case E_USER_WARNING:
-      break;
-    case E_USER_NOTICE:
-      break;
-    case E_USER_DEPRECATED:
-      break;
-    case E_ERROR:
-      break;
-    case E_WARNING:
-      break;
-    case E_NOTICE:
-      break;
-    case E_DEPRECATED:
-      break;
-  }
-  error_log("[" . date(DATE_ATOM) . "][type=" . $errno. "][line=" . $errline . "][file=" . $errfile . "] " . $errstr);
-  return false;
+	switch ($errno) {
+		case E_USER_ERROR:
+			break;
+		case E_USER_WARNING:
+			break;
+		case E_USER_NOTICE:
+			break;
+		case E_USER_DEPRECATED:
+			break;
+		case E_ERROR:
+			break;
+		case E_WARNING:
+			break;
+		case E_NOTICE:
+			break;
+		case E_DEPRECATED:
+			break;
+	}
+	error_log("[" . date(DATE_ATOM) . "][type=" . $errno . "][line=" . $errline . "][file=" . $errfile . "] " . $errstr);
+	return false;
 }
+
 set_error_handler("errorHandler");
+
+///////////////////////////////////////////////////////////////////////
+// Exception Handling
+///////////////////////////////////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////////////////////////////
 // Application Code Starts Here

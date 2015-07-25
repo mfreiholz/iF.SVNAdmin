@@ -14,7 +14,7 @@
 						<ul class="dropdown-menu">
 							{{for providers ~p=provider}}
 							<li role="presentation" class="{{if ~p.id == id}}active{{/if}}">
-								<a href="#!/repositories?providerid={{url:id}}">{{>name}}</a>
+								<a href="#!/repositories?providerid={{url:id}}">{{>displayname}}</a>
 							</li>
 							{{/for}}
 						</ul>
