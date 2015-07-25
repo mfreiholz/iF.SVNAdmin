@@ -153,18 +153,11 @@ class SVNAdminEngine {
 				$p = $this->_providers[$type][$config["id"]];
 			}
 			else {
-				$p = new $config["class_name"]($config["id"]);
-				$p->initialize($this, $config);
+				$p = new $config["class_name"]($config["id"], $config, $this);
+				$p->initialize();
 				$this->_providers[$type][$p->getId()] = $p;
 			}
 			$l[] = $p;
-
-			// Create entity class.
-			//$c = new stdClass();
-			//$c->id = $p->getId();
-			//$c->name = isset($config["name"]) ? $config["name"] : $p->getId();
-			//$c->editable = $p->hasFlag(Provider::FLAG_EDITABLE);
-			//$l[] = $c;
 		}
 		return $l;
 	}
@@ -196,8 +189,8 @@ class SVNAdminEngine {
 		if (!$conf)
 			throw new Exception("Can not find configuration for Provider (type=" . $type . "; id=" . $id . ")");
 
-		$p = new $conf["class_name"]($conf["id"]);
-		$p->initialize($this, $conf);
+		$p = new $conf["class_name"]($conf["id"], $conf, $this);
+		$p->initialize();
 		$this->_providers[$type][$p->getId()] = $p;
 		return $p;
 	}
