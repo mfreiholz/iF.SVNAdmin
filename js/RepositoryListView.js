@@ -62,9 +62,9 @@
 			'click; .DeleteRepositoryLink': function (ev) {
 				var view = this,
 					id = jQ(ev.currentTarget).data('id');
-				if (!window.confirm(tr('Are you sure?'))) {
+				ev.preventDefault();
+				if (!window.confirm(tr('Are you sure?')))
 					return;
-				}
 				svnadmin.app.showWithLoading(function () {
 					return svnadmin.service.deleteRepository(view.prov.id, id)
 						.done(function () {

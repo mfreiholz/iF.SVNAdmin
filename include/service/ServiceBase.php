@@ -1,6 +1,7 @@
 <?php
 
 class ServiceBase extends WebModule {
+
 	public function getAppEngine() {
 		return SVNAdminEngine::getInstance();
 	}

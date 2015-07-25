@@ -364,14 +364,80 @@
 		});
 	};
 
+	// Repositories
+
+	ServiceClient.prototype.getRepositoryProviders = function () {
+		return this.ajax({
+			url: 'service/',
+			data: {
+				m: 'ProviderService',
+				action: 'list',
+				type: 'repository'
+			}
+		});
+	};
+
+	ServiceClient.prototype.getRepositories = function (providerId, offset, num) {
+		return this.ajax({
+			url: 'service/',
+			data: {
+				m: 'RepositoryService',
+				action: 'list',
+				providerid: providerId,
+				offset: offset,
+				num: num
+			}
+		});
+	};
+
+	ServiceClient.prototype.createRepository = function (providerId, name) {
+		return this.ajax({
+			url: 'service/?m=RepositoryService&action=create',
+			method: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				providerid: providerId,
+				name: name
+			})
+		});
+	};
+
+	ServiceClient.prototype.deleteRepository = function (providerId, id) {
+		return this.ajax({
+			url: 'service/?m=RepositoryService&action=delete',
+			method: 'DELETE',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				providerid: providerId,
+				id: id
+			})
+		});
+	};
+
+	ServiceClient.prototype.browseRepository = function () {
+	};
+
+	ServiceClient.prototype.getRepositoryInfo = function (providerId, repositoryId) {
+		return this.ajax({
+			url: 'service/',
+			data: {
+				m: 'RepositoryService',
+				action: 'info',
+				providerid: providerId,
+				repositoryid: repositoryId
+			}
+		});
+	};
+
 	// Users
 
 	ServiceClient.prototype.getUserProviders = function () {
 		return this.ajax({
 			url: 'service/',
 			data: {
-				m: 'UserService',
-				action: 'providers'
+				m: 'ProviderService',
+				action: 'list',
+				type: 'user'
 			}
 		});
 	};
@@ -405,41 +471,39 @@
 
 	ServiceClient.prototype.createUser = function (providerId, name, password) {
 		return this.ajax({
-			url: 'service/',
-			type: 'POST',
-			data: {
-				m: 'UserService',
-				action: 'create',
+			url: 'service/?m=UserService&action=create',
+			method: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
 				providerid: providerId,
 				name: name,
 				password: password
-			}
+			})
 		});
 	};
 
-	ServiceClient.prototype.deleteUser = function (providerId, userId) {
+	ServiceClient.prototype.deleteUser = function (providerId, id) {
 		return this.ajax({
-			url: 'service/',
-			data: {
-				m: 'UserService',
-				action: 'delete',
+			url: 'service/?m=UserService&action=delete',
+			method: 'DELETE',
+			contentType: 'application/json',
+			data: JSON.stringify({
 				providerid: providerId,
-				userid: userId
-			}
+				id: id
+			})
 		});
 	};
 
-	ServiceClient.prototype.changePassword = function (providerId, userId, password) {
+	ServiceClient.prototype.changePassword = function (providerId, id, password) {
 		return this.ajax({
-			url: 'service/',
-			type: 'POST',
-			data: {
-				m: 'UserService',
-				action: 'changepassword',
+			url: 'service/?m=UserService&action=changepassword',
+			type: 'PUT',
+			contentType: 'application/json',
+			data: JSON.stringify({
 				providerid: providerId,
-				userid: userId,
+				id: id,
 				password: password
-			}
+			})
 		});
 	};
 
@@ -562,69 +626,6 @@
 		});
 	};
 
-	// Repositories
-
-	ServiceClient.prototype.getRepositoryProviders = function () {
-		return this.ajax({
-			url: 'service/',
-			data: {
-				m: 'RepositoryService',
-				action: 'providers'
-			}
-		});
-	};
-
-	ServiceClient.prototype.getRepositories = function (providerId, offset, num) {
-		return this.ajax({
-			url: 'service/',
-			data: {
-				m: 'RepositoryService',
-				action: 'list',
-				providerid: providerId,
-				offset: offset,
-				num: num
-			}
-		});
-	};
-
-	ServiceClient.prototype.createRepository = function (providerId, name) {
-		return this.ajax({
-			url: 'service/?m=RepositoryService&action=create',
-			method: 'POST',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				providerid: providerId,
-				name: name
-			})
-		});
-	};
-
-	ServiceClient.prototype.deleteRepository = function (providerId, id) {
-		return this.ajax({
-			url: 'service/?m=RepositoryService&action=delete',
-			method: 'DELETE',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				providerid: providerId,
-				id: id
-			})
-		});
-	};
-
-	ServiceClient.prototype.browseRepository = function () {
-	};
-
-	ServiceClient.prototype.getRepositoryInfo = function (providerId, repositoryId) {
-		return this.ajax({
-			url: 'service/',
-			data: {
-				m: 'RepositoryService',
-				action: 'info',
-				providerid: providerId,
-				repositoryid: repositoryId
-			}
-		});
-	};
 
 	ServiceClient.prototype.getRepositoryPaths = function (providerId, repositoryId) {
 		return this.ajax({
@@ -734,6 +735,9 @@ $.views.helpers({
 			gb = mb / 1024,
 			tb = gb / 1024;
 		return Math.round(gb * 100) / 100 + ' GB';
+	},
+	urlComp: function (s) {
+		return encodeURIComponent(s);
 	}
 });
 

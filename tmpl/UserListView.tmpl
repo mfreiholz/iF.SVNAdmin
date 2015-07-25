@@ -1,36 +1,62 @@
 <script id="tmpl-UserListView" type="text/html">
-  <div class="UserListView">
-    <div class="provider-wrapper"></div>
-    <div class="userlist-wrapper"></div>
-  </div>
-</script>
+	<div class="UserListView">
 
-<script id="tmpl-UserListView-Providers" type="text/html">
-  <div class="UserListView-Providers">
-    <ul class="nav nav-pills">
-      {{for providers ~current=current}}
-      <li class="provider" data-providerid="{{>id}}">
-        <a class="provider-link" data-providerid="{{>id}}" href="#!/users?providerid={{url:id}}">{{>id}}</a>
-      </li>
-      {{/for}}
-    </ul>
-  </div>
-</script>
+		<div class="subnav">
+			<div class="container">
 
-<script id="tmpl-UserListView-UserList" type="text/html">
-  <div class="UserListView-UserList">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h1 class="panel-title">{{>~tr("Users")}}</h1>
-      </div>
-      <div class="panel-body">
-        <div class="table-wrapper"></div>
-      </div>
-      <div class="panel-footer">
-      {{if provider.editable}}
-        <button class="btn btn-default add-link" data-providerid="{{>provider.id}}">{{>~tr("Add")}}</button>
-      {{/if}}
-      </div>
-    </div>
-  </div>
+				<ul class="nav nav-pills">
+					<!-- Providers as drop down menu -->
+					{{if providers.length > 1}}
+					<li role="presentation" class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" role="button" expanded="false">
+							{{>provider.name}} <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							{{for providers ~p=provider}}
+							<li role="presentation" class="{{if ~p.id == id}}active{{/if}}">
+								<a href="#!/users?providerid={{url:id}}">{{>displayname}}</a>
+							</li>
+							{{/for}}
+						</ul>
+					</li>
+					{{/if}}
+
+					{{if provider.editable}}
+					<li><a class="NewUserLink" href="">{{>~tr('Create')}}</a></li>
+					{{/if}}
+				</ul>
+
+			</div>
+		</div>
+
+		<div class="content container">
+
+			<p class="list">
+			<table class="table table-striped">
+				<thead>
+				<th width="30">{{>~tr('#')}}</th>
+				<th>{{>~tr('Display Name')}}</th>
+				<th width="200">{{>~tr('Options')}}</th>
+				</thead>
+				<tbody>
+				{{for users ~provider=provider}}
+				<tr>
+					<td>{{>#index + 1}}</td>
+					<td><a>{{>displayname}}</a></td>
+					<td>
+						<button class="btn btn-default btn-xs ChangePasswordLink" data-id="{{>id}}">{{>~tr('Change Password')}}</button>
+						<button class="btn btn-danger btn-xs DeleteUserLink" data-id="{{>id}}">{{>~tr('Delete')}}</button>
+					</td>
+				</tr>
+				{{/for}}
+				</tbody>
+			</table>
+			{{if users.length == 0}}
+			<div class="alert alert-info">{{>~tr('No data yet.')}}</div>
+			{{/if}}
+			</p>
+
+		</div>
+
+	</div>
 </script>

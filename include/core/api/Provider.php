@@ -6,6 +6,12 @@ class ProviderException extends Exception {
 	}
 }
 
+class NotYetImplementedException extends Exception {
+	public function __construct($message = "", $code = 0, $previous = null) {
+		parent::__construct($message, $code, $previous);
+	}
+}
+
 abstract class Provider {
 	const FLAG_EDITABLE = "editable";
 	const FLAG_REQUIRES_SYNC = "reqsync";

@@ -97,27 +97,37 @@ return array(
                 "class_name" => "SvnParentRepositoryProvider",
                 "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos 2",
                 "svn_authz_file" => ""
+            ),
+            array(
+                "id" => "svn-obsolete",
+                "name" => "Obsolete Repositories",
+                "class_name" => "SvnParentRepositoryProvider",
+                "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "obsolete repos",
+                "svn_authz_file" => ""
+            ),
+            array(
+                "id" => "svn-error-on-select",
+                "name" => "Throws exception on select",
+                "class_name" => "SvnParentRepositoryProvider",
+                "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "does not exist",
+                "svn_authz_file" => ""
             )
         ),
 
-        // User backend
-        // ============
         "user" => array(
-
-            // The PasswdUserProvider manages users of a simple "passwd" file.
-            "passwdusers" => array(
+            array(
+                "id" => "passwdusers",
+                "name" => "Users from PASSWD",
                 "class_name" => "PasswdUserProvider",
                 "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.passwd"
             ),
-
-            // The DigestUserProvider manages users of a "digest" passwd file.
-            // realm = The realm of the users.
-            "digestusers" => array(
+            array(
+                "id" => "digestusers",
+                "name" => "Users from DIGEST",
                 "class_name" => "DigestUserProvider",
                 "file" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "svn users.digest.passwd",
                 "realm" => "myrealm"
             ),
-
             // The LdapUserProvider READS users from a local or remote LDAP (Active Directory, OpenLDAP) server.
             // The providers doesn't provide any CREATE- or DELETE- functionality.
             // NOTE: DO NOT USE IT YET - IN DEVELOPMENT
@@ -187,4 +197,8 @@ return array(
 // The SvnParentRepositoryProvider provides multiple repositories from a single directory.
 // Recursive directory structures are not supported by this backend logic, only flat structures are allowed.
 // svn_authz_file = Used to store permissions. If empty, it will use the default configured authz file from above common-section (recommended)
-?>
+
+// The PasswdUserProvider manages users of a simple "passwd" file.
+
+// The DigestUserProvider manages users of a "digest" passwd file.
+// realm = The realm of the users.
