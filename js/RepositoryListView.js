@@ -51,6 +51,7 @@
 		events: {
 			'click; .NewRepositoryLink': function (ev) {
 				var view = this;
+				ev.preventDefault();
 				brite.display('RepositoryAddView', 'body', {
 					providerId: view.prov.id,
 					submitted: function () {

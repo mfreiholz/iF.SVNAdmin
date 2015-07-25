@@ -1,32 +1,44 @@
 <script id="tmpl-RepositoryListView" type="text/html">
 	<div class="RepositoryListView">
 
-		<div class="providers">
-			<ul class="nav nav-tabs">
-				{{for providers ~p=provider}}
-				<li role="presentation" class="{{if ~p.id == id}}active{{/if}}">
-					<a href="#!/repositories?providerid={{url:id}}">{{>name}}</a>
-				</li>
-				{{/for}}
-			</ul>
+		<div class="subnav">
+			<div class="container">
+
+				<ul class="nav nav-pills">
+					<!-- Providers as drop down menu -->
+					{{if providers.length > 1}}
+					<li role="presentation" class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" role="button" expanded="false">
+							{{>provider.name}} <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							{{for providers ~p=provider}}
+							<li role="presentation" class="{{if ~p.id == id}}active{{/if}}">
+								<a href="#!/repositories?providerid={{url:id}}">{{>name}}</a>
+							</li>
+							{{/for}}
+						</ul>
+					</li>
+					{{/if}}
+
+					{{if provider.editable}}
+					<li><a class="NewRepositoryLink" href="">{{>~tr('Create')}}</a></li>
+					{{/if}}
+				</ul>
+
+			</div>
 		</div>
 
-		{{if provider.editable}}
-		<p class="options">
-			<div class="btn-toolbar" role="toolbar">
-				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-primary NewRepositoryLink">{{>~tr('Create')}}</button>
-				</div>
-			</div>
-		</p>
-		{{/if}}
+		<div class="content container">
 
-		<p class="list">
-			{{for repositories ~provider=provider tmpl="#tmpl-RepositoryListView-RepositoryListItem"/}}
-			{{if repositories.length <= 0}}
-			<div class="alert alert-info">{{>~tr('No data yet.')}}</div>
-			{{/if}}
-		</p>
+			<p class="list">
+				{{for repositories ~provider=provider tmpl="#tmpl-RepositoryListView-RepositoryListItem"/}}
+				{{if repositories.length <= 0}}
+				<div class="alert alert-info">{{>~tr('No data yet.')}}</div>
+				{{/if}}
+			</p>
+
+		</div>
 
 	</div>
 </script>

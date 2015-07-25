@@ -17,21 +17,43 @@ body {
 	width: 100%;
 }
 
-#page-wrapper {
+/*#page-wrapper {
 	padding-top: 15px;
-}
+}*/
 
 /*@-moz-document url-prefix() {
   fieldset { display: table-cell; }
 }*/
 
+/* ------------------------------------ */
+
+/* Sub Navigation */
+
+/* ------------------------------------ */
+
+.subnav {
+	border-width: 0 0 1px 0;
+	border-color: #dddddd;
+	border-style: solid;
+}
+
+.subnav .nav-pills > li > a {
+	border-radius: 0;
+}
+
+/* ------------------------------------ */
+
 /* Common styles */
 
 /* ------------------------------------ */
 
-.provider-wrapper {
+.content {
 	margin-top: 15px;
-	margin-bottom: 15px;
+}
+
+.provider-wrapper {
+	/*margin-top: 15px;
+	margin-bottom: 15px;*/
 }
 
 .provider-action-wrapper {
