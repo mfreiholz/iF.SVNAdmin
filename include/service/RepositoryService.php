@@ -66,68 +66,66 @@ class RepositoryService extends ServiceBase {
 	}
 
 	public function processCreate(WebRequest $request, WebResponse $response) {
-		$providerId = $request->getParameter("providerid");
-		$name = $request->getParameter("name");
-		$options = $request->getParameter("options");
-		if (empty($providerId) || empty($name)) {
+		$data = json_decode($request->getRequestBody());
+		if (empty($data) || empty($data->providerid) || empty($data->name)) {
 			return $this->processErrorMissingParameters($request, $response);
 		}
 
 		$engine = SVNAdminEngine::getInstance();
-		$provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+		$provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $data->providerid);
 		if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
-			return $this->processErrorInvalidProvider($request, $response, $providerId);
+			return $this->processErrorInvalidProvider($request, $response, $data->providerid);
 		}
 
-		$repo = $provider->create($name, $options);
+		$repo = $provider->create($data->name, null);
 		if (empty($repo)) {
 			return $this->processErrorInternal($request, $response);
 		}
 
-		$json = new stdClass();
-		$o = new stdClass();
-		$o->id = $repo->getId();
-		$o->name = $repo->getName();
-		$o->displayname = $repo->getDisplayName();
-		$json->repository = $o;
-		$response->done2json($json);
+		$response->done2json(JsonSerializer::fromRepository($repo));
 		return true;
 	}
 
 	public function processDelete(WebRequest $request, WebResponse $response) {
-		$providerId = $request->getParameter("providerid");
-		$id = $request->getParameter("repositoryid");
-		if (empty($providerId) || empty($id)) {
+		$data = json_decode($request->getRequestBody());
+		if (empty($data) || empty($data->providerid) || empty($data->id)) {
 			return $this->processErrorMissingParameters($request, $response);
 		}
 
 		$engine = SVNAdminEngine::getInstance();
-		$provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+		$provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $data->providerid);
 		if (empty($provider) || !$provider->hasFlag(Provider::FLAG_EDITABLE)) {
-			return $this->processErrorInvalidProvider($request, $response, $providerId);
+			return $this->processErrorInvalidProvider($request, $response, $data->providerid);
+		}
+
+		$repo = $provider->findRepository($data->id);
+		if (empty($repo)) {
+			return $this->processErrorCustom($request, $response, "Can not find repository (id=" . $repo . ")");
 		}
 
 		// Delete all permissions (optional).
-		if (true) {
-			try {
-				$repository = $provider->findRepository($id);
-				$authz = $provider->getSvnAuthz($id);
-				$paths = $authz->getPaths($repository->getName());
-				foreach ($paths as &$path) {
-					$authz->removePath($path);
-				}
-				if (count($paths) > 0) {
-					SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz);
-				}
-			} catch (Exception $e) {
-				error_log("Error during purge of all repository permissions (repositoryid=" . $id . ")");
-			}
-		}
+//		if (false) {
+//			try {
+//				$repository = $provider->findRepository($id);
+//				$authz = $provider->getSvnAuthz($id);
+//				$paths = $authz->getPaths($repository->getName());
+//				foreach ($paths as &$path) {
+//					$authz->removePath($path);
+//				}
+//				if (count($paths) > 0) {
+//					SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz);
+//				}
+//			} catch (Exception $e) {
+//				error_log("Error during purge of all repository permissions (repositoryid=" . $id . ")");
+//			}
+//		}
 
 		// Delete repository.
-		if (!$provider->delete($id)) {
+		if (!$provider->delete($data->id)) {
 			return $this->processErrorInternal($request, $response);
 		}
+
+		$response->done2json(JsonSerializer::fromRepository($repo));
 		return true;
 	}
 

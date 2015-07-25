@@ -5,14 +5,14 @@ return array(
         // Absolute path to the "svn" binary.
         // e.g. Linux: "/usr/bin/svn"
         // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svn.exe"
-        "svn_binary_path" => "/usr/bin/svn",
-        //"svn_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svn.exe",
+        //"svn_binary_path" => "/usr/bin/svn",
+        "svn_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svn.exe",
 
         // Absolute path to the "svnadmin" binary.
         // e.g. Linux: "/bin/svnadmin"
         // e.g. Windows: "C:\\Program Files (x86)\\Subversion\\bin\\svnadmin.exe"
-        "svnadmin_binary_path" => "/usr/bin/svnadmin",
-        //"svnadmin_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svnadmin.exe",
+        //"svnadmin_binary_path" => "/usr/bin/svnadmin",
+        "svnadmin_binary_path" => "D:\\Development\\Data\\subversion 1.7.4-1\\svnadmin.exe",
 
         // Absolute path to a custom Subversion user config directory.
         // Some systems with SElinux permit access to the default config directory.
@@ -82,6 +82,23 @@ return array(
      */
 
     "providers" => array(
+
+        "repository" => array(
+            array(
+                "id" => "svn-cpp-core",
+                "name" => "C++ Core Development",
+                "class_name" => "SvnParentRepositoryProvider",
+                "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos",
+                "svn_authz_file" => ""
+            ),
+            array(
+                "id" => "svn-java-web",
+                "name" => "Java Web Development",
+                "class_name" => "SvnParentRepositoryProvider",
+                "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos 2",
+                "svn_authz_file" => ""
+            )
+        ),
 
         // User backend
         // ============
@@ -163,28 +180,11 @@ return array(
                 "svn_authz_file" => ""
             )
 
-        ),
-
-        // Repository backend
-        // ==================
-        "repository" => array(
-
-            // The SvnParentRepositoryProvider provides multiple repositories from a single directory.
-            // Recursive directory structures are not supported by this backend logic, only flat structures are allowed.
-            // svn_authz_file = Used to store permissions. If empty, it will use the default configured authz file from above common-section (recommended)
-            "svnparentrepos" => array(
-                "class_name" => "SvnParentRepositoryProvider",
-                "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos",
-                "svn_authz_file" => ""
-            ),
-
-            "svnparentrepos2" => array(
-                "class_name" => "SvnParentRepositoryProvider",
-                "path" => SVNADMIN_DATA_DIR . DIRECTORY_SEPARATOR . "my repos 2",
-                "svn_authz_file" => ""
-            )
-
         )
+
     )
 );
+// The SvnParentRepositoryProvider provides multiple repositories from a single directory.
+// Recursive directory structures are not supported by this backend logic, only flat structures are allowed.
+// svn_authz_file = Used to store permissions. If empty, it will use the default configured authz file from above common-section (recommended)
 ?>

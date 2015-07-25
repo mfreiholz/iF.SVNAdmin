@@ -589,25 +589,25 @@
 
 	ServiceClient.prototype.createRepository = function (providerId, name) {
 		return this.ajax({
-			url: 'service/',
-			data: {
-				m: 'RepositoryService',
-				action: 'create',
+			url: 'service/?m=RepositoryService&action=create',
+			method: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
 				providerid: providerId,
 				name: name
-			}
+			})
 		});
 	};
 
-	ServiceClient.prototype.deleteRepository = function (providerId, repositoryId) {
+	ServiceClient.prototype.deleteRepository = function (providerId, id) {
 		return this.ajax({
-			url: 'service/',
-			data: {
-				m: 'RepositoryService',
-				action: 'delete',
+			url: 'service/?m=RepositoryService&action=delete',
+			method: 'DELETE',
+			contentType: 'application/json',
+			data: JSON.stringify({
 				providerid: providerId,
-				repositoryid: repositoryId
-			}
+				id: id
+			})
 		});
 	};
 
