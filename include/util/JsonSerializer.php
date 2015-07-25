@@ -2,10 +2,11 @@
 
 class JsonSerializer {
 
-	public static function fromProvider($provider) {
+	public static function fromProvider(Provider $provider) {
 		$j = new stdClass();
 		if ($provider instanceof Provider) {
 			$j->id = $provider->getId();
+			$j->name = $provider->getId();
 			$j->editable = $provider->hasFlag(Provider::FLAG_EDITABLE);
 		}
 		else {

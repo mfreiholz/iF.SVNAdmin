@@ -13,6 +13,13 @@ class SVNAdminEngine {
 	private $_config = null;
 	private $_classPaths = array();
 	private $_authenticators = array();
+
+	/**
+	 * Caches all created provider instances.
+	 * Maps the Provider ID to it's object.
+	 *
+	 * @var array<string, Provider>
+	 */
 	private $_providers = array();
 
 	/**
@@ -25,8 +32,8 @@ class SVNAdminEngine {
 	private $_authzFiles = array();
 
 	private function __construct($config) {
-		// Init configuration.
 		$this->_config = $config;
+
 		// Setup dynamic class loading.
 		$this->_classPaths = array(SVNADMIN_BASE_DIR . "/include/core/api", SVNADMIN_BASE_DIR . "/include/core/entity", SVNADMIN_BASE_DIR . "/include/impl", SVNADMIN_BASE_DIR . "/include/util");
 		spl_autoload_register(__NAMESPACE__ . "\\SVNAdminEngine::classLoader");
@@ -59,15 +66,14 @@ class SVNAdminEngine {
 		}
 		$path = Elws::normalizeAbsolutePath($path);
 
-		// Get it from cache.
+		// Get object from cache.
 		if (isset($this->_authzFiles[$path])) {
 			return $this->_authzFiles[$path];
 		}
 
 		// Create file, if it doesn't exists.
-		if (!file_exists($path) && touch($path)) {
-			error_log("Can't create non existing authz file (path=" . $path . ")");
-			return null;
+		if (!file_exists($path) && !touch($path)) {
+			throw new Exception("Can not create non existing authz file (path=" . $path . ")");
 		}
 
 		// Create file object and add to cache.
@@ -129,38 +135,71 @@ class SVNAdminEngine {
 		return $this->_authenticators;
 	}
 
+	/**
+	 * Gets a list with all Provider objects of a specific type.
+	 * This function does not call "initialize()" on any of the providers.
+	 *
+	 * @param $type e.g.: "user", "group", "repository", ...
+	 *
+	 * @return array
+	 */
 	public function getKnownProviders($type) {
-		$ret = array();
+		$l = array();
 		$configs = $this->_config["providers"][$type];
-		foreach ($configs as $id => &$config) {
-			$className = $config["class_name"];
-			$obj = new $className($id);
-			$c = new stdClass();
-			$c->id = $id;
-			$c->name = isset($config["name"]) ? $config["name"] : $id;
-			$c->editable = $obj->hasFlag(Provider::FLAG_EDITABLE);
-			$ret[] = $c;
+		foreach ($configs as &$config) {
+			// Check cache.
+			$p = null;
+			if (isset($this->_providers[$type][$config["id"]])) {
+				$p = $this->_providers[$type][$config["id"]];
+			}
+			else {
+				$p = new $config["class_name"]($config["id"]);
+				$p->initialize($this, $config);
+				$this->_providers[$type][$p->getId()] = $p;
+			}
+			$l[] = $p;
+
+			// Create entity class.
+			//$c = new stdClass();
+			//$c->id = $p->getId();
+			//$c->name = isset($config["name"]) ? $config["name"] : $p->getId();
+			//$c->editable = $p->hasFlag(Provider::FLAG_EDITABLE);
+			//$l[] = $c;
 		}
-		return $ret;
+		return $l;
 	}
 
+	/**
+	 * Gets a specific provider.
+	 *
+	 * @param $type string
+	 * @param $id string
+	 *
+	 * @return Provider
+	 * @throws Exception
+	 */
 	public function getProvider($type, $id) {
-		$ret = null;
-		if (!isset($this->_providers[$type][$id])) {
-			if (isset($this->_config["providers"][$type][$id])) {
-				$config = $this->_config["providers"][$type][$id];
-				$className = $config["class_name"];
-				$obj = new $className($id);
-				if ($obj->initialize($this, $config)) {
-					$this->_providers[$type][$id] = $obj;
-					$ret = $obj;
+		// Check cache.
+		if (isset($this->_providers[$type][$id])) {
+			return $this->_providers[$type][$id];
+		}
+
+		$conf = null;
+		if (isset($this->_config["providers"][$type])) {
+			foreach ($this->_config["providers"][$type] as &$c) {
+				if ($c["id"] === $id) {
+					$conf = $c;
+					break;
 				}
 			}
 		}
-		else {
-			$ret = $this->_providers[$type][$id];
-		}
-		return $ret;
+		if (!$conf)
+			throw new Exception("Can not find configuration for Provider (type=" . $type . "; id=" . $id . ")");
+
+		$p = new $conf["class_name"]($conf["id"]);
+		$p->initialize($this, $conf);
+		$this->_providers[$type][$p->getId()] = $p;
+		return $p;
 	}
 
 	public function getGroupMemberAssociater($forProviderId) {
