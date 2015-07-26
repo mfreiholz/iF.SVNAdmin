@@ -36,6 +36,7 @@
 				<thead>
 				<th width="30">{{>~tr('#')}}</th>
 				<th>{{>~tr('Display Name')}}</th>
+				<th>{{>~tr('Login Name')}}</th>
 				<th width="200">{{>~tr('Options')}}</th>
 				</thead>
 				<tbody>
@@ -43,6 +44,7 @@
 				<tr>
 					<td>{{>#index + 1}}</td>
 					<td><a>{{>displayname}}</a></td>
+					<td><a>{{>name}}</a></td>
 					<td>
 						{{if ~provider.editable}}
 						<button class="btn btn-default btn-sm ChangePasswordLink" data-id="{{>id}}">{{>~tr('Change Password')}}</button>
