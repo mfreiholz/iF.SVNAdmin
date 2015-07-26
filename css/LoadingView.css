@@ -8,7 +8,7 @@
 
 .LoadingView .container {
 	background: #ffffff;
-	border: 1px solid #337ab7;
+	border: 0px solid #337ab7;
 	padding: 30px;
 	width: 350px;
 }

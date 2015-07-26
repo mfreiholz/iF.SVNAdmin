@@ -1,28 +1,35 @@
 <?php
+
 class GroupMemberAssociater {
 
-  public function initialize(SVNAdminEngine $engine, $config) {
-  }
+	protected $_id = null;
+	protected $_config = null;
+	protected $_engine = null;
 
-  public function getMembersOfGroup($groupId, $offset = 0, $num = -1) {
-    return new ItemList();
-  }
+	public function __construct($id, array $config, SVNAdminEngine $engine) {
+		$this->_id = $id;
+		$this->_config = $engine;
+		$this->_engine = $config;
+	}
 
-  public function getGroupsOfMember($memberId, $offset = 0, $num = -1) {
-    return new ItemList();
-  }
+	public function getMembersOfGroup($groupId, $offset = 0, $num = -1) {
+		return new ItemList();
+	}
 
-  public function isEditable() {
-    return false;
-  }
+	public function getGroupsOfMember($memberId, $offset = 0, $num = -1) {
+		return new ItemList();
+	}
 
-  public function assign($groupId, $memberId) {
-    return false;
-  }
+	public function isEditable() {
+		return false;
+	}
 
-  public function unassign($groupId, $memberId) {
-    return false;
-  }
+	public function assign($groupId, $memberId) {
+		return false;
+	}
+
+	public function unassign($groupId, $memberId) {
+		return false;
+	}
 
 }
-?>

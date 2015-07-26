@@ -137,7 +137,6 @@ class SVNAdminEngine {
 
 	/**
 	 * Gets a list with all Provider objects of a specific type.
-	 * This function does not call "initialize()" on any of the providers.
 	 *
 	 * @param $type e.g.: "user", "group", "repository", ...
 	 *
@@ -154,7 +153,6 @@ class SVNAdminEngine {
 			}
 			else {
 				$p = new $config["class_name"]($config["id"], $config, $this);
-				$p->initialize();
 				$this->_providers[$type][$p->getId()] = $p;
 			}
 			$l[] = $p;
@@ -190,7 +188,6 @@ class SVNAdminEngine {
 			throw new Exception("Can not find configuration for Provider (type=" . $type . "; id=" . $id . ")");
 
 		$p = new $conf["class_name"]($conf["id"], $conf, $this);
-		$p->initialize();
 		$this->_providers[$type][$p->getId()] = $p;
 		return $p;
 	}

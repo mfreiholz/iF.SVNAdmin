@@ -45,6 +45,20 @@
 
 <script id="tmpl-RepositoryListView-RepositoryListItem" type="text/html">
 	<div class="RepositoryListView-RepositoryListItem">
+		<a class="title">{{>displayname}}</a>
+		<p class="description">Show description from from $REPO/conf/info.conf here.</p>
+		<div class="text-right">
+		{{if ~provider.editable}}
+		<button class="btn btn-link RepositoryPermissionLink" data-id="{{>id}}">{{>~tr('Permissions')}}</button>
+		<button class="btn btn-link link-delete DeleteRepositoryLink" data-id="{{>id}}">{{>~tr('Delete')}}</button>
+		{{/if}}
+		</div>
+		<hr />
+	</div>
+</script>
+
+<script id="tmpl-RepositoryListView-RepositoryListItem-2" type="text/html">
+	<div class="RepositoryListView-RepositoryListItem">
 		<div class="panel panel-default">
 			<div class="panel-body">
 				{{if ~provider.editable}}

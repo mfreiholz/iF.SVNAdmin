@@ -1,69 +1,41 @@
 (function (jQ) {
-	"use strict";
-	brite.registerView("MainView", {emptyParent: true}, {
+	'use strict';
+	brite.registerView('MainView', {emptyParent: true}, {
 
 		create: function (config, data) {
-			return jQ("#tmpl-MainView").render();
+			console.log('NEW MAIN VIEW');
+			return jQ('#tmpl-MainView').render();
 		},
 
 		postDisplay: function (config, data) {
+			var view = this;
+			view._updateActiveLink();
 		},
 
 		events: {
-			"click; .navbar-toggle": function (ev) {
+			'click; .navbar-toggle': function (ev) {
 				var view = this;
-				jQ(".sidebar-collapse").collapse("toggle");
+				jQ('.sidebar-collapse').collapse('toggle');
 			}
-			//"click; .dashboard-link": function (ev) {
-			//  var view = this;
-			//  view.setActiveNavLink(ev.currentTarget.className);
-			//  svnadmin.app.showDashboard();
-			//},
-			//"click; .repositories-link": function (ev) {
-			//  var view = this,
-			//    providerId = jQ(ev.currentTarget).data("providerid");
-			//  view.setActiveNavLink(ev.currentTarget.className);
-			//  svnadmin.app.showRepositoryListView(providerId);
-			//},
-			//"click; .users-link": function (ev) {
-			//  var view = this,
-			//    element = jQuery(ev.currentTarget),
-			//    providerId = element.data("providerid");
-			//  view.setActiveNavLink(ev.currentTarget.className);
-			//  svnadmin.app.showUserListView(providerId);
-			//},
-			//"click; .groups-link": function (ev) {
-			//  var view = this,
-			//    element = jQuery(ev.currentTarget),
-			//    providerId = element.data("providerid");
-			//  view.setActiveNavLink(ev.currentTarget.className);
-			//  svnadmin.app.showGroupListView(providerId);
-			//},
-			//"click; .logout-link": function (ev) {
-			//  var view = this;
-			//  view.setActiveNavLink(ev.currentTarget.className);
-			//  svnadmin.app.logout();
-			//},
-			//"click; .repositoryinfo-link": function (ev) {
-			//  var view = this,
-			//    element = jQuery(ev.currentTarget),
-			//    providerId = element.data("providerid"),
-			//    repositoryId = element.data("repositoryid");
-			//  view.setActiveNavLink("repository-link");
-			//  svnadmin.app.showRepositoryInfoView(providerId, repositoryId);
-			//}
 		},
 
-		///////////////////////////////////////////////////////////////////
-		//
-		///////////////////////////////////////////////////////////////////
+		winEvents: {
+			/*'hashchange': function (ev) {
+				var view = this;
+				view._updateActiveLink();
+			}*/
+		},
 
-		setActiveNavLink: function (linkClass) {
-			var view = this;
-			view.$el.find("ul.nav li").removeClass("active");
-			view.$el.find("ul.nav li a[class='" + linkClass + "']").closest("li").addClass("active");
+		_updateActiveLink: function () {
+			var view = this,
+				url = document.location.href,
+				rxUrl = new RegExp('#!(/[^/?]*)(.*)', 'i'),
+				match = rxUrl.exec(url),
+				path = match && match.length > 1 ? match[1] : '',
+				link = path ? '#!' + path : '#!/dashboard';
+			view.$el.find('ul.nav li').removeClass('active');
+			view.$el.find('ul.nav li a[href*="' + link + '"]').closest('li').addClass('active');
 		}
 
 	});
-
 }(jQuery));

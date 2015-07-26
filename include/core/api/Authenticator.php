@@ -1,13 +1,19 @@
 <?php
+
 class Authenticator {
 
-  public function initialize(SVNAdminEngine $engine, $config) {
-    return true;
-  }
+	protected $_id = null;
+	protected $_config = null;
+	protected $_engine = null;
 
-  public function authenticate($username, $password) {
-    return false;
-  }
+	public function __construct($id, array $config, SVNAdminEngine $engine) {
+		$this->_id = $id;
+		$this->_config = $engine;
+		$this->_engine = $config;
+	}
+
+	public function authenticate($username, $password) {
+		return false;
+	}
 
 }
-?>

@@ -24,17 +24,17 @@ abstract class Provider {
 	/*
 	 * @var array
 	 */
-	protected $_flags = array();
-
-	/*
-	 * @var array
-	 */
 	protected $_config = null;
 
 	/*
 	 * @var SVNAdminEngine
 	 */
 	protected $_engine = null;
+
+	/*
+	 * @var array
+	 */
+	protected $_flags = array();
 
 	public function __construct($id, $config, SVNAdminEngine $engine) {
 		$this->_id = $id;
@@ -57,7 +57,5 @@ abstract class Provider {
 	public function hasFlag($f) {
 		return array_search($f, $this->_flags) !== false;
 	}
-
-	public abstract function initialize();
 
 }

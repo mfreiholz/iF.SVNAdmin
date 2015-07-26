@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class UserProvider
+ *
+ * Base API to manage users.
+ */
 abstract class UserProvider extends Provider {
 
 	public static function getWildcardUser() {
@@ -18,8 +23,8 @@ abstract class UserProvider extends Provider {
 
 	/**
 	 * Gets a user by it's ID.
-	 * UserProvider provides a very basic implementation for this method. It should be overridden by the sub class for
-	 * best performance.
+	 * UserProvider has a very basic implementation for this method.
+	 * It should be overridden by the sub class for best performance.
 	 *
 	 * @param $id
 	 *
@@ -43,8 +48,12 @@ abstract class UserProvider extends Provider {
 	public abstract function search($query, $offset = 0, $limit = -1);
 
 	/**
+	 * Creates a new user.
+	 *
 	 * @param $name
 	 * @param $password
+	 *
+	 * @return User
 	 *
 	 * @throws Exception
 	 */
@@ -53,7 +62,11 @@ abstract class UserProvider extends Provider {
 	}
 
 	/**
+	 * Deletes a User by it's ID.
+	 *
 	 * @param $id
+	 *
+	 * @return User
 	 *
 	 * @throws Exception
 	 */
@@ -62,8 +75,12 @@ abstract class UserProvider extends Provider {
 	}
 
 	/**
+	 * Changes the password of a User.
+	 *
 	 * @param $id
 	 * @param $password
+	 *
+	 * @return User
 	 *
 	 * @throws Exception
 	 */

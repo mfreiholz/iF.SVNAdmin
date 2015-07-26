@@ -1,21 +1,27 @@
 <?php
+
 class Authorizer {
 
-  public function initialize(SVNAdminEngine $engine) {
-    return true;
-  }
+	protected $_id = null;
+	protected $_config = null;
+	protected $_engine = null;
 
-  public function getRoles($offset, $num = -1) {
-    return array ();
-  }
+	public function __construct($id, array $config, SVNAdminEngine $engine) {
+		$this->_id = $id;
+		$this->_config = $engine;
+		$this->_engine = $config;
+	}
 
-  public function isAllowed($roleId, $module, $action) {
-    return false;
-  }
+	public function getRoles($offset, $num = -1) {
+		return array();
+	}
 
-  public function isEditable() {
-    return false;
-  }
+	public function isAllowed($roleId, $module, $action) {
+		return false;
+	}
+
+	public function isEditable() {
+		return false;
+	}
 
 }
-?>
