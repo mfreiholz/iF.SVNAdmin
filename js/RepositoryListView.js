@@ -12,7 +12,7 @@
 					function (callback) {
 						svnadmin.service.getRepositoryProviders()
 							.done(function (res) {
-								view.prov = view._getProviderFromListById(res, data.providerId || res[0].id);
+								view.prov = elws.getProviderFromListById(res, data.providerId || res[0].id);
 								callback(null, res);
 							})
 							.fail(function (err) {
@@ -75,14 +75,6 @@
 						});
 				});
 			}
-		},
-
-		_getProviderFromListById: function (list, id) {
-			for (var i = 0; i < list.length; ++i) {
-				if (list[i].id === id)
-					return list[i];
-			}
-			return null;
 		}
 
 	});

@@ -45,6 +45,8 @@
 					self.showDashboard();
 				} else if (path.indexOf('/repositories') === 0) {
 					self.showRepositoryListView(self.getParameter('providerid'));
+				} else if (path.indexOf('/repository-permissions') === 0) {
+					self.showRepositoryPermissionsView(self.getParameter('providerid'), self.getParameter('repositoryid'));
 				} else if (path.indexOf('/repositoryinfo') === 0) {
 					self.showRepositoryInfoView(self.getParameter('providerid'), self.getParameter('repositoryid'));
 				} else if (path.indexOf('/pathpermissions') === 0) {
@@ -68,15 +70,15 @@
 			var pos = -1;
 			var val = '',
 				v = '';
-			if ((pos = url.indexOf(name + '=')) !== -1) {
+			if ((pos = url.indexOf('?' + name + '=')) !== -1 || (pos = url.indexOf('&' + name + '=')) !== -1) {
 				var pos2 = url.indexOf('#', pos);
 				if (pos2 === -1) {
-					pos2 = url.indexOf('&', pos);
+					pos2 = url.indexOf('&', pos + 1);
 				}
 				if (pos2 === -1) {
-					v = url.substr(pos + name.length + 1);
+					v = url.substr(pos + name.length + 2);
 				} else {
-					v = url.substr(pos + name.length + 1, pos2 - (pos + name.length + 1));
+					v = url.substr(pos + name.length + 2, pos2 - (pos + name.length + 2));
 				}
 				if (v !== '') {
 					val = v;
@@ -171,6 +173,21 @@
 			});
 		};
 
+		AppEngine.prototype.showRepositoryListView = function (providerId) {
+			return this.showWithLoading(function () {
+				return brite.display('RepositoryListView', '#page-wrapper', {providerId: providerId}, {emptyParent: true});
+			});
+		};
+
+		AppEngine.prototype.showRepositoryPermissionsView = function (providerId, repositoryId) {
+			return this.showWithLoading(function () {
+				return brite.display('RepositoryPermissionsView', '#page-wrapper', {
+					providerId: providerId,
+					repositoryId: repositoryId
+				}, {emptyParent: true});
+			});
+		};
+
 		AppEngine.prototype.showUserListView = function (providerId) {
 			return this.showWithLoading(function () {
 				return brite.display('UserListView', '#page-wrapper', {providerId: providerId}, {emptyParent: true});
@@ -202,26 +219,20 @@
 			}, {emptyParent: true});
 		};
 
-		AppEngine.prototype.showRepositoryListView = function (providerId) {
-			return this.showWithLoading(function () {
-				return brite.display('RepositoryListView', '#page-wrapper', {providerId: providerId}, {emptyParent: true});
-			});
-		};
-
-		AppEngine.prototype.showRepositoryInfoView = function (providerId, repositoryId) {
-			return brite.display('RepositoryInfoView', '#page-wrapper', {
-				providerId: providerId,
-				repositoryId: repositoryId
-			}, {emptyParent: true});
-		};
-
-		AppEngine.prototype.showPathPermissions = function (providerId, repositoryId, path) {
-			return brite.display('PathPermissionsView', '#page-wrapper', {
-				providerId: providerId,
-				repositoryId: repositoryId,
-				path: path
-			}, {emptyParent: true});
-		};
+		//AppEngine.prototype.showRepositoryInfoView = function (providerId, repositoryId) {
+		//	return brite.display('RepositoryInfoView', '#page-wrapper', {
+		//		providerId: providerId,
+		//		repositoryId: repositoryId
+		//	}, {emptyParent: true});
+		//};
+		//
+		//AppEngine.prototype.showPathPermissions = function (providerId, repositoryId, path) {
+		//	return brite.display('PathPermissionsView', '#page-wrapper', {
+		//		providerId: providerId,
+		//		repositoryId: repositoryId,
+		//		path: path
+		//	}, {emptyParent: true});
+		//};
 
 		AppEngine.prototype.showUserSearchDialog = function (showPermissions, onSubmittedCallback) {
 			brite.display(
@@ -710,6 +721,25 @@
 	window.svnadmin = window.svnadmin || {};
 	window.svnadmin.service = window.svnadmin.service || new ServiceClient();
 }(jQuery));
+
+
+(function (jQ) {
+	'use strict';
+
+	function Elws() {
+	}
+
+	Elws.prototype.getProviderFromListById = function (list, id) {
+		for (var i = 0; i < list.length; ++i) {
+			if (list[i].id === id)
+				return list[i];
+		}
+		return null;
+	};
+
+	window.elws = window.elws || new Elws();
+}(jQuery));
+
 
 /**
  * Global Helper Functions

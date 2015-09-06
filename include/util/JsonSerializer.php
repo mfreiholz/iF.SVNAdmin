@@ -22,6 +22,12 @@ class JsonSerializer {
 		return $j;
 	}
 
+	public static function fromRepositoryPath(SvnAuthzFilePath $path) {
+		$j = new stdClass();
+		$j->path = $path->path;
+		return $j;
+	}
+
 	public static function fromUser(User $user) {
 		$j = new stdClass();
 		$j->id = $user->getId();

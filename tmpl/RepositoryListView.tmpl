@@ -49,7 +49,7 @@
 		<p class="description">Show description from from $REPO/conf/info.conf here.</p>
 		<div class="text-right">
 		{{if ~provider.editable}}
-		<button class="btn btn-link RepositoryPermissionLink" data-id="{{>id}}">{{>~tr('Permissions')}}</button>
+		<a class="btn btn-link RepositoryPermissionLink" href="#!/repository-permissions?providerid={{url:~provider.id}}&repositoryid={{url:id}}">{{>~tr('Permissions')}}</a>
 		<button class="btn btn-link link-delete DeleteRepositoryLink" data-id="{{>id}}">{{>~tr('Delete')}}</button>
 		{{/if}}
 		</div>

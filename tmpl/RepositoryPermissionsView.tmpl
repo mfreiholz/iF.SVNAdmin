@@ -1,0 +1,19 @@
+<script id="tmpl-RepositoryPermissionsView" type="text/html">
+	<div class="RepositoryPermissionsView container content">
+
+		<h4>{{>~tr('Repository Paths')}}</h4>
+		<ul class="list-group">
+			{{for paths}}
+			<button class="list-group-item" data-toggle="collapse" data-target="#sub-{{>#index}}" data-parent=".RepositoryPermissionsView">{{>path}}</button>
+			<div id="sub-{{>#index}}" class="collapse">
+				<p>Some stuff here</p>
+			</div>
+			{{/for}}
+		</ul>
+
+		{{if paths.length <= 0}}
+		<div class="alert alert-info">{{>~tr('No data yet.')}}</div>
+		{{/if}}
+
+	</div>
+</script>

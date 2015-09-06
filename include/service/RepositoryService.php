@@ -5,6 +5,7 @@ class RepositoryService extends ServiceBase {
 	public function processRequest(WebRequest $request, WebResponse $response) {
 		$action = $request->getParameter("action");
 		switch ($action) {
+			// Repositories
 			case "list":
 				return $this->processRepositoryList($request, $response);
 			case "create":
@@ -15,6 +16,8 @@ class RepositoryService extends ServiceBase {
 				return $this->processBrowse($request, $response);
 			case "info":
 				return $this->processInfo($request, $response);
+
+			// Repository Paths.
 			case "paths":
 				return $this->processPaths($request, $response);
 			case "permissions":
@@ -96,211 +99,205 @@ class RepositoryService extends ServiceBase {
 		return true;
 	}
 
-	// NOT YET NEEDED
+	public function processBrowse(WebRequest $request, WebResponse $response) {
+		return false;
+	}
+
+	public function processInfo(WebRequest $request, WebResponse $response) {
+		$providerId = $request->getParameter("providerid");
+		$repositoryId = $request->getParameter("repositoryid");
+		if (empty($providerId) || empty($repositoryId)) {
+			return $this->processErrorMissingParameters($request, $response);
+		}
+
+		$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+		if (empty($provider)) {
+			return $this->processErrorInvalidProvider($request, $response, $providerId);
+		}
+
+		$json = new stdClass();
+		$json->entry = $provider->getInfo($repositoryId);
+		$response->done2json($json);
+		return true;
+	}
+
+	public function processPaths(WebRequest $request, WebResponse $response) {
+		$providerId = $request->getParameter("providerid");
+		$repositoryId = $request->getParameter("repositoryid");
+		if (empty($providerId) || empty($repositoryId)) {
+			return $this->processErrorMissingParameters($request, $response);
+		}
+
+		$provider = $this->getAppEngine()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+		if (empty($provider)) {
+			return $this->processErrorInvalidProvider($request, $response, $providerId);
+		}
+
+		$repository = $provider->findRepository($repositoryId);
+		$authz = $provider->getSvnAuthz($repositoryId);
+		$paths = $authz->getPaths($repository->getName());
+
+		$json = array();
+		foreach ($paths as &$path) {
+			$json[] = JsonSerializer::fromRepositoryPath($path);
+		}
+		$response->done2json($json);
+		return true;
+	}
 	/*
-		public function processBrowse(WebRequest $request, WebResponse $response) {
-			return false;
-		}
+			public function processPathCreate(WebRequest $request, WebResponse $response) {
+				$providerId = $request->getParameter("providerid");
+				$repositoryId = $request->getParameter("repositoryid");
+				$path = $request->getParameter("path");
+				if (empty($providerId) || empty($repositoryId)) {
+					return $this->processErrorMissingParameters($request, $response);
+				}
 
-		public function processInfo(WebRequest $request, WebResponse $response) {
-			$providerId = $request->getParameter("providerid");
-			$repositoryId = $request->getParameter("repositoryid");
-			if (empty($providerId) || empty($repositoryId)) {
-				return $this->processErrorMissingParameters($request, $response);
-			}
+				$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+				if (empty($provider)) {
+					return $this->processErrorInvalidProvider($request, $response, $providerId);
+				}
 
-			$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-			if (empty($provider)) {
-				return $this->processErrorInvalidProvider($request, $response, $providerId);
-			}
+				$repository = $provider->findRepository($repositoryId);
+				$authz = $provider->getSvnAuthz($repositoryId);
+				if (empty($repository) || empty($authz)) {
+					return $this->processErrorInternal($request, $response);
+				}
 
-			$json = new stdClass();
-			$json->entry = $provider->getInfo($repositoryId);
-			$response->done2json($json);
-			return true;
-		}
-
-		public function processPaths(WebRequest $request, WebResponse $response) {
-			$providerId = $request->getParameter("providerid");
-			$repositoryId = $request->getParameter("repositoryid");
-			if (empty($providerId) || empty($repositoryId)) {
-				return $this->processErrorMissingParameters($request, $response);
-			}
-
-			$engine = SVNAdminEngine::getInstance();
-			$provider = $engine->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-			if (empty($provider)) {
-				return $this->processErrorInvalidProvider($request, $response, $providerId);
-			}
-
-			$repository = $provider->findRepository($repositoryId);
-			$authz = $provider->getSvnAuthz($repositoryId);
-			$paths = $authz->getPaths($repository->getName());
-
-			$json = new stdClass();
-			$json->paths = array();
-			foreach ($paths as &$path) {
-				$obj = new stdClass();
-				$obj->path = $path->path;
-				$json->paths[] = $obj;
-			}
-			$response->done2json($json);
-			return true;
-		}
-
-		public function processPathCreate(WebRequest $request, WebResponse $response) {
-			$providerId = $request->getParameter("providerid");
-			$repositoryId = $request->getParameter("repositoryid");
-			$path = $request->getParameter("path");
-			if (empty($providerId) || empty($repositoryId)) {
-				return $this->processErrorMissingParameters($request, $response);
-			}
-
-			$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-			if (empty($provider)) {
-				return $this->processErrorInvalidProvider($request, $response, $providerId);
-			}
-
-			$repository = $provider->findRepository($repositoryId);
-			$authz = $provider->getSvnAuthz($repositoryId);
-			if (empty($repository) || empty($authz)) {
-				return $this->processErrorInternal($request, $response);
-			}
-
-			$o = SvnAuthzFilePath::create($repository->getName(), $path);
-			$authz->addPath($o);
-			if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
-				return $this->processErrorInternal($request, $response);
-			}
-			return true;
-		}
-
-		public function processPathDelete(WebRequest $request, WebResponse $response) {
-			$providerId = $request->getParameter("providerid");
-			$repositoryId = $request->getParameter("repositoryid");
-			$path = $request->getParameter("path");
-			if (empty($providerId) || empty($repositoryId)) {
-				return $this->processErrorMissingParameters($request, $response);
-			}
-
-			$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-			if (empty($provider)) {
-				return $this->processErrorInvalidProvider($request, $response, $providerId);
-			}
-
-			$repository = $provider->findRepository($repositoryId);
-			$authz = $provider->getSvnAuthz($repositoryId);
-			if (empty($repository) || empty($authz)) {
+				$o = SvnAuthzFilePath::create($repository->getName(), $path);
+				$authz->addPath($o);
+				if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+					return $this->processErrorInternal($request, $response);
+				}
 				return true;
 			}
 
-			$o = new SvnAuthzFilePath();
-			$o->repository = $repository->getName();
-			$o->path = $path;
-			$authz->removePath($o);
-			if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
-				return $this->processErrorInternal($request, $response);
-			}
-			return true;
-		}
-
-		public function processPathPermissions(WebRequest $request, WebResponse $response) {
-			$providerId = $request->getParameter("providerid");
-			$repositoryId = $request->getParameter("repositoryid");
-			$path = $request->getParameter("path");
-			if (empty($providerId) || empty($repositoryId)) {
-				return $this->processErrorMissingParameters($request, $response);
-			}
-
-			$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-			if (empty($provider)) {
-				return $this->processErrorInvalidProvider($request, $response, $providerId);
-			}
-
-			$repository = $provider->findRepository($repositoryId);
-			if (empty($repository)) {
-				return $this->processErrorInternal($request, $response);
-			}
-			$authz = $provider->getSvnAuthz($repositoryId);
-			$permissions = $authz->getPermissionsOfPath(SvnAuthzFilePath::create($repository->getName(), $path));
-			usort($permissions, function ($a, $b) {
-				if ($a->member->asMemberString() === $b->member->asMemberString()) {
-					return 0;
+			public function processPathDelete(WebRequest $request, WebResponse $response) {
+				$providerId = $request->getParameter("providerid");
+				$repositoryId = $request->getParameter("repositoryid");
+				$path = $request->getParameter("path");
+				if (empty($providerId) || empty($repositoryId)) {
+					return $this->processErrorMissingParameters($request, $response);
 				}
-				return ($a->member->asMemberString() < $b->member->asMemberString()) ? -1 : 1;
-			});
 
-			$json = new stdClass();
-			$json->permissions = array();
-			foreach ($permissions as &$permission) {
-				$jsonPerm = new stdClass();
-				$jsonPerm->member = Elws::createMemberEntity($permission->member->asMemberString());
-				$jsonPerm->permission = $permission->permission;
-				$json->permissions[] = $jsonPerm;
-			}
-			$response->done2json($json);
-			return true;
-		}
+				$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+				if (empty($provider)) {
+					return $this->processErrorInvalidProvider($request, $response, $providerId);
+				}
 
-		public function processPathAssign(WebRequest $request, WebResponse $response) {
-			$providerId = $request->getParameter("providerid");
-			$repositoryId = $request->getParameter("repositoryid");
-			$path = $request->getParameter("path");
-			$memberId = $request->getParameter("memberid");
-			$permission = $request->getParameter("permission");
-			if (empty($providerId) || empty($repositoryId) || empty($path) || empty($memberId)) {
-				return $this->processErrorMissingParameters($request, $response);
+				$repository = $provider->findRepository($repositoryId);
+				$authz = $provider->getSvnAuthz($repositoryId);
+				if (empty($repository) || empty($authz)) {
+					return true;
+				}
+
+				$o = new SvnAuthzFilePath();
+				$o->repository = $repository->getName();
+				$o->path = $path;
+				$authz->removePath($o);
+				if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+					return $this->processErrorInternal($request, $response);
+				}
+				return true;
 			}
 
-			$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-			if (empty($provider)) {
-				return $this->processErrorInvalidProvider($request, $response, $providerId);
+			public function processPathPermissions(WebRequest $request, WebResponse $response) {
+				$providerId = $request->getParameter("providerid");
+				$repositoryId = $request->getParameter("repositoryid");
+				$path = $request->getParameter("path");
+				if (empty($providerId) || empty($repositoryId)) {
+					return $this->processErrorMissingParameters($request, $response);
+				}
+
+				$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+				if (empty($provider)) {
+					return $this->processErrorInvalidProvider($request, $response, $providerId);
+				}
+
+				$repository = $provider->findRepository($repositoryId);
+				if (empty($repository)) {
+					return $this->processErrorInternal($request, $response);
+				}
+				$authz = $provider->getSvnAuthz($repositoryId);
+				$permissions = $authz->getPermissionsOfPath(SvnAuthzFilePath::create($repository->getName(), $path));
+				usort($permissions, function ($a, $b) {
+					if ($a->member->asMemberString() === $b->member->asMemberString()) {
+						return 0;
+					}
+					return ($a->member->asMemberString() < $b->member->asMemberString()) ? -1 : 1;
+				});
+
+				$json = new stdClass();
+				$json->permissions = array();
+				foreach ($permissions as &$permission) {
+					$jsonPerm = new stdClass();
+					$jsonPerm->member = Elws::createMemberEntity($permission->member->asMemberString());
+					$jsonPerm->permission = $permission->permission;
+					$json->permissions[] = $jsonPerm;
+				}
+				$response->done2json($json);
+				return true;
 			}
 
-			$repository = $provider->findRepository($repositoryId);
-			$authz = $provider->getSvnAuthz($repositoryId);
-			if (empty($repository) || empty($authz)) {
-				return $this->processErrorCustom($request, $response, "Unknown repository");
+			public function processPathAssign(WebRequest $request, WebResponse $response) {
+				$providerId = $request->getParameter("providerid");
+				$repositoryId = $request->getParameter("repositoryid");
+				$path = $request->getParameter("path");
+				$memberId = $request->getParameter("memberid");
+				$permission = $request->getParameter("permission");
+				if (empty($providerId) || empty($repositoryId) || empty($path) || empty($memberId)) {
+					return $this->processErrorMissingParameters($request, $response);
+				}
+
+				$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+				if (empty($provider)) {
+					return $this->processErrorInvalidProvider($request, $response, $providerId);
+				}
+
+				$repository = $provider->findRepository($repositoryId);
+				$authz = $provider->getSvnAuthz($repositoryId);
+				if (empty($repository) || empty($authz)) {
+					return $this->processErrorCustom($request, $response, "Unknown repository");
+				}
+
+				$authzPath = SvnAuthzFilePath::create($repository->getName(), $path);
+				$authzMember = $authz->createMemberObject($memberId);
+				$authz->addPermission($authzPath, $authzMember, $permission);
+				if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+					return $this->processErrorInternal($request, $response);
+				}
+				return true;
 			}
 
-			$authzPath = SvnAuthzFilePath::create($repository->getName(), $path);
-			$authzMember = $authz->createMemberObject($memberId);
-			$authz->addPermission($authzPath, $authzMember, $permission);
-			if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
-				return $this->processErrorInternal($request, $response);
-			}
-			return true;
-		}
+			public function processPathUnassign(WebRequest $request, WebResponse $response) {
+				$providerId = $request->getParameter("providerid");
+				$repositoryId = $request->getParameter("repositoryid");
+				$path = $request->getParameter("path");
+				$memberId = $request->getParameter("memberid");
+				if (empty($providerId) || empty($repositoryId) || empty($path) || empty($memberId)) {
+					return $this->processErrorMissingParameters($request, $response);
+				}
 
-		public function processPathUnassign(WebRequest $request, WebResponse $response) {
-			$providerId = $request->getParameter("providerid");
-			$repositoryId = $request->getParameter("repositoryid");
-			$path = $request->getParameter("path");
-			$memberId = $request->getParameter("memberid");
-			if (empty($providerId) || empty($repositoryId) || empty($path) || empty($memberId)) {
-				return $this->processErrorMissingParameters($request, $response);
-			}
+				$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
+				if (empty($provider)) {
+					return $this->processErrorInvalidProvider($request, $response, $providerId);
+				}
 
-			$provider = SVNAdminEngine::getInstance()->getProvider(SVNAdminEngine::REPOSITORY_PROVIDER, $providerId);
-			if (empty($provider)) {
-				return $this->processErrorInvalidProvider($request, $response, $providerId);
-			}
+				$repository = $provider->findRepository($repositoryId);
+				$authz = $provider->getSvnAuthz($repositoryId);
+				if (empty($repository) || empty($authz)) {
+					return $this->processErrorCustom($request, $response, "Unknown repository");
+				}
 
-			$repository = $provider->findRepository($repositoryId);
-			$authz = $provider->getSvnAuthz($repositoryId);
-			if (empty($repository) || empty($authz)) {
-				return $this->processErrorCustom($request, $response, "Unknown repository");
+				$authzPath = SvnAuthzFilePath::create($repository->getName(), $path);
+				$authzMember = $authz->createMemberObject($memberId);
+				$authz->removePermission($authzPath, $authzMember);
+				if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
+					return $this->processErrorInternal($request, $response);
+				}
+				return true;
 			}
-
-			$authzPath = SvnAuthzFilePath::create($repository->getName(), $path);
-			$authzMember = $authz->createMemberObject($memberId);
-			$authz->removePermission($authzPath, $authzMember);
-			if (!SVNAdminEngine::getInstance()->commitSvnAuthzFile($authz)) {
-				return $this->processErrorInternal($request, $response);
-			}
-			return true;
-		}
-	*/
+		*/
 }
 
 //		if (false) {
