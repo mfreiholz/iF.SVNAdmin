@@ -11,11 +11,11 @@ function checkPHPVersion($minimumVersion)
     if ($phpVersionParts[0] < $minVersionParts[0])
       $check = false;
 
-  if ($minVersionPartsCount >= 2)
+  if ($minVersionPartsCount >= 2 && $phpVersionParts[0] == $minVersionParts[0])
     if ($phpVersionParts[1] < $minVersionParts[1])
       $check = false;
 
-  if ($minVersionPartsCount >= 3)
+  if ($minVersionPartsCount >= 3 && $phpVersionParts[0] == $minVersionParts[0] && $phpVersionParts[1] == $minVersionParts[1])
     if ($phpVersionParts[2] < $minVersionParts[2])
       $check = false;
 
