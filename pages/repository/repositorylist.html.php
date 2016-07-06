@@ -1,5 +1,27 @@
-<?php GlobalHeader(); ?>
-
+<?php GlobalHeader();
+$sqliteDebug = false;
+try {
+	// connect to your database
+	$db = new SQLite3('descriptions.db');
+	
+	$sqliteResult = $db->query("CREATE TABLE IF NOT EXISTS repo_desc (
+		name varchar(255) NOT NULL,
+		description varchar(255) NOT NULL);
+		");
+	if (!$sqliteResult and $sqliteDebug) {
+		// the query failed and debugging is enabled
+		echo "<p>There was an error in the query.</p>";
+		echo $db->lastErrorMsg();
+	}
+}
+catch (Exception $exception) {
+	// sqlite3 throws an exception when it is unable to connect
+	echo '<p>There was an error connecting to the database!</p>';
+	if ($sqliteDebug) {
+		echo $exception->getMessage();
+	}
+}
+?>
 <h1><?php Translate("Repository management"); ?></h1>
 <p class="hdesc"><?php Translate("On this page you can view your existing repositories and create or delete an repository."); ?></p>
 
@@ -21,6 +43,10 @@
 				<th>
 					<?php Translate("Repositories"); ?>
 				</th>
+				<th>
+					<?php Translate("Description"); ?>
+				</th>
+				<th width="20"></th>
 				<?php if (GetBoolValue("ShowOptions")) : ?>
 				<th width="150">
 					<?php Translate("Options"); ?>
@@ -32,7 +58,7 @@
 		<?php if (GetBoolValue("ShowDeleteButton") && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)): ?>
 		<tfoot>
 			<tr>
-				<td colspan="4">
+				<td colspan="6">
 
 				<table class="datatableinline">
 				<colgroup>
@@ -78,6 +104,23 @@
 				<td>
 					<a href="repositoryview.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>"><?php print($r->name); ?></a>
 				</td>
+				<td>
+					<?php
+						$sqliteResult = $db->query("SELECT description FROM repo_desc WHERE name='".$r->name."'"); 
+						if (!$sqliteResult and $sqliteDebug) {
+							// the query failed and debugging is enabled
+							echo "<p>There was an error in the query.</p>";
+							echo $db->lastErrorMsg();
+						}
+						$row = $sqliteResult->fetchArray();
+						echo $row['description'];						
+					?>
+				</td>
+				<td>
+				<?php
+				echo "<a href=\"changeDescription.php\" onClick=\"window.open('changeDescription.php?name=".$r->name."', 'noname','height=250, width=500'); return false;\" target=\"_blank\"><font size=\"5px\">&#x270D;</font></a>";
+				?>
+				</td>
 				<?php if (GetBoolValue("ShowOptions")) : ?>
 				<td>
 					<?php if (GetBoolValue("ShowDumpOption")) : ?>
@@ -95,5 +138,5 @@
 	</form>
 
 <?php endforeach; ?>
-
+<?php $db->close(); ?>
 <?php GlobalFooter(); ?>
