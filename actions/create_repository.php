@@ -89,6 +89,25 @@ else {
 			$engine->addException($e3);
 		}
 	}
+	$sqliteDebug = false;
+	// connect to your database
+	$db = new SQLite3('descriptions.db');
+	$repodesc = $db->escapeString(get_request_var("repodesc"));
+	$sqliteResult = $db->query("CREATE TABLE IF NOT EXISTS repo_desc (
+		name varchar(255) NOT NULL,
+		description varchar(255) NOT NULL);
+		");
+	if (!$sqliteResult and $sqliteDebug) {
+		// the query failed and debugging is enabled
+		$engine->addMessage($db->lastErrorMsg());
+	}
+	$sqliteResult = $db->query("INSERT INTO repo_desc VALUES ('".$reponame."','".$repodesc."');");
+	if (!$sqliteResult and $sqliteDebug) {
+		// the query failed and debugging is enabled
+		$engine->addMessage($db->lastErrorMsg());
+	}
+	$db->close();	
+	
 	catch (Exception $e) {
 		$engine->addException($e);
 	}
