@@ -45,7 +45,13 @@ $(document).ready(function(){
         <b><?php Translate("Valid signs for repository name are"); ?>:</b> A-Z, a-z, 0-9, <?php Translate("Underscore"); ?>(_), <?php Translate("Hyphen"); ?>(-) <i><?php Translate("No space!"); ?></i>
       </p>
     </div>
-
+    <div class="form-field">
+      <label for="repodesc"><?php Translate("Repository description"); ?></label>
+      <input type="text" name="repodesc" id="repodesc" class="lineedit" maxlength="200">
+      <p>
+	  <b><?php Translate("This description can later be changed."); ?></b>
+      </p>
+    </div>
     <div class="form-field">
       <label for="repotype"><?php Translate("Type"); ?></label>
       <select name="repotype">
