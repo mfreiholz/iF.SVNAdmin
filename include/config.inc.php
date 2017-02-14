@@ -98,7 +98,7 @@ include_once( "./classes/core/Exceptions.class.php" );
  */
 define("MAJOR_VERSION", "1");
 define("MINOR_VERSION", "6.3");
-define("VERSION_EXTRA", "UNOFFICIAL");
+define("VERSION_EXTRA", "BETA");
 
 /**
  * Constant ACL modules.

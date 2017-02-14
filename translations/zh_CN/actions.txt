@@ -50,8 +50,8 @@
 "The following group(s) could not been deleted","下列组无法被删除."
 
 # delete_repository.php
-"You have to select at least one repository.","请至少选择一个代码仓库."
-"The following repository(s) could not been deleted:","下列代码仓库无法被删除:"
+"You have to select at least one repository.","请至少选择一个仓库."
+"The following repository(s) could not been deleted:","下列仓库无法被删除:"
 
 # delete_user.php
 "The following user's has been deleted:","已删除下列用户:"
@@ -68,7 +68,7 @@
 # None
 
 # unassign_permission.php
-"You have to select at least one access-path and one user or group.","请至少选择一个用户或组，和一个访问路径."
+"You have to select at least one access-path and one user or group.","请至少选择一个用户、用户组，或访问路径."
 "The following Access-Path's has been unassigned:","已解除下列访问路径:"
 "You have no permission to unassign the following Access-Path's, they have been skipped:","您无权解除下列访问路径，已跳过"
 "Due to an unknown error, the following Access-Path's could not been handled:","未知错误,下列访问路径未被处理:"

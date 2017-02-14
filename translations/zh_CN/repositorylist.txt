@@ -1,2 +1,5 @@
-"On this page you can view your existing repositories and create or delete an repository.","在本页面，您可以查看存在的代码仓库，也可以添加删除代码仓库"
-"Repository management","代码仓库管理"
+"On this page you can view your existing repositories and create or delete an repository.","在本页面，您可以查看、添加或删除仓库"
+"Repository management","仓库管理"
+"Remove configured Access-Paths","删除对应的访问路径"
+"Add access path","添加访问路径"
+"Repositories","仓库"

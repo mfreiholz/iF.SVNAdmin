@@ -1,1 +1,5 @@
 "The requested module is turned off.","所请求的访问模块已被关闭."
+"You do not have permission to access this page.","抱歉，您没有访问此页面的权限。"
+"Required permissions:","需要的访问权限："
+"Module:","模块："
+"Action:","操作："

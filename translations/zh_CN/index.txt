@@ -1,5 +1,5 @@
-"General information","相关信息"
-"Logged in as","登录为"
-"Application version","版本号"
+"General information","一般信息"
+"Logged in as","登录用户名"
+"Application version","系统版本"
 "PHP version","PHP 版本"
 "Check for updates","更新版本"
