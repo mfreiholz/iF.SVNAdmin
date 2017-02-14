@@ -29,7 +29,7 @@ $appTR->loadModule("roles");
 // Action handling.
 if (check_request_var('unassign'))
 {
-  $appEngine->handleAction('unassign_usergroup');
+  $appEngine->handleAction('unassign_fromgroup');
 }
 else if (check_request_var('unassign_permission'))
 {
@@ -49,7 +49,7 @@ else if(check_request_var('unassign_projectmanager'))
 }
 else if(check_request_var('assign_usergroup'))
 {
-	$appEngine->handleAction('assign_usertogroup');
+	$appEngine->handleAction('assign_togroup');
 }
 
 // Get required variables.
