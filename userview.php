@@ -49,7 +49,7 @@ else if(check_request_var('unassign_projectmanager'))
 }
 else if(check_request_var('assign_usergroup'))
 {
-	$appEngine->handleAction('assign_usertogroup');
+  $appEngine->handleAction('assign_togroup');
 }
 
 // Get required variables.
