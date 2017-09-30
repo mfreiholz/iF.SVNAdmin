@@ -430,7 +430,7 @@ class IF_SVNAuthFileC
 		}
 
 		// Validate the $repopath string.
-		$pattern = '/^[A-Za-z0-9\_\-.]+:\/.*$/i';
+		$pattern = '/^[A-Za-z0-9\_\-\.]+:\/.*$/i';
 		if ($repopath != "/" && !preg_match($pattern, $repopath))
 		{
 			throw new Exception('Invalid repository name. (Pattern: '.$pattern.')');
