@@ -82,7 +82,15 @@ else {
         			$appEngine->addException($ex2);
         		}
         	} // if ($remove_accesspath)
-
+		$sqliteDebug = false;
+		// connect to your database
+		$db = new SQLite3('descriptions.db');
+		$sqliteResult = $db->query("DELETE FROM repo_desc WHERE name='".$oR->name."';");
+		if (!$sqliteResult and $sqliteDebug) {
+			// the query failed and debugging is enabled
+			throw new Exception("Could not delete SQLite-Entry");
+		}
+		$db->close();
 		}
 	}
 	catch (Exception $ex) {
