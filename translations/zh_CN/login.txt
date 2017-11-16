@@ -1,3 +1,4 @@
-"You must login to get access to the application.","请登录."
+"You must login to get access to the application.","您需要登录才能访问本应用系统."
 "Username","用户名"
 "Password","密码"
+"Wrong user/password combination.","用户名或密码不正确。"
