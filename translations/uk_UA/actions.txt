@@ -1,0 +1,84 @@
+# all
+"An unknown error occured. Check your configuration, please.","Сталася непередбачувана помилка. Перевірте вашу конфігурацію."
+"You have to fill out all fields.","Заповніть усі поля."
+"Done","Готово."
+
+# assign_projectmanager.php
+"You have to select at least one access-path and one user.","Необхідно обрати щонайменше один шлях доступу і одного користувача."
+"The following Access-Path's has been assigned:","Було надано доступ по наступному шляху:"
+"It is not possible to set an Project-Manager for the following path's:","Неможливо вказати керівника проета по настпуному шляху:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Через непередбачувану помилку наступні шляхи доступу не вдалося опрацювати:"
+
+# assign_usergrouptoaccesspath.php
+"You have to select a user or group and an access-path to perform this action.","Необхідно обрати користувача чи групу та шлях доступу щоб виконати цю дію."
+"The following Access-Path's has been assigned:","Було надано доступ до наступного шляху:"
+"You have no permission to assign the following Access-Path's, they have been skipped:","У вас немає прав на доступ до наступних шляхів і вони були пропущені:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Через непередбачувану помилку наступні шляхи доступу не вдалося опрацювати:"
+
+# assign_userrole.php
+"You have to select at least one user and one role.","Необхідно обрати щонайменше одного користувача і одну роль."
+"The following assignments has been done:","Наступні призначення було виконано:"
+"It is not possible to do the following assignments, skipped them:","Неможливо виконати наступні призначення і вони були пропущені:"
+"Due to an unknown error, the following assignments could not been handled:","Через непередбачувану помилку наступні призначення не вдалося опрацювати:"
+
+# assign_usertogroup.php
+"You have to select at least one user and one group.","Необхідно обрати щонайменше одного користувача та одну групу."
+
+# change_password.php
+"No username given.","Ім'я користувача відсутнє."
+"The password's doesn't match each other.","Паролі не співпадають."
+
+# create_accesspath.php
+"You don't have the permission to create this access path: %0","У вас недостатньо прав для створення наступного шляху: %0"
+
+# create_group.php
+# None
+
+# create repository.php
+# None
+
+# create_user.php
+# None
+
+# delete_accesspath.php
+"The following Access-Path's has been deleted:","Наступні шляхи доступу було видалено:"
+"You have no permission to delete the following Access-Path's, they have been skipped:","У вас недостатньо прав щоб видалити наступні шляхи доступу і вони були пропущені:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Через непередбачувану помилку наступні шляхи доступу не вдалося опрацювати:"
+
+# delete_group.php
+"You have to select at least one group.","Необхідно вибрати щонайменше одну групу."
+"The following group(s) could not been deleted","Ці групи не можуть бути видалені"
+
+# delete_repository.php
+"You have to select at least one repository.","Необхідно вибрати щонайменше один репозиторій."
+"The following repository(s) could not been deleted:","Ці репозиторії не можуть бути видалені:"
+
+# delete_user.php
+"The following user's has been deleted:","Наступних користувачів видалено:"
+"Could not remove user's Access-Path-Manager associations:","Не вдалося скасувати доступ користувача до наступних шляхів:"
+"Due to an unknown error, the following user's could not been deleted:","Через непередбачувану помилку не вдалося видалити наступних користувачів:"
+
+# login_authentication.php
+"Login failed.","Не вдалося аутентифікуватися в системі."
+
+# logout.php
+# None
+
+# switch_locale.php
+# None
+
+# unassign_permission.php
+"You have to select at least one access-path and one user or group.","Необхідно обрати щонайменше один шлях доступу та одного користувача чи групу."
+"The following Access-Path's has been unassigned:","Доступ до наступних шляхів було скасовано:"
+"You have no permission to unassign the following Access-Path's, they have been skipped:","У вас недостатньо прав для призначення доступу до наступних шляхів і вони були пропущені:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Через непередбачувану помилку наступні шляхи доступу не вдалося опрацювати:"
+
+# unassign_projectmanager.php
+"The following Access-Path's has been unassigned:","Доступ до наступних шляхів було скасовано:"
+"Due to an unknown error, the following Access-Path's could not been handled:","Через непередбачувану помилку наступні шляхи доступу не вдалося опрацювати:"
+
+# unassign_usergroup.php
+# None
+
+# unassign_userrole.php
+"You have to select at least one user and one role.","Необхідно обрати щонайменше одного користувача та одну роль."
