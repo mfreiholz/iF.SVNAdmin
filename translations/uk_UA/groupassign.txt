@@ -1,0 +1,2 @@
+"User and Group &lt;&gt; Group assignment","Членство користувачів та груп в інших групах"
+"Here you can assign users to groups.","Тут ви можете керувати членством користувачів в групах."

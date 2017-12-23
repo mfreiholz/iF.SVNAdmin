@@ -1,0 +1,27 @@
+"Roles of user","Ролі користувачів"
+"Please choose","Оберіть роль"
+"You have to select at least one user and one role.","Необхідно обрати принаймні одного користувача та одну роль."
+
+"Administrator","Адміністратор"
+"Web application administrator.","Адміністартор Web застосунку."
+
+"User","Користувач"
+"Can login and change the own password.","Може аутентифікуватися та змінити свій власний пароль."
+
+"User-Group-Manager","Керівник груп користувачів"
+"Create/Delete users and groups and manages memberships and change passwords of users.","Може створювати та видаляти користувачів та групи а також керувати членством та змінювати паролі користувачів."
+
+"Access-Path-Manager","Керівник шляхів доступу"
+"Create/Delete Access-Paths and manages user and group permissions.","Може створювати та видаляти шляхи доступу та надавати або скасовувати доступ до шляхів для користуввачів та груп."
+
+"Repository-Creator","Створювач репозиторіїв"
+"Can create new repositories, but NOT delete.","Може створювати репозиторії та НЕ може їх видаляти."
+
+"Repository-Manager","Керівник репозиторіїв"
+"Create/Delete repositories.","Може створювати та видаляти репозиторії."
+
+"Role-Manager","Керівник ролей"
+"Assign and unassign web application roles to users.","Може застосовувати або скасовувати ролі користувачів."
+
+"Update-Manager","Відповідальний за оновлення"
+"Can synchronize the user data from provider with the SVNAuthFile.","Може синхронізувати дані між профайдером та файлом SVNAuthFile."

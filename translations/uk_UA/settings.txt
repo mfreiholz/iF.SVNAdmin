@@ -1,0 +1,37 @@
+# All
+"Example","Приклад"
+
+# Settings table
+"Subversion authorization","Аутентифікація на сервері subversion"
+"Subversion authorization file","Файл аутентифікації сервера subversion"
+"Data providers","Провайдери даних"
+"User view provider type:","Перегляд користувачів:"
+"User edit provider type:","Редагування користувачів:"
+"Group view provider type:","Перегляд груп:"
+"Group edit provider type:","Реадгування груп:"
+"Repository view provider type:","Перегляд репозиторіїв:"
+"Repository edit provider type:","Реадгування репозиторіїв:"
+"User authentication","Аутентифікація користувачів"
+"User authentication file (SVNUserFile)","Файл аутентифікації користувачів (SVNUserFile)"
+"Subversion settings","Налаштування subversion"
+"Parent directory of the repositories (SVNParentPath)","Коренева папка всіх репозиторіїв (SVNParentPath)"
+"Subversion client executable","Виконуваний файл клієнта subversion (svn)"
+"Subversion admin executable","Виконуваний файл адміністративної утиліти subversion (svnadmin)"
+"Parent directory of the svn Http server","URL HTTP сервера SVN" 
+"Parent directory of the svn Http viewer","URL HTTP клієнта SVN"
+"LDAP connection information","Підключення до LDAP"
+"Host address","Адреса хосту"
+"Protocol version","Версія протоколу"
+"LDAP user provider information","Провайдер користувачів LDAP"
+"LDAP group provider information","Провайдер груп LDAP"
+
+# No users, no edit provider
+"You have not defined an "UserEditProviderType", but the system also could not find any user from the configured user view provider.","UserEditProviderType не вказано, крім того система не змогла знайти жодного користувача за допомогоб вказаного провайдера."
+"You should now create a new user in your configured backend (e.g.: LDAP/Active Directory).","Тепер необхідно створити користувача в системі LDAP/Active Directory."
+"If you think your configuration is incorrect, <a href="settings.php?firststart=1">click here.</a>","Якщо ви вважаєте, що ваші налаштування неправильні, натиснуть <a href="settings.php?firststart=1">тут</a>."
+
+# Define administrator
+"Could not find existing users with your configuration. Created default Administrator account.","Не вдалось знайти жодного користувача у вашій системі. Створено користувача Administrator."
+"You can <a href="login.php"><b>login now.</b></a>","Ви можете <a href="login.php"><b>ввійти</b> зараз.</a>"
+"No administrator defined! Select the user for the administator privileges, please.","Не вказано адміністратора! Будь ласка оберіть користувача, який буде адміністратором."
+"Save configuration","Зберегти налаштування"

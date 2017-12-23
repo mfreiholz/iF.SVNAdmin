@@ -1,0 +1,6 @@
+"Create group","Створити групу"
+"Create a new group to grant access to the repositories for a range of users.","Створити нову групу для керування доступом до репозиторіїв кількох користувачів."
+"New group data","Дані нової групи"
+"Group name","Назва групи"
+"Valid group names are","Допустимими назвами груп є"
+"Invalid group names are","Недопустимими назвами груп є"

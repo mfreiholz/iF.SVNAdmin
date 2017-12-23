@@ -1,0 +1,4 @@
+"Logged out!","Сесію завершено!"
+"You have been logged out now.","Вашу сесію вдало завершено."
+"See you soon","Тримайтесь купи як яйка дупи"
+"You can close your browser now or <a href="login.php">login</a> as another user.","Ви можете закрити свій браузер зараз або <a href="login.php">увійти</a> під іншим іменем."

@@ -1,0 +1,6 @@
+"On this page you can see all assignments of the user.","На цій сторінці ви можете переглянути усі дозволи користувача та його членство в групах."
+"Groups of user","Групи, до яких належить користувач"
+"Permissions of users","Доступи користувача"
+"Inherit from Group","Надані групою"
+"<b>Note:</b> You can not unassign permissions from user, which are inherited by a group.","<b>Увага!</b> Ви не можете видалити ті доступи, які надані користувачу членством в групі."
+"User is project manager of:","Користувач є керівником наступних проектів:"

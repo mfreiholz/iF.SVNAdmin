@@ -1,0 +1,6 @@
+"Create user","Створити користувача"
+"Create a new user to grant access to the repositories.","Створити нового користувача щоб надати йому доступ до репозмиторіїв."
+"New user data","Дані нового користувача"
+"Username","Ім'я"
+"Password","Пароль"
+"Re-type password","Перевірте пароль"

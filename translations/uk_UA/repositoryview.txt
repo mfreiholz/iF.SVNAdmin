@@ -1,0 +1,2 @@
+"Repository browsing","Перегляд репозиторію"
+"Add access path","Додати шлях доступу"

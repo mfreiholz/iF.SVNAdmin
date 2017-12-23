@@ -1,0 +1,7 @@
+"Create access-path","Створити шлях доступу"
+"Create a new access-path to grant access to users and groups.","Створити новий шлях доступу для того, щоб надавати доступ до файлів за цим шляхом групам та окремим корситувачам."
+"New access-path data","Нові дані шляху"
+"Path","Шлях"
+"Syntax","Синтакс"
+"An "/" as access path holds permissions over all repositories.","Шлях "/" надає доступ до усіх репозиторіїв."
+"Browse...","Переглянути..."
