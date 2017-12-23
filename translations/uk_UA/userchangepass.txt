@@ -1,0 +1,5 @@
+"Change password of user","Зміна паролю користувача"
+"Change the password of your subversion account.","Змінити пароль користувача для доступу до репозиторіїв."
+"New password","Новий пароль"
+"Re-type password","Перевірте пароль"
+"The password's doesn't match each other.","Паролі не співпадають."

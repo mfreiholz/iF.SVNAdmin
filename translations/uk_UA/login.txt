@@ -1,0 +1,4 @@
+"You must login to get access to the application.","Необхідно аутентифікуватися щоб отримати доступ до застосунку."
+"Username","Ім'я"
+"Password","Пароль"
+"You are now logged out.","Ви аутентифікувалися."

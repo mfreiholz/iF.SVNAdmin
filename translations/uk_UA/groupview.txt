@@ -1,0 +1,4 @@
+"On this page you can see all assigned users to this group.","На даній сторінці ви можете бачити перелік усіх користувачів, які числяться в групі."
+"Users of group","Користувачі в групі"
+"Groups of group","Вкладені групи"
+"Permissions of group","Дозволи групи"
