@@ -99,7 +99,7 @@ $(document).ready(function(){
   </thead>
   <tbody>
     <tr>
-      <td>User view provider type:</td>
+      <td><?php Translate("User view provider type:"); ?></td>
       <td>
         <select name="UserViewProviderType" id="UserViewProviderType">
           <?php foreach(GetArrayValue("userViewProviderTypes") as $t): ?>
@@ -109,7 +109,7 @@ $(document).ready(function(){
       </td>
     </tr>
     <tr>
-      <td>User edit provider type:</td>
+      <td><?php Translate("User edit provider type:"); ?></td>
       <td>
         <select name="UserEditProviderType" id="UserEditProviderType">
           <?php foreach(GetArrayValue("userEditProviderTypes") as $t): ?>
@@ -119,7 +119,7 @@ $(document).ready(function(){
       </td>
     </tr>
     <tr>
-      <td>Group view provider type:</td>
+      <td><?php Translate("Group view provider type:"); ?></td>
       <td>
         <select name="GroupViewProviderType" id="GroupViewProviderType">
           <?php foreach(GetArrayValue("groupViewProviderTypes") as $t): ?>
@@ -129,7 +129,7 @@ $(document).ready(function(){
       </td>
     </tr>
     <tr>
-      <td>Group edit provider type:</td>
+      <td><?php Translate("Group edit provider type:"); ?></td>
       <td>
         <select name="GroupEditProviderType" id="GroupEditProviderType">
           <?php foreach(GetArrayValue("groupEditProviderTypes") as $t): ?>
@@ -139,7 +139,7 @@ $(document).ready(function(){
       </td>
     </tr>
     <tr>
-      <td>Repository view provider type:</td>
+      <td><?php Translate("Repository view provider type:"); ?></td>
       <td>
         <select name="RepositoryViewProviderType" id="RepositoryViewProviderType">
           <?php foreach(GetArrayValue("repositoryViewProviderTypes") as $t): ?>
@@ -149,7 +149,7 @@ $(document).ready(function(){
       </td>
     </tr>
     <tr>
-      <td>Repository edit provider type:</td>
+      <td><?php Translate("Repository edit provider type:"); ?></td>
       <td>
         <select name="RepositoryEditProviderType" id="RepositoryEditProviderType">
           <?php foreach(GetArrayValue("repositoryEditProviderTypes") as $t): ?>
