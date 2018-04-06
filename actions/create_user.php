@@ -32,6 +32,11 @@ else if ($password != $password2)
 {
 	$appEngine->addException(new ValidationException(tr("The password's doesn't match each other.")));
 }
+// Add by QXA
+else if (! preg_match('/\S{8,}/',$password) || ! preg_match('/[A-z]+/',$password) || ! preg_match('/\d+/',$password) || ! preg_match('/[\W_]+/',$password))
+{
+    $appEngine->addException(new ValidationException(tr("The password strength is too weak.")));
+}
 else
 {
   // Create user object.
