@@ -38,7 +38,11 @@
 # None
 
 # create_user.php
-# None
+# Add by QXA
+"You have to fill out all fields.","你必须填写所有区域."
+"The password's doesn't match each other.","你输入的两次密码不一致."
+"The password strength is too weak.","密码必须包含字母、数字及特殊字符，且长度不低于8位."
+"The user %0 has been created successfully.","用户%0已经成功创建."
 
 # delete_accesspath.php
 "The following Access-Path's has been deleted:","已删除下列访问路径:"
