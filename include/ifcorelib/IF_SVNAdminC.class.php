@@ -48,7 +48,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
 		// if (!file_exists($svn_admin_binary))
 		// 	throw new IF_SVNException('Path to "svnadmin" binary does not exist: '.$this->m_svnadmin);
 		// if (!is_executable($svn_admin_binary))
-		// 	throw new IF_SVNException('Permission denied! Can not execute "svnadmin" executable: '.$this->m_svnadmin);
+		// 	throwcreate --fs-type new IF_SVNException('Permission denied! Can not execute "svnadmin" executable: '.$this->m_svnadmin);
 	}
 
 	/**

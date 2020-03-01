@@ -22,12 +22,14 @@ include_once("./classes/util/global.func.php");
 set_exception_handler('exception_handler');
 
 // Check PHP version.
+// 检查PHP版本，最小版本PHP 5.3
 if (!checkPHPVersion("5.3")) {
   echo "Wrong PHP version. The minimum required version is: 5.3";
   exit(1);
 }
 
 // Does the config.ini file exists?
+// 检查配置文件是否存在，data目录是否具备777权限
 if (!file_exists("./data/config.ini"))
 {
   if (!copy("./data/config.tpl.ini", "./data/config.ini"))
@@ -50,6 +52,7 @@ if (!file_exists("./data/config.ini"))
 //define("IF_SVNBaseC_ConfigDir", "E:/Development/Test/temp svnadmin/svn-config-dir");
 
 // The iF.CoreLib
+// 核心库
 $ifcorelib_path = "./include/ifcorelib/";
 include_once($ifcorelib_path."globals.php");
 include_once($ifcorelib_path."IF_StringUtils.class.php");
@@ -69,6 +72,7 @@ include_once($ifcorelib_path."IF_ACLRole.class.php");
 include_once($ifcorelib_path."IF_ACL.class.php");
 
 // Core interfaces and classes.
+// 核心接口和类
 include_once( "./classes/core/entities/Permission.class.php" );
 include_once( "./classes/core/entities/Group.class.php" );
 include_once( "./classes/core/entities/User.class.php" );
@@ -102,6 +106,7 @@ define("VERSION_EXTRA", "UNOFFICIAL");
 
 /**
  * Constant ACL modules.
+ * ACL模块常量
  */
 define("ACL_MOD_BASIC",                "basics");
 define("ACL_MOD_REPO",                 "repositories");
@@ -115,6 +120,7 @@ define("ACL_MOD_PROJECTMANAGER",       "projectmanagers");
 
 /**
  * Constant ACL actions.
+ * ACL动作常量
  */
 define("ACL_ACTION_VIEW",				"view");
 define("ACL_ACTION_ADD",				"add");
@@ -132,6 +138,7 @@ define("ACL_ACTION_UNASSIGN_ADMIN_ROLE", "unassignadmin"); // ACL_MOD_ROLE
 
 /*
  * Switch current locale procecure.
+ * 切换当前本地化处理程序，cookie保存时间一年
  */
 $requestedLocale = get_request_var("locale");
 if ($requestedLocale != null)
@@ -147,12 +154,13 @@ if ($requestedLocale != null)
  * @var $appEngine \svnadmin\core\Engine
  * @global $appEngine \svnadmin\core\Engine
  * @deprecated No longer use this global variable!
+ * 定义全局变量
  */
-$appEngine = \svnadmin\core\Engine::getInstance();
+$appEngine = \svnadmin\core\Engine::getInstance(); // app引擎，全局变量
 
 /**
  * Global object to translate strings into different languages.
- *
+ * 全局翻译字符串对象
  * @global IF_Translator
  */
 $appTR = \IF_Translator::getInstance();
@@ -161,7 +169,7 @@ $appTR->setTranslationDirectory($appEngine->getConfig()->getValue("Translation",
 /**
  * The template of the current opened page.
  * It supports translations and ACL's.
- *
+ * 页面模板对象
  * @global IF_Template
  */
 $appTemplate = new \IF_Template;
@@ -171,6 +179,7 @@ $cfg = $appEngine->getConfig();
 
 /**
  * User view provider.
+ * 使用三种方式提供用户模块，passwd密码形式定义用户，ldap定义用户，digest定义用户
  */
 if ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "passwd")
 {
@@ -304,6 +313,7 @@ if ($cfg->getValue("Engine:Providers", "RepositoryEditProviderType") == "svnclie
 
 /**
  * Authentication status.
+ * 认证状态
  */
 if ($cfg->getValue("Engine:Providers", "AuthenticationStatus") == "basic")
 {
@@ -326,6 +336,7 @@ if ($cfg->getValue("Engine:Providers", "AuthenticationStatus") == "basic")
 /**
  * An administrator role MUST be defined, if the authentication is active.
  * Otherwise nobody could setup the application.
+ * 必须设置一个管理员角色，否则没有人能够设置当前应用
  */
 $appCurrentScriptFile = currentScriptFileName();
 if ($appEngine->isAuthenticationActive() && $appCurrentScriptFile != "settings.php" && $appCurrentScriptFile != "update_ldap.php")
@@ -355,7 +366,9 @@ else
 {
 	// Fallback to default locale.
 	$appTR->setCurrentLocale(
-			$appEngine->getConfig()->getValue("GUI", "DefaultLocale", "en_US")
+            // $appEngine->getConfig()->getValue("GUI", "DefaultLocale", "en_US")
+            // 将默认的语言改成中文
+			$appEngine->getConfig()->getValue("GUI", "DefaultLocale", "zh_CN")
 		);
 }
 

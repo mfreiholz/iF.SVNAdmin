@@ -1,3 +1,4 @@
 "You must login to get access to the application.","请登录."
 "Username","用户名"
 "Password","密码"
+"Exception list","异常"
