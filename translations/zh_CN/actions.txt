@@ -52,7 +52,9 @@
 
 
 # create_repository.php
-# None
+"The repository %0 has been created successfully","仓库 %0 创建成功"
+"Missing project name","缺失项目名称"
+
 
 # create_user.php
 "The user %0 has been created successfully.","用户 %0 创建成功."

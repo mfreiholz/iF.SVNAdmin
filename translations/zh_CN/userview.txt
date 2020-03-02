@@ -4,3 +4,4 @@
 "Inherit from Group","从组继承"
 "<b>Note:</b> You can not unassign permissions from user, which are inherited by a group.","<b>注意:</b> 您无法解除从组继承过来的用户的权限."
 "User is project manager of:","用户是项目经理:"
+"+All sub Access-Path's","+ 所有子访问路径"

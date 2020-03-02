@@ -72,7 +72,7 @@
 				</td>
 				<td>
 					<?php if (GetBoolValue('ShowDeleteButton') && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)) : ?>
-						<input type="checkbox" name="selected_repos[]" value="<?php print($r->name); echo 'dddd'; ?>">
+						<input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>">
 					<?php endif; ?>
 				</td>
 				<td>
