@@ -6,9 +6,13 @@
 	<meta name="Author" content="Manuel Freiholz, insaneFactory.com">
 	<link rel="stylesheet" type="text/css" href="templates/ifappstyle.css">
 	<link rel="stylesheet" type="text/css" href="templates/jquery-ui-1.8.2.custom.css">
+    <!--  引入chosen插件，对下拉框进行搜索筛选，参考https://www.jianshu.com/p/51863ae82723 -->
+    <link href='https://cdn.bootcss.com/chosen/1.5.1/chosen.min.css' rel='stylesheet'/>
 	<script type="text/javascript" src="templates/jquery-1.4.2.min.js"></script>
 	<script type="text/javascript" src="templates/jquery-ui-1.8.2.custom.min.js"></script>
-	<script type="text/javascript" src="templates/script.js"></script>
+    <!--  引入chosen插件，对下拉框进行搜索筛选，参考https://www.jianshu.com/p/51863ae82723 -->
+    <script src='https://cdn.bootcss.com/chosen/1.5.1/chosen.jquery.js'></script>
+    <script type="text/javascript" src="templates/script.js"></script>
 </head>
 <body>
 	<div id="main">

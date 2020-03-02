@@ -39,7 +39,7 @@ $(document).ready(function(){
               </td>
               <td align="right">
                 <?php if (IsProviderActive(PROVIDER_USER_VIEW) && HasAccess(ACL_MOD_PROJECTMANAGER, ACL_ACTION_ASSIGN)) : ?>
-                <select name="selected_users[]">
+                <select class="chosen" name="selected_users[]">
                   <option value="">--- <?php Translate("Set project manager"); ?> ---</option>
                 <?php foreach (GetArrayValue("UserList") as $u) : ?>
                   <option value="<?php print($u->name); ?>"><?php print($u->getDisplayName()); ?></option>

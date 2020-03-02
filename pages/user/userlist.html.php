@@ -60,12 +60,13 @@ $(document).ready(function(){
 	          <?php } ?>
 	        </td>
 	        <td align="right">
+              <!-- 给select定义chosen类，对下拉框进行搜索  -->
 	          <?php if (IsProviderActive(PROVIDER_AUTHENTICATION) && HasAccess(ACL_MOD_ROLE, ACL_ACTION_ASSIGN)) { ?>
 	          <small>(<a id="showrolelistlink" href="#"><?php Translate("Show roles"); ?></a>)</small>
-	          <select name="selected_assign_role_name">
+	          <select class='chosen' name="selected_assign_role_name">
 	            <option value="">--- <?php Translate("Role"); ?> ---</option>
 	            <?php foreach (GetArrayValue("RoleList") as $r) { ?>
-	            <option value="<?php print($r->name); ?>"><?php Translate($r->name); ?></option>
+                   <option value="<?php print($r->name); ?>"><?php Translate($r->name); ?></option>
 	            <?php } ?>
 	          </select>
 	          <input type="submit" name="assign_role" value="<?php Translate("Assign"); ?>" class="anbtn">
