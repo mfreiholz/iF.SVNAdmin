@@ -1,3 +1,6 @@
 "Assigned users and groups to this access-path.","授权用户和组到该访问路径"
 "Assigned users","已授权用户"
 "Assigned groups","已授权用户组"
+"No permission","无权限"
+"Read only","只读权限"
+"Read &amp; Write","读 &amp; 写"

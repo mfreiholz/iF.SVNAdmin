@@ -25,3 +25,6 @@
 
 "Update-Manager","更新管理员"
 "Can synchronize the user data from provider with the SVNAuthFile.","可以从数据提供方同步用户数据."
+
+"Available roles","可选的角色"
+"Description","描述"

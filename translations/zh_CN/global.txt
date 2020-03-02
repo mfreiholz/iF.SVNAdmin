@@ -30,3 +30,5 @@
 "Show roles","选择角色"
 "Session","会话"
 "Home","首页"
+"Back to overview","返回"
+"Removed Access-Path "%0"","访问路径"%0"已经移除"
