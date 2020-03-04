@@ -8,7 +8,7 @@
 "Valid signs for repository name are","合法的代码仓库名字为"
 "Underscore","下划线"
 "Hyphen","连字符"
-"No space!","切忌空格!"
+"No space!","切忌空格!(======> 管理员推荐仅使用英文或数字作为仓库名称)"
 "Repository location","代码仓库根路径"
 "Berkly DB","Berkly DB(不推荐)"
 "Pre-defined repository structure","预定义的存储库结构"

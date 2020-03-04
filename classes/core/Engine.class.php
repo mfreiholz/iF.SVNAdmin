@@ -321,7 +321,7 @@ class Engine
 	/**
 	 * This function checks whether the current user is authenticated and
 	 * has permission to access a specific resource.
-	 *
+	 * 检查当前用户是否具备相应的权限
 	 * Note: This function should take place on every page, where an authentication is required.
 	 *
 	 * @param bool $redirect Indicates whether the user should be redirected to login page.

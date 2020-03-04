@@ -214,7 +214,7 @@ class IF_Config
 
 	/**
 	 * Sets a specific value to config.
-	 *
+	 * 设置配置文件中的键值对
 	 * @param string $section
 	 * @param string $key
 	 * @param string $value

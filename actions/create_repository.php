@@ -1,4 +1,5 @@
 <?php
+// 检查常量'ACTION_HANDLING'是否存在
 if (!defined('ACTION_HANDLING')) {
 	die("HaHa!");
 }
@@ -20,15 +21,14 @@ $engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_ADD);
 //
 
 $varParentIdentifierEnc = get_request_var('pi');
-$reponame = get_request_var("reponame");
-$repotype = get_request_var("repotype");
+$reponame = get_request_var("reponame"); // 获取仓库名称
+$repotype = get_request_var("repotype"); // 获取仓库类型fsfs或bdb
 
 $varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 
 //
 // Validation
-//
-
+// 验证，如果仓库名称为空，那么就添加异常
 if ($reponame == NULL) {
 	$engine->addException(new ValidationException(tr("You have to fill out all fields.")));
 }

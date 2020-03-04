@@ -53,7 +53,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
 
 	/**
 	 * Creates a new empty repository.
-	 *
+	 * 此处是创建SVN仓库的核心代码
 	 * @param string $path Absolute path to the new repository
 	 * @param string $type Repository type: fsfs=file system(default); bdb=berkley db (not recommended)
 	 * @throws IF_SVNException
@@ -61,12 +61,14 @@ class IF_SVNAdminC extends IF_SVNBaseC
 	 */
 	public function create($path, $type="fsfs")
 	{
+	    // 检查仓库的绝对路径是否存在
 		if (empty($path))
 		{
 			throw new IF_SVNException('Empty path parameter for create() command.');
 		}
 
 		// Validate repository name.
+        // 验证仓库名称，需要为英文、数字下划线或破折号，点号
 		$pattern = '/^([a-z0-9\_\-.]+)$/i';
 		$repo_name = basename($path);
 
@@ -75,6 +77,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
 			throw new IF_SVNException('Invalid repository name: '.$repo_name.' (Allowed pattern: '.$pattern.')');
 		}
 
+		// 设置svnadmin create需要使用的参数序列
 		$args = array();
 		if (!empty($this->config_directory))
 		{
@@ -86,12 +89,15 @@ class IF_SVNAdminC extends IF_SVNBaseC
 			$args["--fs-type"] = escapeshellarg($type);
 		}
 
+		// 调用基类中的创建svn命令字符串，组装成最终需要使用的命令行字符串
 		$cmd = self::create_svn_command($this->m_svnadmin, "create", self::encode_local_path($path), $args, false);
 
+		// 设置输出和退出码，并执行命令
 		$output = null;
 		$exitCode = 0;
 		exec($cmd, $output, $exitCode);
 
+		// 如果退出码非零，则抛出异常
 		if ($exitCode != 0)
 		{
 			throw new IF_SVNCommandExecutionException('Command='.$cmd.'; Return='.$exitCode.'; Output='.$output.';');

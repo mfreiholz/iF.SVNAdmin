@@ -19,6 +19,7 @@
 "The following Access-Path's has been assigned:","下列访问路径已授权:"
 "You have no permission to assign the following Access-Path's, they have been skipped:","您并无下列访问路径的分配权限，已跳过:"
 "Due to an unknown error, the following Access-Path's could not been handled:","未知错误，下列访问路径未被处理:"
+"Grant %0 permission to %1 on %2","给 %1 用户授予了访问路径 %2 的 %0 权限"
 
 # assign_userrole.php
 "You have to select at least one user and one role.","请至少选择一个用户和一个角色."
@@ -78,6 +79,7 @@
 # delete_repository.php
 "You have to select at least one repository.","请至少选择一个代码仓库."
 "The following repository(s) could not been deleted:","下列代码仓库无法被删除:"
+"The repository %0 has been deleted.","仓库 %0 成功删除."
 
 # delete_user.php
 "The following user's has been deleted:","已删除下列用户:"

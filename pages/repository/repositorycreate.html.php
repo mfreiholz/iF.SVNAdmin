@@ -40,7 +40,7 @@ $(document).ready(function(){
 
     <div class="form-field">
       <label for="reponame"><?php Translate("Repository name"); ?></label>
-      <input type="text" name="reponame" id="reponame" class="lineedit">
+      <input type="text" name="reponame" id="reponame" class="lineedit"> <!-- 输入仓库名称 -->
       <p>
         <b><?php Translate("Valid signs for repository name are"); ?>:</b> A-Z, a-z, 0-9, <?php Translate("Underscore"); ?>(_), <?php Translate("Hyphen"); ?>(-) <i><?php Translate("No space!"); ?></i>
       </p>
