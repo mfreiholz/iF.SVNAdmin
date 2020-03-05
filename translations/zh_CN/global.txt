@@ -32,3 +32,4 @@
 "Home","首页"
 "Back to overview","返回"
 "Removed Access-Path "%0"","访问路径"%0"已经移除"
+"Message list","消息"

@@ -48,4 +48,5 @@
 "Repository view provider type:","仓库视图提供方类型:"
 "Repository edit provider type:","仓库编辑提供方类型:"
 "Test","测试"
+"Done.","完成"
 

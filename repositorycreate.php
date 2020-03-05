@@ -49,6 +49,8 @@ if (check_request_var('create'))
 // View Data
 //
 
+// 将仓库父路径的值渲染到HTML模板中
 SetValue('RepositoryParentList', $engine->getRepositoryViewProvider()->getRepositoryParents());
+// 渲染模板
 ProcessTemplate("repository/repositorycreate.html.php");
 ?>

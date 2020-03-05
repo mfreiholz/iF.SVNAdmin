@@ -104,7 +104,7 @@ class IF_SVNBaseC
 
 	/**
 	 * Checks whether the folder at the given location is a repository.
-	 *
+	 * 检查给定文件夹是否是SVN仓库，此处仅做了一个简单的判断是否是目录
 	 * @param string $path Absolute path to a repository directory.
 	 * @return bool
 	 */
@@ -116,7 +116,7 @@ class IF_SVNBaseC
 
 	/**
 	 * Gets a list with all available repositories in the given base path.
-	 *
+	 * 获取所有有效的仓库
 	 * @param $basePath The SVNParentPath of the repositories.
 	 * @return array<string> List of absolute paths to repositories.
 	 * @throws IF_SVNException
@@ -268,7 +268,7 @@ class IF_SVNBaseC
   /**
    * Creates the commandline command which can be used for execution.
    * This function also escapes the shell arguments given by <code>$args</code>.
-   *
+   * 创建命令行命令字符串
    * <p>
    *   <b>Note:</b> The <code>$repo_path</code> parameter should be UTF-8 encoded.
    *   (see <code>encode_path(...)</code>)

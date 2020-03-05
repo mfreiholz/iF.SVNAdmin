@@ -106,7 +106,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
 
 	/**
 	 * Deletes the repository at the given path.
-	 *
+	 * 删除给定路径的仓库
 	 * @param string $path Path to the repository.
 	 * @return bool
 	 */
@@ -136,7 +136,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
 	
 	/**
 	 * Dump the contents of the given file-system
-	 * 
+	 * 备份仓库
 	 * @param string $path	Local path to the repository.
 	 * @param string $file [optional]	If NULL the binary output of the dump
 	 *									comannd is directed to STDOUT (browser).
