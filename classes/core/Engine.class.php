@@ -738,18 +738,19 @@ class Engine
     return $this->m_repositoryViewProvider;
   }
 
-  /////
-
+  // 判断仓库编辑是否激活
   public function isRepositoryEditActive()
   {
     return $this->m_repositoryEditProvider == null ? false : true;
   }
 
+  // 设置仓库编辑程序
   public function setRepositoryEditProvider( $o )
   {
     $this->m_repositoryEditProvider = $o;
   }
 
+  // 获取存储库编辑提供程序
   public function getRepositoryEditProvider()
   {
     if( $this->m_repositoryEditProvider != null )

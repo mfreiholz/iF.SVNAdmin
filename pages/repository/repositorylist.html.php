@@ -21,6 +21,9 @@
 				<th>
 					<?php Translate("Repositories"); ?>
 				</th>
+                <th>
+                    <?php Translate("Repository Description"); ?>
+                </th>
 				<?php if (GetBoolValue("ShowOptions")) : ?>
 				<th width="150">
 					<?php Translate("Options"); ?>
@@ -78,6 +81,11 @@
 				<td>
 					<a href="repositoryview.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>"><?php print($r->name); ?></a>
 				</td>
+
+                <td>
+                    测试描述信息<?php print($r->getDescription());?>
+                </td>
+
 				<?php if (GetBoolValue("ShowOptions")) : ?>
 				<td>
 					<?php if (GetBoolValue("ShowDumpOption")) : ?>

@@ -23,6 +23,7 @@ $engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_ADD);
 $varParentIdentifierEnc = get_request_var('pi');
 $reponame = get_request_var("reponame"); // 获取仓库名称
 $repotype = get_request_var("repotype"); // 获取仓库类型fsfs或bdb
+$repodesc = get_request_var("repodesc"); // 获取仓库描述信息
 
 $varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 
@@ -33,11 +34,16 @@ if ($reponame == NULL) {
 	$engine->addException(new ValidationException(tr("You have to fill out all fields.")));
 }
 else {
-	$r = new \svnadmin\core\entities\Repository($reponame, $varParentIdentifier);
+	$r = new \svnadmin\core\entities\Repository($reponame, $varParentIdentifier, $repodesc);
 
 	// Create repository.
 	try {
+
+	    // 创建SVN仓库第1步，在svnreos根目录下面创建仓库文件夹
 		$engine->getRepositoryEditProvider()->create($r, $repotype);
+
+        // 创建SVN仓库第2步，会调用RepositoryEditProvider.class.php文件中RepositoryEditProvider类的save()方法
+        // 实质没做什么，仅返回true
 		$engine->getRepositoryEditProvider()->save();
 		$engine->addMessage(tr("The repository %0 has been created successfully", array($reponame)));
 
@@ -49,7 +55,9 @@ else {
 				$ap = new \svnadmin\core\entities\AccessPath($reponame . ':/');
 
 				if ($engine->getAccessPathEditProvider()->createAccessPath($ap)) {
+                    $engine->addMessage('测试保存仓库2');
 					$engine->getAccessPathEditProvider()->save();
+                    $engine->addMessage('测试保存仓库3');
 				}
 			}
 		}

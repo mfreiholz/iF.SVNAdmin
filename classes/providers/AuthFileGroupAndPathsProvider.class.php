@@ -89,11 +89,13 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 	}
 
 	/**
-	 * (non-PHPdoc)
+	 * 保存配置文件
 	 * @see svnadmin\core\interfaces.IEditProvider::save()
 	 */
 	public function save()
 	{
+        global $appEngine;
+        $appEngine->addMessage('AuthFileGroupAndPathsProvider.class.php 98 尝试保存配置文件'.print_r($this));
 		return $this->m_authfile->save();
 	}
 

@@ -46,6 +46,14 @@ $(document).ready(function(){
       </p>
     </div>
 
+  <div class="form-field">
+      <label for="repodesc"><?php Translate("Repository Description"); ?></label>
+      <input type="text" name="repodesc" id="repodesc" class="lineedit"> <!-- 输入仓库描述信息 -->
+      <p>
+        <b><?php Translate("Repository Description. simple summary."); ?>
+      </p>
+  </div>
+
     <div class="form-field">
       <label for="repotype"><?php Translate("Type"); ?></label>
       <select name="repotype">

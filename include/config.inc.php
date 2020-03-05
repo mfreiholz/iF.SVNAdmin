@@ -17,8 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.
  */
+
+// 规定当前脚本的错误报告级别,E_ERROR级别是指：运行时致命的错误。不能修复的错误。停止执行脚本。
 error_reporting(E_ERROR);
 include_once("./classes/util/global.func.php");
+// 设置用户自定义的异常处理函数
 set_exception_handler('exception_handler');
 
 // Check PHP version.
@@ -99,6 +102,7 @@ include_once( "./classes/core/Exceptions.class.php" );
 
 /**
  * iF.SVNAdmin version.
+ * iF.SVNAdmin 的版本信息
  */
 define("MAJOR_VERSION", "1");
 define("MINOR_VERSION", "6.3");
@@ -154,7 +158,7 @@ if ($requestedLocale != null)
  * @var $appEngine \svnadmin\core\Engine
  * @global $appEngine \svnadmin\core\Engine
  * @deprecated No longer use this global variable!
- * 定义全局变量
+ * 定义全局变量，其他函数需要调用时，可以使用global $appEngine进行调用
  */
 $appEngine = \svnadmin\core\Engine::getInstance(); // app引擎，全局变量
 
@@ -180,6 +184,7 @@ $cfg = $appEngine->getConfig();
 /**
  * User view provider.
  * 使用三种方式提供用户模块，passwd密码形式定义用户，ldap定义用户，digest定义用户
+ * 不同用户程序调用不同的PHP文件，产生不同的用户视图对象
  */
 if ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "passwd")
 {
@@ -216,6 +221,7 @@ elseif ($cfg->getValue("Engine:Providers", "UserViewProviderType") == "ldap")
 /**
  * User edit provider.
  * LDAP is currently not supported as edit provider.
+ * 用户编程提供程序，不支持对LDAP方式的用户进行修改编辑
  */
 if ($cfg->getValue("Engine:Providers", "UserEditProviderType") == "passwd")
 {
@@ -234,13 +240,17 @@ if ($cfg->getValue("Engine:Providers", "UserEditProviderType") == "digest")
 
 /**
  * Group view provider.
+ *
+ * 组视图提供程序
  */
+// 普通方式通过svnauthfile,也就是SVNAuthFile=/home/svn/authz 控制用户组
 if ($cfg->getValue("Engine:Providers", "GroupViewProviderType") == "svnauthfile")
 {
   include_once( "./classes/providers/AuthFileGroupAndPathsProvider.class.php" );
   $groupView = \svnadmin\providers\AuthFileGroupAndPathProvider::getInstance();
   $appEngine->setGroupViewProvider( $groupView );
 }
+// 使用LDAP形式，忽略
 elseif($cfg->getValue("Engine:Providers", "GroupViewProviderType") == "ldap" && $cfg->getValue("Engine:Providers", "UserViewProviderType") == "ldap")
 {
 	$groupView = null;
@@ -263,6 +273,7 @@ elseif($cfg->getValue("Engine:Providers", "GroupViewProviderType") == "ldap" && 
 /**
  * Group edit provider.
  * No LDAP support.
+ * 组编辑程序，不考虑LDAP
  */
 if ($cfg->getValue("Engine:Providers", "GroupEditProviderType") == "svnauthfile" )
 {
@@ -273,6 +284,7 @@ if ($cfg->getValue("Engine:Providers", "GroupEditProviderType") == "svnauthfile"
 
 /**
  * Access-Path view provider.
+ * 访问路径视图提供程序
  */
 if ($cfg->getValue("Engine:Providers", "AccessPathViewProviderType") == "svnauthfile")
 {
@@ -283,6 +295,7 @@ if ($cfg->getValue("Engine:Providers", "AccessPathViewProviderType") == "svnauth
 
 /**
  * Access-Path edit provider.
+ * 访问路径编辑提供程序
  */
 if ($cfg->getValue("Engine:Providers", "AccessPathEditProviderType") == "svnauthfile")
 {
@@ -293,6 +306,7 @@ if ($cfg->getValue("Engine:Providers", "AccessPathEditProviderType") == "svnauth
 
 /**
  * Repository view provider.
+ * 仓库视图提供程序
  */
 if ($cfg->getValue("Engine:Providers", "RepositoryViewProviderType") == "svnclient")
 {
@@ -303,6 +317,7 @@ if ($cfg->getValue("Engine:Providers", "RepositoryViewProviderType") == "svnclie
 
 /**
  * Repository edit provider.
+ * 仓库编辑提供程序
  */
 if ($cfg->getValue("Engine:Providers", "RepositoryEditProviderType") == "svnclient")
 {

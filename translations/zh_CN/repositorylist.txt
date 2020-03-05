@@ -6,3 +6,4 @@
 "+Remove configured Access-Paths","+同时删除访问路径配置"
 "Options","可选操作"
 "Export dump","导出dump备份文件"
+"Repository Description","仓库描述信息"

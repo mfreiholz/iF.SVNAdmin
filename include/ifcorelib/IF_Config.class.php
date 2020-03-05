@@ -11,12 +11,16 @@ class IF_SyntaxErrorException extends Exception {}
  * @todo Write back empty sections.
  *
  * @author Manuel Freiholz, insaneFactory.com
+ *
+ * IF_Config类用于提供更高组的解析和读功能
  */
 class IF_Config
 {
 	/**
 	 * Path to config file.
 	 * @var string
+     *
+     * 配置文件路径
 	 */
 	private $configFilePath = null;
 
@@ -24,6 +28,8 @@ class IF_Config
 	 * Holds the configuration keys from file.
 	 * e.g.: $items["section_name"]["key"] = "value";
 	 * @var array()
+     *
+     * 配置文件键值对
 	 */
 	private $items = array();
 
@@ -42,6 +48,8 @@ class IF_Config
 	 * Parses the file in INI format.
 	 *
 	 * @throws IF_SyntaxErrorException
+     *
+     * 以ini格式解析配置文件
 	 */
 	private function parse()
 	{
@@ -50,45 +58,76 @@ class IF_Config
 		}
 
 		$fh = fopen($this->configFilePath, 'r');
+		// 锁定文件，LOCK_SH表示共享锁定
 		if (!flock($fh, LOCK_SH )) {
 			throw new Exception('Can not lock (shared) file. ' . $this->configFilePath);
 		}
-  
+        // 测试，引入引擎
+        $engine = \svnadmin\core\Engine::getInstance();
+
 		$last_section_name = NULL;
+		// 当前文件指针不是文件结尾处时，读取一行，文件指针会自动移动到下一行
 		while (!feof($fh)) {
 			$line = fgets($fh);
-			$line = trim($line);
+			$line = trim($line); // 移除行首和行末的whitespace字符，如空格、tab等
 
 			// skip empty lines
+            // 忽略空行
 			if (empty($line)) {
 				continue;
 			}
     
 			// skip comments
+            // 忽略备注信息
 			if (strpos($line, '#') === 0
 				|| strpos($line, ';') === 0) {
 				continue;
 			}
 
 			// section header
+            // 处理节点头部
 			if (substr($line, 0, 1) == '[' ) {
-				$section_name = substr($line, 1, strlen($line)-2);
-				$this->items[$section_name] = array();
-				$last_section_name = $section_name;
+			    // [groups]或[testrepo:/]，原始获取的section_name的值是groups或testrepo:/
+//				$section_name = substr($line, 1, strlen($line)-2);
+//				$this->items[$section_name] = array();
+//				$last_section_name = $section_name;
+
+                // 添加描述信息
+
+				// 因为要把仓库备注信息添加到仓库section_name后面，因此改写此处实现
+                // 改造后，section节点示例：
+                // [testrepo:/] # desc: 测试仓
+                // 则    section_name = "testrepo:/"
+                //      section_description = "测试仓"
+                $splits = explode('#', $line, 2);
+                $section_string = trim($splits[0]);
+                $section_comment = trim($splits[1]);
+                $section_name = substr($section_string, 1, strlen($section_string)-2);
+                $section_description = trim(substr($section_comment, 5, strlen($section_comment)-2));
+                $this->items[$section_name] = array();
+                $this->items[$section_name]['#section_desc'] = $section_description;
+                $last_section_name = $section_name;
+
+
 				continue;
 			}
 			// "key=value" pairs of last section header
+            // 获取键值对，
 			else {
+			    // 以等号=作为分隔符，对每一行进行拆分，拆分一次，数组包含两个元素
 				$splits = explode('=', $line, 2);
-				$key = trim($splits[0]);
-				$val = NULL;
+				$key = trim($splits[0]); // '用户名'，或者'@组名'
+				$val = NULL; // 获取用户或组的权限，不要在权限后面添加备注信息
 
 				if (count($splits) > 1) {
 					$val = trim($splits[1]);
 				}
 				$this->items[$last_section_name][$key] = $val;
+
 			}
 		}
+
+        $engine->addMessage(var_dump($this->items));
 		flock($fh, LOCK_UN);
 		fclose($fh);
 		return true;
@@ -126,12 +165,24 @@ class IF_Config
 		
 		// iterate all sections
 		foreach ($this->items as $section_name => $section_data) {
-			fwrite($fh, "\n[" . $section_name . "]\n");
+
+//		    fwrite($fh, "\n[" . $section_name . "]\n");
+            // 改造此处，将section_description信息写入到配置文件
+            fwrite($fh, "\n[" . $section_name . "]");
+            if (empty($section_data['#section_desc'])) {
+                fwrite($fh, "\n");
+            }
+            else {
+                fwrite($fh, " # desc: " . $section_data['#section_desc'] . "\n");
+            }
 
 			if (is_array($section_data)) {
 				// iterate key/value pairs of section
 				foreach ($section_data as $key => $val) {
-					fwrite($fh, $key . '=' . $val . "\n");
+				    // 排除section节点描述信息
+				    if ($key !== '#section_desc') {
+                        fwrite($fh, $key . '=' . $val . "\n");
+                    }
 				}
 			}
 		}

@@ -26,6 +26,12 @@ class Repository
 	 * @var string
 	 */
 	public $name;
+
+    /**
+     * The description of the repository.
+     * @var string
+     */
+    public $repo_description;
 	
 	/**
 	 * The parent identifier of the repository.
@@ -39,19 +45,28 @@ class Repository
 	 * 
 	 * @param string $name
 	 * @param string $parentIdentifier 
+	 * @param string $repoDescription
 	 */
-	public function __construct($name = null, $parentIdentifier = null)
+	public function __construct($name = null, $parentIdentifier = null, $repoDescription = null)
 	{
 		$this->name = $name;
 		$this->parentIdentifier = $parentIdentifier;
+		$this->repoDescription = $repoDescription;
 	}
 
 	public function getName()
-	{
-		return $this->name;
-	}
-	
-	public function getParentIdentifier()
+    {
+        return $this->name;
+    }
+
+    public function getDescription()
+    {
+        $this->repoDescription = '   此处需要修改';
+        return $this->repoDescription;
+    }
+
+
+    public function getParentIdentifier()
 	{
 		return $this->parentIdentifier;
 	}

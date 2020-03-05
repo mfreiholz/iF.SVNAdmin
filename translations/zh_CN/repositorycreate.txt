@@ -19,3 +19,5 @@
 "Project name","项目名称"
 "The folders 'trunk', 'branches' and 'tags' will be created in a subfolder, which is named by the project's name.","在项目名称命名的子目录下面创建'trunk', 'branches'和'tags'目录"
 "Back to overview","返回到代码仓库列表"
+"Repository Description","仓库描述信息"
+"Repository Description. simple summary.","仓库的总结描述信息"

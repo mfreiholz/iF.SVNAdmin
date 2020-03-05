@@ -32,21 +32,23 @@
  */
 class IF_SVNAuthFileC
 {
-	public static $PERMISSION_NONE		= '';
-	public static $PERMISSION_READ		= 'r';
-	public static $PERMISSION_READWRITE	= 'rw';
+	public static $PERMISSION_NONE		= '';  // 静态属性， 无权限标志
+	public static $PERMISSION_READ		= 'r'; // 静态属性，读权限标志
+	public static $PERMISSION_READWRITE	= 'rw'; // 静态属性，读写权限标志
 
-	private $SIGN_ALL_USERS	= '*';
-	private $GROUP_SIGN		= '@';
-	private $GROUP_SECTION	= 'groups';
-	private $ALIAS_SIGN		= '&';
-	private $ALIAS_SECTION	= 'aliases';
+	private $SIGN_ALL_USERS	= '*'; // 所有用户标志
+	private $GROUP_SIGN		= '@'; // 组标志
+	private $GROUP_SECTION	= 'groups'; // 组section标志
+	private $ALIAS_SIGN		= '&'; // 假名标志
+	private $ALIAS_SECTION	= 'aliases'; // 假名section标志
 
 	/**
 	 * Holds the IF_Config object which is used to manage
 	 * all actions on SVNAuthFile (INI-format).
 	 *
 	 * @var IF_Config
+     * $config用于管理所有的配置文件中的对象
+     *
 	 */
 	private $config = null;
 
@@ -74,6 +76,8 @@ class IF_SVNAuthFileC
 	 * @return bool
 	 *
 	 * @throws Exception
+     *
+     * 打开配置文件
 	 */
 	public function open($path)
 	{
@@ -96,22 +100,26 @@ class IF_SVNAuthFileC
 	 * @return bool
 	 *
 	 * @throws Exception
+     *
+     * 保存配置文件
 	 */
 	public function save($path = null)
 	{
 		try {
+		    // 写数据到config.ini配置文件中
 			return $this->config->save($path);
 		}
 		catch (Exception $e) {
 			throw new Exception("Can not write SVNAuthFile.", 0, $e);
 		}
-		return false;
 	}
 
 	/**
 	 * Gets all existing aliases.
 	 *
 	 * @return array <string>
+     *
+     * 获取所的的假名
 	 */
 	public function aliases()
 	{
@@ -122,6 +130,8 @@ class IF_SVNAuthFileC
 	 * Gets all existing groups.
 	 *
 	 * @return array <string>
+     *
+     * 获取所的的组
 	 */
 	public function groups()
 	{
@@ -132,6 +142,8 @@ class IF_SVNAuthFileC
 	 * Gets all configured repositories + repository-path
 	 *
 	 * @return array<string>
+     *
+     * 获取所有的仓库和仓库路径
 	 */
 	public function repositories()
 	{
@@ -155,6 +167,7 @@ class IF_SVNAuthFileC
 	 * @param string $alias
 	 *
 	 * @return string
+     * 获取假名的真值
 	 */
 	public function getAliasValue($alias)
 	{
@@ -171,6 +184,7 @@ class IF_SVNAuthFileC
 	 * @param string $group
 	 *
 	 * @return array<string>
+     * 获取组中的用户
 	 */
 	public function usersOfGroup($group)
 	{
@@ -203,6 +217,8 @@ class IF_SVNAuthFileC
 	 * @param string $group
 	 *
 	 * @return array<string>
+     *
+     * 获取组中的子组
 	 */
 	public function groupsOfGroup($group)
 	{
@@ -238,6 +254,8 @@ class IF_SVNAuthFileC
 	 * @param string $repository
 	 *
 	 * @return array<string>
+     *
+     * 获取仓库中被分配的用户和组信息
 	 */
 	public function membersOfRepository($repository)
 	{
@@ -250,6 +268,8 @@ class IF_SVNAuthFileC
 	 * @param string $repository
 	 *
 	 * @return array<string>
+     *
+     * 获取具备当前仓库路径直接权限所有用户
 	 */
 	public function usersOfRepository($repository)
 	{
@@ -279,6 +299,8 @@ class IF_SVNAuthFileC
 	 * @param string $repository
 	 *
 	 * @return array<string>
+     *
+     * 获取具备当前仓库路径直接权限所有组
 	 */
 	public function groupsOfRepository($repository)
 	{
@@ -310,6 +332,8 @@ class IF_SVNAuthFileC
 	 * @param string $username
 	 *
 	 * @return array<string>
+     *
+     *  获取当前用户所在的组列表信息
 	 */
 	public function groupsOfUser($username)
 	{
@@ -334,6 +358,8 @@ class IF_SVNAuthFileC
 	 * @param string $groupname
 	 *
 	 * @return array<string>
+     *
+     * 获取当前组所在的组的列表信息
 	 */
 	public function groupsOfSubgroup($groupname)
 	{
@@ -358,6 +384,8 @@ class IF_SVNAuthFileC
 	 * @param string $groupname
 	 *
 	 * @return array<string>
+     *
+     * 获取当前组具有的所有仓库路径
 	 */
 	public function repositoryPathsOfGroup($groupname)
 	{
@@ -382,6 +410,8 @@ class IF_SVNAuthFileC
 	 * @param string $username
 	 *
 	 * @return array<string>
+     *
+     * 获取用户有权限的所有仓库路径
 	 */
 	public function repositoryPathsOfUser($username)
 	{
@@ -406,6 +436,8 @@ class IF_SVNAuthFileC
 	 * @param string $repository the repository path
 	 *
 	 * @return bool
+     *
+     * 检查仓库路径在配置文件中是否存在
 	 */
 	public function repositoryPathExists($repository)
 	{
@@ -420,16 +452,19 @@ class IF_SVNAuthFileC
 	 * @return bool true=OK; false=Repository path already exists.
 	 *
 	 * @throws Exception If an invalid repository path has been provided.
+     *
+     * 添加一个新的仓库配置路径到SVNAuthFile配置文件中
 	 */
 	public function addRepositoryPath($repopath)
 	{
     	if (self::repositoryPathExists($repopath))
 		{
-			// Already exists.
+			// Already exists. 路径已经存在
 			return false;
 		}
 
 		// Validate the $repopath string.
+        // 校验仓库路径有效性
 		$pattern = '/^[A-Za-z0-9\_\-.]+:\/.*$/i';
 		if ($repopath != "/" && !preg_match($pattern, $repopath))
 		{
@@ -437,6 +472,7 @@ class IF_SVNAuthFileC
 		}
 
 		// Create the repository configuration path.
+        // 创建仓库配置路径
 		$this->config->setValue($repopath, null, null);
 		return true;
 	}
@@ -447,6 +483,8 @@ class IF_SVNAuthFileC
 	 * @param string $repopath
 	 *
 	 * @return bool
+     *
+     * 从配置文件中移除访问路径
 	 */
 	public function removeRepositoryPath($repopath)
 	{
@@ -464,6 +502,8 @@ class IF_SVNAuthFileC
 	 * @param string $groupname
 	 *
 	 * @return bool
+     *
+     * 检查组是否存在
 	 */
 	public function groupExists($groupname)
 	{
@@ -478,6 +518,8 @@ class IF_SVNAuthFileC
 	 * @return bool TRUE/FALSE
 	 *
 	 * @throws Exception If an invalid group name has been provided.
+     *
+     * 创建组
 	 */
 	public function createGroup($groupname)
 	{
@@ -505,6 +547,8 @@ class IF_SVNAuthFileC
 	 * @param $groupname
 	 *
 	 * @return bool
+     *
+     * 删除组
 	 */
 	public function deleteGroup($groupname)
 	{
@@ -522,6 +566,8 @@ class IF_SVNAuthFileC
 	 * @param string $username
 	 *
 	 * @return bool
+     *
+     * 给组中添加用户
 	 */
 	public function addUserToGroup($groupname, $username)
 	{
@@ -562,6 +608,8 @@ class IF_SVNAuthFileC
 	 * @param string $subgroupname
 	 *
 	 * @return bool
+     *
+     * 添加子组到组中
 	 */
 	public function addSubgroupToGroup($groupname, $subgroupname)
 	{
@@ -602,6 +650,8 @@ class IF_SVNAuthFileC
 	 * @param string $username
 	 *
 	 * @return bool
+     *
+     * 检查用户是否在组中
 	 */
 	public function isUserInGroup($groupname, $username)
 	{
@@ -621,6 +671,8 @@ class IF_SVNAuthFileC
 	 * @param string $subgroupname
 	 *
 	 * @return bool
+     *
+     * 检查子组是否在组中
 	 */
 	public function isSubgroupInGroup($groupname, $subgroupname)
 	{
@@ -640,6 +692,8 @@ class IF_SVNAuthFileC
 	 * @param string $groupname
 	 *
 	 * @return bool
+     *
+     * 从组中移除用户
 	 */
 	public function removeUserFromGroup($username, $groupname)
 	{
@@ -673,6 +727,8 @@ class IF_SVNAuthFileC
 	 * @param string $groupname
 	 *
 	 * @return bool
+     *
+     * 从组中移除子组
 	 */
 	public function removeSubgroupFromGroup($subgroupname, $groupname)
 	{
@@ -705,6 +761,8 @@ class IF_SVNAuthFileC
 	 * @param string $repository
 	 *
 	 * @return bool
+     *
+     * 从仓库中移除组
 	 */
 	public function removeGroupFromRepository($groupname, $repository)
 	{
@@ -719,12 +777,13 @@ class IF_SVNAuthFileC
 	}
 
 	/**
-	 * Removes the given $groupname from $repository.
+	 * Removes the given $username from $repository.
 	 *
 	 * @param string $username
 	 * @param string $repository
 	 *
 	 * @return bool
+     * 从仓库中移除用户
 	 */
 	public function removeUserFromRepository($username, $repository)
 	{
@@ -744,6 +803,7 @@ class IF_SVNAuthFileC
 	 * @param string $permission
 	 *
 	 * @return bool
+     * 判断用户是否分配该仓库的权限
 	 */
 	public function isUserAssignedToRepository($username, $repository, $permission=null)
 	{
@@ -773,7 +833,7 @@ class IF_SVNAuthFileC
 	}
 
 	/**
-	 * Gets to know whether the user is assigned to a specified
+	 * Gets to know whether the group is assigned to a specified
 	 * repository path (optional: with specific permission.)
 	 *
 	 * @param string $username
@@ -781,6 +841,8 @@ class IF_SVNAuthFileC
 	 * @param string $permission
 	 *
 	 * @return bool
+     *
+     * 判断组是否分配该仓库的权限
 	 */
 	public function isGroupAssignedToRepository($groupname, $repository, $permission=null)
 	{
@@ -819,6 +881,8 @@ class IF_SVNAuthFileC
 	 * @param string $permission
 	 *
 	 * @return bool
+     *
+     * 给用户分配权限
 	 */
 	public function addUserToRepository($username, $repository, $permission)
 	{
@@ -840,6 +904,8 @@ class IF_SVNAuthFileC
 	 * @param string $permission
 	 *
 	 * @return bool
+     *
+     * 给组分配权限
 	 */
 	public function addGroupToRepository($groupname, $repository, $permission)
 	{
@@ -871,6 +937,8 @@ class IF_SVNAuthFileC
 	 * @param string $filterRepository (default=null) Restricts the returning array to the given repository.
 	 *
 	 * @return array See method description for details.
+     *
+     * 获取所有用户的权限列表
 	 */
 	public function permissionsOfUser($username, $resolveGroups = true, $filterRepository = null)
 	{
@@ -942,6 +1010,8 @@ class IF_SVNAuthFileC
 	 * @param string $filterRepository (default=null) Restricts the returning array to the given repository.
 	 *
 	 * @return array See method description for details.
+     *
+     * 获取组具备的权限
 	 */
 	public function permissionsOfGroup($groupname, $resolveGroups = true, $filterRepository = null)
 	{
@@ -983,6 +1053,8 @@ class IF_SVNAuthFileC
 	 * @param array $users
 	 * @return string
 	 * @see http://svnbook.red-bean.com/en/1.7/svn.serverconfig.pathbasedauthz.html
+     *
+     * 将用户列表或组列表转换成字符串
 	 */
 	private static function convertGroupsUsersToString(array $groups, array $users)
 	{

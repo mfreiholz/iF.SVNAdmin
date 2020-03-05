@@ -24,18 +24,21 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	/**
 	 * Object to handle operations of the "svn" executable.
 	 * @var IF_SVNClientC
+     * SVN客户端执行程序svn
 	 */
     private $_svnClient = NULL;
 
     /**
      * Object to handle operations of the "svnadmin" executable.
      * @var IF_SVNAdminC
+     * SVN服务端执行程序svnadmin
      */
 	private $_svnAdmin = NULL;
 
 	/**
 	 * Holds the singelton instance of this class.
 	 * @var svnadmin\providers\RepositoryEditProvider
+     * 保存此类的单例实例
 	 */
 	private static $_instance = NULL;
 	
@@ -56,35 +59,44 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	 *			),
 	 *		)
 	 * @var array
+     * 多仓库配置列表
 	 */
 	private $_config = array();
 	
 	/**
-	 * Initializes the object by Engine configuration. 
+	 * Initializes the object by Engine configuration.
+     * 通过引擎配置初始化对象
 	 */
 	public function __construct()
 	{
-		$engine = \svnadmin\core\Engine::getInstance();
+		// 核心引擎
+	    $engine = \svnadmin\core\Engine::getInstance();
+		// 读取配置文件"data/config.ini"
 		$config = $engine->getConfig();
 		
 		// Subversion class for browsing.
+        // 获取SVN客户端程序svn,如/usr/bin/svn
 		$this->_svnClient = new \IF_SVNClientC($engine->getConfig()
 				->getValue('Repositories:svnclient', 'SvnExecutable'));
 		
 		// Subversion class for administration.
+        // 获取SVN服务端程序svnadmin，如/usr/bin/svnadmin
 		$this->_svnAdmin = new \IF_SVNAdminC($engine->getConfig()
 				->getValue('Repositories:svnclient', 'SvnAdminExecutable'));
 		
 		// Load default repository location configuration.
+        // 获取默认的仓库根路径，如/home/svn/svnrepos
 		$defaultSvnParentPath = $engine->getConfig()
 				->getValue('Repositories:svnclient', 'SVNParentPath');
 		
 		// Set as default.
+        // 默认设置
 		$this->_config[0]['SVNParentPath'] = $defaultSvnParentPath;
 		$this->_config[0]['description'] = 'Repositories';
 		
 		// Issue #5: Support multiple path values for SVNParentPath
 		// Try to load more repository locations.
+        // 支持SVN父路径存在多个多路径值
 		$index = (int) 1;
 		while (true) {
 			$svnParentPath = $config->getValue('Repositories:svnclient:' . $index, 'SVNParentPath');
@@ -108,6 +120,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	 * Gets the singelton instance of this object.
 	 *
 	 * @return svnadmin\providers\RepositoryEditProvider
+     * 获取此类的单例实例
 	 */
 	public static function getInstance()
 	{
@@ -120,6 +133,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
     /**
      * (non-PHPdoc)
      * @see svnadmin\core\interfaces.IProvider::init()
+     * 实现init()接口方法
      */
 	public function init()
 	{
@@ -129,18 +143,26 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IEditProvider::save()
+     * 实现save()接口方法
 	 */
 	public function save()
 	{
+        global $appEngine;
+        $appEngine->addMessage('创建仓库第2步，save()函数仅返回true,并未做实质性的事情');
 		return true;
 	}
 
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IRepositoryEditProvider::create()
+     * 实现create()接口方法
 	 */
 	public function create(\svnadmin\core\entities\Repository $oRepository, $type = "fsfs")
 	{
+        global $appEngine;
+        $appEngine->addMessage('创建仓库第1步，在根目录下面创建仓库文件夹');
+
+	    // 获取SVN根目录
 		$svnParentPath = $this->getRepositoryConfigValue($oRepository, 'SVNParentPath');
 		
 		if (!file_exists($svnParentPath)) {
@@ -148,6 +170,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 					$svnParentPath);
 		}
 
+		// 构建当前仓库的绝对路径
 		$path = $svnParentPath . '/' . $oRepository->name;
 		$this->_svnAdmin->create($path, $type);
 
@@ -157,6 +180,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IRepositoryEditProvider::delete()
+     * 实现delete()接口方法，删除仓库目录
 	 */
 	public function delete(\svnadmin\core\entities\Repository $oRepository)
 	{
@@ -176,6 +200,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IRepositoryEditProvider::mkdir()
+     * 实现mkdir()接口方法，创建目录
 	 */
 	public function mkdir(\svnadmin\core\entities\Repository $oRepository, array $paths)
 	{
@@ -199,6 +224,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IRepositoryEditProvider::dump()
+     * 实现dump()接口方法，备份仓库
 	 */
 	public function dump(\svnadmin\core\entities\Repository $oRepository)
 	{
@@ -227,6 +253,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	/**
 	 * Gets the configuration value associated to the given Repository object
 	 * (identified by 'parentIdentifier')
+     * 获取仓库的配置信息
 	 * 
 	 * @param \svnadmin\core\entities\Repository $oRepository
 	 * @param string $key
