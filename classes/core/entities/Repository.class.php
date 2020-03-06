@@ -51,7 +51,6 @@ class Repository
 	{
 		$this->name = $name;
 		$this->parentIdentifier = $parentIdentifier;
-		if_log_debug('$repoDescription是新增的，用于记录仓库描述信息');
 		$this->repoDescription = $repoDescription;
 	}
 
@@ -62,7 +61,6 @@ class Repository
 
     public function getDescription()
     {
-        $this->repoDescription = '   此处需要修改';
         return $this->repoDescription;
     }
 

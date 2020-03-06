@@ -11,13 +11,14 @@
 
 	<form action="repositorylist.php" method="POST">
 		<input type="hidden" name="pi" value="<?php print($rp->getEncodedIdentifier()); ?>">
-		
+        <!-- define the table, if just single svn repo root ,then the id is repolist_0	-->
 		<table id="repolist_<?php print($rp->identifier); ?>" class="datatable">
 
 		<thead>
 			<tr>
 				<th width="22"></th>
 				<th width="20"></th>
+				<th width="50" align="center"><?php Translate("Index"); ?></th>
 				<th>
 					<?php Translate("Repositories"); ?>
 				</th>
@@ -35,7 +36,7 @@
 		<?php if (GetBoolValue("ShowDeleteButton") && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)): ?>
 		<tfoot>
 			<tr>
-				<td colspan="4">
+				<td colspan="6">
 
 				<table class="datatableinline">
 				<colgroup>
@@ -61,9 +62,15 @@
 
 		<tbody>
 			<?php
+                // 获取所有的仓库列表
 				$list = GetArrayValue('RepositoryList');
 				$list = $list[$rp->identifier];
+				// $list中每个$r的值类似于：svnadmin\core\entities\Repository Object ( [name] => A03 [repoDescription] => testdesc [parentIdentifier] => 0 )
+                // 也就是说，在此一步已经获取到每个仓库实际的仓库名和描述信息了，因此需要分析上面的GetArrayValue函数
+                // $index作为仓库序号
+                $index = 1;
 				foreach ($list as $r) :
+//                    print_r($r);
 			?>
 			<tr>
 				<td>
@@ -78,12 +85,19 @@
 						<input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>">
 					<?php endif; ?>
 				</td>
+                <td align="center">
+                    <?php print($index); ?>
+                </td>
 				<td>
 					<a href="repositoryview.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>"><?php print($r->name); ?></a>
 				</td>
 
                 <td>
-                    测试描述信息<?php print($r->getDescription());?>
+                    <?php if (empty($r->getDescription())) { ?>
+                        <span class="redfont"><?php Translate("No data!"); ?></span>
+                    <?php } else { ?>
+                        <?php print($r->getDescription()); ?>
+                    <?php } ?>
                 </td>
 
 				<?php if (GetBoolValue("ShowOptions")) : ?>
@@ -96,7 +110,7 @@
 				</td>
 				<?php endif; ?>
 			</tr>
-			<?php endforeach; ?>
+			<?php $index++; endforeach; ?>
 		</tbody>
 
 		</table>

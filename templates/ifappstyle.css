@@ -313,3 +313,7 @@ div.form-field p{
 table.settings tr td input[type='text'], tr td input[type='password']{
   width:300px;
 }
+
+.redfont {
+    color: red;
+}

@@ -147,7 +147,8 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	 */
 	public function save()
 	{
-        if_log_debug('save()函数仅返回true,并未做实质性的事情');
+        //save()函数仅返回true,并未做实质性的事情
+        if_log_debug('save() function do nothing.');
 		return true;
 	}
 
@@ -158,7 +159,8 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	 */
 	public function create(\svnadmin\core\entities\Repository $oRepository, $type = "fsfs")
 	{
-        if_log_debug('在服务器SVN根目录下面创建仓库文件夹');
+        // 在服务器SVN根目录下面创建仓库文件夹
+        if_log_debug('create SVN repository folder in the server svn root path');
 
 	    // 获取SVN根目录
 		$svnParentPath = $this->getRepositoryConfigValue($oRepository, 'SVNParentPath');

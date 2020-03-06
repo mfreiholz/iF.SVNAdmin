@@ -123,6 +123,7 @@ class IF_SVNBaseC
 	 */
 	public function listRepositories($basePath)
 	{
+	    if_log_debug('Gets a list with all available repositories in the given base path.');
 		if (!file_exists($basePath))
 		{
 			throw new IF_SVNException('The repository parent path (SVNParentPath) does not exists: '.$basePath);
@@ -145,7 +146,8 @@ class IF_SVNBaseC
 			}
 		}
 		closedir($hd);
-
+        if_log_debug('$basePath repositories'. $basePath);
+        if_log_array($ret);
 		return $ret;
 	}
 
@@ -247,7 +249,6 @@ class IF_SVNBaseC
   {
   	$local_path = str_replace(DIRECTORY_SEPARATOR, "/", $local_path);
   	$local_path = self::encode_string($local_path);
-
     // Quick fix for Windows share names.
   	if ($this->is_windows_server)
   	{

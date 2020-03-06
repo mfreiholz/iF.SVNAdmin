@@ -34,7 +34,6 @@ namespace svnadmin\core\entities
       $this->perm = $perm;
       $this->inherited = $inherited;
       $this->managers = $managers;
-      if_log_debug('$description用于记录仓库或访问路径的描述信息');
     }
 
     public function getPath()

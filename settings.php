@@ -492,8 +492,12 @@ SetValue("groupEditProviderTypes", $groupEditProviderTypes);
 
 // RepositoryViewProviderType
 $repositoryViewProviderTypes = array("off", "svnclient");
+// 在数组开头插入值,插入后列表的值为: array("svnclient", "off", "svnclient");
 array_unshift($repositoryViewProviderTypes, $cfgEngine->getValue("Engine:Providers","RepositoryViewProviderType"));
+
+// 进行替换
 $appTemplate->addReplacement("repositoryViewProviderTypes", $repositoryViewProviderTypes);
+// 设置值，	$appTemplate->addReplacement("repositoryViewProviderTypes", $repositoryViewProviderTypes);
 SetValue("repositoryViewProviderTypes", $repositoryViewProviderTypes);
 
 // RepositoryEditProviderType

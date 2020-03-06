@@ -94,8 +94,8 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 	 */
 	public function save()
 	{
-        if_log_debug('AuthFileGroupAndPathsProvider.class.php尝试保存配置文件'.print_r($this));
-
+        if_log_debug('save data to ini config file');
+        // see the IF_SVNAuthFileC.class.php file
 		return $this->m_authfile->save();
 	}
 
@@ -482,7 +482,8 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 	    // 将访问路径对象中的path和description描述传递给addRepositoryPath方法
         // 即告诉addRepositoryPath函数访问路径的路径和描述信息
         // addRepositoryPath方法定义在include/ifcorelib/IF_SVNAuthFileC.class.php文件中
-        if_log_debug('创建访问路径信息');
+        // 创建访问路径信息
+        if_log_debug('Create access path info');
 		return $this->m_authfile->addRepositoryPath( $objAccessPath->path, $objAccessPath->description);
 	}
 

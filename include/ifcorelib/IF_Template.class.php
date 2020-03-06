@@ -47,6 +47,7 @@ class IF_Template
 	private $m_templateContent = NULL;
 	
 	// Used replacements for the patterns.
+    // 用于模式替换，是一个列表
 	public $m_replacements = array();
 	
 	// Defines for if-statements.
@@ -73,7 +74,7 @@ class IF_Template
 	
 	/**
 	 * Loads the given template from file.
-	 *
+	 * 加载模板文件
 	 * @param IF_File $strFile
 	 * 
 	 * @return bool
@@ -98,7 +99,7 @@ class IF_Template
 	
 	/**
 	 * Loads the template from the given string object.
-	 *
+	 * 从字符串对象中加载模板
 	 * @param string $templateString
 	 * 
 	 * @return bool
@@ -139,7 +140,7 @@ class IF_Template
 	/**
 	 * Adds a new replacement to the template class.
 	 * All replacements will replace the pattern in the template string.
-	 * 
+	 *  添加替换
 	 * Example:
 	 * 1. Parameter: "NAME"
 	 * 2. Parameter: "Foo"
@@ -153,8 +154,12 @@ class IF_Template
 	 */
 	public function addReplacement( $strPattern , $replacement )
 	{
+	    // $strPattern在项目中可取的值：LocaleList, RepositoryParentList，ShowOptions，ShowDeleteButton，RepositoryList
+        // $replacement有可能是Array列表，如包含Repository类对象实例的列表
 		if( !empty($strPattern) ) // Using != NULL, because empty strings are valid
 		{
+		    // 此处将列表传给$this->>m_replaements,前端页面才能正常显示出数据
+            // 将LocaleList, RepositoryParentList，ShowOptions，ShowDeleteButton，RepositoryList等的数据都保存到一个大的列表中
 			$this->m_replacements[$strPattern] = $replacement;
 			return TRUE;
 		}
@@ -455,10 +460,10 @@ class IF_Template
 	 * and replaces all including variables of the loops.
 	 */
 	private function doLoops()
-	{	
+	{
+
 		// Find out the position of the first loop-start.
 		$iOffset = 0;
-		
 		do
 		{
 			// Will contain the final loop content.
@@ -703,6 +708,8 @@ class IF_Template
 
   public function getProcessedTemplate($bLoops=true, $bReplacements=true, $bIncludes=true)
   {
+      global $appEngine;
+      $appEngine->addMessage('balalba');
 		// Find includes.
 		self::doIncludes();
 

@@ -141,7 +141,8 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	 */
 	public function getRepositoryParents()
 	{
-		$ret = array();
+	    if_log_debug('getRepositoryParents');
+        $ret = array();
 		
 		foreach ($this->_config as $parentIdentifier => $options) {
 			$ret[] = new \svnadmin\core\entities\RepositoryParent(
@@ -150,8 +151,8 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 					$this->getRepositoryParentConfigValue($parentIdentifier, 'description')
 				);
 		}
-		
-		return $ret;
+
+        return $ret;
 	}
 
 	/**
@@ -161,12 +162,11 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	public function getRepositories()
 	{
 		$ret = array();
-		
+
 		foreach ($this->_config as $parentIdentifier => $options) {
 			$list = $this->_svnClient->listRepositories($options['SVNParentPath']);
-			
 			foreach ($list as $name) {
-				$ret[] = new \svnadmin\core\entities\Repository($name, $parentIdentifier);
+                $ret[] = new \svnadmin\core\entities\Repository($name, $parentIdentifier);
 			}
 		}
 		
@@ -174,19 +174,34 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 获取父节点下面所有的仓库，此处组装所有仓库组成的列表
 	 * @see svnadmin\core\interfaces.IRepositoryViewProvider::getRepositoriesOfParent()
 	 */
 	public function getRepositoriesOfParent(\svnadmin\core\entities\RepositoryParent $parent)
 	{
 		$ret = array();
-		
+		if_log_debug('get the svnParentPath');
+
+        // Load file.
+        // 加载SVNAuthFile配置文件
+        global $appEngine;
+        $svnAuthFilePath = $appEngine->getConfig()->getValue("Subversion", "SVNAuthFile");
+        $svnAuthFile = new \IF_Config($svnAuthFilePath);
+
+
+        // 获取到SVNParentPath对应的路径/home/svn/svnrepos字符串
 		$svnParentPath = $this->getRepositoryParentConfigValue($parent->identifier);
 		if ($svnParentPath != NULL) {
+		    // 获取到SVN根路径后，获取所有仓库，参考include/ifcorelib/IF_SVNBaseC.class.php
 			$list = $this->_svnClient->listRepositories($svnParentPath);
-			
+
 			foreach ($list as $name) {
-				$ret[] = new \svnadmin\core\entities\Repository($name, $parent->identifier);
+			    // section_name为仓库名后接:/
+			    $section_name = $name . ':/';
+			    // 获取仓库的说明信息
+                $repodesc = $svnAuthFile->getSectionDescription($section_name);
+                // 创建每个仓库的对象放到列表中
+				$ret[] = new \svnadmin\core\entities\Repository($name, $parent->identifier, $repodesc);
 			}
 		}
 		
@@ -199,7 +214,7 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
      */
 	public function listPath(\svnadmin\core\entities\Repository $oRepository, $relativePath)
     {
-		// Get SVNParentPath of given Repository object.
+        // Get SVNParentPath of given Repository object.
 		$svnParentPath = $this->getRepositoryParentConfigValue(
 				$oRepository->getParentIdentifier(), 'SVNParentPath');
 		
@@ -239,25 +254,27 @@ class RepositoryViewProvider implements \svnadmin\core\interfaces\IRepositoryVie
 	
 	/**
 	 * Gets the configuration value associated to the given $parentIdentifier.
-	 * 
+	 * 返回配置文件中SVNParentPath对应的值，返回字符串：/home/svn/svnrepos
 	 * @param string $parentIdentifier
 	 * @param string $key
 	 * @return string
 	 */
 	protected function getRepositoryParentConfigValue($parentIdentifier, $key = 'SVNParentPath')
 	{
-		$v = null;
+        $v = null;
 
 		if ($parentIdentifier === null) {
 			$v = $this->_config[0][$key];
+			if_log_debug('$v'.$v);
 		}
 		else if (isset($this->_config[$parentIdentifier])){
 			if (isset ($this->_config[$parentIdentifier][$key])) {
 				$v = $this->_config[$parentIdentifier][$key];
 			}
 		}
-		
-		return $v;
+        if_log_debug('getRepositoryParentConfigValue return:'.$v);
+
+        return $v;
 	}
 }
 ?>

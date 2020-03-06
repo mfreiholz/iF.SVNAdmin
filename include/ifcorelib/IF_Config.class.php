@@ -107,7 +107,7 @@ class IF_Config
                 $this->items[$section_name] = array();
                 $this->items[$section_name]['#section_desc'] = $section_description;
                 $last_section_name = $section_name;
-                if_log_debug('section_name:' . $section_name . 'section_comment:' . $section_comment);
+                if_log_debug('section_name:' . $section_name . ',   section_comment:' . $section_comment);
 				continue;
 			}
 			// "key=value" pairs of last section header
@@ -161,7 +161,8 @@ class IF_Config
 		$fh = fopen($path, 'w');
 		flock($fh, LOCK_EX);
 
-		if_log_debug('将$items对象写入到配置文件中');
+		// 将$items对象写入到配置文件中
+		if_log_debug('Write $items object to config file');
 		// iterate all sections
 		foreach ($this->items as $section_name => $section_data) {
 
@@ -340,5 +341,21 @@ class IF_Config
 		}
 		return false;
 	}
+
+	/*
+	 * Get Section Description,
+	 * @param unknow_type $section
+	 */
+	public function getSectionDescription($section)
+    {
+        if (isset($this->items[$section]))
+        {
+            if (isset($this->items[$section]['#section_desc']))
+            {
+                return $this->items[$section]['#section_desc'];
+            }
+        }
+        return null;
+    }
 }
 ?>

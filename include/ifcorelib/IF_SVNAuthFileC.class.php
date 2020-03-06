@@ -106,8 +106,8 @@ class IF_SVNAuthFileC
 	public function save($path = null)
 	{
 		try {
-		    // 写数据到config.ini配置文件中
-            if_log_debug('IF_SVNAuthFileC:写数据到config.ini配置文件中');
+		    // 写数据到配置文件中
+            if_log_debug('IF_SVNAuthFileC:write data to SVNAuthFile config file');
 			return $this->config->save($path);
 		}
 		catch (Exception $e) {
@@ -480,11 +480,12 @@ class IF_SVNAuthFileC
 		// 如果用户输入了仓库或访问路径的描述信息，那么就把描述信息写到配置文件中
         // 此处调用setValue方法只是在列表中加入数据，定义详细见include/ifcorelib/IF_Config.class.php文件
 		if (!empty($repodesc)) {
-		    if_log_debug('将描述信息添加到列表中，描述信息:' . $repodesc . '  仓库路径:' . $repopath);
+		    if_log_debug('Add description info to $items array:' . $repodesc . '  Repository Path:' . $repopath);
             $this->config->setValue($repopath, '#section_desc', $repodesc);
         }
 		return true;
 	}
+
 
 	/**
 	 * Removes the access path from the configuration.

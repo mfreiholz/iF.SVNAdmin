@@ -39,10 +39,16 @@ function tr($text, $args=null)
 // LOGGING
 // 记录日志，将日志保存到/var/log/httpd/error_log文件中
 ////////////////////////////////////////////////////////////////////////
-
+// 普通日志
 function if_log_debug($message)
 {
 	error_log($message);
+}
+
+// 将数组变量写入到日志中
+function if_log_array($varArray)
+{
+    if_log_debug(var_export($varArray, true));
 }
 
 // ------------------------------------------ Global template "print" functions.
@@ -123,15 +129,24 @@ function CurrentLocale()
 	return "en_US";
 }
 
+// 设置值
 function SetValue($varName, $varValue)
 {
-	global $appTemplate;
+    if_log_debug('SetValue');
+    if_log_debug('SetValue function: $varName: ' . $varName);
+    global $appTemplate;
+
 	$appTemplate->addReplacement($varName, $varValue);
 }
 
 function GetValue($varName)
 {
-	global $appTemplate;
+    if_log_debug('Get Value of :' . $varName);
+	global $appTemplate; // 引用全局变量，实质是IF_Template类实例，参考IF_Template.class.php文件
+
+    // 此处的$varName在项目中，可能的取值：RepositoryParentList，ShowOptions，ShowDeleteButton，RepositoryList
+    // 通过		$v=$appTemplate->m_replacements[$varName]; 获取到了每种类型时的列表，列表中包含各种的对象
+    // 此处是获取数据的关键位置
 	if (isset($appTemplate->m_replacements[$varName]))
 	{
 		$v=$appTemplate->m_replacements[$varName];
@@ -145,7 +160,13 @@ function GetValue($varName)
 
 function GetArrayValue($varName)
 {
+    // 此函数用于获取列表的实际值，可用于多个对象，如：
+    // $list = GetArrayValue('RepositoryList');
+    // GetArrayValue('RepositoryParentList')
+    if_log_debug('Get Arrary Value of :'. $varName);
+
 	$v=NULL;
+	// 调用 GetValue函数
 	if (($v=GetValue($varName)) != NULL)
 	{
 		if (is_array($v))
