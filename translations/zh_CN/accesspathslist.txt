@@ -2,3 +2,6 @@
 "Here you can see a list of all access path, which are defined in your subversion configuration.","在这里，您可以看到所有定义了您的svn配置信息的访问路径的列表"
 "Set project manager","设置项目经理"
 "Managers","项目经理"
+"Index","序号"
+"Access-Path Description","访问路径描述信息"
+"No data!","没有描述数据"

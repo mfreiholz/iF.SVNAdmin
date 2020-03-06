@@ -18,13 +18,15 @@ $(document).ready(function(){
 <thead>
 <tr>
 	<th width="20"><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?><input type="checkbox" id="selectall"><?php endif; ?></th>
+	<th width="50" align="center"><?php Translate("Index"); ?></th>
 	<th><?php Translate("Access-Path"); ?></th>
+	<th><?php Translate("Access-Path Description"); ?></th>
 </tr>
 </thead>
 
 <tfoot>
 	<tr>
-		<td colspan="2">
+		<td colspan="4">
 
 			<table class="datatableinline">
             <colgroup>
@@ -55,15 +57,23 @@ $(document).ready(function(){
       </tr>
       </tfoot>
       <tbody>
-      <?php foreach (GetArrayValue("AccessPathList") as $ap) : ?>
+      <?php $index = 1; foreach (GetArrayValue("AccessPathList") as $ap) : ?>
       <tr>
         <td><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print($ap->getPath()); ?>"><?php endif; ?></td>
+        <td align="center"><?php print($index); ?></td>
         <td>
           <a href="accesspathview.php?accesspath=<?php print($ap->getEncodedPath()); ?>"><?php print($ap->getPath()); ?></a><br>
           <small><?php Translate("Managers"); ?>: <?php print($ap->getManagersAsString()); ?></small>
         </td>
+        <td>
+            <?php if (empty($ap->getDescription())) { ?>
+                <span class="redfont"><?php Translate("No data!"); ?></span>
+            <?php } else { ?>
+                <?php print($ap->getDescription()); ?>
+            <?php } ?>
+        </td>
       </tr>
-      <?php endforeach; ?>
+      <?php $index++; endforeach; ?>
       </tbody>
       </table>
       </form>
