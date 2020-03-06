@@ -31,7 +31,7 @@ class Repository
      * The description of the repository.
      * @var string
      */
-    public $repo_description;
+    public $repoDescription;
 	
 	/**
 	 * The parent identifier of the repository.
@@ -51,6 +51,7 @@ class Repository
 	{
 		$this->name = $name;
 		$this->parentIdentifier = $parentIdentifier;
+		if_log_debug('$repoDescription是新增的，用于记录仓库描述信息');
 		$this->repoDescription = $repoDescription;
 	}
 

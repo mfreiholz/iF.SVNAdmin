@@ -19,6 +19,8 @@
  */
 
 // 规定当前脚本的错误报告级别,E_ERROR级别是指：运行时致命的错误。不能修复的错误。停止执行脚本。
+// 错误日志会写入到日志文件/var/log/httpd/error_log中
+// 可以使用error_log($message)或者function if_log_debug($message)方式写入日志文件
 error_reporting(E_ERROR);
 include_once("./classes/util/global.func.php");
 // 设置用户自定义的异常处理函数

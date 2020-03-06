@@ -107,8 +107,7 @@ class IF_Config
                 $this->items[$section_name] = array();
                 $this->items[$section_name]['#section_desc'] = $section_description;
                 $last_section_name = $section_name;
-
-
+                if_log_debug('section_name:' . $section_name . 'section_comment:' . $section_comment);
 				continue;
 			}
 			// "key=value" pairs of last section header
@@ -127,7 +126,6 @@ class IF_Config
 			}
 		}
 
-        $engine->addMessage(var_dump($this->items));
 		flock($fh, LOCK_UN);
 		fclose($fh);
 		return true;
@@ -162,7 +160,8 @@ class IF_Config
 
 		$fh = fopen($path, 'w');
 		flock($fh, LOCK_EX);
-		
+
+		if_log_debug('将$items对象写入到配置文件中');
 		// iterate all sections
 		foreach ($this->items as $section_name => $section_data) {
 
@@ -176,6 +175,7 @@ class IF_Config
                 fwrite($fh, " # desc: " . $section_data['#section_desc'] . "\n");
             }
 
+            // 在列表中加入了'#section_desc'键后，$section_data永远都是列表
 			if (is_array($section_data)) {
 				// iterate key/value pairs of section
 				foreach ($section_data as $key => $val) {

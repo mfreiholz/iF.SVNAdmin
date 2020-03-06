@@ -22,21 +22,29 @@ namespace svnadmin\core\entities
   class AccessPath
   {
     public $path;
+    public $description; // 增加描述字段，对于根路径就是仓库的描述信息，对子路径就可以理解为访问路径的描述信息
     public $perm;
     public $inherited;
     public $managers;
 
-    public function __construct($path=null, $perm=null, $inherited=null, $managers=null)
+    public function __construct($path=null, $description=null, $perm=null, $inherited=null, $managers=null)
     {
       $this->path = $path;
+      $this->description = $description;
       $this->perm = $perm;
       $this->inherited = $inherited;
       $this->managers = $managers;
+      if_log_debug('$description用于记录仓库或访问路径的描述信息');
     }
 
     public function getPath()
     {
       return $this->path;
+    }
+
+    public function getDescription()
+    {
+      return $this->description;
     }
 
     public function getPerm()

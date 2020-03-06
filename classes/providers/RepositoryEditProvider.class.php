@@ -147,8 +147,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	 */
 	public function save()
 	{
-        global $appEngine;
-        $appEngine->addMessage('创建仓库第2步，save()函数仅返回true,并未做实质性的事情');
+        if_log_debug('save()函数仅返回true,并未做实质性的事情');
 		return true;
 	}
 
@@ -159,8 +158,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 	 */
 	public function create(\svnadmin\core\entities\Repository $oRepository, $type = "fsfs")
 	{
-        global $appEngine;
-        $appEngine->addMessage('创建仓库第1步，在根目录下面创建仓库文件夹');
+        if_log_debug('在服务器SVN根目录下面创建仓库文件夹');
 
 	    // 获取SVN根目录
 		$svnParentPath = $this->getRepositoryConfigValue($oRepository, 'SVNParentPath');

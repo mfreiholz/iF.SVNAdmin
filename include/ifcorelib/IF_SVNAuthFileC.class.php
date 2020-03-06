@@ -107,6 +107,7 @@ class IF_SVNAuthFileC
 	{
 		try {
 		    // 写数据到config.ini配置文件中
+            if_log_debug('IF_SVNAuthFileC:写数据到config.ini配置文件中');
 			return $this->config->save($path);
 		}
 		catch (Exception $e) {
@@ -448,14 +449,15 @@ class IF_SVNAuthFileC
 	 * Adds a new repostory configuration path to the SVNAuthFile.
 	 *
 	 * @param string $repopath
+	 * @param string $repodesc
 	 *
 	 * @return bool true=OK; false=Repository path already exists.
 	 *
 	 * @throws Exception If an invalid repository path has been provided.
      *
-     * 添加一个新的仓库配置路径到SVNAuthFile配置文件中
+     * 添加一个新的仓库配置路径到SVNAuthFile配置文件中，此处增加了一个参数$repodesc，代表仓库的描述信息
 	 */
-	public function addRepositoryPath($repopath)
+	public function addRepositoryPath($repopath, $repodesc=null)
 	{
     	if (self::repositoryPathExists($repopath))
 		{
@@ -474,6 +476,13 @@ class IF_SVNAuthFileC
 		// Create the repository configuration path.
         // 创建仓库配置路径
 		$this->config->setValue($repopath, null, null);
+
+		// 如果用户输入了仓库或访问路径的描述信息，那么就把描述信息写到配置文件中
+        // 此处调用setValue方法只是在列表中加入数据，定义详细见include/ifcorelib/IF_Config.class.php文件
+		if (!empty($repodesc)) {
+		    if_log_debug('将描述信息添加到列表中，描述信息:' . $repodesc . '  仓库路径:' . $repopath);
+            $this->config->setValue($repopath, '#section_desc', $repodesc);
+        }
 		return true;
 	}
 

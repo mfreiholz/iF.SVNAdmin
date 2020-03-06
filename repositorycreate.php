@@ -42,6 +42,7 @@ $appTR->loadModule("repositorycreate");
 if (check_request_var('create'))
 {
     // 处理动作
+    if_log_debug('处理创建仓库动作');
 	$engine->handleAction('create_repository');
 }
 
