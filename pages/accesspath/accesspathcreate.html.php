@@ -15,6 +15,14 @@
 			</p>
 		</div>
 
+        <div class="form-field">
+            <label for="accesspathdesc"><?php Translate("Access Path Description:"); ?></label>
+            <input type="text" name="accesspathdesc" id="accesspathdesc" class="lineedit"> <!-- 输入访问描述信息 -->
+            <p>
+                <b><?php Translate("Access Path Description. simple summary."); ?>
+            </p>
+        </div>
+
 		<?php if (IsProviderActive(PROVIDER_REPOSITORY_VIEW) && HasAccess(ACL_MOD_REPO, ACL_ACTION_VIEW)) : ?>
 		<p style="margin-top:0; margin-bottom:20px;">
 			<img src="templates/icons/addpath.png" border="0" alt="<?php Translate("Browse..."); ?>">

@@ -4,6 +4,9 @@ $appEngine->checkUserAuthentication(true, ACL_MOD_ACCESSPATH, ACL_ACTION_ADD);
 
 // Check required fields.
 $path = get_request_var('path');
+$accesspathdesc = get_request_var('accesspathdesc');  // Access Path Description info
+
+// Check Access Path inputed.
 if( $path == NULL )
 {
   $appEngine->addException(new ValidationException(tr("You have to fill out all fields.")));
@@ -14,6 +17,7 @@ else
     $doCreate = true;
     $p = new \svnadmin\core\entities\AccessPath();
     $p->path = $path;
+    $p->description = $accesspathdesc;
 
     // Is the user restricted to some paths? (project-manager)
     if ($appEngine->isAuthenticationActive())
