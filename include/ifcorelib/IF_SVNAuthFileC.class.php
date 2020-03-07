@@ -260,7 +260,14 @@ class IF_SVNAuthFileC
 	 */
 	public function membersOfRepository($repository)
 	{
-		return $this->config->getSectionKeys($repository);
+        $user_data = $this->config->getSectionKeys($repository);
+        // 找到'#section_desc'的元素的索引值
+        $section_desc_index = array_search('#section_desc', $user_data);
+        // 从列表中移除值为'#section_desc'的元素
+        unset($user_data[$section_desc_index]);
+        // 对数组进行重排
+        $user_data = array_values($user_data);
+        return $user_data;
 	}
 
 	/**

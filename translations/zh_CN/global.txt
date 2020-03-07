@@ -35,3 +35,7 @@
 "Message list","消息"
 "( Other Users )","( 其他用户 )"
 "Index","序号"
+"You do not have permission to access this page.","您无权查看该页面."
+"Required permissions:","要求的权限:"
+"Module:","模型:"
+"Action:","动作:"

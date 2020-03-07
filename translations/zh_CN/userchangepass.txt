@@ -3,3 +3,4 @@
 "New password","新密码"
 "Re-type password","新密码确认"
 "The password's doesn't match each other.","两次新密码不匹配."
+"The password has been changed.","密码修改成功."

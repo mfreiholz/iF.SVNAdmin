@@ -1,1 +1,1 @@
-"You don't have permission to access this page.","您无权查看该页面."
+"You do not have permission to access this page.","您无权查看该页面."

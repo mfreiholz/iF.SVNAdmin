@@ -8,3 +8,4 @@
 "The user %0 has been assigned to role %1","用户 %0 已经分配了 %1 角色"
 "The user %0 has been removed from role %1","用户 %0 已经移除了 %1 角色"
 "Can not remove user %0 from role %1","不能将用户 %0 从 %1 角色中移除"
+"Removed user %0 from access path %1","从访问路径 %1 中移除用户 %0 ."
