@@ -38,7 +38,8 @@ $(document).ready(function(){
 	    <input type="checkbox" id="selectall">
 	    <?php } ?>
 	  </th>
-	  <th>
+      <th width="50" align="center"><?php Translate("Index"); ?></th>
+      <th>
 	  	<?php Translate("Users"); ?>
 	  </th>
 	</tr>
@@ -46,7 +47,7 @@ $(document).ready(function(){
 
 	<tfoot>
 	<tr>
-	  <td colspan="2">
+	  <td colspan="3">
 
 	    <table class="datatableinline">
 	      <colgroup>
@@ -80,16 +81,17 @@ $(document).ready(function(){
 	</tfoot>
 
 	<tbody>
-		<?php foreach (GetArrayValue("UserList") as $u) { ?>
+		<?php $Index=1; foreach (GetArrayValue("UserList") as $u) { ?>
 		<tr>
 		  <td>
         <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE,	ACL_ACTION_ASSIGN)) { ?>
         <input type="checkbox" name="selected_users[]" value="<?php print($u->name); ?>">
         <?php } ?>
       </td>
+          <td align="center"><?php print($Index); ?></td>
 		  <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
 		</tr>
-		<?php } ?>
+		<?php $Index++; } ?>
 	</tbody>
 	</table>
 </form>

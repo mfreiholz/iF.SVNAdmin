@@ -37,7 +37,7 @@
             </td>
             <td align="right">
               <?php if (HasAccess(ACL_MOD_GROUP, ACL_ACTION_ASSIGN)): ?>
-              <select name="selected_users[]">
+              <select class="chosen" name="selected_users[]">
                 <option value="">--- <?php Translate("User"); ?> ---</option>
                 <?php foreach(GetArrayValue("AllUserList") as $u): ?>
                 <option value="<?php print($u->name); ?>"><?php print($u->getDisplayName()); ?></option>
@@ -106,7 +106,7 @@
             </td>
             <td align="right">
               <?php if (HasAccess(ACL_MOD_GROUP, ACL_ACTION_ASSIGN)): ?>
-              <select name="selected_subgroups[]">
+              <select class="chosen" name="selected_subgroups[]">
                 <option value="">--- <?php Translate("Group"); ?> ---</option>
                 <?php foreach(GetArrayValue("AllGroupList") as $g): ?>
                 <option value="<?php print($g->name); ?>"><?php print($g->name); ?></option>

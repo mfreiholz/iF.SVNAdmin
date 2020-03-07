@@ -18,13 +18,14 @@ $(document).ready(function(){
 <thead>
 <tr>
   <th width="20"><?php if (IsProviderActive(PROVIDER_GROUP_EDIT)  && HasAccess(ACL_MOD_GROUP, ACL_ACTION_DELETE)) { ?><input type="checkbox" id="selectall"><?php } ?></th>
+  <th width="50" align="center"><?php Translate("Index"); ?></th>
   <th><?php Translate("Groups"); ?></th>
 </tr>
 </thead>
 
 <tfoot>
 <tr>
-  <td colspan="2">
+  <td colspan="3">
     <table class="datatableinline">
       <colgroup>
         <col width="50%">
@@ -45,12 +46,14 @@ $(document).ready(function(){
 </tfoot>
 
 <tbody>
-<?php foreach (GetArrayValue("GroupList") as $g) { ?>
+<?php $Index = 1; foreach (GetArrayValue("GroupList") as $g) { ?>
 <tr>
   <td><?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_DELETE)) { ?><input type="checkbox" name="selected_groups[]" value="<?php print($g->name); ?>"><?php } ?></td>
+  <td align="center"><?php print($Index); ?></td>
+
   <td><a href="groupview.php?groupname=<?php print($g->getEncodedName()); ?>"><?php print($g->name); ?></a></td>
 </tr>
-<?php } ?>
+<?php $Index++; } ?>
 </tbody>
 
 </table>

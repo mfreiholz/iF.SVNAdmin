@@ -95,7 +95,7 @@ namespace svnadmin\providers
       {
         $oUAll = new \svnadmin\core\entities\User;
         $oUAll->id = '*';
-        $oUAll->name = '*';
+        $oUAll->name = '*'.tr('( Other Users )');
         array_push( $retList, $oUAll );
       }
 

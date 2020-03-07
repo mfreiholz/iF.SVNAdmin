@@ -5,3 +5,6 @@
 "<b>Note:</b> You can not unassign permissions from user, which are inherited by a group.","<b>注意:</b> 您无法解除从组继承过来的用户的权限."
 "User is project manager of:","用户是项目经理:"
 "+All sub Access-Path's","+ 所有子访问路径"
+"The user %0 has been assigned to role %1","用户 %0 已经分配了 %1 角色"
+"The user %0 has been removed from role %1","用户 %0 已经移除了 %1 角色"
+"Can not remove user %0 from role %1","不能将用户 %0 从 %1 角色中移除"

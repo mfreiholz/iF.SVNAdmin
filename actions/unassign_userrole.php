@@ -55,17 +55,17 @@ else
 	      // Skip unassignment, if the user doesn't have permission to unassign the "admin" role.
 	      if ($appEngine->getAclManager()->isAdminRole($oR) && !$appEngine->hasPermission(ACL_MOD_ROLE, ACL_ACTION_UNASSIGN_ADMIN_ROLE))
 	      {
-	        $appEngine->addException(new Exception(tr("Can not remove user %0 from role %1", array($oU->name, $oR->name))));
+	        $appEngine->addException(new Exception(tr("Can not remove user %0 from role %1", array($oU->name, tr($oR->name)))));
 	        continue;
 	      }
 
 	      if ($appEngine->getAclManager()->removeUserFromRole($oU, $oR))
 	      {
-	      	$appEngine->addMessage(tr("The user %0 has been removed from role %1", array($oU->name, $oR->name)));
+	      	$appEngine->addMessage(tr("The user %0 has been removed from role %1", array($oU->name, tr($oR->name))));
 	      }
 	      else
 	      {
-	      	$appEngine->addException(new Exception(tr("Can not remove user %0 from role %1", array($oU->name, $oR->name))));
+	      	$appEngine->addException(new Exception(tr("Can not remove user %0 from role %1", array($oU->name, tr($oR->name)))));
 	      }
 	    } //for
 	  } //for

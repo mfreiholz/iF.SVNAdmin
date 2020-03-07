@@ -73,7 +73,7 @@ $(document).ready(function(){
 	        <td align="right">
 	          <?php if (HasAccess(ACL_MOD_ROLE, ACL_ACTION_ASSIGN)) { ?>
 	          <small>(<a id="showrolelistlink" href="#"><?php Translate("Show roles"); ?></a>)</small>
-	          <select name="selected_assign_role_name">
+	          <select class="chosen" name="selected_assign_role_name">
 	            <option value="">--- <?php Translate("Role"); ?> ---</option>
 	            <?php foreach (GetArrayValue("RoleListAll") as $r) { ?>
 	            <option value="<?php print($r->name); ?>"><?php Translate($r->name); ?></option>
@@ -139,7 +139,7 @@ $(document).ready(function(){
 	        </td>
 	        <td align="right">
 	          <?php if (HasAccess(ACL_MOD_GROUP, ACL_ACTION_ASSIGN)) { ?>
-	          <select name="selected_groups[]">
+	          <select class="chosen" name="selected_groups[]">
 	            <option value="">--- <?php Translate("Group"); ?> ---</option>
 	            <?php foreach (GetArrayValue("GroupListAll") as $g) { ?>
 	            <option value="<?php print($g->name); ?>"><?php print($g->name); ?></option>

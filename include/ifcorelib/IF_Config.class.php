@@ -105,7 +105,10 @@ class IF_Config
                 $section_name = substr($section_string, 1, strlen($section_string)-2);
                 $section_description = trim(substr($section_comment, 5, strlen($section_comment)-2));
                 $this->items[$section_name] = array();
-                $this->items[$section_name]['#section_desc'] = $section_description;
+                // do not add description to [groups] section
+                if ($section_name !== 'groups'){
+                    $this->items[$section_name]['#section_desc'] = $section_description;
+                }
                 $last_section_name = $section_name;
                 if_log_debug('section_name:' . $section_name . ',   section_comment:' . $section_comment);
 				continue;
