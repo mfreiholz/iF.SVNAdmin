@@ -486,6 +486,14 @@ class IF_SVNAuthFileC
 		return true;
 	}
 
+    /*
+     * Get Section Description,
+     * @param unknow_type $section
+     */
+	public function getSectionDescription($section)
+    {
+        return $this->config->getSectionDescription($section);
+    }
 
 	/**
 	 * Removes the access path from the configuration.

@@ -54,9 +54,10 @@ $users = array();
 
 try {
 	// All AccessPaths.
+    // 获取所有访问路径对象组成的列表
+    // 在classes/providers/AuthFileGroupAndPathsProvider.class.php获取详细的实现
 	$list = $appEngine->getAccessPathViewProvider()->getPaths();
 	usort($list, array('\svnadmin\core\entities\AccessPath', "compare"));
-
 
 	// Filter access-paths for project-managers.
 	if ($appEngine->isAuthenticationActive())
@@ -90,5 +91,6 @@ catch (Exception $ex) {
 
 SetValue("UserList", $users);
 SetValue("AccessPathList", $list);
+
 ProcessTemplate("accesspath/accesspathlist.html.php");
 ?>

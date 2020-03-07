@@ -27,7 +27,8 @@ else
         }
 
         if ($appEngine->getAclManager()->assignAccessPathAdmin($selpaths[$j], $selusers[$i]))
-          $appEngine->addMessage(tr("Assigned user %0 to access-path %1 successfully.", array($selusers[$i], $selpaths[$i])));
+          // fix assign one project manager to multi access path error
+          $appEngine->addMessage(tr("Assigned user %0 to access-path %1 successfully.", array($selusers[$i], $selpaths[$j])));
         else
           $appEngine->addException(new Exception(tr("Could not assign user %0 to access-path %1", array($selusers[$i], $selpaths[$i]))));
       }

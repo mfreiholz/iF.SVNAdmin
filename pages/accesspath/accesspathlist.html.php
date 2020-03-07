@@ -10,6 +10,7 @@ $(document).ready(function(){
 
 <h1><?php Translate("Access-Path management"); ?></h1>
 <p class="hdesc"><?php Translate("Here you can see a list of all access path, which are defined in your subversion configuration."); ?></p>
+<p class="redfont"><?php Translate("Just list the access path that no Project Manager or you is the Project Manager!"); ?></p>
 
 <?php HtmlFilterBox("accesspathlist", 1); ?>
 
@@ -58,6 +59,7 @@ $(document).ready(function(){
       </tfoot>
       <tbody>
       <?php $index = 1; foreach (GetArrayValue("AccessPathList") as $ap) : ?>
+
       <tr>
         <td><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print($ap->getPath()); ?>"><?php endif; ?></td>
         <td align="center"><?php print($index); ?></td>

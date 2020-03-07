@@ -343,11 +343,19 @@ class AuthFileGroupAndPathProvider implements	\svnadmin\core\interfaces\IGroupVi
 	public function getPaths()
 	{
 		$list = array();
+        // 获取所有的仓库和仓库路径
+		// 参考include/ifcorelib/IF_SVNAuthFileC.class.php
 		$paths = $this->m_authfile->repositories();
+		if_log_debug('all the repository path:');
+		if_log_array($paths);
+
 		for( $i=0; $i<count($paths); $i++ )
 		{
 			$o = new \svnadmin\core\entities\AccessPath;
 			$o->path = $paths[$i];
+			// 获取节点对应的说明描述信息
+            // 参考include/ifcorelib/IF_SVNAuthFileC.class.php
+			$o->description = $this->m_authfile->getSectionDescription($paths[$i]);
 			array_push( $list, $o );
 		}
 		return $list;

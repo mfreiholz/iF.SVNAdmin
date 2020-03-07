@@ -2,6 +2,8 @@
 /.settings/
 .buildpath
 .project
+.idea
 test.html
 base.php
+data/userroleassignments.ini
 data/userroleassignments.ini*
