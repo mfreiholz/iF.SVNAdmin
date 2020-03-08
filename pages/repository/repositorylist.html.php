@@ -16,8 +16,8 @@
 
 		<thead>
 			<tr>
-				    <th width="22"></th>
-				    <th width="20"></th>
+                <th width="22">#</th>
+                <th width="20">#</th>
 
 				<th width="50" align="center"><?php Translate("Index"); ?></th>
 				<th>
@@ -75,16 +75,16 @@
 			?>
 			<tr>
 				    <td>
-                        <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) : ?>
-                            <a href="accesspathcreate.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>">
-                                <img src="templates/icons/addpath.png" alt="<?php Translate("Add access path"); ?>" title="<?php Translate("Add access path"); ?>">
-                            </a>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <?php if (GetBoolValue('ShowDeleteButton') && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)) : ?>
-                            <input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>">
-                        <?php endif; ?>
+                    <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) : ?>
+                        <a href="accesspathcreate.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>">
+                            <img src="templates/icons/addpath.png" alt="<?php Translate("Add access path"); ?>" title="<?php Translate("Add access path"); ?>">
+                        </a>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if (GetBoolValue('ShowDeleteButton') && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)) : ?>
+                        <input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>">
+                    <?php endif; ?>
                     </td>
 
                 <td align="center">

@@ -33,11 +33,11 @@ $(document).ready(function(){
 
 	<thead>
 	<tr>
-	  <th width="20">
-	  	<?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE,	ACL_ACTION_ASSIGN)) { ?>
-	    <input type="checkbox" id="selectall">
-	    <?php } ?>
-	  </th>
+      <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE,	ACL_ACTION_ASSIGN)) { ?>
+        <th width="20">
+	      <input type="checkbox" id="selectall">
+	    </th>
+      <?php } ?>
       <th width="50" align="center"><?php Translate("Index"); ?></th>
       <th>
 	  	<?php Translate("Users"); ?>
@@ -83,11 +83,11 @@ $(document).ready(function(){
 	<tbody>
 		<?php $Index=1; foreach (GetArrayValue("UserList") as $u) { ?>
 		<tr>
-		  <td>
-        <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE,	ACL_ACTION_ASSIGN)) { ?>
-        <input type="checkbox" name="selected_users[]" value="<?php print($u->name); ?>">
-        <?php } ?>
-      </td>
+          <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE,	ACL_ACTION_ASSIGN)) { ?>
+            <td>
+                <input type="checkbox" name="selected_users[]" value="<?php print($u->name); ?>">
+            </td>
+          <?php } ?>
           <td align="center"><?php print($Index); ?></td>
 		  <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
 		</tr>

@@ -18,8 +18,12 @@ $(document).ready(function(){
 <table id="accesspathlist" class="datatable">
 <thead>
 <tr>
-	<th width="20"><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?><input type="checkbox" id="selectall"><?php endif; ?></th>
-	<th width="50" align="center"><?php Translate("Index"); ?></th>
+  <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?>
+    <th width="20">
+          <input type="checkbox" id="selectall">
+    </th>
+  <?php endif; ?>
+    <th width="50" align="center"><?php Translate("Index"); ?></th>
 	<th><?php Translate("Access-Path"); ?></th>
 	<th><?php Translate("Access-Path Description"); ?></th>
 </tr>
@@ -61,8 +65,12 @@ $(document).ready(function(){
       <?php $index = 1; foreach (GetArrayValue("AccessPathList") as $ap) : ?>
 
       <tr>
-        <td><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print($ap->getPath()); ?>"><?php endif; ?></td>
-        <td align="center"><?php print($index); ?></td>
+        <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?>
+          <td>
+              <input type="checkbox" name="selected_accesspaths[]" value="<?php print($ap->getPath()); ?>">
+          </td>
+        <?php endif; ?>
+          <td align="center"><?php print($index); ?></td>
         <td>
           <a href="accesspathview.php?accesspath=<?php print($ap->getEncodedPath()); ?>"><?php print($ap->getPath()); ?></a><br>
           <small><?php Translate("Managers"); ?>: <?php print($ap->getManagersAsString()); ?></small>
