@@ -29,9 +29,7 @@ if (!defined('ACTION_HANDLING'))
 $loginname = get_request_var('loginname');
 $loginpass = get_request_var('loginpass');
 
-//
 // Validation
-//
 
 if ($loginname == NULL || $loginpass == NULL)
 {
@@ -42,9 +40,13 @@ else
 	try {
 		if ($appEngine->getAuthenticator() != null)
 		{
-			$u = new \svnadmin\core\entities\User($loginname, $loginname);
-			$authOK = $appEngine->getAuthenticator()->authenticate( $u, $loginpass );
-			if ($authOK)
+			$u = new \svnadmin\core\entities\User($loginname, $loginname, $loginpass);
+
+      // see classes/providers/EngineBaseAuthenticator.class.php
+      // 对用户权限进行检查
+      $authOK = $appEngine->getAuthenticator()->authenticate( $u, $loginpass );
+
+      if ($authOK)
 			{
 				// Set session variable which indicates that the user is logged in.
 				$_SESSION["svnadmin_username"] = $loginname;
@@ -52,6 +54,7 @@ else
 			}
 			else
 			{
+			  // 认证异常时返回账号密码不匹配
 				$appEngine->addException(new ValidationException(tr("Wrong user/password combination.")));
 			}
 		}
@@ -62,7 +65,7 @@ else
 		}
 	}
 	catch (Exception $ex) {
-		$appEngine->addException($ex);
+        $appEngine->addException($ex);
 	}
 }
 ?>

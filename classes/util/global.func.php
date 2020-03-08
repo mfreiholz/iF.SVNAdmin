@@ -46,8 +46,9 @@ function if_log_debug($message)
 }
 
 // 将数组变量写入到日志中
-function if_log_array($varArray)
+function if_log_array($varArray, $message=null)
 {
+    if_log_debug($message . ':\n');
     if_log_debug(var_export($varArray, true));
 }
 

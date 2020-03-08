@@ -4,6 +4,8 @@ namespace svnadmin\core\acl
   /**
    *
    * Manages the permission of roles to different modules.
+   * 管理不同模型的用户角色权限
+   *
    * @author Manuel Freiholz
    *
    */
@@ -12,6 +14,7 @@ namespace svnadmin\core\acl
   {
     /**
      * Indicates whether the init-method was called.
+     * 指示是否调用了初始化方法。
      * @var bool
      */
     private $init_done;
@@ -30,6 +33,7 @@ namespace svnadmin\core\acl
 
     /**
      * Holds the parsed data of the $user_role_file.
+     * 保存$user_role_file的分析数据。
      * @var array
      */
     private $assignments;
@@ -37,22 +41,35 @@ namespace svnadmin\core\acl
     /**
      * The prefix of a section which makes the section to an access path section,
      * which holds the assignment projects managers as keys.
+     *
+     * 访问路径前缀值
      * @var string
      */
     public $path_postfix = ":AccessPaths";
 
     /**
      * The role name of the project manager role.
+     * 项目经理角色名称
      * @var string
      */
     public $project_admin_role_name = "Project-Manager";
 
     /**
      * The role name of the administrator role.
+     * 管理员角色名称
      * @var string
      */
     public $administrator_role_name = "Administrator";
 
+
+    // include/config.inc.php中实例化该实例,并将UserRoleAssignmentFile文件(./data/userroleassignments.ini)传入
+    // 该配置文件中存储着每个用户分配了哪些角色,如:
+    //  [admin]
+    //  Administrator=
+    //
+    //  [meizhaohui]
+    //  User=
+    //  Administrator=
     /**
      * Creates a new instance of the FSAclManager.
      * The object serializes the ACL's to the given $file.
@@ -69,6 +86,7 @@ namespace svnadmin\core\acl
     /**
      * Loads the ACL and assignments of users from file,
      * if the function is called the first time.
+     * 从配置文件中加载用户配置
      */
     public function init()
     {
@@ -79,6 +97,11 @@ namespace svnadmin\core\acl
       }
     }
 
+    /**
+     * Check if is admin role
+     * @param \svnadmin\core\entities\Role $objRole
+     * @return bool
+     */
     public function isAdminRole($objRole)
     {
       if (!$objRole)
@@ -91,6 +114,7 @@ namespace svnadmin\core\acl
 
     /**
      * Gets all available roles.
+     * 获取所有有效角色列表
      * @return array<IF_ACLRole>
      */
     public function getRoles()
@@ -110,21 +134,32 @@ namespace svnadmin\core\acl
 
     /**
      * Checks whether the user has permission.
-     * @param User $objUser
-     * @param string $module
-     * @param string $action
+     * @param User $objUser  用户对象
+     * @param string $module  访问模型，如basic,repositories,users,groups,...,等等
+     * @param string $action 操作动作，如view,delete,add,...,等等
      */
     public function hasPermission($objUser, $module, $action)
     {
+      if_log_debug('Checks whether the user has permission.');
+
       // Get roles of user.
+      if_log_debug('Get roles of user.');
+      // 获取用户角色,当前文件中查看
       $roles = self::getRolesOfUser($objUser);
 
       // Check all roles for permission, until one has the permission.
+      // 检查所有的角色权限,直到确定有一个角色有权限,那么用户就可以访问这个页面
       foreach ($roles as &$roleObj)
       {
+        // 此处可以看到角色的名称,如'User','Administrator'等等
+        // 此种情况下,每个用户可以分配不同的角色,角色不同的时候,具有不同的权限
+        // 针对的是个人
+        // 查看IF_ACL.class.php文件,检查hasPermission具体的行为
         if ($this->acl->hasPermission($roleObj->getName(), $module, $action))
           return true;
       }
+
+      // 下面是针对的访问路径,访问路径设置有项目经理,项目经理可以对访问路径进行相应的操作
 
       // FIXME This is a really dirty way to manage the rights of the project manager. I dont like it...
       // Project-Manager
@@ -133,6 +168,7 @@ namespace svnadmin\core\acl
       {
         $tmpAcl = clone $this->acl;
         $n = $this->project_admin_role_name;
+        // 此处控制项目经理可以操作哪些页面模块
         $tmpAcl->addRole(new \IF_ACLRole($n, "Can be assigned to Access-Paths as project manager."), array("User"));
         $tmpAcl->addRule($n, \ACL_MOD_USER, array(\ACL_ACTION_VIEW));
         $tmpAcl->addRule($n, \ACL_MOD_GROUP, array(\ACL_ACTION_VIEW));
@@ -143,7 +179,6 @@ namespace svnadmin\core\acl
         $tmpAcl->addRule($n, \ACL_MOD_ACCESSPATH, array(\ACL_ACTION_UNASSIGN));
         $tmpAcl->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_VIEW));
         $tmpAcl->addRule($n, \ACL_MOD_PROJECTMANAGER, array(\ACL_ACTION_VIEW));
-
         if ($tmpAcl->hasPermission($this->project_admin_role_name, $module, $action))
           return true;
       }
@@ -171,29 +206,46 @@ namespace svnadmin\core\acl
 
     /**
      * Gets the roles of the user.
+     * 获取用户所有的角色
      * @param User $objUser
      * @return array<\svnadmin\core\entities\Role>
      */
     public function getRolesOfUser($objUser)
     {
+      if_log_debug('Gets the roles of the user.');
+
       $roles = array();
+      // 如果$this->assignments为空，那么返回$roles集合为空
+
       if ($this->assignments == null)
         return $roles;
 
+      // if assigned the role to user, then check all the role name
       if (isset($this->assignments[$objUser->getName()]) && is_array($this->assignments[$objUser->getName()]))
       {
+        // check each one role
+        // 检查每个角色信息
         foreach ($this->assignments[$objUser->getName()] as $rolename => &$noval)
         {
+          if_log_debug('$rolename' . $rolename);
+
+          // 通过角色的名称(如:Administrator)获取角色对象，参考IF_ACL_class.php
+          // 角色对象值如: object(IF_ACLRole){
+          //  private 'name' => string 'Administrator'
+          //  private 'description' => string 'Web application administrator.' }
           $roleObj = $this->acl->getRoleByName($rolename);
           if ($roleObj != NULL)
           {
+            // 如果获取到了角色对象，那么创建一个角色的Role实例对象,并且将名称和描述信息传递到对象中
             $o = new \svnadmin\core\entities\Role();
             $o->name = $roleObj->getName();
             $o->description = $roleObj->getDescription();
+            // 将Role对象存放到$roles列表中
             $roles[] = $o;
           }
         }
       }
+      if_log_array($roles, 'The role object array');
       return $roles;
     }
 
@@ -293,6 +345,7 @@ namespace svnadmin\core\acl
 
     /**
      * Checks whether a user is a manager for any access-path.
+     * 检查用户是否是路径的项目经理
      * @param string $username
      * @param bool
      */
@@ -301,6 +354,7 @@ namespace svnadmin\core\acl
       if ($this->assignments == null)
         return false;
 
+      // 项目经理节点名称
       $section = $username.$this->path_postfix;
       return isset($this->assignments[$section]) ? true : false;
     }
@@ -551,6 +605,7 @@ namespace svnadmin\core\acl
 
     /**
      * Loads the default ACL's and parses the ACL-to-User assignment file.
+     * 加载ACL配置文件
      * @return bool
      * @throws Exception If the user-to-role file can not been created.
      */
@@ -567,9 +622,11 @@ namespace svnadmin\core\acl
     	}
 
       // Load the default ACL object.
+      // 加载默认的ACL对象
       $this->acl = self::getDefaultAcl();
 
       // User<>Role assignment file.
+      // 解析
       $this->assignments = if_parse_ini_file($this->user_role_file);
     }
 
@@ -596,6 +653,15 @@ namespace svnadmin\core\acl
       $o->addRule($n, \ACL_MOD_BASIC, array(\ACL_ACTION_LOGIN));
       $o->addRule($n, \ACL_MOD_USER, array(\ACL_ACTION_CHANGEPASS));
 
+
+      // Advanced-User  (inhertis "User")
+      $n = "Advanced-User";
+      $o->addRole(new \IF_ACLRole($n, "Can view all the View page. can NOT add or delete."), array("User"));
+      $o->addRule($n, \ACL_MOD_USER, array(\ACL_ACTION_VIEW));
+      $o->addRule($n, \ACL_MOD_GROUP, array(\ACL_ACTION_VIEW));
+      $o->addRule($n, \ACL_MOD_ACCESSPATH, array(\ACL_ACTION_VIEW));
+      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_VIEW));
+
       // User-Group-Administrator (inhertis "User")
       $n = "User-Group-Manager";
       $o->addRole(new \IF_ACLRole($n, "Create/Delete users and groups and manages memberships and change passwords of users."), array("User"));
@@ -620,6 +686,7 @@ namespace svnadmin\core\acl
       $o->addRule($n, \ACL_MOD_ACCESSPATH, array(\ACL_ACTION_ASSIGN));
       $o->addRule($n, \ACL_MOD_ACCESSPATH, array(\ACL_ACTION_UNASSIGN));
       $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_VIEW));
+
 
       // Repository-Creator
       $n = "Repository-Creator";

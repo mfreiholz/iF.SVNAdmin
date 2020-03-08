@@ -2,3 +2,4 @@
 "Username","用户名"
 "Password","密码"
 "Exception list","异常"
+"Wrong user/password combination.","错误的用户名或密码."

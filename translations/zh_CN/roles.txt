@@ -5,8 +5,11 @@
 "Administrator","超级管理员"
 "Web application administrator.","网页程序管理员."
 
-"User","用户"
-"Can login and change the own password.","可登录并修改自己的密码."
+"User","普通用户"
+"Can login and change the own password.","可登录并修改自己的密码.(默认用户)"
+
+"Advanced-User","高级用户"
+"Can view all the View page. can NOT add or delete.","可以查看所有视图, 修改密码, 但没有增加和删除(用户,组,仓库,访问路径等)权限"
 
 "User-Group-Manager","用户－组－管理员"
 "Create/Delete users and groups and manages memberships and change passwords of users.","可 增加－删除用户／组 ，和管理其间关系，可为用户修改密码"
