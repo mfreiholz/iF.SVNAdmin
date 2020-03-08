@@ -26,7 +26,7 @@ include("include/config.inc.php");
 $engine = \svnadmin\core\Engine::getInstance();
 
 if (!$engine->isProviderActive(PROVIDER_REPOSITORY_VIEW)) {
-	$engine->forwardError(ERROR_INVALID_MODULE);
+  $engine->forwardError(ERROR_INVALID_MODULE);
 }
 
 $engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_VIEW);
@@ -37,15 +37,13 @@ $appTR->loadModule("repositorylist");
 //
 
 if (check_request_var("delete")) {
-	$engine->handleAction("delete_repository");
-}
-else if (check_request_var('dump')) {
-	$engine->handleAction('dump_repository');
-	exit(0);
-}
-else if (check_request_var('load')) {
-	
-	exit(0);
+  $engine->handleAction("delete_repository");
+} else if (check_request_var('dump')) {
+  $engine->handleAction('dump_repository');
+  exit(0);
+} else if (check_request_var('load')) {
+
+  exit(0);
 }
 
 //
@@ -55,32 +53,41 @@ else if (check_request_var('load')) {
 $repositoryParentList = array();
 $repositoryList = array();
 try {
-	// Repository parent locations.
-    if_log_debug('Repository parent locations.');
-    // 通过RepositoryViewProvider.class.php获取仓库父目录
-	$repositoryParentList = $engine->getRepositoryViewProvider()->getRepositoryParents();
-	
-	// Repositories of all locations.
-	foreach ($repositoryParentList as $rp) {
-	    // 此处的getRepositoriesOfParent()函数会获取仓库列表数据
-        // 详细参考classes/providers/RepositoryViewProvider.class.php文件
-        $repositoryList[$rp->identifier] = $engine->getRepositoryViewProvider()->getRepositoriesOfParent($rp);
-		// 对数组进行升序排序
-		usort($repositoryList[$rp->identifier], array('\svnadmin\core\entities\Repository', 'compare'));
-    }
+  // Repository parent locations.
+  if_log_debug('Repository parent locations.');
+  // 通过RepositoryViewProvider.class.php获取仓库父目录
+  $repositoryParentList = $engine->getRepositoryViewProvider()->getRepositoryParents();
+
+  // Repositories of all locations.
+  foreach ($repositoryParentList as $rp) {
+    // 此处的getRepositoriesOfParent()函数会获取仓库列表数据
+    // 详细参考classes/providers/RepositoryViewProvider.class.php文件
+    $repositoryList[$rp->identifier] = $engine->getRepositoryViewProvider()->getRepositoriesOfParent($rp);
+    // 对数组进行升序排序
+    usort($repositoryList[$rp->identifier], array('\svnadmin\core\entities\Repository', 'compare'));
+  }
 
 
-    // Show options column?
-	if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
-		&& $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DUMP)
-		&& $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDumpEnabled', false))
-		){
-		SetValue('ShowOptions', true);
-		SetValue('ShowDumpOption', true);
-	}
-}
-catch (Exception $ex) {
-	$engine->addException($ex);
+  // Show options column?
+  // 显示下载仓库链接按钮
+  if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
+    && $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DUMP)
+    && $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDumpEnabled', false))
+  ) {
+    SetValue('ShowOptions', true);
+    SetValue('ShowDumpOption', true);
+  }
+
+  // Show Download repository path list Excel file button
+  if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
+    && $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DOWNLOAD)
+    && $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDownloadEnabled', false))
+  ) {
+    SetValue('ShowOptions', true);
+    SetValue('ShowDownloadOption', true);
+  }
+} catch (Exception $ex) {
+  $engine->addException($ex);
 }
 
 SetValue('RepositoryParentList', $repositoryParentList);

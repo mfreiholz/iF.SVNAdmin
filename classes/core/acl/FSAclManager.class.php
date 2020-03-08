@@ -652,6 +652,9 @@ namespace svnadmin\core\acl
       $o->addRole(new \IF_ACLRole($n, "Can login and change the own password."));
       $o->addRule($n, \ACL_MOD_BASIC, array(\ACL_ACTION_LOGIN));
       $o->addRule($n, \ACL_MOD_USER, array(\ACL_ACTION_CHANGEPASS));
+      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_VIEW));
+      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_DOWNLOAD));
+
 
 
       // Advanced-User  (inhertis "User")

@@ -8,3 +8,4 @@ base.php
 data/userroleassignments.ini
 data/userroleassignments.ini*
 .Trash-0
+.DS_Store

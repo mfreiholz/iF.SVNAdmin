@@ -16,8 +16,12 @@
 
 		<thead>
 			<tr>
+            <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) { ?>
                 <th width="22">#</th>
+            <?php } ?>
+            <?php if (GetBoolValue('ShowDeleteButton') && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)) { ?>
                 <th width="20">#</th>
+            <?php } ?>
 
 				<th width="50" align="center"><?php Translate("Index"); ?></th>
 				<th>
@@ -74,18 +78,19 @@
 //                    print_r($r);
 			?>
 			<tr>
-				    <td>
-                    <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) : ?>
-                        <a href="accesspathcreate.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>">
-                            <img src="templates/icons/addpath.png" alt="<?php Translate("Add access path"); ?>" title="<?php Translate("Add access path"); ?>">
-                        </a>
-                    <?php endif; ?>
-                </td>
+                <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) : ?>
                 <td>
-                    <?php if (GetBoolValue('ShowDeleteButton') && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)) : ?>
-                        <input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>">
-                    <?php endif; ?>
-                    </td>
+                    <a href="accesspathcreate.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>">
+                        <img src="templates/icons/addpath.png" alt="<?php Translate("Add access path"); ?>" title="<?php Translate("Add access path"); ?>">
+                    </a>
+                </td>
+                <?php endif; ?>
+
+                <?php if (GetBoolValue('ShowDeleteButton') && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)) : ?>
+                <td>
+                    <input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>">
+                </td>
+                <?php endif; ?>
 
                 <td align="center">
                     <?php print($index); ?>
@@ -105,11 +110,18 @@
 				<?php if (GetBoolValue("ShowOptions")) : ?>
 				<td>
 					<?php if (GetBoolValue("ShowDumpOption")) : ?>
-					<a href="repositorylist.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>&amp;dump=true">
+					    <a href="repositorylist.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>&amp;dump=true">
 						<img src="templates/icons/exportdump.png" border="0" alt="<?php Translate("Dump"); ?>" title="<?php Translate("Export dump"); ?>">
-					</a>
+					    </a>
 					<?php endif; ?>
+
+                    <?php if (GetBoolValue("ShowDownloadOption")) : ?>
+                        <a href="repositorylist.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>&amp;dump=true">
+                          <img src="templates/icons/exportexcel.ico" border="0" alt="<?php Translate("Excel"); ?>" title="<?php Translate("Export Repository Path List Excel"); ?>">
+                        </a>
+                    <?php endif; ?>
 				</td>
+
 				<?php endif; ?>
 			</tr>
 			<?php $index++; endforeach; ?>
