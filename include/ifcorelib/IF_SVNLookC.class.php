@@ -42,6 +42,8 @@ class IF_SVNLookC extends IF_SVNBaseC
   {
     parent::__construct();
     $this->m_svnlook = $svn_admin_binary;
+
+
   }
 
   /** output the repository path list
@@ -50,13 +52,15 @@ class IF_SVNLookC extends IF_SVNBaseC
    * @return bool
    * @throws IF_SVNException
    */
-  public function tree($path)
+  public function tree($path, $svnRepoURL)
   {
     if (empty($path)) {
       throw new IF_SVNException('Empty path parameter for tree() command.');
     }
 
-    $cmd = $this->m_svnlook . ' tree --full-paths ' . $path ;
+    // |awk '{if ($0=="/") {print "'$url'"} else {print "'$url'"$0} }'
+    $cmd = $this->m_svnlook . ' tree --full-paths ' . $path . "|awk '{if ($0==\"/\") {print \"'" . $svnRepoURL  .  "'\"} else {print \"'" . $svnRepoURL . "'\"$0} }' ";
+
     passthru($cmd);
     return true;
   }

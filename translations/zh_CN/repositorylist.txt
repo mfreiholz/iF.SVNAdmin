@@ -10,3 +10,4 @@
 "Export dump","导出dump备份文件"
 "Export Repository Path List Excel","导出仓库路径列表Excel文件"
 "Repository Description","仓库描述信息"
+"Repository URL","仓库链接"

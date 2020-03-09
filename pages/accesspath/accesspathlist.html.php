@@ -25,13 +25,14 @@ $(document).ready(function(){
   <?php endif; ?>
     <th width="50" align="center"><?php Translate("Index"); ?></th>
 	<th><?php Translate("Access-Path"); ?></th>
+	<th><?php Translate("SVN URL"); ?></th>
 	<th><?php Translate("Access-Path Description"); ?></th>
 </tr>
 </thead>
 
 <tfoot>
 	<tr>
-		<td colspan="4">
+		<td colspan="5">
 
 			<table class="datatableinline">
             <colgroup>
@@ -74,6 +75,9 @@ $(document).ready(function(){
         <td>
           <a href="accesspathview.php?accesspath=<?php print($ap->getEncodedPath()); ?>"><?php print($ap->getPath()); ?></a><br>
           <small><?php Translate("Managers"); ?>: <?php print($ap->getManagersAsString()); ?></small>
+        </td>
+        <td>
+          <a href="<?php print($ap->getURLPath()); ?>"><?php print($ap->getURLPath()); ?></a>
         </td>
         <td>
             <?php if (empty($ap->getDescription())) { ?>

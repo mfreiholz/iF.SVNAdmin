@@ -40,7 +40,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
   /**
    * Object to handle operations of the "svnlook" executable.
    * @var IF_SVNLookC
-   * SVN服务端执行程序svnadmin
+   * SVN服务端执行程序svnlook
    */
   private $_svnLook = NULL;
 
@@ -107,7 +107,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
         // 默认设置
 		$this->_config[0]['SVNParentPath'] = $defaultSvnParentPath;
 		$this->_config[0]['description'] = 'Repositories';
-		
+
 		// Issue #5: Support multiple path values for SVNParentPath
 		// Try to load more repository locations.
         // 支持SVN父路径存在多个多路径值
@@ -277,8 +277,15 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
       throw new \Exception('Invalid parent-identifier: ' .
         $oRepository->getParentIdentifier());
     }
+    global $appEngine;
+    $svnBaseURL = $appEngine->getConfig()->getValue('Subversion', 'BaseURL');
+    if (! endsWith($svnBaseURL, '/')) {
+      $svnBaseURL = $svnBaseURL . '/';
+    }
 
     $absoluteRepositoryPath = $svnParentPath . '/' . $oRepository->name;
+
+    $svnRepoURL = $svnBaseURL . 'svn/' . $oRepository->name . '/';
 
     // Set HTTP header
     header('Content-Description: Repository Tree');
@@ -290,7 +297,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
     header('Pragma: public');
 
     // Stream file to STDOUT now.
-    return $this->_svnLook->tree($absoluteRepositoryPath);
+    return $this->_svnLook->tree($absoluteRepositoryPath, $svnRepoURL);
   }
 
   /**

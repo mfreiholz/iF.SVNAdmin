@@ -28,6 +28,9 @@
 					<?php Translate("Repositories"); ?>
 				</th>
                 <th>
+                    <?php Translate("Repository URL"); ?>
+                </th>
+                <th>
                     <?php Translate("Repository Description"); ?>
                 </th>
 				<?php if (GetBoolValue("ShowOptions")) : ?>
@@ -41,7 +44,7 @@
 		<?php if (GetBoolValue("ShowDeleteButton") && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)): ?>
 		<tfoot>
 			<tr>
-				<td colspan="6">
+				<td colspan="7">
 
 				<table class="datatableinline">
 				<colgroup>
@@ -98,7 +101,9 @@
 				<td>
 					<a href="repositoryview.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>"><?php print($r->name); ?></a>
 				</td>
-
+                <td>
+                    <a href="<?php print($r->getURLPath()); ?>"><?php print($r->getURLPath()); ?></a>
+                </td>
                 <td>
                     <?php if (empty($r->getDescription())) { ?>
                         <span class="redfont"><?php Translate("No data!"); ?></span>

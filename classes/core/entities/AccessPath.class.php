@@ -73,6 +73,18 @@ namespace svnadmin\core\entities
       return rawurlencode( $this->path );
     }
 
+    public function getURLPath()
+    {
+      global $appEngine;
+      $baseURL = $appEngine->getConfig()->getValue('Subversion', 'BaseURL');
+      if (! endsWith($baseURL, '/'))
+      {
+        $baseURL = $baseURL . '/';
+      }
+      $basePath = $baseURL . 'svn/' . str_replace(':', '', $this->path);
+      return $basePath;
+    }
+
     public static function compare( $o1, $o2 )
     {
       if( $o1->path == $o2->path )

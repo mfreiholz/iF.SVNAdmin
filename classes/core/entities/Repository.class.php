@@ -80,6 +80,18 @@ class Repository
 		return rawurlencode($this->parentIdentifier);
 	}
 
+  public function getURLPath()
+  {
+    global $appEngine;
+    $baseURL = $appEngine->getConfig()->getValue('Subversion', 'BaseURL');
+    if (! endsWith($baseURL, '/'))
+    {
+      $baseURL = $baseURL . '/';
+    }
+    $basePath = $baseURL . 'svn/' . str_replace(':', '', $this->name) . '/';
+    return $basePath;
+  }
+
 	public static function compare( $o1, $o2 )
 	{
 		if ($o1->name == $o2->name) {
@@ -87,5 +99,7 @@ class Repository
 		}
 		return ($o1->name > $o2->name) ? +1 : -1;
 	}
+
+
 }
 ?>
