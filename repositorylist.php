@@ -41,8 +41,8 @@ if (check_request_var("delete")) {
 } else if (check_request_var('dump')) {
   $engine->handleAction('dump_repository');
   exit(0);
-} else if (check_request_var('load')) {
-
+} else if (check_request_var('tree')) {
+  $engine->handleAction('tree_repository');
   exit(0);
 }
 
@@ -80,7 +80,7 @@ try {
 
   // Show Download repository path list Excel file button
   if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
-    && $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DOWNLOAD)
+    && $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DOWNLOAD_TREE)
     && $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDownloadEnabled', false))
   ) {
     SetValue('ShowOptions', true);

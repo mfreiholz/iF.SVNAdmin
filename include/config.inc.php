@@ -72,6 +72,7 @@ include_once($ifcorelib_path."IF_Translator.class.php");
 include_once($ifcorelib_path."IF_Template.class.php");
 include_once($ifcorelib_path."IF_AbstractLdapConnector.class.php");
 include_once($ifcorelib_path."IF_SVNAdminC.class.php");
+include_once($ifcorelib_path."IF_SVNLookC.class.php");
 include_once($ifcorelib_path."IF_ACLModule.class.php");
 include_once($ifcorelib_path."IF_ACLRole.class.php");
 include_once($ifcorelib_path."IF_ACL.class.php");
@@ -139,7 +140,7 @@ define("ACL_ACTION_CHANGEPASS_OTHER",	"changepassother");	// ACL_MOD_USER only!
 define("ACL_ACTION_SYNCHRONIZE",		"synchronize");		// ACL_MOD_UPDATE only!
 define("ACL_ACTION_CHANGE",				"change");			// ACL_MOD_SETTINGS only (atm...)!
 define("ACL_ACTION_DUMP",				"dump");			// ACL_MOD_REPO
-define("ACL_ACTION_DOWNLOAD",				"download");			// ACL_MOD_REPO
+define("ACL_ACTION_DOWNLOAD_TREE",				"tree");			// ACL_MOD_REPO
 define("ACL_ACTION_ASSIGN_ADMIN_ROLE", "assignadmin"); // ACL_MOD_ROLE
 define("ACL_ACTION_UNASSIGN_ADMIN_ROLE", "unassignadmin"); // ACL_MOD_ROLE
 

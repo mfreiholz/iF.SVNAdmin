@@ -35,6 +35,15 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
      */
 	private $_svnAdmin = NULL;
 
+
+
+  /**
+   * Object to handle operations of the "svnlook" executable.
+   * @var IF_SVNLookC
+   * SVN服务端执行程序svnadmin
+   */
+  private $_svnLook = NULL;
+
 	/**
 	 * Holds the singelton instance of this class.
 	 * @var svnadmin\providers\RepositoryEditProvider
@@ -83,12 +92,17 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
         // 获取SVN服务端程序svnadmin，如/usr/bin/svnadmin
 		$this->_svnAdmin = new \IF_SVNAdminC($engine->getConfig()
 				->getValue('Repositories:svnclient', 'SvnAdminExecutable'));
+
+    // Subversion class for administration.
+    // 获取SVN服务端程序svnlook，如/usr/bin/svnlook
+    $this->_svnLook = new \IF_SVNLookC($engine->getConfig()
+      ->getValue('Repositories:svnclient', 'SvnLookExecutable'));
 		
 		// Load default repository location configuration.
         // 获取默认的仓库根路径，如/home/svn/svnrepos
 		$defaultSvnParentPath = $engine->getConfig()
 				->getValue('Repositories:svnclient', 'SVNParentPath');
-		
+
 		// Set as default.
         // 默认设置
 		$this->_config[0]['SVNParentPath'] = $defaultSvnParentPath;
@@ -248,9 +262,38 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 		
 		// Stream file to STDOUT now.
 		return $this->_svnAdmin->dump($absoluteRepositoryPath);
-	}	
-	
-	/**
+	}
+
+  /** 导出SVN仓库的目录树结构
+   * @param \svnadmin\core\entities\Repository $oRepository
+   * @return bool
+   * @throws \IF_SVNException
+   */
+  public function tree(\svnadmin\core\entities\Repository $oRepository)
+  {
+    $svnParentPath = $this->getRepositoryConfigValue($oRepository, 'SVNParentPath');
+
+    if ($svnParentPath == NULL) {
+      throw new \Exception('Invalid parent-identifier: ' .
+        $oRepository->getParentIdentifier());
+    }
+
+    $absoluteRepositoryPath = $svnParentPath . '/' . $oRepository->name;
+
+    // Set HTTP header
+    header('Content-Description: Repository Tree');
+    header('Content-type: application/octet-stream');
+    header('Content-Disposition: attachment; filename=' . $oRepository->name . '.xls');
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+
+    // Stream file to STDOUT now.
+    return $this->_svnLook->tree($absoluteRepositoryPath);
+  }
+
+  /**
 	 * Gets the configuration value associated to the given Repository object
 	 * (identified by 'parentIdentifier')
      * 获取仓库的配置信息

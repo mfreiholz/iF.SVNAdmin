@@ -653,7 +653,7 @@ namespace svnadmin\core\acl
       $o->addRule($n, \ACL_MOD_BASIC, array(\ACL_ACTION_LOGIN));
       $o->addRule($n, \ACL_MOD_USER, array(\ACL_ACTION_CHANGEPASS));
       $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_VIEW));
-      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_DOWNLOAD));
+      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_DOWNLOAD_TREE));
 
 
 
