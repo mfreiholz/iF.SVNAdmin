@@ -36,14 +36,14 @@
 						</td>
 						<td align="right">
 							<?php if (HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ASSIGN)) : ?>
-							<select name="selected_users[]">
+							<select class="chosen" name="selected_users[]">
 								<option value="">--- <?php Translate("User"); ?> ---</option>
 								<?php foreach (GetArrayValue("UserListAll") as $u) : ?>
 								<option value="<?php print($u->getName()); ?>"><?php print($u->getDisplayName()); ?></option>
 								<?php endforeach; ?>
 							</select>
 
-							<select name="permission">
+							<select class="chosen" name="permission">
 								<option value="<?php PrintStringValue("PermNone"); ?>"><?php Translate("No permission"); ?></option>
 								<option value="<?php PrintStringValue("PermRead"); ?>"><?php Translate("Read only"); ?></option>
 								<option value="<?php PrintStringValue("PermReadWrite"); ?>"><?php Translate("Read &amp; Write"); ?></option>
@@ -103,13 +103,13 @@
               </td>
               <td align="right">
                 <?php if (HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ASSIGN)): ?>
-                <select name="selected_groups[]">
+                <select class="chosen" name="selected_groups[]">
                   <option value="">--- <?php Translate("Group"); ?> ---</option>
                   <?php foreach(GetArrayValue("GroupListAll") as $g): ?>
                   <option value="<?php print($g->getName()); ?>"><?php print($g->getName()); ?></option>
                   <?php endforeach; ?>
                 </select>
-                <select name="permission">
+                <select class="chosen" name="permission">
                   <option value="<?php PrintStringValue("PermNone"); ?>"><?php Translate("No permission"); ?></option>
                   <option value="<?php PrintStringValue("PermRead"); ?>"><?php Translate("Read only"); ?></option>
                   <option value="<?php PrintStringValue("PermReadWrite"); ?>"><?php Translate("Read &amp; Write"); ?></option>
