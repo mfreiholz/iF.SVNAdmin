@@ -60,6 +60,7 @@ $pGroupEditProviderType = get_request_var("GroupEditProviderType");
 $pRepositoryViewProviderType = get_request_var("RepositoryViewProviderType");
 $pRepositoryEditProviderType = get_request_var("RepositoryEditProviderType");
 $pSVNAuthFile = get_request_var("SVNAuthFile");
+$pBaseURL = get_request_var("BaseURL");
 $pSVNUserFile = get_request_var("SVNUserFile");
 $pSVNUserDigestFile = get_request_var("SVNUserDigestFile");
 $pSVNDigestRealm = get_request_var("SVNDigestRealm");
@@ -105,6 +106,7 @@ if (check_request_var("save"))
 	$cfgEngine->setValue("Engine:Providers", "RepositoryViewProviderType", $pRepositoryViewProviderType);
 	$cfgEngine->setValue("Engine:Providers", "RepositoryEditProviderType", $pRepositoryEditProviderType);
 	$cfgEngine->setValue("Subversion", "SVNAuthFile", $pSVNAuthFile);
+	$cfgEngine->setValue("Subversion", "BaseURL", $pBaseURL);
 	$cfgEngine->setValue("Users:passwd", "SVNUserFile", $pSVNUserFile);
 	$cfgEngine->setValue("Users:digest", "SVNUserDigestFile", $pSVNUserDigestFile);
 	$cfgEngine->setValue("Users:digest", "SVNDigestRealm", $pSVNDigestRealm);
@@ -174,6 +176,20 @@ if (check_request_var("dotest") && check_request_var("dotestsec"))
 				$msgErr = $appTR->tr("The file does not exist.");
 			break;
 
+    case "BaseURL":
+      if (startsWith($pBaseURL, 'http://') or startsWith($pBaseURL, 'https://')) {
+        if (strpos($pBaseURL, '/svn/') or strpos($pBaseURL, '/SVN/')) {
+          $msgErr = $appTR->tr("The URL no need '/svn/', if you SVN URL like this: http://svnadmin.insanefactory.com:8088/svn/testrepo/, you can input like this:http://svnadmin.insanefactory.com:8088/");
+        } else if (!endsWith($pBaseURL, '/')) {
+          $msgErr = $appTR->tr("The SVN URl should ends with '/'. for example: http://svnadmin.insanefactory.com:8088/");
+        } else {
+          $msgOk = $appTR->tr("Test passed.");
+        }
+      }
+      else {
+        $msgErr = $appTR->tr("The SVN URL not exist.");
+      }
+      break;
 
 		case "SVNUserFile":
 			if (file_exists($pSVNUserFile))
@@ -469,6 +485,12 @@ $svnAuthFile = $cfgEngine->getValue("Subversion","SVNAuthFile");
 $svnAuthFileEx = $cfgTpl->getValue("Subversion","SVNAuthFile");
 SetValue("SVNAuthFile", $svnAuthFile);
 SetValue("SVNAuthFileEx", $svnAuthFileEx);
+
+// BaseURL
+$BaseURL = $cfgEngine->getValue("Subversion","BaseURL");
+$BaseURLEx = $cfgTpl->getValue("Subversion","BaseURL");
+SetValue("BaseURL", $BaseURL);
+SetValue("BaseURLEx", $BaseURLEx);
 
 // UserViewProviderType
 $userViewProviderTypes = array(/*"off",*/ "passwd", "digest", "ldap");

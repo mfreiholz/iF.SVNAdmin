@@ -10,6 +10,10 @@ $(document).ready(function(){
     testSettings("SVNAuthFile", {SVNAuthFile: $("#SVNAuthFile").val()}, "#SVNAuthFileTestResult");
   });
 
+  $('#BaseURLTest').click(function(){
+    testSettings("BaseURL", {BaseURL: $("#BaseURL").val()}, "#BaseURLTestResult");
+  });
+
   $('#SVNUserFileTest').click(function(){
     testSettings("SVNUserFile", {SVNUserFile: $("#SVNUserFile").val()}, "#SVNUserFileTestResult");
   });
@@ -80,6 +84,14 @@ $(document).ready(function(){
         <input type="text" name="SVNAuthFile" id="SVNAuthFile" value="<?php PrintStringValue("SVNAuthFile"); ?>">
         <input type="button" id="SVNAuthFileTest" value="<?php Translate("Test"); ?>">
         <span id="SVNAuthFileTestResult" style="display:none;"></span>
+      </td>
+    </tr>
+    <tr>
+      <td><?php Translate("Subversion Web URL"); ?><br><small><b><?php Translate("Example"); ?>:</b> <?php PrintStringValue("BaseURLEx"); ?></small></td>
+      <td>
+        <input type="text" name="BaseURL" id="BaseURL" value="<?php PrintStringValue("BaseURL"); ?>">
+        <input type="button" id="BaseURLTest" value="<?php Translate("Test"); ?>">
+        <span id="BaseURLTestResult" style="display:none;"></span>
       </td>
     </tr>
   </tbody>

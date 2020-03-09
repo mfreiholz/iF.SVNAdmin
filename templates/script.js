@@ -232,7 +232,7 @@ function testSettings(testSection, params, resultContainer)
 	// Append static control parameters.
 	params.dotest = 1;
 	params.dotestsec = testSection;
-	
+
 	var C = $(resultContainer);
 	
 	$.ajax({

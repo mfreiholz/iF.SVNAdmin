@@ -3,6 +3,7 @@
 
 # Settings table
 "Subversion authorization","Subversion 授权相关"
+"Subversion Web URL","SVN网站链接"
 "Subversion authorization file","Subversion 授权文件"
 "Data providers","数据提供方相关"
 "User authentication","用户身份验证"
@@ -16,6 +17,9 @@
 "Protocol version","LDAP 协议版本"
 "LDAP user provider information","LDAP 用户信息相关 "
 "LDAP group provider information","LDAP 用户组信息相关"
+"The URL no need '/svn/', if you SVN URL like this: http://svnadmin.insanefactory.com:8088/svn/testrepo/, you can input like this:http://svnadmin.insanefactory.com:8088/","SVN链接不需要包含'/svn/'字符,如果你的SVN地址类似'http://svnadmin.insanefactory.com:8088/svn/testrepo/',此处请填写'http://svnadmin.insanefactory.com:8088/'"
+"The SVN URl should ends with '/'. for example: http://svnadmin.insanefactory.com:8088/","SVN链接应以'/'结尾,'http://'或'https://'开头. 例如: http://svnadmin.insanefactory.com:8088/"
+"The SVN URL not exist.","SVN链接不存. SVN链接应以'/'结尾,'http://'或'https://'开头. 例如: http://svnadmin.insanefactory.com:8088/"
 
 # No users, no edit provider
 "You have not defined an "UserEditProviderType", but the system also could not find any user from the configured user view provider.","您并未定义 "UserEditProviderType" . 且系统未从用户数据提供方 发现任何用户 ."
