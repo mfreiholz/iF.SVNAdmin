@@ -300,6 +300,41 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
     return $this->_svnLook->tree($absoluteRepositoryPath, $svnRepoURL);
   }
 
+
+  /**
+   * Download the access path permission csv file of the respository.
+   * 实现下载仓库访问路径组成权限文件
+   * @param \svnadmin\core\entities\Repository $oRepository
+   * @param $accessPathList
+   * @return bool
+   * @throws \IF_SVNException
+   */
+  public function downloadAccessPath(\svnadmin\core\entities\Repository $oRepository, $accessPathList)
+  {
+    $svnParentPath = $this->getRepositoryConfigValue($oRepository, 'SVNParentPath');
+
+    if ($svnParentPath == NULL) {
+      throw new \Exception('Invalid parent-identifier: ' .
+        $oRepository->getParentIdentifier());
+    }
+
+    $absoluteRepositoryPath = $svnParentPath . '/' . $oRepository->name;
+    if_log_array($absoluteRepositoryPath,'$absoluteRepositoryPath');
+
+
+    // Set HTTP header
+    header('Content-Description: Repository Access Path');
+    header('Content-type: application/octet-stream');
+    header('Content-Disposition: attachment; filename=' . $oRepository->name . date('_Y-m-d_hms') . '.csv');
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+
+    // Stream file to STDOUT now.
+    return $this->_svnAdmin->downloadAccessPath($oRepository->name, $accessPathList);
+  }
+
   /**
 	 * Gets the configuration value associated to the given Repository object
 	 * (identified by 'parentIdentifier')

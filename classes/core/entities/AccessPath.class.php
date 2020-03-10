@@ -58,6 +58,7 @@ namespace svnadmin\core\entities
 
     public function getManagersAsString()
     {
+      if_log_debug('Project Managers:' . $this->managers);
     	if (!empty($this->managers) && is_array($this->managers))
     	{
     		return join(",", $this->managers);

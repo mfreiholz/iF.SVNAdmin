@@ -35,7 +35,7 @@ $appTR->loadModule("repositorylist");
 //
 // Actions
 //
-
+// make sure to do which action
 if (check_request_var("delete")) {
   $engine->handleAction("delete_repository");
 } else if (check_request_var('dump')) {
@@ -43,6 +43,9 @@ if (check_request_var("delete")) {
   exit(0);
 } else if (check_request_var('tree')) {
   $engine->handleAction('tree_repository');
+  exit(0);
+} else if (check_request_var('accesspath')) {
+  $engine->handleAction('download_repository_accesspath');
   exit(0);
 }
 
@@ -81,10 +84,19 @@ try {
   // Show Download repository path list Excel file button
   if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
     && $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DOWNLOAD_TREE)
-    && $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDownloadEnabled', false))
+    && $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDownloadTreeEnabled', false))
   ) {
     SetValue('ShowOptions', true);
-    SetValue('ShowDownloadOption', true);
+    SetValue('ShowDownloadTreeOption', true);
+  }
+
+  // Show Download repository access path list Excel file button
+  if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
+    && $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DOWNLOAD_ACCESS_PATH)
+    && $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDownloadAccessPathEnabled', false))
+  ) {
+    SetValue('ShowOptions', true);
+    SetValue('ShowDownloadAccessPathOption', true);
   }
 } catch (Exception $ex) {
   $engine->addException($ex);

@@ -39,3 +39,6 @@
 "Required permissions:","要求的权限:"
 "Module:","模型:"
 "Action:","动作:"
+"Read-Write","读写权限"
+"Read","只读权限"
+"No-Access","无权限"

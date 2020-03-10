@@ -141,6 +141,7 @@ define("ACL_ACTION_SYNCHRONIZE",		"synchronize");		// ACL_MOD_UPDATE only!
 define("ACL_ACTION_CHANGE",				"change");			// ACL_MOD_SETTINGS only (atm...)!
 define("ACL_ACTION_DUMP",				"dump");			// ACL_MOD_REPO
 define("ACL_ACTION_DOWNLOAD_TREE",				"tree");			// ACL_MOD_REPO
+define("ACL_ACTION_DOWNLOAD_ACCESS_PATH",				"accesspath");			// ACL_MOD_REPO
 define("ACL_ACTION_ASSIGN_ADMIN_ROLE", "assignadmin"); // ACL_MOD_ROLE
 define("ACL_ACTION_UNASSIGN_ADMIN_ROLE", "unassignadmin"); // ACL_MOD_ROLE
 

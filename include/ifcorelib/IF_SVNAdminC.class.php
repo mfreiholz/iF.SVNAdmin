@@ -147,19 +147,19 @@ class IF_SVNAdminC extends IF_SVNBaseC
 		if (empty($path)) {
 			throw new IF_SVNException('Empty path parameter for dump() command.');
 		}
-		
+
 		$args = array();
-		
+
 		if (!empty($this->config_directory)) {
 			$args['--config-dir'] = escapeshellarg($this->config_directory);
 		}
-		
+
 		if ($file != NULL) {
 			$args[] = '> ' . escapeshellarg($file);
 		}
-		
+
 		$cmd = self::create_svn_command($this->m_svnadmin, 'dump', self::encode_local_path($path), $args, false);
-		
+
 		if ($file != NULL) {
 			// Not supported....
 		}
@@ -168,4 +168,86 @@ class IF_SVNAdminC extends IF_SVNBaseC
 		}
 		return true;
 	}
+
+  public function downloadAccessPath($repository_name, $accessPathList)
+  {
+    global $appEngine;
+    $return_string = tr('Index,SVN Path,Project Manager,User,Group') . "\n";
+    if (empty($accessPathList)) {
+      echo $repository_name . tr(": no access about this repository");
+      return true;
+    }
+    else{
+      // 检查每个访问路径的权限信息
+      foreach ($accessPathList as $index => $accessPathObj) {
+        if_log_array($accessPathObj, 'Access Path item');
+        // 获取访问路径对应SVN WEB的URL地址
+        $accessPathURL = $accessPathObj->getURLPath();
+        if_log_array($accessPathURL, '$accessPathURL');
+
+        // View data.
+        // Project Managers data
+        $managers = $appEngine->getAclManager()->getUsersOfAccessPath($accessPathObj->path);
+        if_log_array($managers,'$managers');
+        $accessPathObj->managers = $managers;
+        $managers_string = str_replace(',', "\n", $accessPathObj->getManagersAsString());
+        $return_string = $return_string . ($index + 1) . ',' . $accessPathURL . ',';
+        $return_string = $return_string . '"' . $managers_string . '",';
+
+        // Users data
+        $users = $appEngine->getAccessPathViewProvider()->getUsersOfPath($accessPathObj);
+        if_log_array($users,'$users');
+        $user_string = '';
+        if (empty($users)){
+          $user_string = tr('no user');
+        }
+        foreach ($users as $user){
+          $username = $user->getName();
+          $permission = tr($user->getPermission());
+          $user_string = $user_string . $username . ':' . $permission . "\n\n";
+
+        }
+        $return_string = $return_string . '"' . $user_string . '"';
+
+        // Groups data
+        $groups = $appEngine->getAccessPathViewProvider()->getGroupsOfPath($accessPathObj);
+        if_log_array($groups,'$groups');
+        $group_string = '';
+        foreach ($groups as $group){
+          $groupname = $group->getName();
+          $permission = tr($group->getPermission());
+          // get group members
+          // do not conside the subgroup of the group
+          $members_array = $group->getUsersOfGroup();
+          $members_string = '';
+          if (empty($members_array)){
+            $members_string = tr('no member');
+          }
+          foreach ($members_array as $index=>$user){
+            $username = $user->getName();
+            if ($index != count($members_array) - 1) {
+              $members_string = $members_string . $username . ", ";
+            }
+            else{
+              $members_string = $members_string . $username;
+            }
+          }
+          $group_string = $group_string . $groupname . ':' . $permission . "\n" . tr('Group Members:') . $members_string. "\n\n";
+
+        }
+        $return_string = $return_string . ',"' . $group_string . '"';
+
+
+
+//        $return_string = $return_string . implode("," , '$users') . ',';
+//        $return_string = $return_string . implode("," , '$groups') . "\n";
+        $return_string = $return_string . "\n";
+      }
+    }
+    echo $return_string;
+    return true;
+
+  }
+
+
 }

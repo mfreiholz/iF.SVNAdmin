@@ -120,11 +120,17 @@
 					    </a>
 					<?php endif; ?>
 
-                    <?php if (GetBoolValue("ShowDownloadOption")) : ?>
+                    <?php if (GetBoolValue("ShowDownloadTreeOption")) : ?>
                         <a href="repositorylist.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>&amp;tree=true">
-                          <img src="templates/icons/exportexcel.ico" border="0" alt="<?php Translate("Excel"); ?>" title="<?php Translate("Export Repository Path List Excel"); ?>">
+                          <img src="templates/icons/exportexcel.ico" border="0" alt="<?php Translate("Excel"); ?>" title="<?php Translate("Export Repository Path file"); ?>">
                         </a>
                     <?php endif; ?>
+
+                    <?php if (GetBoolValue("ShowDownloadAccessPathOption")) : ?>
+                        <a href="repositorylist.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>&amp;accesspath=true">
+                          <img src="templates/icons/permission.ico" border="0" alt="<?php Translate("AccessPath"); ?>" title="<?php Translate("Export Repository Access Path file"); ?>">
+                        </a>
+                  <?php endif; ?>
 				</td>
 
 				<?php endif; ?>

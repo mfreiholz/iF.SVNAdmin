@@ -62,6 +62,27 @@ namespace svnadmin\core\entities
       }
       return ($o1->name > $o2->name) ? +1 : -1;
     }
+
+    public function getUsersOfGroup()
+    {
+      $retArray = array();
+      global $appEngine;
+      $m_authfile = new \IF_SVNAuthFileC($appEngine->getConfig()->getValue("Subversion", "SVNAuthFile"));
+      $userNamesArray = $m_authfile->usersOfGroup( $this->name );
+
+      if( is_array($userNamesArray) )
+      {
+        for( $i=0; $i<count($userNamesArray); $i++ )
+        {
+          $userObj = new \svnadmin\core\entities\User();
+          $userObj->id = $userNamesArray[$i];
+          $userObj->name = $userNamesArray[$i];
+          array_push( $retArray, $userObj );
+        }
+      }
+      return $retArray;
+    }
+
   }
 }
 ?>
