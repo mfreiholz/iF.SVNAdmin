@@ -289,8 +289,8 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 
     // Set HTTP header
     header('Content-Description: Repository Tree');
-    header('Content-type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=' . $oRepository->name . '.xls');
+    header('Content-type: application/octet-stream');  //告诉浏览器这是一个文件流格式的文件
+    header('Content-Disposition: attachment; filename=' . $oRepository->name . date('_Y-m-d') . '.csv');   //用来告诉浏览器，文件是可以当做附件被下载
     header('Content-Transfer-Encoding: binary');
     header('Expires: 0');
     header('Cache-Control: must-revalidate');

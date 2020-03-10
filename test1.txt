@@ -1,0 +1,9 @@
+        die("HaHa!");
+}
+else {
+    echo "yes";
+    $output = null;
+    $exitCode = 0;
+    echo '<br>'.exec('whoami', $output, $exitCode);
+    echo PHP_OS;
+}
