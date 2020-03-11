@@ -27,13 +27,13 @@ namespace svnadmin\core\entities
     // Object(Permission)
     public $perm;
 
-    public function __construct($id=null, $name=null)
+    public function __construct($id = null, $name = null)
     {
       $this->id = $id;
       $this->name = $name;
     }
 
-    public function ctr( $id, $name )
+    public function ctr($id, $name)
     {
       $this->id = $id;
       $this->name = $name;
@@ -51,38 +51,55 @@ namespace svnadmin\core\entities
 
     public function getEncodedName()
     {
-      return rawurlencode( $this->name );
+      return rawurlencode($this->name);
     }
 
-    public static function compare( $o1, $o2 )
+    public static function compare($o1, $o2)
     {
-      if( $o1->name == $o2->name )
-      {
+      if ($o1->name == $o2->name) {
         return 0;
       }
       return ($o1->name > $o2->name) ? +1 : -1;
     }
 
+    /*
+     * get the users of the group
+     */
     public function getUsersOfGroup()
     {
       $retArray = array();
       global $appEngine;
       $m_authfile = new \IF_SVNAuthFileC($appEngine->getConfig()->getValue("Subversion", "SVNAuthFile"));
-      $userNamesArray = $m_authfile->usersOfGroup( $this->name );
+      $userNamesArray = $m_authfile->usersOfGroup($this->name);
 
-      if( is_array($userNamesArray) )
-      {
-        for( $i=0; $i<count($userNamesArray); $i++ )
-        {
+      if (is_array($userNamesArray)) {
+        for ($i = 0; $i < count($userNamesArray); $i++) {
           $userObj = new \svnadmin\core\entities\User();
           $userObj->id = $userNamesArray[$i];
           $userObj->name = $userNamesArray[$i];
-          array_push( $retArray, $userObj );
+          array_push($retArray, $userObj);
         }
       }
       return $retArray;
     }
 
+
+    public function getSubgroupOfGroup()
+    {
+      $retArray = array();
+      global $appEngine;
+      $m_authfile = new \IF_SVNAuthFileC($appEngine->getConfig()->getValue("Subversion", "SVNAuthFile"));
+      $groupNamesArray = $m_authfile->groupsOfGroup($this->name);
+
+      if (is_array($groupNamesArray)) {
+        for ($i = 0; $i < count($groupNamesArray); $i++) {
+          $groupObj = new \svnadmin\core\entities\Group();
+          $groupObj->id = $groupNamesArray[$i];
+          $groupObj->name = $groupNamesArray[$i];
+          array_push($retArray, $groupObj);
+        }
+      }
+      return $retArray;
+    }
   }
 }
-?>

@@ -216,31 +216,43 @@ class IF_SVNAdminC extends IF_SVNBaseC
         foreach ($groups as $group){
           $groupname = $group->getName();
           $permission = tr($group->getPermission());
-          // get group members
-          // do not conside the subgroup of the group
-          $members_array = $group->getUsersOfGroup();
-          $members_string = '';
-          if (empty($members_array)){
-            $members_string = tr('no member');
-          }
-          foreach ($members_array as $index=>$user){
-            $username = $user->getName();
-            if ($index != count($members_array) - 1) {
-              $members_string = $members_string . $username . ", ";
-            }
-            else{
-              $members_string = $members_string . $username;
-            }
-          }
-          $group_string = $group_string . $groupname . ':' . $permission . "\n" . tr('Group Members:') . $members_string. "\n\n";
 
+          // Consider only one level subgroup in the group. not multilayer nesting
+          // get user members in group
+          $user_members_array = $group->getUsersOfGroup();
+          $user_members_string = '';
+          if (empty($user_members_array)){
+            $user_members_string = tr('no member');
+          } else {
+            foreach ($user_members_array as $index => $user) {
+              $username = $user->getName();
+              if ($index != count($user_members_array) - 1) {
+                $user_members_string = $user_members_string . $username . ", ";
+              } else {
+                $user_members_string = $user_members_string . $username;
+              }
+            }
+            $user_members_string = $user_members_string . ',';
+          }
+
+          $group_string = $group_string . $groupname . ': ' . $permission . "\n" . tr('Group Members:') . $user_members_string;
+
+          // get subgroup members in group
+          $subgroup_members_array = $group->getSubgroupOfGroup();
+          $subgroup_members_string = '';
+          if (! empty($subgroup_members_array)) {
+            foreach ($subgroup_members_array as $index => $subgroup) {
+              $subgroup_name = $subgroup->getName();
+              if ($index != count($subgroup_members_array) - 1) {
+                $subgroup_members_string = $subgroup_members_string . '@' . $subgroup_name . ", ";
+              } else {
+                $subgroup_members_string = $subgroup_members_string . '@' . $subgroup_name;
+              }
+            }
+          }
+          $group_string = $group_string . $subgroup_members_string. "\n\n";
         }
         $return_string = $return_string . ',"' . $group_string . '"';
-
-
-
-//        $return_string = $return_string . implode("," , '$users') . ',';
-//        $return_string = $return_string . implode("," , '$groups') . "\n";
         $return_string = $return_string . "\n";
       }
     }
