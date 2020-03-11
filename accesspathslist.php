@@ -54,8 +54,7 @@ $users = array();
 
 try {
 	// All AccessPaths.
-    // 获取所有访问路径对象组成的列表
-    // 在classes/providers/AuthFileGroupAndPathsProvider.class.php获取详细的实现
+  // see classes/providers/AuthFileGroupAndPathsProvider.class.php
 	$list = $appEngine->getAccessPathViewProvider()->getPaths();
 	usort($list, array('\svnadmin\core\entities\AccessPath', "compare"));
 

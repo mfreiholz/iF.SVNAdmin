@@ -23,7 +23,7 @@ interface IRepositoryEditProvider extends IEditProvider
 {
 	/**
 	 * Creates a new repository.
-	 * 创建一个新的仓库
+	 *
 	 * @param \svnadmin\core\entities\Repository   $oRepository
 	 * @param string $type The repository type (fsfs or bdb)
 	 *
@@ -33,7 +33,7 @@ interface IRepositoryEditProvider extends IEditProvider
 
 	/**
 	 * Deletes an existing repository.
-	 * 删除已经存在的仓库
+	 *
 	 * @param \svnadmin\core\entities\Repository $oRepository
 	 *
 	 * @return bool
@@ -42,7 +42,7 @@ interface IRepositoryEditProvider extends IEditProvider
 
 	/**
 	 * Creates a new folder in the repository (including parents of folder).
-	 * 创建仓库目录
+	 *
 	 * @param \svnadmin\core\entities\Repository $oRepository
 	 * @param array $path Paths to the folders which should be created.
 	 *
@@ -52,7 +52,7 @@ interface IRepositoryEditProvider extends IEditProvider
 	
 	/**
 	 * Dumps a repository file system content to STDOUT (Browser).
-	 * 备份仓库文件
+	 *
 	 * @param \svnadmin\core\entities\Repository $oRepository
 	 * 
 	 * @return bool

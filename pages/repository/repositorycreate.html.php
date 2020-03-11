@@ -1,58 +1,63 @@
 <?php GlobalHeader(); ?>
 
 <script type="text/javascript">
-$(document).ready(function(){
+    $(document).ready(function () {
 
-  $("#repostructuretype").change(function(){
-    var eSingle = $("#repostructuretype-single");
-    var eMulti  = $("#repostructuretype-multi");
+        $("#repostructuretype").change(function () {
+            var eSingle = $("#repostructuretype-single");
+            var eMulti = $("#repostructuretype-multi");
 
-    eSingle.hide();
-    eMulti.hide();
+            eSingle.hide();
+            eMulti.hide();
 
-    if ($(this).val() == "single"){ eSingle.show(); }
-    else if ($(this).val() == "multi"){ eMulti.show(); }
-  });
-});
+            if ($(this).val() == "single") {
+                eSingle.show();
+            } else if ($(this).val() == "multi") {
+                eMulti.show();
+            }
+        });
+    });
 </script>
 
 <h1><?php Translate("Create repository"); ?></h1>
 <p class="hdesc"><?php Translate("Create a new repository to manage your sources."); ?></p>
 <div>
   <form method="POST" action="repositorycreate.php">
-	  
-	<div class="form-field">
-		<label for="pi"><?php Translate('Repository location'); ?></label>
-		<select name="pi" id="pi" class="">
-			<?php foreach (GetArrayValue('RepositoryParentList') as $rp) : ?>
-				<option value="<?php print($rp->getEncodedIdentifier()); ?>">
-					<?php print($rp->path); ?>
-					<?php
-					if (!empty($rp->description)) {
-						print(' - ');
-						print($rp->description);
-					}
-					?>
-				</option>
-			<?php endforeach; ?>
-		</select>
-	</div>
+
+    <div class="form-field">
+      <label for="pi"><?php Translate('Repository location'); ?></label>
+      <select name="pi" id="pi" class="">
+        <?php foreach (GetArrayValue('RepositoryParentList') as $rp) : ?>
+          <option value="<?php print($rp->getEncodedIdentifier()); ?>">
+            <?php print($rp->path); ?>
+            <?php
+            if (!empty($rp->description)) {
+              print(' - ');
+              print($rp->description);
+            }
+            ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
+    </div>
 
     <div class="form-field">
       <label for="reponame"><?php Translate("Repository name"); ?></label>
-      <input type="text" name="reponame" id="reponame" class="lineedit"> <!-- 输入仓库名称 -->
+      <input type="text" name="reponame" id="reponame" class="lineedit"> <!-- input repository name -->
       <p>
-        <b><?php Translate("Valid signs for repository name are"); ?>:</b> A-Z, a-z, 0-9, <?php Translate("Underscore"); ?>(_), <?php Translate("Hyphen"); ?>(-) <i><?php Translate("No space!"); ?></i>
+        <b><?php Translate("Valid signs for repository name are"); ?>:</b> A-Z, a-z,
+        0-9, <?php Translate("Underscore"); ?>(_), <?php Translate("Hyphen"); ?>(-)
+        <i><?php Translate("No space!"); ?></i>
       </p>
     </div>
 
-  <div class="form-field">
+    <div class="form-field">
       <label for="repodesc"><?php Translate("Repository Description"); ?></label>
-      <input type="text" name="repodesc" id="repodesc" class="lineedit"> <!-- 输入仓库描述信息 -->
+      <input type="text" name="repodesc" id="repodesc" class="lineedit"> <!-- input repository description information -->
       <p>
         <b><?php Translate("Repository Description. simple summary."); ?>
       </p>
-  </div>
+    </div>
 
     <div class="form-field">
       <label for="repotype"><?php Translate("Type"); ?></label>
@@ -64,7 +69,8 @@ $(document).ready(function(){
 
     <div class="form-field">
       <label for="accesspathcreate"><?php Translate("Access-Path"); ?></label>
-      <input type="checkbox" name="accesspathcreate" id="accesspathcreate" value="1" checked> <?php Translate("Create"); ?>
+      <input type="checkbox" name="accesspathcreate" id="accesspathcreate" value="1"
+             checked> <?php Translate("Create"); ?>
     </div>
 
     <div class="form-field">

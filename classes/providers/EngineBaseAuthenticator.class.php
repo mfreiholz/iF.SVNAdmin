@@ -41,9 +41,8 @@ class EngineBaseAuthenticator implements \svnadmin\core\interfaces\IAuthenticato
 		// Check for permission of current user.
 		// If the user shouldn't have permission, we do not need to use the
 		// authentication function.
-    // 检查当前用户的权限
     // $objUser, basics, login
-    // 查看文件classes/core/acl/FSAclManager.class.php
+    // @see classes/core/acl/FSAclManager.class.php
 		if (!$E->getAclManager()->hasPermission($objUser, \ACL_MOD_BASIC, \ACL_ACTION_LOGIN))
 		{
       return false;

@@ -42,7 +42,7 @@ $appTR->loadModule("login");
 //
 if (check_request_var("login"))
 {
-  // 处理登陆认证动作，查看login_authentication.php
+  // deal with the login action. @see login_authentication.php
 	$appEngine->handleAction("login_authentication");
 }
 

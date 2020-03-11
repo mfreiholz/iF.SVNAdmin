@@ -321,7 +321,7 @@ class Engine
 	/**
 	 * This function checks whether the current user is authenticated and
 	 * has permission to access a specific resource.
-	 * 检查当前用户是否具备相应的权限
+	 *
 	 * Note: This function should take place on every page, where an authentication is required.
 	 *
 	 * @param bool $redirect Indicates whether the user should be redirected to login page.
@@ -369,20 +369,18 @@ class Engine
 	 * Checks whether the current logged in user has access to a
 	 * specific resource.
 	 *
-     * 检查当前登陆用户是否具备访问特定资源的权限
 	 * @param string $module
 	 * @param string $action
 	 * @return bool
 	 */
 	public function checkUserAccess($module, $action)
 	{
-    // 首先判断是否有设置svnadmin_username，就是应用要确定一个admin管理员用户，如果没有设置则会跳转到设置页面
-    // 如果设置了，那么就新建用户对象
+    // must set a user as the Administrator of the If.SVNAdmin.
 		if (isset($_SESSION["svnadmin_username"]))
 		{
 			$u = new \svnadmin\core\entities\User();
 			$u->name = $_SESSION["svnadmin_username"];
-      // 检查用户的访问权限
+      // check user access permission
 			return $this->getAclManager()->hasPermission($u, $module, $action);
 		}
 		return false;
@@ -741,19 +739,19 @@ class Engine
     return $this->m_repositoryViewProvider;
   }
 
-  // 判断仓库编辑是否激活
   public function isRepositoryEditActive()
   {
     return $this->m_repositoryEditProvider == null ? false : true;
   }
 
-  // 设置仓库编辑程序
   public function setRepositoryEditProvider( $o )
   {
     $this->m_repositoryEditProvider = $o;
   }
 
-  // 获取存储库编辑提供程序
+  /**
+   * get the repository edit provider
+   */
   public function getRepositoryEditProvider()
   {
     if( $this->m_repositoryEditProvider != null )

@@ -1,7 +1,6 @@
 <?php
-// 检查常量'ACTION_HANDLING'是否存在
 if (!defined('ACTION_HANDLING')) {
-	die("HaHa!");
+  die("HaHa!");
 }
 
 $engine = \svnadmin\core\Engine::getInstance();
@@ -11,7 +10,7 @@ $engine = \svnadmin\core\Engine::getInstance();
 //
 
 if (!$engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)) {
-	$engine->forwardError(ERROR_INVALID_MODULE);
+  $engine->forwardError(ERROR_INVALID_MODULE);
 }
 
 $engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_ADD);
@@ -21,95 +20,91 @@ $engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_ADD);
 //
 
 $varParentIdentifierEnc = get_request_var('pi');
-$reponame = get_request_var("reponame"); // 获取仓库名称
-$repotype = get_request_var("repotype"); // 获取仓库类型fsfs或bdb
-$repodesc = get_request_var("repodesc"); // 获取仓库描述信息
+$reponame = get_request_var("reponame"); // get the repository name
+$repotype = get_request_var("repotype"); // get the repository type, can be 'fsfs' or 'bdb', default is 'fsfs'
+$repodesc = get_request_var("repodesc"); // get the repository description or summary information.
 
 $varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 
 //
 // Validation
-// 验证，如果仓库名称为空，那么就添加异常
+// if the repository name is null will return exception
 if ($reponame == NULL) {
-	$engine->addException(new ValidationException(tr("You have to fill out all fields.")));
-}
-else {
-	$r = new \svnadmin\core\entities\Repository($reponame, $varParentIdentifier, $repodesc);
+  $engine->addException(new ValidationException(tr("You have to fill out all fields.")));
+} else {
+  $r = new \svnadmin\core\entities\Repository($reponame, $varParentIdentifier, $repodesc);
 
-	// Create repository.
-	try {
-        if_log_debug('Start to create repository');
-	    // 创建SVN仓库第1步，在svnreos根目录下面创建仓库文件夹
-		$engine->getRepositoryEditProvider()->create($r, $repotype);
-        // 创建SVN仓库第2步，会调用RepositoryEditProvider.class.php文件中RepositoryEditProvider类的save()方法
-        // 实质没做什么，仅返回true
-		$engine->getRepositoryEditProvider()->save();
-		$engine->addMessage(tr("The repository %0 has been created successfully", array($reponame)));
+  // Create repository.
+  try {
+    if_log_debug('Start to create repository');
+    // Step 1: create the repository folder in the svn root folder
+    $engine->getRepositoryEditProvider()->create($r, $repotype);
 
+    // Step 2: call the save() method in the RepositoryEditProvider.class.php
+    // do nothing. just return true
+    $engine->getRepositoryEditProvider()->save();
+    $engine->addMessage(tr("The repository %0 has been created successfully", array($reponame)));
 
-        // 在SVN根目录中创建仓库完成，进行配置文件修改
-        if_log_debug('Created SVN repository in the SVN rootpath. Start to modify the ini config file');
-        // Create the access path now.
-		try {
-			if (get_request_var("accesspathcreate") != NULL
-				&& $engine->isProviderActive(PROVIDER_ACCESSPATH_EDIT)) {
-                // 用户输入的仓库描述信息
-                if_log_debug('The repository description information:'.$repodesc);
-                // 创建SVN仓库第3步，创建访问路径对象，并将仓库名称和仓库描述信息传入到AccessPath对象中
-                // AccessPath对象定义在classes/entities/AccessPath.class.php文件中
-                $ap = new \svnadmin\core\entities\AccessPath($reponame . ':/', $repodesc);
+    // Step 3: Modify the config file after the repository folder created.
+    if_log_debug('Created SVN repository in the SVN rootpath. Start to modify the ini config file');
+    // Create the access path now.
+    try {
+      if (get_request_var("accesspathcreate") != NULL
+        && $engine->isProviderActive(PROVIDER_ACCESSPATH_EDIT)) {
+        // get the repository description information
+        if_log_debug('The repository description information:' . $repodesc);
 
-                // 调用createAccessPath方法，方法定义在classes/providers/AuthFileGroupAndPathsProvider.class.php文件
-                // createAccessPath方法仅仅是将用户配置的数据加入到$items列表中
-                // $engine->getAccessPathEditProvider()->save(); 才会最终将用户的数据保存写入到配置文件中
-                // 创建访问路径对象，并保存数据到配置文件中
-                if_log_debug('Create the Access Path Object and save use data to config file');
-				if ($engine->getAccessPathEditProvider()->createAccessPath($ap)) {
-                    // 保存数据到ini配置文件
-                    if_log_debug('Save data to ini config file');
-					$engine->getAccessPathEditProvider()->save();
-                    if_log_debug('Access Path created!');
-				}
-			}
-		}
-		catch (Exception $e2) {
-			$engine->addException($e2);
-		}
+        // Step 4: Create the AccessPath object. and give the repository name and description information.
+        // @see classes/entities/AccessPath.class.php
+        $ap = new \svnadmin\core\entities\AccessPath($reponame . ':/', $repodesc);
 
-		// Create a initial repository structure.
-		try {
-			$repoPredefinedStructure = get_request_var("repostructuretype");
-			if ($repoPredefinedStructure != NULL) {
-				
-				switch ($repoPredefinedStructure) {
-					case "single":
-						$engine->getRepositoryEditProvider()
-							->mkdir($r, array('trunk', 'branches', 'tags'));
-						break;
+        // Step 5: call the createAccessPath method. define @see classes/providers/AuthFileGroupAndPathsProvider.class.php
+        // createAccessPath write the user config data to the $items array
+        // $engine->getAccessPathEditProvider()->save(); will save the user data to the config file
+        // Create the Access Path Object and save use data to config file
+        if_log_debug('Create the Access Path Object and save use data to config file');
+        if ($engine->getAccessPathEditProvider()->createAccessPath($ap)) {
+          // save user data to the authz config file
+          if_log_debug('Save data to the authz config file');
+          $engine->getAccessPathEditProvider()->save();
+          if_log_debug('Access Path created!');
+        }
+      }
+    } catch (Exception $e2) {
+      $engine->addException($e2);
+    }
 
-					case "multi":
-						$projectName = get_request_var("projectname");
-						if ($projectName != NULL) {
-							$engine->getRepositoryEditProvider()
-								->mkdir($r, array(
-									$projectName . '/trunk',
-									$projectName . '/branches',
-									$projectName . '/tags'
-								));
-						}
-						else {
-							throw new ValidationException(tr("Missing project name"));
-						}
-						break;
-				}
-			}
-		}
-		catch (Exception $e3) {
-			$engine->addException($e3);
-		}
-	}
-	catch (Exception $e) {
-		$engine->addException($e);
-	}
+    // Create a initial repository structure.
+    try {
+      $repoPredefinedStructure = get_request_var("repostructuretype");
+      if ($repoPredefinedStructure != NULL) {
+
+        switch ($repoPredefinedStructure) {
+          case "single":
+            $engine->getRepositoryEditProvider()
+              ->mkdir($r, array('trunk', 'branches', 'tags'));
+            break;
+
+          case "multi":
+            $projectName = get_request_var("projectname");
+            if ($projectName != NULL) {
+              $engine->getRepositoryEditProvider()
+                ->mkdir($r, array(
+                  $projectName . '/trunk',
+                  $projectName . '/branches',
+                  $projectName . '/tags'
+                ));
+            } else {
+              throw new ValidationException(tr("Missing project name"));
+            }
+            break;
+        }
+      }
+    } catch (Exception $e3) {
+      $engine->addException($e3);
+    }
+  } catch (Exception $e) {
+    $engine->addException($e);
+  }
 }
 ?>

@@ -43,7 +43,7 @@ else
 			$u = new \svnadmin\core\entities\User($loginname, $loginname, $loginpass);
 
       // see classes/providers/EngineBaseAuthenticator.class.php
-      // 对用户权限进行检查
+      // check the user permission
       $authOK = $appEngine->getAuthenticator()->authenticate( $u, $loginpass );
 
       if ($authOK)
@@ -54,7 +54,7 @@ else
 			}
 			else
 			{
-			  // 认证异常时返回账号密码不匹配
+        // if the authentiator is not OK, then return the username/password not match.
 				$appEngine->addException(new ValidationException(tr("Wrong user/password combination.")));
 			}
 		}

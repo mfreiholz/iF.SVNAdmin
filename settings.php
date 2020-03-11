@@ -176,6 +176,8 @@ if (check_request_var("dotest") && check_request_var("dotestsec"))
 				$msgErr = $appTR->tr("The file does not exist.");
 			break;
 
+
+		// set the SVN WEB URL base address
     case "BaseURL":
       if (startsWith($pBaseURL, 'http://') or startsWith($pBaseURL, 'https://')) {
         if (strpos($pBaseURL, '/svn/') or strpos($pBaseURL, '/SVN/')) {
@@ -190,6 +192,7 @@ if (check_request_var("dotest") && check_request_var("dotestsec"))
         $msgErr = $appTR->tr("The SVN URL not exist.");
       }
       break;
+
 
 		case "SVNUserFile":
 			if (file_exists($pSVNUserFile))
@@ -514,12 +517,11 @@ SetValue("groupEditProviderTypes", $groupEditProviderTypes);
 
 // RepositoryViewProviderType
 $repositoryViewProviderTypes = array("off", "svnclient");
-// 在数组开头插入值,插入后列表的值为: array("svnclient", "off", "svnclient");
+// insert the value at the head of the array. then the array will be : array("svnclient", "off", "svnclient");
 array_unshift($repositoryViewProviderTypes, $cfgEngine->getValue("Engine:Providers","RepositoryViewProviderType"));
 
-// 进行替换
+// replace
 $appTemplate->addReplacement("repositoryViewProviderTypes", $repositoryViewProviderTypes);
-// 设置值，	$appTemplate->addReplacement("repositoryViewProviderTypes", $repositoryViewProviderTypes);
 SetValue("repositoryViewProviderTypes", $repositoryViewProviderTypes);
 
 // RepositoryEditProviderType

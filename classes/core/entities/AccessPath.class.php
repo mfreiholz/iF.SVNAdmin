@@ -22,7 +22,7 @@ namespace svnadmin\core\entities
   class AccessPath
   {
     public $path;
-    public $description; // 增加描述字段，对于根路径就是仓库的描述信息，对子路径就可以理解为访问路径的描述信息
+    public $description; // the repository or access path description or summary information.
     public $perm;
     public $inherited;
     public $managers;

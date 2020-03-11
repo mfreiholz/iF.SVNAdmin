@@ -29,19 +29,19 @@ if (!$engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)) {
 	$engine->forwardInvalidModule(true);
 }
 
-// 检查当前用户权限
+// check the login user authentication
 $engine->checkUserAuthentication(true, ACL_MOD_REPO, ACL_ACTION_ADD);
-// 加载翻译文件
+// load the translate file
 $appTR->loadModule("repositorycreate");
 
 //
 // Actions
 //
 
-// 判断'create'这个变量是否设置，也就是是否配置有'create'提交按钮
+// if user click the create submit button
 if (check_request_var('create'))
 {
-    // 处理动作
+    // do action
     if_log_debug('deal create repository action');
 	$engine->handleAction('create_repository');
 }
@@ -50,8 +50,8 @@ if (check_request_var('create'))
 // View Data
 //
 
-// 将仓库父路径的值渲染到HTML模板中
+// Render the repository Parent list to html template.
 SetValue('RepositoryParentList', $engine->getRepositoryViewProvider()->getRepositoryParents());
-// 渲染模板
+// Render template
 ProcessTemplate("repository/repositorycreate.html.php");
 ?>

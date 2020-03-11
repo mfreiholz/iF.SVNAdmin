@@ -58,21 +58,21 @@ $repositoryList = array();
 try {
   // Repository parent locations.
   if_log_debug('Repository parent locations.');
-  // 通过RepositoryViewProvider.class.php获取仓库父目录
+  // @see RepositoryViewProvider.class.php to get repository Parent folder
   $repositoryParentList = $engine->getRepositoryViewProvider()->getRepositoryParents();
 
   // Repositories of all locations.
   foreach ($repositoryParentList as $rp) {
-    // 此处的getRepositoriesOfParent()函数会获取仓库列表数据
-    // 详细参考classes/providers/RepositoryViewProvider.class.php文件
+    // getRepositoriesOfParent() will get the repository list data
+    // @see classes/providers/RepositoryViewProvider.class.php
     $repositoryList[$rp->identifier] = $engine->getRepositoryViewProvider()->getRepositoriesOfParent($rp);
-    // 对数组进行升序排序
+    // Sort the array in ascending order a->z
     usort($repositoryList[$rp->identifier], array('\svnadmin\core\entities\Repository', 'compare'));
   }
 
 
   // Show options column?
-  // 显示下载仓库链接按钮
+  // show the download repository dump file icon
   if (($engine->isProviderActive(PROVIDER_REPOSITORY_EDIT)
     && $engine->hasPermission(ACL_MOD_REPO, ACL_ACTION_DUMP)
     && $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDumpEnabled', false))
@@ -103,7 +103,7 @@ try {
 }
 
 SetValue('RepositoryParentList', $repositoryParentList);
-// 设置值，将$repositoryList的值写入到列表中
+// save the $repositoryList to the list
 SetValue('RepositoryList', $repositoryList);
 SetValue('ShowDeleteButton', $engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDeleteEnabled', true));
 ProcessTemplate('repository/repositorylist.html.php');

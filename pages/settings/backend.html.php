@@ -154,7 +154,7 @@ $(document).ready(function(){
       <td><?php Translate("Repository view provider type:"); ?></td>
       <td>
         <select name="RepositoryViewProviderType" id="RepositoryViewProviderType">
-            <!-- 此处下拉框显示'svnclient','off','svnclient'           -->
+            <!-- the drop-down box display : 'svnclient','off','svnclient'           -->
           <?php foreach(GetArrayValue("repositoryViewProviderTypes") as $t): ?>
           <option><?php print($t); ?></option>
           <?php endforeach; ?>

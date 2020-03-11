@@ -1,99 +1,104 @@
 <?php GlobalHeader(); ?>
 
-<script type="text/javascript">
-$(document).ready(function(){
-  $("#selectall").click(function(){
-    selectAll(this, "selected_users[]");
-  });
+  <script type="text/javascript">
+      $(document).ready(function () {
+          $("#selectall").click(function () {
+              selectAll(this, "selected_users[]");
+          });
 
-  $("#showrolelistlink").click(function(event){
-    event.preventDefault();
-    if ($("#rolelist").length == 0)
-    {
-      $.get("rolelist.php", function(data){
-        $("body").append(data);
-        $("#rolelist").dialog({width:750, height:450});
+          $("#showrolelistlink").click(function (event) {
+              event.preventDefault();
+              if ($("#rolelist").length == 0) {
+                  $.get("rolelist.php", function (data) {
+                      $("body").append(data);
+                      $("#rolelist").dialog({width: 750, height: 450});
+                  });
+              } else {
+                  $("#rolelist").dialog();
+              }
+          });
       });
-    }
-    else
-    {
-      $("#rolelist").dialog();
-    }
-  });
-});
-</script>
+  </script>
 
-<h1><?php Translate("User management"); ?></h1>
-<p class="hdesc"><?php Translate("Here you can see a list of all users which can be authenticated by your subversion server."); ?></p>
+  <h1><?php Translate("User management"); ?></h1>
+  <p class="hdesc"><?php Translate("Here you can see a list of all users which can be authenticated by your subversion server."); ?></p>
 
 <?php HtmlFilterBox("userlist", 1); ?>
 
-<form action="userlist.php" method="POST">
-	<table id="userlist" class="datatable">
+  <form action="userlist.php" method="POST">
+    <table id="userlist" class="datatable">
 
-	<thead>
-	<tr>
-      <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE,	ACL_ACTION_ASSIGN)) { ?>
-        <th width="20">
-	      <input type="checkbox" id="selectall">
-	    </th>
-      <?php } ?>
-      <th width="50" align="center"><?php Translate("Index"); ?></th>
-      <th>
-	  	<?php Translate("Users"); ?>
-	  </th>
-	</tr>
-	</thead>
+      <thead>
+      <tr>
+        <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE, ACL_ACTION_ASSIGN)) { ?>
+          <th width="20">
+            <input type="checkbox" id="selectall">
+          </th>
+        <?php } ?>
+        <th width="50" align="center"><?php Translate("Index"); ?></th>
+        <th>
+          <?php Translate("Users"); ?>
+        </th>
+      </tr>
+      </thead>
 
-	<tfoot>
-	<tr>
-	  <td colspan="3">
+      <tfoot>
+      <tr>
+        <td colspan="3">
 
-	    <table class="datatableinline">
-	      <colgroup>
-	        <col width="50%">
-	        <col width="50%">
-	      </colgroup>
-	      <tr>
-	        <td>
-	          <?php if (IsProviderActive(PROVIDER_USER_EDIT) && HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE)) { ?>
-	          <input type="submit" name="delete" value="<?php Translate("Delete"); ?>" class="delbtn" onclick="return deletionPrompt('<?php Translate("Are you sure?"); ?>');">
-	          <?php } ?>
-	        </td>
-	        <td align="right">
-              <!-- 给select定义chosen类，对下拉框进行搜索  -->
-	          <?php if (IsProviderActive(PROVIDER_AUTHENTICATION) && HasAccess(ACL_MOD_ROLE, ACL_ACTION_ASSIGN)) { ?>
-	          <small>(<a id="showrolelistlink" href="#"><?php Translate("Show roles"); ?></a>)</small>
-	          <select class='chosen' name="selected_assign_role_name">
-	            <option value="">--- <?php Translate("Role"); ?> ---</option>
-	            <?php foreach (GetArrayValue("RoleList") as $r) { ?>
-                   <option value="<?php print($r->name); ?>"><?php Translate($r->name); ?></option>
-	            <?php } ?>
-	          </select>
-	          <input type="submit" name="assign_role" value="<?php Translate("Assign"); ?>" class="anbtn">
-	          <?php } ?>
-	        </td>
-	      </tr>
-	    </table>
+          <table class="datatableinline">
+            <colgroup>
+              <col width="50%">
+              <col width="50%">
+            </colgroup>
+            <tr>
+              <td>
+                <?php if (IsProviderActive(PROVIDER_USER_EDIT) && HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE)) { ?>
+                  <input type="submit" name="delete" value="<?php Translate("Delete"); ?>"
+                         class="delbtn"
+                         onclick="return deletionPrompt('<?php Translate("Are you sure?"); ?>');">
+                <?php } ?>
+              </td>
+              <td align="right">
+                <!-- use chosen class, add the search function in the drop-down box -->
+                <?php if (IsProviderActive(PROVIDER_AUTHENTICATION) && HasAccess(ACL_MOD_ROLE, ACL_ACTION_ASSIGN)) { ?>
+                  <small>(<a id="showrolelistlink"
+                             href="#"><?php Translate("Show roles"); ?></a>)</small>
+                  <select class='chosen' name="selected_assign_role_name">
+                    <option value="">--- <?php Translate("Role"); ?> ---</option>
+                    <?php foreach (GetArrayValue("RoleList") as $r) { ?>
+                      <option value="<?php print($r->name); ?>"><?php Translate($r->name); ?></option>
+                    <?php } ?>
+                  </select>
+                  <input type="submit" name="assign_role" value="<?php Translate("Assign"); ?>"
+                         class="anbtn">
+                <?php } ?>
+              </td>
+            </tr>
+          </table>
 
-	  </td>
-	</tr>
-	</tfoot>
+        </td>
+      </tr>
+      </tfoot>
 
-	<tbody>
-		<?php $Index=1; foreach (GetArrayValue("UserList") as $u) { ?>
-		<tr>
-          <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE,	ACL_ACTION_ASSIGN)) { ?>
+      <tbody>
+      <?php $Index = 1;
+      foreach (GetArrayValue("UserList") as $u) { ?>
+        <tr>
+          <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE, ACL_ACTION_ASSIGN)) { ?>
             <td>
-                <input type="checkbox" name="selected_users[]" value="<?php print($u->name); ?>">
+              <input type="checkbox" name="selected_users[]" value="<?php print($u->name); ?>">
             </td>
           <?php } ?>
           <td align="center"><?php print($Index); ?></td>
-		  <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
-		</tr>
-		<?php $Index++; } ?>
-	</tbody>
-	</table>
-</form>
+          <td>
+            <a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a>
+          </td>
+        </tr>
+        <?php $Index++;
+      } ?>
+      </tbody>
+    </table>
+  </form>
 
 <?php GlobalFooter(); ?>

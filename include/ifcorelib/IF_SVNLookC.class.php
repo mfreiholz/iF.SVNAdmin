@@ -63,7 +63,7 @@ class IF_SVNLookC extends IF_SVNBaseC
     # use passthru($cmd) can not add index and base url to path.
     $all_path = shell_exec($cmd);
     $path_array = explode("\n", $all_path);
-    $return_string = '序号,SVN链接'. "\n";
+    $return_string = 'Index,SVN Web Link'. "\n";
     foreach ( $path_array as $index => $item) {
       if ($item == '/') {
         $return_string = $return_string . ($index + 1) . ',' . $svnRepoURL . "\n";
