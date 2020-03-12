@@ -7,7 +7,10 @@ test.html
 base.php
 data/userroleassignments.ini
 data/userroleassignments.ini*
+data/config.ini
+data/config.ini*
 .Trash-0
 .DS_Store
 test*.php
 test*.txt
+config.ini

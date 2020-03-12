@@ -19,6 +19,9 @@
  */
 namespace svnadmin\providers\ldap;
 
+use svnadmin\core\interfaces\Group;
+use svnadmin\core\interfaces\User;
+
 class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	implements	\svnadmin\core\interfaces\IUserViewProvider,
 				\svnadmin\core\interfaces\IGroupViewProvider
@@ -639,7 +642,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 
 		if (!is_array($found) || count($found) <= 0)
 		{
-			error_log("Can not resolve member ID. member-id=$memberId; filter=$filter;");
+			error_log("Can not resolve member ID. member-id=$memberId; filter=$this->users_search_filter;");
 			return null;
 		}
 
@@ -881,5 +884,29 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 			throw $ex;
 		}
 	}
+
+  /**
+   * @inheritDoc
+   */
+  public function getGroupsOfSubgroup($objSubgroup)
+  {
+    // TODO: Implement getGroupsOfSubgroup() method.
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function getSubgroupsOfGroup($objGroup)
+  {
+    // TODO: Implement getSubgroupsOfGroup() method.
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function isSubgroupInGroup($objSubgroup, $objGroup)
+  {
+    // TODO: Implement isSubgroupInGroup() method.
+  }
 }
 ?>

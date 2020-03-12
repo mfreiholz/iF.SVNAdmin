@@ -35,7 +35,7 @@
       <tr>
         <td><?php Translate("User"); ?></td>
         <td>
-          <select name="selected_users[]">
+          <select class="chosen" name="selected_users[]">
             <?php foreach(GetArrayValue("UserList") as $u): ?>
             <option value="<?php print($u->getEncodedName()); ?>"><?php print($u->getName()); ?></option>
             <?php endforeach; ?>
