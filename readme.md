@@ -23,6 +23,7 @@ we add the follow functions:
 - add the function that to download the csv file that contain all the file path in the repository. 
 - add the function that to download the csv file that contain the access path permissions in the repository.
 - add search function in the drop-down box.
+- add Advanced-User role that can access all the view page, but can **not** add or delete. 
 
 Display like this:
 
