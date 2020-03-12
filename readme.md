@@ -15,14 +15,21 @@ Documentation about installation and configuration can be found on the project h
 Function
 -------------
 
-we add new function as the follow items.
+we add the follow functions:
 
 - add table index in most tables.
 - add Repository URL to SVN WEB link.
 - add repository description.
 - add the function that to download the csv file that contain all the file path in the repository. 
 - add the function that to download the csv file that contain the access path permissions in the repository.
+- add search function in the drop-down box.
 
+Display like this:
+
+![functions](./images/functions.png)
+![repo_description](./images/repo_description.png)
+![drop-down-box-search](./images/drop-down-box-search.png)
+![access_path_descrption](./images/access_path_descrption.png)
 
 
 Who is responsible for this crap?
