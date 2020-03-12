@@ -50,8 +50,6 @@ class EngineBaseAuthenticator implements \svnadmin\core\interfaces\IAuthenticato
 		// Correct user/pass combination?
 		if (!$E->getUserViewProvider()->authenticate($objUser, $password))
 		{
-      $E->addMessage(var_dump('c'));
-
       return false;
 		}
 

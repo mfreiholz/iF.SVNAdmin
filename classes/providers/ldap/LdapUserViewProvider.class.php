@@ -303,7 +303,17 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 			$u = new \svnadmin\core\entities\User;
 			$u->id = $ldapUsers[$i]->dn;
 			$u->name = $ldapUsers[$i]->$up_name;
-			$u->displayName = $this->formatDisplayName($this->users_display_name_format, $ldapUsers[$i]);
+			$displayname = $this->formatDisplayName($this->users_display_name_format, $ldapUsers[$i]);
+      // fix if the DisplayNameFormat set error,display error issue
+			$displayname_array = explode(',', $displayname);
+			$users_displayname_array = explode(',', $this->users_display_name_format);
+      $not_parse_array = array_intersect($displayname_array, $users_displayname_array);
+			if (empty($not_parse_array)){
+        $u->displayName = $displayname;
+      }
+			else {
+        $u->displayName = $u->name;
+      }
 			$ret[] = $u;
 		}
 
@@ -537,6 +547,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
     $displayName = $format;
     $matches = array();
     $offset = 0;
+
     while (preg_match('/\%([A-Za-z0-9\-\_]+)/i', $displayName, $matches, PREG_OFFSET_CAPTURE, $offset) === 1) {
       $attributeName = strtolower($matches[1][0]);
       if (!isset($ldapUser->$attributeName)) {
@@ -545,6 +556,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
       }
       $displayName = str_replace($matches[0][0], $ldapUser->$attributeName, $displayName);
     }
+
     return $displayName;
   }
 
@@ -557,11 +569,9 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	{
 		// The standard attributes.
 		$attributes = $this->users_attributes;
-
 		// Include the attribute which is used in the "member" attribute of a group-entry.
 		$attributes[] = $this->groups_to_users_attribute_value;
-
-		return parent::objectSearch($this->connection, $this->users_base_dn, $this->users_search_filter, $attributes, 0);
+    return parent::objectSearch($this->connection, $this->users_base_dn, $this->users_search_filter, $attributes, 0);
 	}
 
 	/**
@@ -620,7 +630,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		$attributes[] = $this->groups_to_users_attribute;
 
 		// Execute search.
-		$found = parent::objectSearch($this->connection, $this->groups_base_dn, $filter, $att, 1);
+		$found = parent::objectSearch($this->connection, $this->groups_base_dn, $filter, $attributes, 1);
 
 		if (!is_array($found) || count($found) <= 0)
 			return NULL;
