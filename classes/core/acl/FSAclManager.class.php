@@ -648,10 +648,6 @@ namespace svnadmin\core\acl
       $o->addRole(new \IF_ACLRole($n, "Can login and change the own password."));
       $o->addRule($n, \ACL_MOD_BASIC, array(\ACL_ACTION_LOGIN));
       $o->addRule($n, \ACL_MOD_USER, array(\ACL_ACTION_CHANGEPASS));
-      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_VIEW));
-      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_DOWNLOAD_TREE));
-      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_DOWNLOAD_ACCESS_PATH));
-
 
 
       // Advanced-User  (inhertis "User")
@@ -661,6 +657,9 @@ namespace svnadmin\core\acl
       $o->addRule($n, \ACL_MOD_GROUP, array(\ACL_ACTION_VIEW));
       $o->addRule($n, \ACL_MOD_ACCESSPATH, array(\ACL_ACTION_VIEW));
       $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_VIEW));
+      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_DOWNLOAD_TREE));
+      $o->addRule($n, \ACL_MOD_REPO, array(\ACL_ACTION_DOWNLOAD_ACCESS_PATH));
+
 
       // User-Group-Administrator (inhertis "User")
       $n = "User-Group-Manager";
