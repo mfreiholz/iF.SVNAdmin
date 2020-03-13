@@ -45,7 +45,6 @@ else
       // see classes/providers/EngineBaseAuthenticator.class.php
       // check the user permission
       $authOK = $appEngine->getAuthenticator()->authenticate( $u, $loginpass );
-
       if ($authOK)
 			{
 				// Set session variable which indicates that the user is logged in.
@@ -55,7 +54,7 @@ else
 			else
 			{
         // if the authentiator is not OK, then return the username/password not match.
-				$appEngine->addException(new ValidationException(tr("Wrong user/password combination.")));
+				$appEngine->addException(new ValidationException(tr("Wrong user/password combination. Or you do not been assigned any role. Please connect to the administrator!")));
 			}
 		}
 		else

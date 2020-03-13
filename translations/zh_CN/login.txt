@@ -2,4 +2,4 @@
 "Username","用户名"
 "Password","密码"
 "Exception list","异常"
-"Wrong user/password combination.","错误的用户名或密码."
+"Wrong user/password combination. Or you do not been assigned any role. Please connect to the administrator!","错误的用户名或密码，或者您没有被分配任何角色。 请联系管理员"
