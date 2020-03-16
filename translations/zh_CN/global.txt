@@ -43,3 +43,4 @@
 "Read","只读权限"
 "No-Access","无权限"
 "Index,SVN Web Link","序号,SVN链接"
+"History","历史"

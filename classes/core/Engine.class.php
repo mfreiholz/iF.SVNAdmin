@@ -35,6 +35,7 @@ define("PROVIDER_ACCESSPATH_EDIT",     6);
 define("PROVIDER_REPOSITORY_VIEW",     7);
 define("PROVIDER_REPOSITORY_EDIT",     8);
 define("PROVIDER_AUTHENTICATION",      9);
+define("PROVIDER_HISTORY_VIEW",        10);
 
 /**
  * Page forward defines.
@@ -106,6 +107,12 @@ class Engine
 	 * @var \svnadmin\core\interfaces\IRepositoryEditProvider
 	 */
 	private $m_repositoryEditProvider = null;
+
+  /**
+   * @var \svnadmin\core\interfaces\IHistoryEditProvider
+   */
+  private $m_historyViewProvider = null;
+
 
 	/**
 	 * @var \svnadmin\core\interfaces\IAuthenticator
@@ -444,6 +451,9 @@ class Engine
 			case PROVIDER_AUTHENTICATION:
 				return $this->m_authenticator == null ? false : true;
 
+      case PROVIDER_HISTORY_VIEW:
+        return $this->m_historyViewProvider == null ? false : true;
+
 			default:
 				if_log_debug('Unknown Provider ID: '.$providerId);
 				return false;
@@ -759,6 +769,27 @@ class Engine
       $this->m_repositoryEditProvider->init();
     }
     return $this->m_repositoryEditProvider;
+  }
+
+
+  public function setHistoryViewProvider( $o )
+  {
+    $this->m_historyViewProvider = $o;
+  }
+
+
+  /**
+   * Gets the user view provider.
+   * @return IHistoryViewProvider or null
+   */
+  public function getHistoryViewProvider()
+  {
+    global $appEngine;$appEngine->addMessage(var_dump($this->m_historyViewProvider));
+    if( $this->m_historyViewProvider != null )
+    {
+      $this->m_historyViewProvider->init();
+    }
+    return $this->m_historyViewProvider;
   }
 
 

@@ -57,6 +57,14 @@
     </li>
     <?php } ?>
 
+    <?php if (HasAccess(ACL_MOD_SETTINGS, ACL_ACTION_CHANGE)) { ?>
+      <li><a href="historylist.php"><?php Translate("History"); ?></a>
+        <ul class="ddm-sub">
+          <li><a href="historylist.php"><?php Translate("List"); ?></a></li>
+        </ul>
+      </li>
+    <?php } ?>
+
     <?php if (IsUserLoggedIn()) { ?>
     <li><a href="#"><?php Translate("Session"); ?></a>
       <ul class="ddm-sub">

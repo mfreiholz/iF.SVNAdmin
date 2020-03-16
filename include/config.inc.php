@@ -74,6 +74,7 @@ include_once($ifcorelib_path . "IF_SVNLookC.class.php");
 include_once($ifcorelib_path . "IF_ACLModule.class.php");
 include_once($ifcorelib_path . "IF_ACLRole.class.php");
 include_once($ifcorelib_path . "IF_ACL.class.php");
+include_once($ifcorelib_path . "IF_History.class.php");
 
 // Core interfaces and classes.
 include_once("./classes/core/entities/Permission.class.php");
@@ -84,6 +85,8 @@ include_once("./classes/core/entities/Repository.class.php");
 include_once("./classes/core/entities/RepositoryPath.class.php");
 include_once("./classes/core/entities/RepositoryParent.class.php");
 include_once("./classes/core/entities/Role.class.php");
+include_once("./classes/core/entities/History.class.php");
+
 include_once("./classes/core/interfaces/IProvider.iface.php");
 include_once("./classes/core/interfaces/IAuthenticator.iface.php");
 include_once("./classes/core/interfaces/IViewProvider.iface.php");
@@ -119,6 +122,7 @@ define("ACL_MOD_ROLE", "roles");
 define("ACL_MOD_SETTINGS", "settings");
 define("ACL_MOD_UPDATE", "updates");
 define("ACL_MOD_PROJECTMANAGER", "projectmanagers");
+define("ACL_MOD_HISTORY", "history");
 
 /**
  * Constant ACL actions.
@@ -296,6 +300,19 @@ if ($cfg->getValue("Engine:Providers", "RepositoryEditProviderType") == "svnclie
   $repoEdit = \svnadmin\providers\RepositoryEditProvider::getInstance();
   $appEngine->setRepositoryEditProvider($repoEdit);
 }
+
+/**
+ * History view provider.
+ */
+//global $appEngine;$appEngine->addMessage(var_dump($cfg->getValue("History", "DatabaseFile")));
+if (!empty($cfg->getValue("History", "DatabaseFile"))) {
+  include_once("./classes/providers/HistoryProvider.class.php");
+  $historyView = \svnadmin\providers\HistoryProvider::getInstance();
+  global $appEngine;$appEngine->addMessage(var_dump($historyView));
+  $appEngine->setHistoryViewProvider($historyView);
+
+}
+
 
 /**
  * User Authentication status.
