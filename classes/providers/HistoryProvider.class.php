@@ -45,7 +45,6 @@ namespace svnadmin\providers
       if( !$this->m_database_file )
       {
         $this->m_init_done = true;
-//        global $appEngine;$appEngine->addMessage(var_dump($appEngine->getConfig()));
         global $appEngine;$appEngine->addMessage(var_dump($appEngine->getConfig()->getValue("History", "DatabaseFile")));
         $this->m_database_file = new \IF_History($appEngine->getConfig()->getValue("History", "DatabaseFile"));
         return $this->m_database_file->init();
@@ -57,21 +56,7 @@ namespace svnadmin\providers
     public function getHistories()
     {
       $historyArray = $this->m_database_file->getHistoryList();
-      $retList = array();
-      if( is_array( $historyArray ) )
-      {
-        for( $i=0; $i<count($historyArray); $i++ )
-        {
-          $historyObj = new \svnadmin\core\entities\History;
-          $historyObj->id = $historyArray[$i];
-          $historyObj->username = $historyArray[$i];
-          $historyObj->action = $historyArray[$i];
-          $historyObj->description = $historyArray[$i];
-          array_push( $retList, $historyObj );
-        }
-      }
-
-      return $retList;
+      return $historyArray;
     }
 
     public function addHistory( $objHisotry )

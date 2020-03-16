@@ -1,1 +1,5 @@
 "Here you can see a list of all the Configuration Management Officer operation history","在这里您可以看到所有配置管理人员操作历史记录的列表"
+"History management","历史管理"
+"Action","动作"
+"Date","时间"
+"Description","说明信息"

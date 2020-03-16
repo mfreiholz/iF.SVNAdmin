@@ -29,15 +29,17 @@
 
       <tbody>
       <?php $Index = 1;
-      foreach (GetArrayValue("UserList") as $u) { ?>
+      foreach (GetArrayValue("HistoryList") as $h) { ?>
         <tr>
           <td align="center"><?php print($Index); ?></td>
           <td>
-            <a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a>
+            <a href="userview.php?username=<?php print($h->getUsername()); ?>"><?php print($h->getUsername()); ?></a>
           </td>
-          <td>test</td>
-          <td>test</td>
-          <td>test</td>
+          <td>
+            <?php print($h->getAction()); ?>
+          </td>
+          <td><?php print($h->getDate()); ?></td>
+          <td><?php print($h->getDescription()); ?></td>
         </tr>
         <?php $Index++;
       } ?>

@@ -70,11 +70,7 @@ class IF_History
 
   public function getHistoryList()
   {
-    $relist = array();
-    foreach($this->m_data as $history)
-    {
-      global $appEngine;$appEngine->addMessage(var_dump($history));
-    }
+    return $this->m_data;
   }
 
   // 插入一条历史记录到数据库中
