@@ -85,6 +85,7 @@ include_once("./classes/core/entities/Repository.class.php");
 include_once("./classes/core/entities/RepositoryPath.class.php");
 include_once("./classes/core/entities/RepositoryParent.class.php");
 include_once("./classes/core/entities/Role.class.php");
+// add the history class file
 include_once("./classes/core/entities/History.class.php");
 
 include_once("./classes/core/interfaces/IProvider.iface.php");
@@ -308,9 +309,7 @@ if ($cfg->getValue("Engine:Providers", "RepositoryEditProviderType") == "svnclie
 if (!empty($cfg->getValue("History", "DatabaseFile"))) {
   include_once("./classes/providers/HistoryProvider.class.php");
   $historyView = \svnadmin\providers\HistoryProvider::getInstance();
-  global $appEngine;$appEngine->addMessage(var_dump($historyView));
   $appEngine->setHistoryViewProvider($historyView);
-
 }
 
 

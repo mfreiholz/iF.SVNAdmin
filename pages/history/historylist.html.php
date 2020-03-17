@@ -10,14 +10,16 @@
       <tr>
         <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE, ACL_ACTION_ASSIGN)) { ?>
         <?php } ?>
-        <th width="50" align="center"><?php Translate("Index"); ?></th>
+        <th width="50" align="center">
+          <?php Translate("Index"); ?>
+        </th>
         <th width="150" align="center">
           <?php Translate("Users"); ?>
         </th>
-        <th>
+        <th  width="200">
           <?php Translate("Action"); ?>
         </th>
-        <th>
+        <th width="300"  align="center">
           <?php Translate("Date"); ?>
         </th>
         <th>
@@ -25,7 +27,6 @@
         </th>
       </tr>
       </thead>
-
 
       <tbody>
       <?php $Index = 1;
@@ -38,7 +39,7 @@
           <td>
             <?php print($h->getAction()); ?>
           </td>
-          <td><?php print($h->getDate()); ?></td>
+          <td align="center"><?php print($h->getDate()); ?></td>
           <td><?php print($h->getDescription()); ?></td>
         </tr>
         <?php $Index++;

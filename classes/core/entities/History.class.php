@@ -23,24 +23,24 @@ namespace svnadmin\core\entities
   {
     public $id;
     public $username;
-    public $action;
+    public $user_action;
     public $date;
     public $description;
 
-    public function __construct($id=null, $username=null, $action=null, $date=null, $description=null)
+    public function __construct($id=null, $username=null, $user_action=null, $date=null, $description=null)
     {
       $this->id = $id;
       $this->username = $username;
-      $this->action = $action;
+      $this->user_action = $user_action;
       $this->date = $date;
       $this->description = $description;
     }
 
-    public function ctr( $id, $username, $action, $date, $description)
+    public function ctr( $id, $username, $user_action, $date, $description)
     {
       $this->id = $id;
       $this->username = $username;
-      $this->action = $action;
+      $this->user_action = $user_action;
       $this->date = $date;
       $this->description = $description;
     }
@@ -52,7 +52,7 @@ namespace svnadmin\core\entities
 
     public function getAction()
     {
-      return $this->action;
+      return $this->user_action;
     }
 
     public function getDate()
@@ -65,14 +65,14 @@ namespace svnadmin\core\entities
       return $this->description;
     }
 
-
+    // order bu date time desc
     public static function compare( $o1, $o2 )
     {
-      if( $o1->username == $o2->username )
+      if( $o1->date == $o2->date )
       {
         return 0;
       }
-      return ($o1->username > $o2->username) ? +1 : -1;
+      return ($o1->date > $o2->date) ? -1 : +1;
     }
   }
 }

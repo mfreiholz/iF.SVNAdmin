@@ -784,7 +784,6 @@ class Engine
    */
   public function getHistoryViewProvider()
   {
-    global $appEngine;$appEngine->addMessage(var_dump($this->m_historyViewProvider));
     if( $this->m_historyViewProvider != null )
     {
       $this->m_historyViewProvider->init();
