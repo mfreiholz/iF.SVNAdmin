@@ -239,7 +239,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
     // Set HTTP header
     header('Content-Description: Repository Dump');
     header('Content-type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=' . $oRepository->name. date('_Y-m-d_His') . '.dump');
+    header('Content-Disposition: attachment; filename=' . $oRepository->name . date('_Y-m-d_His') . '.dump');
     header('Content-Transfer-Encoding: binary');
     header('Expires: 0');
     header('Cache-Control: must-revalidate');

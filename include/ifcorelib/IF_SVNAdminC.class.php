@@ -18,6 +18,8 @@
  * along with this program.
  */
 
+use svnadmin\providers\HistoryProvider;
+
 /**
  * Provides functionality of the "svnadmin.exe" executable by using the
  * executable and parsing the output.
@@ -94,8 +96,13 @@ class IF_SVNAdminC extends IF_SVNBaseC
     $exitCode = 0;
     exec($cmd, $output, $exitCode);
 
+
     if ($exitCode != 0) {
       throw new IF_SVNCommandExecutionException('Command=' . $cmd . '; Return=' . $exitCode . '; Output=' . $output . ';');
+    } else {
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr('Create repository: ') . $repo_name, 'testing');
     }
   }
 

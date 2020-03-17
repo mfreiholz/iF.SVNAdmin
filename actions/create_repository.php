@@ -23,13 +23,14 @@ $varParentIdentifierEnc = get_request_var('pi');
 $reponame = get_request_var("reponame"); // get the repository name
 $repotype = get_request_var("repotype"); // get the repository type, can be 'fsfs' or 'bdb', default is 'fsfs'
 $repodesc = get_request_var("repodesc"); // get the repository description or summary information.
+$repo_reason = get_request_var("reporeason"); // get the reason creating this repository
 
 $varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 
 //
 // Validation
 // if the repository name is null will return exception
-if ($reponame == NULL) {
+if ($reponame == NULL or $repo_reason == NULL) {
   $engine->addException(new ValidationException(tr("You have to fill out all fields.")));
 } else {
   $r = new \svnadmin\core\entities\Repository($reponame, $varParentIdentifier, $repodesc);

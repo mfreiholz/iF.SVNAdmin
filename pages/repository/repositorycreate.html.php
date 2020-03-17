@@ -60,6 +60,14 @@
     </div>
 
     <div class="form-field">
+      <label for="repodesc"><?php Translate("Reason for creating the repository"); ?></label>
+      <input type="text" name="reporeason" id="reporeason" class="lineedit">
+      <p>
+        <b><?php Translate("Why you create this repository."); ?>
+      </p>
+    </div>
+
+    <div class="form-field">
       <label for="repotype"><?php Translate("Type"); ?></label>
       <select name="repotype">
         <option value="fsfs" selected="selected"><?php Translate("File System (Recommended)"); ?></option>

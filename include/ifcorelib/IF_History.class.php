@@ -60,7 +60,6 @@ class IF_History
   public function init()
   {
     $db = self::parseUserFile($this->m_dbfile);
-    $this->createHistory();
     return $db;
   }
 
@@ -71,19 +70,20 @@ class IF_History
   }
 
   // 插入一条历史记录到数据库中
-  public function createHistory($objHistory=null)
+  public function createHistory($user_action = null, $description = null)
   {
     $h = new \svnadmin\core\entities\History();
     $h->id = null;
     global $appEngine;
     $h->username = $appEngine->getSessionUsername();
-    $h->user_action = array('Repository', 'User', 'Group', 'AccessPath')[array_rand(array('Repository', 'User', 'Group', 'AccessPath'), 1)] . ' ' . array('Add', 'Delete')[array_rand(array('Add', 'Delete'))];
+//    $h->user_action = array('Repository', 'User', 'Group', 'AccessPath')[array_rand(array('Repository', 'User', 'Group', 'AccessPath'), 1)] . ' ' . array('Add', 'Delete')[array_rand(array('Add', 'Delete'))];
+    $h->user_action = $user_action;
     ini_set('date.timezone', 'Asia/Shanghai');
     $objDate = new DateTime();
     $h->date = $objDate->format("Y-m-d H:i:s u");
 //    $h->date = date("Y-m-d H:i:s u", time());
-    $h->description = array('Repository', 'User', 'Group', 'AccessPath')[array_rand(array('Repository', 'User', 'Group', 'AccessPath'), 1)] . ' ' . array('Add', 'Delete')[array_rand(array('Add', 'Delete'))];
-//    return $this->writeToFile($this->m_dbfile, $objHistory);
+//    $h->description = array('Repository', 'User', 'Group', 'AccessPath')[array_rand(array('Repository', 'User', 'Group', 'AccessPath'), 1)] . ' ' . array('Add', 'Delete')[array_rand(array('Add', 'Delete'))];
+    $h->description = $description;
     return $this->writeToFile($this->m_dbfile, $h);
   }
 
@@ -126,10 +126,7 @@ class IF_History
       $h->description = $row['DESCRIPTION'];
       array_push($this->m_data, $h);
     }
-    usort($this->m_data, array('\svnadmin\core\entities\History',"compare"));
-    global $appEngine;
-    $appEngine->addMessage(var_dump($this->m_data));
-
+    usort($this->m_data, array('\svnadmin\core\entities\History', "compare"));
     $db->close();
     return true;
   }
@@ -145,7 +142,7 @@ class IF_History
     if ($filename == NULL) {
       $filename = $this->m_dbfile;
     }
-    if (!file_exists($filename)){
+    if (!file_exists($filename)) {
       touch($filename);
       // Create table:
       // CREATE TABLE History(ID INTEGER PRIMARY KEY AUTOINCREMENT, USERNAME CHAR(25) NOT NULL, ACTION CHAR(50) NOT NULL, DATE CHAR(50) NOT NULL, DESCRIPTION CHAR(250) NOT NULL);

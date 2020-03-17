@@ -17,10 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.
  */
-namespace svnadmin\providers
-{
+
+namespace svnadmin\providers {
   class HistoryProvider
-//  class HistoryProvider implements \svnadmin\core\interfaces\IHistoryProvider
   {
     private $m_database_file = NULL;
     private $m_init_done = false;
@@ -28,22 +27,16 @@ namespace svnadmin\providers
 
     public static function getInstance()
     {
-      if( self::$m_instance == NULL )
-      {
+      if (self::$m_instance == NULL) {
         self::$m_instance = new HistoryProvider;
       }
       return self::$m_instance;
     }
 
-    //////////////////////////////////////////////////////////////////////////////
-    // -- Base interface implementations ----------------------------------------
-    //////////////////////////////////////////////////////////////////////////////
-
     public function init()
     {
       global $appEngine;
-      if( !$this->m_database_file )
-      {
+      if (!$this->m_database_file) {
         $this->m_init_done = true;
         // get the database file ./data/.history.db
         $this->m_database_file = new \IF_History($appEngine->getConfig()->getValue("History", "DatabaseFile"));
@@ -52,24 +45,28 @@ namespace svnadmin\providers
       return false;
     }
 
-
+    /**
+     * get history list
+     * @return mixed
+     */
     public function getHistories()
     {
       $historyArray = $this->m_database_file->getHistoryList();
       return $historyArray;
     }
 
-    public function addHistory( $objHisotry )
+    /**
+     * add history data to database
+     * @param null $user_action
+     * @param null $description
+     * @return mixed
+     */
+    public function addHistory($user_action = null, $description = null)
     {
-      if( $objHisotry != NULL &&
-        !empty($objHisotry->username) &&
-        !empty($objHisotry->user_action) &&
-        !empty($objHisotry->descrption))
-      {
-        return $this->m_database_file->createHistory($objHisotry);
+      if (!empty($user_action) && !empty($description)) {
+        return $this->m_database_file->createHistory($user_action, $description);
       }
     }
-
   }
 }
 ?>

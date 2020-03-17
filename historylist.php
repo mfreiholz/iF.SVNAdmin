@@ -24,7 +24,6 @@ $appTR->loadModule("historylist");
 
 // Get all histories list
 $histories = $appEngine->getHistoryViewProvider()->getHistories();
-global $appEngine;$appEngine->addMessage(var_dump($histories));
 usort( $histories, array('\svnadmin\core\entities\History',"compare") );
 SetValue("HistoryList", $histories);
 ProcessTemplate("history/historylist.html.php");

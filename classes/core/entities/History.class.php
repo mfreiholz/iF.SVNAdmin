@@ -65,7 +65,7 @@ namespace svnadmin\core\entities
       return $this->description;
     }
 
-    // order bu date time desc
+    // order by date time desc
     public static function compare( $o1, $o2 )
     {
       if( $o1->date == $o2->date )

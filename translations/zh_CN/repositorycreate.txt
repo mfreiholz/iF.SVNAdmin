@@ -21,3 +21,6 @@
 "Back to overview","返回到代码仓库列表"
 "Repository Description","仓库描述信息"
 "Repository Description. simple summary.","仓库的总结描述信息"
+"Create repository: ","创建仓库: "
+"Reason for creating the repository","创建仓库的原因"
+"Why you create this repository.","为什么要创建此仓库，添加原因说明"
