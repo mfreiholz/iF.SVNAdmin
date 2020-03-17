@@ -39,7 +39,7 @@ if ($reponame == NULL or $repo_reason == NULL) {
   try {
     if_log_debug('Start to create repository');
     // Step 1: create the repository folder in the svn root folder
-    $engine->getRepositoryEditProvider()->create($r, $repotype);
+    $engine->getRepositoryEditProvider()->create($r, $repotype, $repo_reason);
 
     // Step 2: call the save() method in the RepositoryEditProvider.class.php
     // do nothing. just return true

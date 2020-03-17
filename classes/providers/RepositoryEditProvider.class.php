@@ -159,7 +159,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
    * create repository
    * @see svnadmin\core\interfaces.IRepositoryEditProvider::create()
    */
-  public function create(\svnadmin\core\entities\Repository $oRepository, $type = "fsfs")
+  public function create(\svnadmin\core\entities\Repository $oRepository, $type = "fsfs", $reason = null)
   {
     // create SVN repository folder in the server svn root path
     if_log_debug('create SVN repository folder in the server svn root path');
@@ -174,7 +174,7 @@ class RepositoryEditProvider implements \svnadmin\core\interfaces\IRepositoryEdi
 
     // Build the absolute path of the current repository
     $path = $svnParentPath . '/' . $oRepository->name;
-    $this->_svnAdmin->create($path, $type);
+    $this->_svnAdmin->create($path, $type, $reason);
 
     return true;
   }

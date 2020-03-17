@@ -26,10 +26,10 @@ interface IRepositoryEditProvider extends IEditProvider
 	 *
 	 * @param \svnadmin\core\entities\Repository   $oRepository
 	 * @param string $type The repository type (fsfs or bdb)
-	 *
+	 * @param string $reason The reason for creating the repository
 	 * @return bool
 	 */
-	public function create(\svnadmin\core\entities\Repository $oRepository, $type);
+	public function create(\svnadmin\core\entities\Repository $oRepository, $type, $reason);
 
 	/**
 	 * Deletes an existing repository.

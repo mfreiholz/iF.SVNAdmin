@@ -59,10 +59,11 @@ class IF_SVNAdminC extends IF_SVNBaseC
    *
    * @param string $path Absolute path to the new repository
    * @param string $type Repository type: fsfs=file system(default); bdb=berkley db (not recommended)
+   * @param string $reason The reason for creating the repository
    * @throws IF_SVNException
    * @throws IF_SVNCommandExecutionException
    */
-  public function create($path, $type = "fsfs")
+  public function create($path, $type = "fsfs", $reason = null)
   {
     // check the repository path exist
     if (empty($path)) {
@@ -102,7 +103,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
     } else {
       // add the process history to database
       global $appEngine;
-      $appEngine->getHistoryViewProvider()->addHistory(tr('Create repository: ') . $repo_name, 'testing');
+      $appEngine->getHistoryViewProvider()->addHistory(tr('Create repository: ') . $repo_name, $reason);
     }
   }
 
