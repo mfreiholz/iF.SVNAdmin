@@ -92,6 +92,14 @@ $(document).ready(function(){
     </tbody>
   </table>
 
+  <div class="form-field">
+    <label for="name"><?php Translate("Reason for assign the membership"); ?></label>
+    <input type="text" name="reason" id="reason" class="lineedit">
+    <p>
+      <b><?php Translate("Why you assign the membership."); ?>
+    </p>
+  </div>
+
   <?php if (IsProviderActive(PROVIDER_GROUP_EDIT)) : ?>
   <div class="formsubmit">
     <input type="submit" name="assign" value="<?php Translate('Assign'); ?>" class="anbtn">

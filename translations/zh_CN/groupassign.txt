@@ -1,2 +1,6 @@
 "User and Group &lt;&gt; Group assignment","用户和组 &lt;&gt; 组分配"
 "Here you can assign users to groups.","可分配的用户和组(注意：请将左侧的用户或组添加到右侧的组中。先勾选，最后点击'分配'按钮)"
+"Reason for assign the membership","分配组成员的原因"
+"Why you assign the membership.","你为什么分配该组成员，说明原因"
+"Add user: %0 to group: %1","添加用户( %0 )到组( %1 )中"
+"Add subgroup: %0 to group: %1","添加子组( %0 )到组( %1 )中"

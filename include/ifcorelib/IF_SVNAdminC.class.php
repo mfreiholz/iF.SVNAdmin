@@ -104,6 +104,7 @@ class IF_SVNAdminC extends IF_SVNBaseC
       // add the process history to database
       global $appEngine;
       $appEngine->getHistoryViewProvider()->addHistory(tr('Create repository: ') . $repo_name, $reason);
+
     }
   }
 

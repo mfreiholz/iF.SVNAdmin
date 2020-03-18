@@ -2,3 +2,5 @@
 "Users of group","组用户"
 "Permissions of group","组权限"
 "Groups of group","组中包含的组"
+"Removed user %0 from group %1","将用户( %0 )从组( %1 )中移除"
+"Removed group %0 from group %1","将组( %0 )从组( %1 )中移除"

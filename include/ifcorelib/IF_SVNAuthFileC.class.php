@@ -448,7 +448,7 @@ class IF_SVNAuthFileC
 
       // add the process history to database
       global $appEngine;
-      $appEngine->getHistoryViewProvider()->addHistory(tr('Create Access Path: ') . $repopath, $reason);
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Create Access Path: ") . $repopath, $reason);
 
     }
     return true;
@@ -548,11 +548,12 @@ class IF_SVNAuthFileC
    *
    * @param string $groupname
    * @param string $username
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function addUserToGroup($groupname, $username)
+  public function addUserToGroup($groupname, $username, $reason)
   {
     if (!self::groupExists($groupname)) {
       return false;
@@ -578,6 +579,11 @@ class IF_SVNAuthFileC
     // Set changes to config.
     $userString = self::convertGroupsUsersToString($groups, $users);
     $this->config->setValue($this->GROUP_SECTION, $groupname, $userString);
+
+    // add the process history to database
+    global $appEngine;
+    $appEngine->getHistoryViewProvider()->addHistory(tr("Add user: %0 to group: %1", array($username, $groupname)), $reason);
+
     return true;
   }
 
@@ -586,11 +592,12 @@ class IF_SVNAuthFileC
    *
    * @param string $groupname
    * @param string $subgroupname
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function addSubgroupToGroup($groupname, $subgroupname)
+  public function addSubgroupToGroup($groupname, $subgroupname, $reason)
   {
     if (!self::groupExists($groupname) || !self::groupExists($subgroupname)) {
       return false;
@@ -616,6 +623,12 @@ class IF_SVNAuthFileC
     // Set changes to config.
     $userString = self::convertGroupsUsersToString($groups, $users);
     $this->config->setValue($this->GROUP_SECTION, $groupname, $userString);
+
+    // add the process history to database
+    global $appEngine;
+    $appEngine->getHistoryViewProvider()->addHistory(tr("Add subgroup: %0 to group: %1", array($subgroupname, $groupname)), $reason);
+
+
     return true;
   }
 

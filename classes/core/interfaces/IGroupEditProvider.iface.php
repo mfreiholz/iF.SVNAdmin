@@ -42,20 +42,22 @@ namespace svnadmin\core\interfaces
      * @param $objGroup
      * @return bool
      */
-    public function assignUserToGroup( $objUser, $objGroup );
+    public function assignUserToGroup( $objUser, $objGroup, $reason);
 
     /**
      * Assigns the subgroup to group.
      * @param $objSubgroup
      * @param $objGroup
+     * @param $reason
      * @return bool
      */
-    public function assignSubgroupToGroup( $objSubgroup, $objGroup );
+    public function assignSubgroupToGroup( $objSubgroup, $objGroup, $reason);
 
     /**
      * Removes the user from group.
      * @param $objUser
      * @param $objGroup
+     * @param $reason
      * @return bool
      */
     public function removeUserFromGroup( $objUser, $objGroup );

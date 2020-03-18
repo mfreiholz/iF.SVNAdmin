@@ -5,6 +5,7 @@ $appEngine->forwardInvalidModule( !$appEngine->isGroupEditActive() );
 $selusers = get_request_var('selusers');
 $selgroups = get_request_var('selgroups');
 $selsubgroups = get_request_var('selsubgroups');
+$reason = get_request_var('reason');
 
 if ($selusers == NULL)
 	$selusers = get_request_var("selected_users");
@@ -35,6 +36,12 @@ if( ($selusers == NULL && $selsubgroups == NULL) || $selgroups == NULL )
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one user and one group.")));
 }
+
+if ( $reason == NULL )
+{
+  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
+}
+
 // Do assignments.
 else
 {
@@ -56,7 +63,7 @@ else
 				$oS->name = $selsubgroups[$k];
 				if ($oG->name != $oS->name)
 				{
-					if ($appEngine->getGroupEditProvider()->assignSubgroupToGroup($oS, $oG))
+					if ($appEngine->getGroupEditProvider()->assignSubgroupToGroup($oS, $oG, $reason))
 					{
 						$appEngine->getGroupEditProvider()->save();
 						$appEngine->addMessage(tr("The group %0 is now a member of group %1", array($oS->name, $oG->name)));
@@ -78,7 +85,7 @@ else
 				$oU->id = $selusers[$j];
 				$oU->name = $selusers[$j];
 
-				if ($appEngine->getGroupEditProvider()->assignUserToGroup($oU, $oG))
+				if ($appEngine->getGroupEditProvider()->assignUserToGroup($oU, $oG, $reason))
 				{
 					$appEngine->getGroupEditProvider()->save();
 					$appEngine->addMessage(tr("The user %0 is now a member of group %1", array($oU->name, $oG->name)));
