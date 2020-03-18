@@ -40,10 +40,15 @@ $engine->checkUserAuthentication(true, ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN);
 $selusers = get_request_var('selected_users');
 $selgroups = get_request_var('selected_groups');
 $selpaths = get_request_var('selected_accesspaths');
+$reason = get_request_var('reason');
 
 //
 // Validation
 //
+
+if ($reason == NULL) {
+  $engine->addException(new ValidationException(tr("You have to input the reason.")));
+}
 
 if ($selpaths == NULL
 	|| ($selgroups == NULL && $selusers == NULL)) {
@@ -80,7 +85,7 @@ else {
 	      
 				// remove user from ap
 				try {
-					if ($engine->getAccessPathEditProvider()->removeUserFromAccessPath($oU, $oAP))
+					if ($engine->getAccessPathEditProvider()->removeUserFromAccessPath($oU, $oAP, $reason))
 						$engine->addMessage(tr("Removed user %0 from access path %1", array($oU->name, $oAP->path)));
 					else
 						$engine->addException(new Exception(tr("Can not remove user %0 from access path %1", array($oU->name, $oAP->path))));
@@ -100,7 +105,7 @@ else {
 				
 				// remove group from ap
 				try {
-					if ($engine->getAccessPathEditProvider()->removeGroupFromAccessPath($oG, $oAP))
+					if ($engine->getAccessPathEditProvider()->removeGroupFromAccessPath($oG, $oAP, $reason))
 						$engine->addMessage(tr("Removed group %0 from access path %1", array($oG->name, $oAP->path)));
 					else
 						$engine->addException(new Exception(tr("Can not remove group %0 from access path %1", array($oG->name, $oAP->path))));

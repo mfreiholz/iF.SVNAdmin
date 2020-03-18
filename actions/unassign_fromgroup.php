@@ -27,6 +27,8 @@ $appEngine->forwardInvalidModule( !$appEngine->isGroupEditActive() );
 $selusers = get_request_var('selected_users');
 $selgroups = get_request_var('selected_groups');
 $selsubgroups = get_request_var('selected_subgroups');
+$reason = get_request_var('reason');
+
 
 // Remove empty selections.
 if ($selusers != NULL && is_array($selusers))
@@ -43,6 +45,9 @@ if ($selsubgroups != NULL && is_array($selsubgroups))
 if (($selusers == NULL && $selsubgroups == NULL) || $selgroups == NULL)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one user or one group.")));
+}
+if ($reason == NULL) {
+  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 else
 {
@@ -63,7 +68,7 @@ else
 	      $oS->id = $selsubgroups[$k];
 	      $oS->name = $selsubgroups[$k];
 
-	      if( $appEngine->getGroupEditProvider()->removeSubgroupFromGroup( $oS, $oG ) )
+	      if( $appEngine->getGroupEditProvider()->removeSubgroupFromGroup( $oS, $oG, $reason ) )
 	      {
 	      	$appEngine->addMessage(tr("Removed group %0 from group %1", array($oS->name, $oG->name)));
 	      }
@@ -79,7 +84,7 @@ else
 	      $oU->id = $selusers[$j];
 	      $oU->name = $selusers[$j];
 	
-	      if( $appEngine->getGroupEditProvider()->removeUserFromGroup( $oU, $oG ) )
+	      if( $appEngine->getGroupEditProvider()->removeUserFromGroup( $oU, $oG, $reason ) )
 	      {
 	      	$appEngine->addMessage(tr("Removed user %0 from group %1", array($oU->name, $oG->name)));
 	      }

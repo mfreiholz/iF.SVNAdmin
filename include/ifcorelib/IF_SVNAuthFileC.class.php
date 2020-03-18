@@ -582,7 +582,7 @@ class IF_SVNAuthFileC
 
     // add the process history to database
     global $appEngine;
-    $appEngine->getHistoryViewProvider()->addHistory(tr("Add user: %0 to group: %1", array($username, $groupname)), $reason);
+    $appEngine->getHistoryViewProvider()->addHistory(tr("Add user %0 to group %1", array($username, $groupname)), $reason);
 
     return true;
   }
@@ -626,7 +626,7 @@ class IF_SVNAuthFileC
 
     // add the process history to database
     global $appEngine;
-    $appEngine->getHistoryViewProvider()->addHistory(tr("Add subgroup: %0 to group: %1", array($subgroupname, $groupname)), $reason);
+    $appEngine->getHistoryViewProvider()->addHistory(tr("Add subgroup %0 to group %1", array($subgroupname, $groupname)), $reason);
 
 
     return true;
@@ -675,18 +675,19 @@ class IF_SVNAuthFileC
    *
    * @param string $username
    * @param string $groupname
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function removeUserFromGroup($username, $groupname)
+  public function removeUserFromGroup($username, $groupname, $reason)
   {
     $groupUsers = $this->usersOfGroup($groupname);
 
     // Search the user in array.
     $pos = array_search($username, $groupUsers);
 
-    if ($pos !== FALSE) {
+    if ($pos !== FALSE and $this->check_reason($reason)) {
       // Remove the user from array.
       unset($groupUsers[$pos]);
 
@@ -694,6 +695,11 @@ class IF_SVNAuthFileC
 
       $userString = self::convertGroupsUsersToString($groups, $groupUsers);
       $this->config->setValue($this->GROUP_SECTION, $groupname, $userString);
+
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Removed user %0 from group %1", array($username, $groupname)), $reason);
+
     } else {
       // User is not in group.
       return true;
@@ -706,17 +712,19 @@ class IF_SVNAuthFileC
    *
    * @param string $subgroupname
    * @param string $groupname
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function removeSubgroupFromGroup($subgroupname, $groupname)
+  public function removeSubgroupFromGroup($subgroupname, $groupname, $reason)
   {
+
     $groupGroups = $this->groupsOfGroup($groupname);
 
     // Search the user in array.
     $pos = array_search($subgroupname, $groupGroups);
-    if ($pos !== FALSE) {
+    if ($pos !== FALSE and $this->check_reason($reason)) {
       // Remove the group from array.
       unset($groupGroups[$pos]);
 
@@ -724,9 +732,22 @@ class IF_SVNAuthFileC
 
       $userString = self::convertGroupsUsersToString($groupGroups, $users);
       $this->config->setValue($this->GROUP_SECTION, $groupname, $userString);
+
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Removed group %0 from group %1", array($subgroupname, $groupname)), $reason);
     } else {
       // Group is not in group.
       return true;
+    }
+    return true;
+  }
+
+  public function check_reason($reason){
+    if ($reason == NULL){
+      global $appEngine;
+      $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
+      return false;
     }
     return true;
   }
@@ -736,19 +757,29 @@ class IF_SVNAuthFileC
    *
    * @param string $groupname
    * @param string $repository
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function removeGroupFromRepository($groupname, $repository)
+  public function removeGroupFromRepository($groupname, $repository, $reason)
   {
     // Does the repo config exists?
     if (!$this->repositoryPathExists($repository)) {
       return false;
     }
 
+
+    $base_groupname = $groupname;
     $groupname = '@' . $groupname;
-    return $this->config->removeValue($repository, $groupname);
+
+    if ($this->config->removeValue($repository, $groupname) and $this->check_reason($reason)) {
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Remove group: %0 from access path: %1", array($base_groupname, $repository)), $reason);
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -756,15 +787,23 @@ class IF_SVNAuthFileC
    *
    * @param string $username
    * @param string $repository
+   * @param string $reason
    *
    * @return bool
    */
-  public function removeUserFromRepository($username, $repository)
+  public function removeUserFromRepository($username, $repository, $reason = null)
   {
     if (!$this->repositoryPathExists($repository)) {
       return false;
     }
-    return $this->config->removeValue($repository, $username);
+
+    if ($this->config->removeValue($repository, $username) and $this->check_reason($reason)) {
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Remove user: %0 from access path: %1", array($username, $repository)), $reason);
+      return true;
+    }
+    return false;
   }
 
   /**

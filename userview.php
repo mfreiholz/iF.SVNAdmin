@@ -29,10 +29,11 @@ $appTR->loadModule("roles");
 // Action handling.
 if (check_request_var('unassign'))
 {
-  $appEngine->handleAction('unassign_usergroup');
+  $appEngine->handleAction("unassign_fromgroup");
 }
 else if (check_request_var('unassign_permission'))
 {
+  // Permissions of users
   $appEngine->handleAction('unassign_permission');
 }
 else if (check_request_var('assign_role'))

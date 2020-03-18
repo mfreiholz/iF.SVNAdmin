@@ -44,6 +44,15 @@ $(document).ready(function(){
 -->
 <h2><?php Translate("Roles of user"); ?></h2>
 <form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
+
+  <div class="form-field">
+    <label for="name"><?php Translate("Reason for assign/unassign user role for this user"); ?></label>
+    <input type="text" name="reason" id="reason" class="lineedit">
+    <p>
+      <b><?php Translate("Why you assign/unassign user role for this user."); ?>
+    </p>
+  </div>
+
 	<input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 	<table class="datatable">
 	
@@ -110,6 +119,15 @@ $(document).ready(function(){
 -->
 <h2><?php Translate("Groups of user"); ?></h2>
 <form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
+
+  <div class="form-field">
+    <label for="name"><?php Translate("Reason for remove user from the group"); ?></label>
+    <input type="text" name="reason" id="reason" class="lineedit">
+    <p>
+      <b><?php Translate("Why you remove user from the group."); ?>
+    </p>
+  </div>
+
 <input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 
 <?php HtmlFilterBox("usergrouplist", 1); ?>
@@ -175,6 +193,15 @@ $(document).ready(function(){
 -->
 <h2><?php Translate("Permissions of users"); ?></h2>
 <form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
+
+  <div class="form-field">
+    <label for="name"><?php Translate("Reason for remove user permisson from the access path"); ?></label>
+    <input type="text" name="reason" id="reason" class="lineedit">
+    <p>
+      <b><?php Translate("Why you remove user permission from the access path."); ?>
+    </p>
+  </div>
+
 <input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 
 <?php HtmlFilterBox("userpermissionlist", 1); ?>
@@ -233,6 +260,15 @@ $(document).ready(function(){
 -->
 <h2><?php Translate("User is project manager of:"); ?></h2>
 <form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
+
+  <div class="form-field">
+    <label for="name"><?php Translate("Reason for remove project manager role from the access path"); ?></label>
+    <input type="text" name="reason" id="reason" class="lineedit">
+    <p>
+      <b><?php Translate("Why you remove project manager role from the access path."); ?>
+    </p>
+  </div>
+
 <input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 <table class="datatable">
   <thead>

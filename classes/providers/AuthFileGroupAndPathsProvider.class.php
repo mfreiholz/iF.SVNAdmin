@@ -284,18 +284,18 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IGroupEditProvider::removeUserFromGroup()
    */
-  public function removeUserFromGroup($objUser, $objGroup)
+  public function removeUserFromGroup($objUser, $objGroup, $reason)
   {
-    return $this->m_authfile->removeUserFromGroup($objUser->name, $objGroup->name);
+    return $this->m_authfile->removeUserFromGroup($objUser->name, $objGroup->name, $reason);
   }
 
   /**
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IGroupEditProvider::removeSubgroupFromGroup()
    */
-  public function removeSubgroupFromGroup($objSubgroup, $objGroup)
+  public function removeSubgroupFromGroup($objSubgroup, $objGroup, $reason)
   {
-    return $this->m_authfile->removeSubgroupFromGroup($objSubgroup->name, $objGroup->name);
+    return $this->m_authfile->removeSubgroupFromGroup($objSubgroup->name, $objGroup->name, $reason);
   }
 
   /**
@@ -506,18 +506,18 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IPathsEditProvider::removeUserFromAccessPath()
    */
-  public function removeUserFromAccessPath($objUser, $objAccessPath)
+  public function removeUserFromAccessPath($objUser, $objAccessPath, $reason)
   {
-    return $this->m_authfile->removeUserFromRepository($objUser->name, $objAccessPath->path);
+    return $this->m_authfile->removeUserFromRepository($objUser->name, $objAccessPath->path, $reason);
   }
 
   /**
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IPathsEditProvider::removeGroupFromAccessPath()
    */
-  public function removeGroupFromAccessPath($objGroup, $objAccessPath)
+  public function removeGroupFromAccessPath($objGroup, $objAccessPath, $reason)
   {
-    return $this->m_authfile->removeGroupFromRepository($objGroup->name, $objAccessPath->path);
+    return $this->m_authfile->removeGroupFromRepository($objGroup->name, $objAccessPath->path, $reason);
   }
 
   /**

@@ -4,6 +4,12 @@ $appEngine->checkUserAuthentication(true, ACL_MOD_PROJECTMANAGER, ACL_ACTION_ASS
 
 $selusers = get_request_var("selected_users");
 $selpaths = get_request_var("selected_accesspaths");
+$reason = get_request_var("reason");
+
+if ( $reason == NULL )
+{
+  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
+}
 
 if ($selusers == null || $selpaths == null)
 {

@@ -44,3 +44,8 @@
 "No-Access","无权限"
 "Index,SVN Web Link","序号,SVN链接"
 "History","历史"
+"You have to input the reason.","你必须输入修改原因"
+"Removed user %0 from group %1","将用户( %0 )从组( %1 )中移除"
+"Removed group %0 from group %1","将子组( %0 )从组( %1 )中移除"
+"Add user %0 to group %1","添加用户( %0 )到组( %1 )中"
+"Add subgroup %0 to group %1","添加子组( %0 )到组( %1 )中"
