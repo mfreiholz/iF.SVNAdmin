@@ -6,4 +6,4 @@
 "Invalid group names are","不合法的组名为:"
 "Create Group: ","创建组: "
 "Reason for creating the Group","创建组的原因"
-"Why you create this group.","为什么你要创建该用户组，说明原因"
+"Why you create this group.","你为什么创建该用户组，说明原因"

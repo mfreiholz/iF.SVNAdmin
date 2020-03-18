@@ -64,7 +64,7 @@ if ($reponame == NULL or $repo_reason == NULL) {
         // $engine->getAccessPathEditProvider()->save(); will save the user data to the config file
         // Create the Access Path Object and save use data to config file
         if_log_debug('Create the Access Path Object and save use data to config file');
-        if ($engine->getAccessPathEditProvider()->createAccessPath($ap)) {
+        if ($engine->getAccessPathEditProvider()->createAccessPath($ap, tr("Initialize the repository:") . $reponame)) {
           // save user data to the authz config file
           if_log_debug('Save data to the authz config file');
           $engine->getAccessPathEditProvider()->save();

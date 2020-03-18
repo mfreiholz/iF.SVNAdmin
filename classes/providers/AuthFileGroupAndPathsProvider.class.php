@@ -468,12 +468,12 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * create AccessPath object
    * @see svnadmin\core\interfaces.IPathsEditProvider::createAccessPath()
    */
-  public function createAccessPath($objAccessPath)
+  public function createAccessPath($objAccessPath, $reason)
   {
     // tell addRepositoryPath the path and description information
     // @see addRepositoryPath in the include/ifcorelib/IF_SVNAuthFileC.class.php
     if_log_debug('Create access path info');
-    return $this->m_authfile->addRepositoryPath($objAccessPath->path, $objAccessPath->description);
+    return $this->m_authfile->addRepositoryPath($objAccessPath->path, $objAccessPath->description, $reason);
   }
 
   /**

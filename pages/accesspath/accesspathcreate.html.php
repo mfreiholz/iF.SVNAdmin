@@ -24,6 +24,14 @@
         </p>
       </div>
 
+      <div class="form-field">
+        <label for="accesspathreason"><?php Translate("Reason for creating the Access Path"); ?></label>
+        <input type="text" name="accesspathreason" id="accesspathreason" class="lineedit">
+        <p>
+          <b><?php Translate("Why you create this Access Path"); ?>
+        </p>
+      </div>
+
       <?php if (IsProviderActive(PROVIDER_REPOSITORY_VIEW) && HasAccess(ACL_MOD_REPO, ACL_ACTION_VIEW)) : ?>
         <p style="margin-top:0; margin-bottom:20px;">
           <img src="templates/icons/addpath.png" border="0" alt="<?php Translate("Browse..."); ?>">

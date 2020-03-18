@@ -417,13 +417,14 @@ class IF_SVNAuthFileC
    *
    * @param string $repopath  repository path
    * @param string $repodesc  repository description information
+   * @param string $reason  repository path create reason
    *
    * @return bool true=OK; false=Repository path already exists.
    *
    * @throws Exception If an invalid repository path has been provided.
    *
    */
-  public function addRepositoryPath($repopath, $repodesc = null)
+  public function addRepositoryPath($repopath, $repodesc = null, $reason = null)
   {
     if (self::repositoryPathExists($repopath)) {
       // Already exists.
@@ -444,6 +445,11 @@ class IF_SVNAuthFileC
     if (!empty($repodesc)) {
       if_log_debug('Add description info to $items array:' . $repodesc . '  Repository Path:' . $repopath);
       $this->config->setValue($repopath, '#section_desc', $repodesc);
+
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr('Create Access Path: ') . $repopath, $reason);
+
     }
     return true;
   }

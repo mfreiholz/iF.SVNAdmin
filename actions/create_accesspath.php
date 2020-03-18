@@ -5,9 +5,10 @@ $appEngine->checkUserAuthentication(true, ACL_MOD_ACCESSPATH, ACL_ACTION_ADD);
 // Check required fields.
 $path = get_request_var('path');
 $accesspathdesc = get_request_var('accesspathdesc');  // Access Path Description info
+$accesspathd_reason = get_request_var('accesspathreason');
 
 // Check Access Path inputed.
-if( $path == NULL )
+if( $path == NULL or $accesspathd_reason == NULL)
 {
   $appEngine->addException(new ValidationException(tr("You have to fill out all fields.")));
 }
@@ -36,13 +37,13 @@ else
     // Create now.
     if ($doCreate)
     {
-      $b = $appEngine->getAccessPathEditProvider()->createAccessPath($p);
+      $b = $appEngine->getAccessPathEditProvider()->createAccessPath($p, $accesspathd_reason);
       if($b) {
         $appEngine->getAccessPathEditProvider()->save();
         $appEngine->addMessage(tr("Created AccessPath \"%0\" successfully.", array($path)));
       }
       else {
-        throw new Exception(tr("An unknown error occured. Check your configuration, please."));
+        throw new Exception(tr("An unknown error occured. Check your configuration. Maybe this AccessPath exist. please."));
       }
     }
   }
