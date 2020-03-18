@@ -70,6 +70,7 @@
                       <option value="<?php print($r->name); ?>"><?php Translate($r->name); ?></option>
                     <?php } ?>
                   </select>
+                  <input type="text" name="reason" class="reasonedit" placeholder="<?php Translate("Assign Reason"); ?>">
                   <input type="submit" name="assign_role" value="<?php Translate("Assign"); ?>"
                          class="anbtn">
                 <?php } ?>

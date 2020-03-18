@@ -46,6 +46,16 @@ input.lineedit{
   border-radius:5px;
 }
 
+input.reasonedit{
+    -moz-border-radius:5px;
+    -khtml-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    width:200px;
+    align-content: center;
+}
+
+
 p.hdesc{
   color:#797c80;
   padding:0px 0px 20px 0px;

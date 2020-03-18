@@ -5,3 +5,4 @@
 "Can not remove user %0.","无法删除用户 %0 ."
 "Could not remove user's Access-Path-Manager associations:","无法删除用户的Access-Path-Manager关联"
 "You have to select at least one user.","请至少选择一个用户."
+"Assign Reason","分配角色的原因"

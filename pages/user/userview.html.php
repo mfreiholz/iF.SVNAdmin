@@ -45,13 +45,15 @@ $(document).ready(function(){
 <h2><?php Translate("Roles of user"); ?></h2>
 <form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
 
-  <div class="form-field">
-    <label for="name"><?php Translate("Reason for assign/unassign user role for this user"); ?></label>
-    <input type="text" name="reason" id="reason" class="lineedit">
-    <p>
-      <b><?php Translate("Why you assign/unassign user role for this user."); ?>
-    </p>
-  </div>
+  <?php if (HasAccess(ACL_MOD_ROLE, ACL_ACTION_UNASSIGN)) { ?>
+    <div class="form-field">
+      <label for="name"><?php Translate("Reason for assign/unassign user role for this user"); ?></label>
+      <input type="text" name="reason" id="reason" class="lineedit">
+      <p>
+        <b><?php Translate("Why you assign/unassign user role for this user."); ?>
+      </p>
+    </div>
+  <?php } ?>
 
 	<input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 	<table class="datatable">
@@ -120,15 +122,18 @@ $(document).ready(function(){
 <h2><?php Translate("Groups of user"); ?></h2>
 <form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
 
-  <div class="form-field">
+  <?php if (HasAccess(ACL_MOD_GROUP, ACL_ACTION_UNASSIGN)) {?>
+    <div class="form-field">
     <label for="name"><?php Translate("Reason for remove user from the group"); ?></label>
     <input type="text" name="reason" id="reason" class="lineedit">
     <p>
       <b><?php Translate("Why you remove user from the group."); ?>
     </p>
-  </div>
+    </div>
+  <?php } ?>
 
-<input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
+
+  <input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 
 <?php HtmlFilterBox("usergrouplist", 1); ?>
 
@@ -194,15 +199,18 @@ $(document).ready(function(){
 <h2><?php Translate("Permissions of users"); ?></h2>
 <form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
 
-  <div class="form-field">
+  <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN)) { ?>
+    <div class="form-field">
     <label for="name"><?php Translate("Reason for remove user permisson from the access path"); ?></label>
     <input type="text" name="reason" id="reason" class="lineedit">
     <p>
       <b><?php Translate("Why you remove user permission from the access path."); ?>
     </p>
-  </div>
+    </div>
+  <?php } ?>
 
-<input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
+
+  <input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 
 <?php HtmlFilterBox("userpermissionlist", 1); ?>
 

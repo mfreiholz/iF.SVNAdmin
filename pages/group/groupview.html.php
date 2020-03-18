@@ -7,13 +7,16 @@
 <?php if (IsProviderActive(PROVIDER_GROUP_VIEW) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_VIEW)) : ?>
 <h2><?php Translate("Users of group"); ?></h2>
 <form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?>" method="POST">
-  <div class="form-field">
-    <label for="name"><?php Translate("Reason for assign/unassign user to group"); ?></label>
-    <input type="text" name="reason" id="reason" class="lineedit">
-    <p>
-      <b><?php Translate("Why you assign/unassign the membership."); ?>
-    </p>
-  </div>
+
+  <?php if (HasAccess(ACL_MOD_GROUP, ACL_ACTION_UNASSIGN)): ?>
+    <div class="form-field">
+      <label for="name"><?php Translate("Reason for assign/unassign user to group"); ?></label>
+      <input type="text" name="reason" id="reason" class="lineedit">
+      <p>
+        <b><?php Translate("Why you assign/unassign the membership."); ?>
+      </p>
+    </div>
+  <?php endif; ?>
 
   <input type="hidden" name="selected_groups[]" value="<?php PrintStringValue('GroupName'); ?>">
 
@@ -87,13 +90,16 @@
 <h2><?php Translate("Groups of group"); ?></h2>
 <form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?>" method="POST">
 
-  <div class="form-field">
-    <label for="name"><?php Translate("Reason for assign/unassign group to group"); ?></label>
-    <input type="text" name="reason" id="reason" class="lineedit">
-    <p>
-      <b><?php Translate("Why you assign/unassign the membership."); ?>
-    </p>
-  </div>
+  <?php if (HasAccess(ACL_MOD_GROUP, ACL_ACTION_UNASSIGN)): ?>
+    <div class="form-field">
+      <label for="name"><?php Translate("Reason for assign/unassign group to group"); ?></label>
+      <input type="text" name="reason" id="reason" class="lineedit">
+      <p>
+        <b><?php Translate("Why you assign/unassign the membership."); ?>
+      </p>
+    </div>
+  <?php endif; ?>
+
 
   <input type="hidden" name="selected_groups[]" value="<?php PrintStringValue('GroupName'); ?>">
 
@@ -165,13 +171,15 @@
 <h2><?php Translate("Permissions of group"); ?></h2>
 <form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?>" method="POST">
 
-<div class="form-field">
-  <label for="name"><?php Translate("Reason for remove group permission from access path"); ?></label>
-  <input type="text" name="reason" id="reason" class="lineedit">
-  <p>
-    <b><?php Translate("Why you remove group permission from access path."); ?>
-  </p>
-</div>
+  <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN)): ?>
+    <div class="form-field">
+    <label for="name"><?php Translate("Reason for remove group permission from access path"); ?></label>
+    <input type="text" name="reason" id="reason" class="lineedit">
+    <p>
+      <b><?php Translate("Why you remove group permission from access path."); ?>
+    </p>
+    </div>
+  <?php endif; ?>
 
 <input type="hidden" name="selected_groups[]" value="<?php PrintStringValue('GroupNameEncoded'); ?>">
 
