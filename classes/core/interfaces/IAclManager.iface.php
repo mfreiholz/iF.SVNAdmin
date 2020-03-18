@@ -37,17 +37,19 @@ interface IAclManager
 	 * Assigns the given user to the given role.
 	 * @param <type> $objUser
 	 * @param <type> $objRole
+	 * @param string $reason
 	 * @return bool
 	 */
-	public function assignUserToRole($objUser, $objRole);
+	public function assignUserToRole($objUser, $objRole, $reason = null);
 
 	/**
 	 * Removes the user from a role.
 	 * @param <type> $objUser
 	 * @param <type> $objRole
+	 * @param string $reason
 	 * @return bool
 	 */
-	public function removeUserFromRole($objUser, $objRole);
+	public function removeUserFromRole($objUser, $objRole, $reason = null);
 
 	/**
 	 * Saves the ACL.

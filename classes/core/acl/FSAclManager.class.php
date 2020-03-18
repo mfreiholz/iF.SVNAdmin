@@ -252,9 +252,10 @@ namespace svnadmin\core\acl
      * Assigns the given user to the given role.
      * @param <type> $objUser
      * @param <type> $objRole
+     * @param string $reason
      * @return bool
      */
-    public function assignUserToRole($objUser, $objRole)
+    public function assignUserToRole($objUser, $objRole, $reason = null)
     {
       // First check, whether the section of the user already exists.
       if (!isset($this->assignments[$objUser->getName()]))
@@ -272,6 +273,10 @@ namespace svnadmin\core\acl
 
       // Assign the user now.
       $this->assignments[$objUser->getName()][$objRole->getName()] = "";
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr("The user %0 has been assigned to role %1", array($objUser->getName(), tr($objRole->getName()))),$reason);
+
       return true;
     }
 
@@ -279,9 +284,10 @@ namespace svnadmin\core\acl
      * Removes the user from a role.
      * @param <type> $objUser
      * @param <type> $objRole
+     * @param string $reason
      * @return bool
      */
-    public function removeUserFromRole($objUser, $objRole)
+    public function removeUserFromRole($objUser, $objRole, $reason = null)
     {
       // First check, whether the section of the user exists.
       if (!isset($this->assignments[$objUser->getName()]))
@@ -294,6 +300,10 @@ namespace svnadmin\core\acl
       if (isset($this->assignments[$objUser->getName()][$objRole->getName()]))
       {
         unset($this->assignments[$objUser->getName()][$objRole->getName()]);
+
+        // add the process history to database
+        global $appEngine;
+        $appEngine->getHistoryViewProvider()->addHistory(tr("The user %0 has been removed from role %1", array($objUser->getName(), tr($objRole->getName()))),$reason);
       }
 
       // Count the number of left roles from the user.

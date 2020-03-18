@@ -30,10 +30,15 @@ $selusers = get_request_var("selected_users");
 // Selected roles on page.
 $selroles = get_request_var("selected_roles");
 
+$reason = get_request_var('reason');
+
 // Validate the selection.
 if ($selusers == NULL || $selroles == NULL)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one user and one role.")));
+}
+else if ($reason == NULL) {
+  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 else
 {
@@ -59,7 +64,7 @@ else
 	        continue;
 	      }
 
-	      if ($appEngine->getAclManager()->removeUserFromRole($oU, $oR))
+	      if ($appEngine->getAclManager()->removeUserFromRole($oU, $oR, $reason))
 	      {
 	      	$appEngine->addMessage(tr("The user %0 has been removed from role %1", array($oU->name, tr($oR->name))));
 	      }
