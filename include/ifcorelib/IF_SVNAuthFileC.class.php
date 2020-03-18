@@ -491,13 +491,14 @@ class IF_SVNAuthFileC
    * Creates the new group "$groupname", if it does not exist.
    *
    * @param string $groupname
+   * @param string $reason
    *
    * @return bool TRUE/FALSE
    *
    * @throws Exception If an invalid group name has been provided.
    *
    */
-  public function createGroup($groupname)
+  public function createGroup($groupname, $reason)
   {
     // Validate the groupname.
     $pattern = '/^[A-Za-z0-9\-\_]+$/i';
@@ -512,6 +513,11 @@ class IF_SVNAuthFileC
     }
 
     $this->config->setValue($this->GROUP_SECTION, $groupname, "");
+
+    // add the process history to database
+    global $appEngine;
+    $appEngine->getHistoryViewProvider()->addHistory(tr('Create Group: ') . $groupname, $reason);
+
     return true;
   }
 

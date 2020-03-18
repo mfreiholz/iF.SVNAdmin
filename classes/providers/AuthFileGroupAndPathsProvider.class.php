@@ -243,12 +243,14 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
   }
 
   /**
-   * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IGroupEditProvider::addGroup()
+   * @param $objGroup
+   * @param null $group_reason
+   * @return bool
    */
-  public function addGroup($objGroup)
+  public function addGroup($objGroup, $group_reason = null)
   {
-    return $this->m_authfile->createGroup($objGroup->name);
+    return $this->m_authfile->createGroup($objGroup->name, $group_reason);
   }
 
   /**

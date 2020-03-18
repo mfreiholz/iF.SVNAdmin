@@ -15,6 +15,14 @@
       </p>
     </div>
 
+    <div class="form-field">
+      <label for="name"><?php Translate("Reason for creating the Group"); ?></label>
+      <input type="text" name="groupreason" id="groupreason" class="lineedit">
+      <p>
+        <b><?php Translate("Why you create this group."); ?>
+      </p>
+    </div>
+
     <div class="formsubmit">
       <input type="submit" name="create" value="<?php Translate('Create'); ?>" class="addbtn">
     </div>

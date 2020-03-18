@@ -24,9 +24,10 @@ namespace svnadmin\core\interfaces
     /**
      * Adds the given group.
      * @param $objGroup
+     * @param $reason
      * @return bool
      */
-    public function addGroup( $objGroup );
+    public function addGroup( $objGroup, $reason);
 
     /**
      * Removes the given group.
