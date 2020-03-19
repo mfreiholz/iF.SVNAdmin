@@ -7,3 +7,5 @@
 "Read &amp; Write","读写"
 "The user(s)/group(s) can see, create, modify and delete all files.","用户/组 可增删改所有文件."
 "Select the Access-Path for which the user(s)/group(s) should get rights","选择用户/组应该获得权限的访问路径."
+"Reason for assign user/group permission to access path","分配用户/组访问路径权限的原因"
+"Why you assign user/group permission to access path.","为什么要分配用户/组访问路径的权限"

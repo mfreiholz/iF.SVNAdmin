@@ -275,6 +275,23 @@ function HasAppMessages()
   return false;
 }
 
+/**
+ * translate the permission string to locale string
+ *
+ * @param string $permission can be the value '','r', or 'rw'
+ * @return string
+ */
+function LocalPermissionString($permission){
+  if ($permission == NULL or $permission == '') {
+    return tr('No-Access');
+  }
+  else if ($permission == 'r') {
+    return tr('Read');
+  }
+  else
+    return tr('Read-Write');
+}
+
 // --------------------------------------------------- Complete html components.
 
 /**

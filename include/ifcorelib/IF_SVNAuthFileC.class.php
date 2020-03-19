@@ -415,9 +415,9 @@ class IF_SVNAuthFileC
   /**
    * Adds a new repostory configuration path to the SVNAuthFile.
    *
-   * @param string $repopath  repository path
-   * @param string $repodesc  repository description information
-   * @param string $reason  repository path create reason
+   * @param string $repopath repository path
+   * @param string $repodesc repository description information
+   * @param string $reason repository path create reason
    *
    * @return bool true=OK; false=Repository path already exists.
    *
@@ -743,8 +743,9 @@ class IF_SVNAuthFileC
     return true;
   }
 
-  public function check_reason($reason){
-    if ($reason == NULL){
+  public function check_reason($reason)
+  {
+    if ($reason == NULL) {
       global $appEngine;
       $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
       return false;
@@ -877,17 +878,25 @@ class IF_SVNAuthFileC
    * @param string $username
    * @param string $repository
    * @param string $permission
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function addUserToRepository($username, $repository, $permission)
+  public function addUserToRepository($username, $repository, $permission, $reason)
   {
     if (!$this->repositoryPathExists($repository)) {
       return false;
     }
 
     $this->config->setValue($repository, $username, $permission);
+    global $appEngine;
+    $appEngine->addMessage(var_dump($permission));
+    // add the process history to database
+    global $appEngine;
+    $appEngine->getHistoryViewProvider()->addHistory(tr("Grant %0 permission to %1 on %2", array(LocalPermissionString($permission), $username, $repository)), $reason);
+
+
     return true;
   }
 
@@ -898,18 +907,24 @@ class IF_SVNAuthFileC
    * @param string $groupname
    * @param string $repository
    * @param string $permission
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function addGroupToRepository($groupname, $repository, $permission)
+  public function addGroupToRepository($groupname, $repository, $permission, $reason)
   {
     if (!$this->repositoryPathExists($repository)) {
       return false;
     }
-
+    $base_groupname = $groupname;
     $groupname = $this->GROUP_SIGN . $groupname;
     $this->config->setValue($repository, $groupname, $permission);
+
+    // add the process history to database
+    global $appEngine;
+    $appEngine->getHistoryViewProvider()->addHistory(tr("Grant %0 permission to %1 on %2", array(LocalPermissionString($permission), $base_groupname, $repository)), $reason);
+
     return true;
   }
 

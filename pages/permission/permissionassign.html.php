@@ -121,6 +121,13 @@ $(document).ready(function(){
         </tr>
       </table>
       <div class="formsubmit">
+        <div class="form-field">
+          <label for="name"><?php Translate("Reason for assign user/group permission to access path"); ?></label>
+          <input type="text" name="reason" id="reason" class="lineedit">
+          <p>
+            <b><?php Translate("Why you assign user/group permission to access path."); ?>
+          </p>
+        </div>
         <input type="submit" name="assign" value="<?php Translate("Assign"); ?>" class="anbtn">
       </div>
       </form>

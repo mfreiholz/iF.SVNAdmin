@@ -7,6 +7,9 @@ $selgroups = get_request_var('selected_groups');
 $selpaths  = get_request_var('selected_accesspaths');
 $selperm   = get_request_var('permission'); // TODO: There is no check, whether this var is given!
 
+$reason = get_request_var('reason');
+
+
 if (count($selusers) == 1 && empty($selusers[0]))
   $selusers = NULL;
 if (count($selgroups) == 1 && empty($selgroups[0]))
@@ -17,6 +20,9 @@ if (count($selpaths) == 1 && empty($selpaths[0]))
 if( $selpaths == NULL || ( $selusers == NULL && $selgroups == NULL ) )
 {
 	$appEngine->addException(new ValidationException(tr("You have to select a user or group and an access-path to perform this action.")));
+}
+else if ($reason == NULL) {
+	$appEngine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 else
 {
@@ -60,11 +66,11 @@ else
 			$oU->name = $selusers[$iu];
 
 			try {
-				$b = $appEngine->getAccessPathEditProvider()->assignUserToAccessPath($oU, $oAP, $oP);
+        $b = $appEngine->getAccessPathEditProvider()->assignUserToAccessPath($oU, $oAP, $oP, $reason);
 				if (!$b) {
 					throw new Exception("ERROR");
 				}
-				$appEngine->addMessage(tr("Grant %0 permission to %1 on %2", array($oP->perm, $oU->name, $oAP->path)));
+        $appEngine->addMessage(tr("Grant %0 permission to %1 on %2", array(tr($oP->perm), $oU->name, $oAP->path)));
 			}
 			catch (Exception $e) {
 				$appEngine->addException($e);
@@ -79,11 +85,11 @@ else
 	      $oG->name = $selgroups[$ig];
 
 	      try {
-	      	$b = $appEngine->getAccessPathEditProvider()->assignGroupToAccessPath( $oG, $oAP, $oP );
+	      	$b = $appEngine->getAccessPathEditProvider()->assignGroupToAccessPath( $oG, $oAP, $oP, $reason);
 	      	if (!$b) {
 	      		throw new Exception("ERROR");
 	      	}
-	      	$appEngine->addMessage(tr("Grant %0 permission to %1 on %2", array($oP->perm, $oG->name, $oAP->path)));
+	      	$appEngine->addMessage(tr("Grant %0 permission to %1 on %2", array(tr($oP->perm), $oG->name, $oAP->path)));
 	      }
 	      catch (Exception $e) {
 	      	$appEngine->addException($e);

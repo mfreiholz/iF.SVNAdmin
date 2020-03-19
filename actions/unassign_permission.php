@@ -46,13 +46,14 @@ $reason = get_request_var('reason');
 // Validation
 //
 
-if ($reason == NULL) {
-  $engine->addException(new ValidationException(tr("You have to input the reason.")));
-}
+
 
 if ($selpaths == NULL
 	|| ($selgroups == NULL && $selusers == NULL)) {
 	$engine->addException(new ValidationException(tr("You have to select at least one access-path and one user or group.")));
+}
+else if ($reason == NULL) {
+  $engine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 else {
 	try {

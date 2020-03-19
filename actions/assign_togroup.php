@@ -32,15 +32,12 @@ if ($selsubgroups != NULL && count($selsubgroups) > 0 && empty($selsubgroups[0])
 }
 
 // Validate.
-if ( $reason == NULL )
-{
-  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
-  return false;
-}
-
 if( ($selusers == NULL && $selsubgroups == NULL) || $selgroups == NULL )
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one user and one group.")));
+}
+else if ($reason == NULL) {
+  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 // Do assignments.
 else

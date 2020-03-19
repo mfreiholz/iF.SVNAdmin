@@ -524,11 +524,11 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IPathsEditProvider::assignGroupToAccessPath()
    */
-  public function assignGroupToAccessPath($objGroup, $objAccessPath, $objPermission)
+  public function assignGroupToAccessPath($objGroup, $objAccessPath, $objPermission, $reason)
   {
     $p = self::resolvePermission($objPermission);
     if ($p !== FALSE) {
-      return $this->m_authfile->addGroupToRepository($objGroup->name, $objAccessPath->path, $p);
+      return $this->m_authfile->addGroupToRepository($objGroup->name, $objAccessPath->path, $p, $reason);
     }
     return false;
   }
@@ -537,11 +537,11 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IPathsEditProvider::assignUserToAccessPath()
    */
-  public function assignUserToAccessPath($objUser, $objAccessPath, $objPermission)
+  public function assignUserToAccessPath($objUser, $objAccessPath, $objPermission, $reason)
   {
     $p = self::resolvePermission($objPermission);
     if ($p !== FALSE) {
-      return $this->m_authfile->addUserToRepository($objUser->name, $objAccessPath->path, $p);
+      return $this->m_authfile->addUserToRepository($objUser->name, $objAccessPath->path, $p, $reason);
     }
     return false;
   }
