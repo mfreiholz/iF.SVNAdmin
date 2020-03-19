@@ -33,7 +33,6 @@
 "Back to overview","返回"
 "Removed Access-Path "%0"","访问路径"%0"已经移除"
 "Message list","消息"
-"( Other Users )","( 其他用户 )"
 "Index","序号"
 "You do not have permission to access this page.","您无权查看该页面."
 "Required permissions:","要求的权限:"

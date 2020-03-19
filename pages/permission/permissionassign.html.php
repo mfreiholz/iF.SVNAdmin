@@ -123,7 +123,7 @@ $(document).ready(function(){
       <div class="formsubmit">
         <div class="form-field">
           <label for="name"><?php Translate("Reason for assign user/group permission to access path"); ?></label>
-          <input type="text" name="reason" id="reason" class="lineedit">
+          <input type="text" name="reason" id="reason" class="reasonedit">
           <p>
             <b><?php Translate("Why you assign user/group permission to access path."); ?>
           </p>
