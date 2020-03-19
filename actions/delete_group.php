@@ -35,7 +35,7 @@ if($selected == NULL)
   $appEngine->addException(new ValidationException(tr("You have to select at least one group.")));
 }
 else if ($reason == NULL) {
-  $engine->addException(new ValidationException(tr("You have to input the reason.")));
+  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 else
 {

@@ -459,9 +459,9 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IPathsEditProvider::deleteAccessPath()
    */
-  public function deleteAccessPath($objAccessPath)
+  public function deleteAccessPath($objAccessPath, $reason = null)
   {
-    return $this->m_authfile->removeRepositoryPath($objAccessPath->path);
+    return $this->m_authfile->removeRepositoryPath($objAccessPath->path, $reason);
   }
 
   /**

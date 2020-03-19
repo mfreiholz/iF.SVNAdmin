@@ -35,6 +35,8 @@ $appEngine->checkUserAuthentication(true, ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)
 //
 
 $selected = get_request_var('selected_accesspaths');
+$reason = get_request_var('reason1');
+
 
 //
 // Validation
@@ -43,6 +45,9 @@ $selected = get_request_var('selected_accesspaths');
 if ($selected == NULL)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one access-path.")));
+}
+else if ($reason == NULL) {
+  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 else
 {
@@ -73,7 +78,7 @@ else
 
 		// Remove the access-path.
 
-		if (!$appEngine->getAccessPathEditProvider()->deleteAccessPath($ap))
+		if (!$appEngine->getAccessPathEditProvider()->deleteAccessPath($ap, $reason))
 		{
 			$appEngine->addException(new Exception(tr('Can not delete Access-Path: %0', array($ap->getPath()))));
 		}

@@ -41,20 +41,23 @@ $(document).ready(function(){
             </colgroup>
             <tr>
               <td>
-                <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?>
-                <input type="submit" name="delete" value="<?php Translate("Delete"); ?>" class="delbtn" onclick="return deletionPrompt('<?php Translate("Are you sure?"); ?>');">
-                <?php endif; ?>
+                <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) { ?>
+                  <input type="text" name="reason1" id="reason1" class="reasonedit" placeholder="<?php Translate("Reason for delete access path"); ?>">
+
+                  <input type="submit" name="delete" value="<?php Translate("Delete"); ?>" class="delbtn" onclick="return deletionPrompt('<?php Translate("Are you sure?"); ?>');">
+                <?php } ?>
               </td>
               <td align="right">
-                <?php if (IsProviderActive(PROVIDER_USER_VIEW) && HasAccess(ACL_MOD_PROJECTMANAGER, ACL_ACTION_ASSIGN)) : ?>
+                <?php if (IsProviderActive(PROVIDER_USER_VIEW) && HasAccess(ACL_MOD_PROJECTMANAGER, ACL_ACTION_ASSIGN)) { ?>
                 <select class="chosen" name="selected_users[]">
                   <option value="">--- <?php Translate("Set project manager"); ?> ---</option>
                 <?php foreach (GetArrayValue("UserList") as $u) : ?>
                   <option value="<?php print($u->name); ?>"><?php print($u->getDisplayName()); ?></option>
                 <?php endforeach; ?>
                 </select>
-                <input type="submit" name="assign_projectmanager" value="<?php Translate("Assign"); ?>">
-                <?php endif; ?>
+                  <input type="text" name="reason" id="reason" class="reasonedit" placeholder="<?php Translate("Reason for Set project manager"); ?>">
+                  <input type="submit" name="assign_projectmanager" value="<?php Translate("Assign"); ?>">
+                <?php } ?>
               </td>
             </tr>
           </table>

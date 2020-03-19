@@ -467,17 +467,26 @@ class IF_SVNAuthFileC
    * Removes the access path from the configuration.
    *
    * @param string $repopath
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function removeRepositoryPath($repopath)
+  public function removeRepositoryPath($repopath, $reason)
   {
     if (!self::repositoryPathExists($repopath)) {
       return false;
     }
 
-    return $this->config->removeValue($repopath, null);
+//    return $this->config->removeValue($repopath, null);
+    if ($this->config->removeValue($repopath, null)){
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Removed Access-Path: %0", array($repopath)), $reason);
+      return true;
+    }
+    else
+      return false;
   }
 
   /**

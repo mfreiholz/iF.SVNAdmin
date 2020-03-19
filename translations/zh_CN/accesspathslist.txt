@@ -7,3 +7,5 @@
 "Access-Path Description","访问路径描述信息"
 "No data!","没有描述数据"
 "Just list the access path that no Project Manager or you is the Project Manager!","注意：此页面仅列出未分配项目经理或项目经理是你的访问路径(解除项目经理请在用户视图页面操作)"
+"Reason for Set project manager","设置项目经理的原因"
+"Reason for delete access path","删除访问的原因"
