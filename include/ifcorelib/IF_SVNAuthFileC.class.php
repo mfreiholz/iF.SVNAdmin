@@ -531,16 +531,23 @@ class IF_SVNAuthFileC
    * Deletes the given group by name.
    *
    * @param $groupname
+   * @param string $reason
    *
    * @return bool
    *
    */
-  public function deleteGroup($groupname)
+  public function deleteGroup($groupname, $reason)
   {
     if (!self::groupExists($groupname)) {
       return false;
     }
-    return $this->config->removeValue($this->GROUP_SECTION, $groupname);
+    if ($this->config->removeValue($this->GROUP_SECTION, $groupname)) {
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Deleted group %0 successfully.", array($groupname)), $reason);
+      return true;
+    }
+//    return $this->config->removeValue($this->GROUP_SECTION, $groupname);
   }
 
   /**
@@ -687,7 +694,11 @@ class IF_SVNAuthFileC
     // Search the user in array.
     $pos = array_search($username, $groupUsers);
 
-    if ($pos !== FALSE and $this->check_reason($reason)) {
+    if ($reason == NULL) {
+      global $appEngine;
+      $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
+    }
+    else if ($pos !== FALSE ) {
       // Remove the user from array.
       unset($groupUsers[$pos]);
 
@@ -724,7 +735,11 @@ class IF_SVNAuthFileC
 
     // Search the user in array.
     $pos = array_search($subgroupname, $groupGroups);
-    if ($pos !== FALSE and $this->check_reason($reason)) {
+    if ($reason == NULL) {
+      global $appEngine;
+      $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
+    }
+    else if ($pos !== FALSE ) {
       // Remove the group from array.
       unset($groupGroups[$pos]);
 
@@ -739,16 +754,6 @@ class IF_SVNAuthFileC
     } else {
       // Group is not in group.
       return true;
-    }
-    return true;
-  }
-
-  public function check_reason($reason)
-  {
-    if ($reason == NULL) {
-      global $appEngine;
-      $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
-      return false;
     }
     return true;
   }
@@ -774,10 +779,14 @@ class IF_SVNAuthFileC
     $base_groupname = $groupname;
     $groupname = '@' . $groupname;
 
-    if ($this->config->removeValue($repository, $groupname) and $this->check_reason($reason)) {
+    if ($reason == NULL) {
+      global $appEngine;
+      $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
+    }
+    else if ($this->config->removeValue($repository, $groupname)) {
       // add the process history to database
       global $appEngine;
-      $appEngine->getHistoryViewProvider()->addHistory(tr("Remove group: %0 from access path: %1", array($base_groupname, $repository)), $reason);
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Removed group %0 from access path %1", array($base_groupname, $repository)), $reason);
       return true;
     }
     return false;
@@ -798,10 +807,14 @@ class IF_SVNAuthFileC
       return false;
     }
 
-    if ($this->config->removeValue($repository, $username) and $this->check_reason($reason)) {
+    if ($reason == NULL) {
+      global $appEngine;
+      $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
+    }
+    else if ($this->config->removeValue($repository, $username)) {
       // add the process history to database
       global $appEngine;
-      $appEngine->getHistoryViewProvider()->addHistory(tr("Remove user: %0 from access path: %1", array($username, $repository)), $reason);
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Removed user %0 from access path %1", array($username, $repository)), $reason);
       return true;
     }
     return false;

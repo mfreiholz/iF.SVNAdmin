@@ -8,7 +8,7 @@
 "The user %0 has been assigned to role %1","用户 %0 已经分配了 %1 角色"
 "The user %0 has been removed from role %1","用户 %0 已经移除了 %1 角色"
 "Can not remove user %0 from role %1","不能将用户 %0 从 %1 角色中移除"
-"Removed user %0 from access path %1","从访问路径 %1 中移除用户 %0 ."
+"Removed user %0 from access path %1","将用户( %0 ) 从访问路径( %1 )中移除"
 "Removed Project-Manager status of user %0 from %1","将用户 %0 从访问路径 %1 中移除项目经理状态"
 "Reason for remove project manager role from the access path","从访问路径中移除该项目经理角色的原因"
 "Why you remove project manager role from the access path.","你为什么从访问路径中移除该项目经理角色"

@@ -19,7 +19,7 @@
 "The following Access-Path's has been assigned:","下列访问路径已授权:"
 "You have no permission to assign the following Access-Path's, they have been skipped:","您并无下列访问路径的分配权限，已跳过:"
 "Due to an unknown error, the following Access-Path's could not been handled:","未知错误，下列访问路径未被处理:"
-"Grant %0 permission to %1 on %2","给 %1 用户授予了访问路径 %2 的 %0 权限"
+"Grant %0 permission to %1 on %2","给 %1 用户/组 授予了访问路径 %2 的 %0 权限"
 
 # assign_userrole.php
 "You have to select at least one user and one role.","请至少选择一个用户和一个角色."

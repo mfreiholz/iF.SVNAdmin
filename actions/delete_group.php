@@ -26,9 +26,16 @@ $appEngine->forwardInvalidModule( !$appEngine->isGroupEditActive() );
 
 
 $selected = get_request_var('selected_groups');
+
+$reason = get_request_var('reason');
+
+
 if($selected == NULL)
 {
   $appEngine->addException(new ValidationException(tr("You have to select at least one group.")));
+}
+else if ($reason == NULL) {
+  $engine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 else
 {
@@ -41,7 +48,7 @@ else
       $g->id = $selected[$i];
       $g->name = $selected[$i];
 
-      if ($appEngine->getGroupEditProvider()->removeSubgroupFromAllGroups($g) && $appEngine->deleteGroup($g))
+      if ($appEngine->getGroupEditProvider()->removeSubgroupFromAllGroups($g, $reason) && $appEngine->deleteGroup($g, $reason))
       {
         $appEngine->addMessage(tr("Deleted group %0 successfully.", array($g->name)));
       }

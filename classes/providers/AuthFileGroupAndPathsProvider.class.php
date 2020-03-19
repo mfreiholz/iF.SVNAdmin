@@ -257,9 +257,9 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IGroupEditProvider::deleteGroup()
    */
-  public function deleteGroup($objGroup)
+  public function deleteGroup($objGroup, $reason)
   {
-    return $this->m_authfile->deleteGroup($objGroup->name);
+    return $this->m_authfile->deleteGroup($objGroup->name, $reason);
   }
 
   /**
@@ -315,12 +315,12 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IGroupEditProvider::removeSubgroupFromAllGroups()
    */
-  public function removeSubgroupFromAllGroups($objSubgroup)
+  public function removeSubgroupFromAllGroups($objSubgroup, $reason)
   {
     $groups = $this->m_authfile->groupsOfSubgroup($objSubgroup->name);
 
     for ($i = 0; $i < count($groups); $i++) {
-      $this->m_authfile->removeSubgroupFromGroup($objSubgroup->name, $groups[$i]);
+      $this->m_authfile->removeSubgroupFromGroup($objSubgroup->name, $groups[$i], $reason);
     }
     return true;
   }
@@ -468,7 +468,7 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * create AccessPath object
    * @see svnadmin\core\interfaces.IPathsEditProvider::createAccessPath()
    */
-  public function createAccessPath($objAccessPath, $reason)
+  public function createAccessPath($objAccessPath, $reason = null)
   {
     // tell addRepositoryPath the path and description information
     // @see addRepositoryPath in the include/ifcorelib/IF_SVNAuthFileC.class.php
@@ -480,11 +480,11 @@ class AuthFileGroupAndPathProvider implements \svnadmin\core\interfaces\IGroupVi
    * (non-PHPdoc)
    * @see svnadmin\core\interfaces.IPathsEditProvider::removeGroupFromAllAccessPaths()
    */
-  public function removeGroupFromAllAccessPaths($objGroup)
+  public function removeGroupFromAllAccessPaths($objGroup, $reason = null)
   {
     $paths = $this->m_authfile->repositoryPathsOfGroup($objGroup->name);
     for ($i = 0; $i < count($paths); $i++) {
-      $this->m_authfile->removeGroupFromRepository($objGroup->name, $paths[$i]);
+      $this->m_authfile->removeGroupFromRepository($objGroup->name, $paths[$i], $reason);
     }
     return true;
   }

@@ -38,7 +38,9 @@ $(document).ready(function(){
       <tr>
         <td>
           <?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_DELETE)) { ?>
-          <input type="submit" name="delete" value="<?php Translate('Delete'); ?>" class="delbtn" onclick="return deletionPrompt('<?php Translate("Are you sure?"); ?>');">
+            <input type="text" name="reason" class="reasonedit" placeholder="<?php Translate("The reason for delete group"); ?>">
+
+            <input type="submit" name="delete" value="<?php Translate('Delete'); ?>" class="delbtn" onclick="return deletionPrompt('<?php Translate("Are you sure?"); ?>');">
           <?php } ?>
         </td>
         <td align="right">

@@ -228,7 +228,7 @@
         <a href="accesspathview.php?accesspath=<?php echo $ap->getEncodedPath(); ?>"><?php echo $ap->getPath(); ?></a>
       </td>
       <td>
-        <?php echo $ap->getPerm(); ?>
+        <?php echo tr($ap->getPerm()); ?>
       </td>
     </tr>
     <?php endforeach; ?>

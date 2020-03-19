@@ -29,7 +29,7 @@ interface IPathsEditProvider extends IEditProvider
 
 	public function assignGroupToAccessPath($objGroup, $objAccessPath, $objPermission, $reason);
 	public function removeGroupFromAccessPath($objGroup, $objAccessPath, $reason);
-	public function removeGroupFromAllAccessPaths($objGroup);
+	public function removeGroupFromAllAccessPaths($objGroup, $reason = null);
 
 	public function assignUserToAccessPath($objUser, $objAccessPath, $objPermission, $reason);
 	public function removeUserFromAccessPath($objUser, $objAccessPath, $reason);

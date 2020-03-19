@@ -814,15 +814,16 @@ class Engine
 	 * Deletes the group and removes all associations of this group.
 	 *
 	 * @param Group $group
+   * @param string $reason
 	 * @return bool
 	 *
 	 * @deprecated
 	 */
-	public function deleteGroup($group)
+	public function deleteGroup($group, $reason)
 	{
-		if( $this->getAccessPathEditProvider()->removeGroupFromAllAccessPaths($group) )
+		if( $this->getAccessPathEditProvider()->removeGroupFromAllAccessPaths($group, $reason) )
 		{
-			if( $this->getGroupEditProvider()->deleteGroup($group) )
+			if( $this->getGroupEditProvider()->deleteGroup($group, $reason) )
 			{
 				$this->getAccessPathEditProvider()->save();
 				$this->getGroupEditProvider()->save();

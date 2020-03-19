@@ -86,8 +86,9 @@ else {
 	      
 				// remove user from ap
 				try {
-					if ($engine->getAccessPathEditProvider()->removeUserFromAccessPath($oU, $oAP, $reason))
+					if ($engine->getAccessPathEditProvider()->removeUserFromAccessPath($oU, $oAP, $reason)){
 						$engine->addMessage(tr("Removed user %0 from access path %1", array($oU->name, $oAP->path)));
+					}
 					else
 						$engine->addException(new Exception(tr("Can not remove user %0 from access path %1", array($oU->name, $oAP->path))));
 				}

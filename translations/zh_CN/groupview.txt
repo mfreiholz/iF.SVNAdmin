@@ -13,4 +13,3 @@
 "Why you remove group permission from access path.","你从访问路径中移除组权限的原因"
 "Remove user: %0 from access path: %1","将用户( %0 )从访问路径( %1 )中移除"
 "Remove group: %0 from access path: %1","将组( %0 )从访问路径( %1 )中移除"
-"Removed group %0 from access path %1","将组( %0 )从访问路径( %1 )中移除"

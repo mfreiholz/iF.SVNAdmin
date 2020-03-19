@@ -250,7 +250,7 @@ $(document).ready(function(){
 	<tr>
 	  <td><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN) && empty($ap->inherited)) { ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print($ap->path); ?>"><?php } ?></td>
 	  <td><a href="accesspathview.php?accesspath=<?php print($ap->getEncodedPath()); ?>"><?php print($ap->path); ?></a></td>
-	  <td><?php print($ap->perm); ?></td>
+	  <td><?php print(tr($ap->perm)); ?></td>
 	  <td><?php print($ap->inherited); ?></td>
 	</tr>
 	<?php } ?>
