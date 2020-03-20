@@ -11,7 +11,7 @@
         <?php if (HasAccess(ACL_MOD_USER, ACL_ACTION_DELETE) || HasAccess(ACL_MOD_ROLE, ACL_ACTION_ASSIGN)) { ?>
         <?php } ?>
         <th width="50" align="center">
-          <?php Translate("Index"); ?>
+          <?php Translate("ID"); ?>
         </th>
         <th width="150" align="center">
           <?php Translate("Users"); ?>
@@ -29,10 +29,10 @@
       </thead>
 
       <tbody>
-      <?php $Index = 1;
+      <?php
       foreach (GetArrayValue("HistoryList") as $h) { ?>
         <tr>
-          <td align="center"><?php print($Index); ?></td>
+          <td align="center"><?php print($h->getID()); ?></td>
           <td>
             <a href="userview.php?username=<?php print($h->getUsername()); ?>"><?php print($h->getUsername()); ?></a>
           </td>
@@ -42,8 +42,7 @@
           <td align="center"><?php print($h->getDate()); ?></td>
           <td><?php print($h->getDescription()); ?></td>
         </tr>
-        <?php $Index++;
-      } ?>
+        <?php } ?>
       </tbody>
     </table>
   </form>

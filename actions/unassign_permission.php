@@ -41,12 +41,18 @@ $selusers = get_request_var('selected_users');
 $selgroups = get_request_var('selected_groups');
 $selpaths = get_request_var('selected_accesspaths');
 $reason = get_request_var('reason');
-
 //
 // Validation
 //
 
-
+if ($reason == NULL) {
+  if ($selusers !== NULL) {
+    $reason = get_request_var('reason_unassign_user');
+  }
+  else if ($selgroups !== NULL) {
+    $reason = get_request_var('reason_uassign_group');
+  }
+}
 
 if ($selpaths == NULL
 	|| ($selgroups == NULL && $selusers == NULL)) {
@@ -60,11 +66,11 @@ else {
 		$selpathsLen = count($selpaths);
 		$selusersLen = ($selusers != null) ? count($selusers) : 0;
 		$selgroupsLen = ($selgroups != null) ? count($selgroups) : 0;
-	  
+
 		// iterate all selected_accesspaths
 		for ($i = 0; $i < $selpathsLen; ++$i) {
 			$oAP = new \svnadmin\core\entities\AccessPath($selpaths[$i]);
-	
+
 			// Is the user restricted to some paths? (project-manager)
 			if ($engine->isAuthenticationActive()) {
 				$currentUsername = $engine->getSessionUsername();
@@ -75,15 +81,15 @@ else {
 					}
 				}
 			}
-	
+
 			// iterate selected_users.
 			for ($iu = 0; $iu < $selusersLen; ++$iu) {
 				if (empty($selusers[$iu])) {
 					continue;
 				}
-			
+
 				$oU = new \svnadmin\core\entities\User($selusers[$iu], $selusers[$iu]);
-	      
+
 				// remove user from ap
 				try {
 					if ($engine->getAccessPathEditProvider()->removeUserFromAccessPath($oU, $oAP, $reason)){
@@ -96,15 +102,15 @@ else {
 					$engine->addException($e);
 				}
 			}
-	    
+
 			// iterate selected_groups.
 			for ($ig = 0; $ig < $selgroupsLen; ++$ig) {
 				if (empty($selgroups[$ig])) {
 					continue;
 				}
-			
+
 				$oG = new \svnadmin\core\entities\Group($selgroups[$ig], $selgroups[$ig]);
-				
+
 				// remove group from ap
 				try {
 					if ($engine->getAccessPathEditProvider()->removeGroupFromAccessPath($oG, $oAP, $reason))

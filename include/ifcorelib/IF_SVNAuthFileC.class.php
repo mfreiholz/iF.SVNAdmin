@@ -812,6 +812,7 @@ class IF_SVNAuthFileC
    */
   public function removeUserFromRepository($username, $repository, $reason = null)
   {
+    global $appEngine;$appEngine->addMessage(var_dump($reason));
     if (!$this->repositoryPathExists($repository)) {
       return false;
     }
@@ -820,7 +821,8 @@ class IF_SVNAuthFileC
       global $appEngine;
       $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
     }
-    else if ($this->config->removeValue($repository, $username)) {
+    else {
+      $this->config->removeValue($repository, $username);
       // add the process history to database
       global $appEngine;
       $appEngine->getHistoryViewProvider()->addHistory(tr("Removed user %0 from access path %1", array($username, $repository)), $reason);

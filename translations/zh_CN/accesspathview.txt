@@ -8,3 +8,7 @@
 "Can not remove user %0 from access path %1","不能将用户 %0 从访问路径 %1 中移除"
 "Removed group %0 from access path %1","将组 %0 从访问路径 %1 中移除"
 "Can not remove group %0 from access path %1","不能将组 %0 从访问路径 %1 中移除"
+"Reason for unassign user from access path","将用户从访问路径中移除的原因"
+"Reason for unassign group from access path","将组从访问路径中移除的原因"
+"Reason for assign user permission to access path","给用户分配访问路径的权限的原因"
+"Reason for assign group permission to access path","给组分配访问路径的权限的原因"
