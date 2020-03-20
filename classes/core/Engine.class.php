@@ -37,6 +37,8 @@ define("PROVIDER_REPOSITORY_EDIT",     8);
 define("PROVIDER_AUTHENTICATION",      9);
 define("PROVIDER_HISTORY_VIEW",        10);
 
+define("HISTORY_PAGE_ITEMS", 20);
+
 /**
  * Page forward defines.
  */

@@ -47,11 +47,12 @@ namespace svnadmin\providers {
 
     /**
      * get history list
+     * @param string $q query type
      * @return mixed
      */
-    public function getHistories()
+    public function getHistories($q)
     {
-      $historyArray = $this->m_database_file->getHistoryList();
+      $historyArray = $this->m_database_file->getHistoryList($q);
       return $historyArray;
     }
 

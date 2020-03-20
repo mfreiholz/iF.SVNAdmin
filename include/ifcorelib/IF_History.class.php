@@ -27,6 +27,9 @@ class IF_History
   // Holds the history file data as an array
   private $m_data = array();
 
+  // holds the all history items number
+  private $m_number = NULL;
+
   // Holds the History database file
   private $m_dbfile = NULL;
 
@@ -64,9 +67,13 @@ class IF_History
   }
 
   // 获取所有历史记录
-  public function getHistoryList()
+  public function getHistoryList($q)
   {
-    return $this->m_data;
+    $ret = array();
+    self::parseUserFile($this->m_dbfile, $q);
+    $ret['items'] = $this->m_data;
+    $ret['number'] = $this->m_number;
+    return $ret;
   }
 
   // 插入一条历史记录到数据库中
@@ -94,10 +101,11 @@ class IF_History
    * Parses the database file and saves the data in a localy holded array, which
    * can be accessed by the public functions of this class.
    *
-   * @param striing $dbfile The file to parse.
+   * @param string $dbfile The file to parse.
+   * @param string $query_type query type, default is page.
    * @return bool
    */
-  private function parseUserFile($dbfile)
+  private function parseUserFile($dbfile, $query_type = null)
   {
     if (!file_exists($dbfile)) {
       // File does not exist.
@@ -111,12 +119,37 @@ class IF_History
       return false;
     }
 
-
     // Read data from db file
     $db = new SQLite3($dbfile);
-    // the table name is "History" in the sqlite database
-    $q = $db->query('SELECT * FROM History');
 
+    // get the history items number
+    $rows = $db->query('SELECT count(*) as count FROM History');
+    $row = $rows->fetchArray();
+    $this->m_number = $row['count'];
+
+    $page_items_number = HISTORY_PAGE_ITEMS;
+    // create the query sql string
+    if ($query_type == NULL || $$query_type == "page") {
+      $condition = "order by id desc limit " . $page_items_number;
+    } else if ($query_type == "show_day") {
+      $condition = "where date between date('now','localtime', 'start of day') and date('now', 'localtime', 'start of day', '1 day')";
+    } else if ($query_type == "yesterday") {
+      $condition = "where date between date('now','localtime', 'start of day', '-1 day') and date('now', 'localtime', 'start of day')";
+    } else if ($query_type == "one_week") {
+      $condition = "where date between date('now', 'localtime', 'start of day','-6 day','weekday 1') and date('now', 'localtime', 'start of day', '1 day')";
+    } else if ($query_type == "one_month") {
+      $condition = "where date between date('now', 'localtime', 'start of month') and date('now', 'localtime', 'start of day', '1 day')";
+    } else if ($query_type == "show_all") {
+      $condition = "";
+    } else {
+      $condition = " order by id desc limit " . $page_items_number * ($query_type - 1) . "," . $page_items_number;
+    }
+
+
+    // the table name is "History" in the sqlite database
+    $q = $db->query('SELECT * FROM History ' . $condition);
+
+    $this->m_data = array();
     while ($row = $q->fetchArray()) {
       $h = new \svnadmin\core\entities\History();
       $h->id = $row['ID'];
