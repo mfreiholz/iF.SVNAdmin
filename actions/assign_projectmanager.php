@@ -35,9 +35,7 @@ else
           // fix assign one project manager to multi access path error
           $appEngine->addMessage(tr("Assigned user %0 to access-path %1 successfully.", array($selusers[$i], $selpaths[$j])));
           // add the process history to database
-//          global $appEngine;
           $appEngine->getHistoryViewProvider()->addHistory(tr("Assigned user %0 to access-path %1 successfully.", array($selusers[$i], $selpaths[$j])), $reason);
-          return true;
         }
         else
           $appEngine->addException(new Exception(tr("Could not assign user %0 to access-path %1", array($selusers[$i], $selpaths[$i]))));
