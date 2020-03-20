@@ -5,7 +5,6 @@
 
 <?php HtmlFilterBox("historylist", 1); ?>
 <p><span><?php Translate("History items number:") . PrintStringValue("HistoryNumber");?></span></p>
-<!--  <form action="historylist.php?page=--><?php //PrintStringValue("currentPage");?><!--" method="POST">-->
   <form action="historylist.php" method="POST">
     <input type="submit" name="one_day" value="<?php Translate("Show one day items"); ?>">&nbsp;
     <input type="submit" name="yesterday" value="<?php Translate("Show yesterday items"); ?>">&nbsp;
