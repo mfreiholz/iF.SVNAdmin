@@ -50,3 +50,4 @@
 "Add subgroup %0 to group %1","添加子组( %0 )到组( %1 )中"
 "Can not remove group %0 from access path %1","不能将组 %0 从访问路径 %1 中移除"
 "Removed group %0 from access path %1","将组( %0 )从访问路径( %1 )中移除"
+"Create Access Path: ","创建访问路径: "

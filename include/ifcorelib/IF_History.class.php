@@ -192,8 +192,6 @@ class IF_History
       $this->m_errno = 3;
       return false;
     }
-    global $appEngine;
-    $appEngine->addMessage(var_dump($objHostory));
     // Open file and write the array of histoies to it.
     $sql = "INSERT INTO History (ID, USERNAME, ACTION, DATE, DESCRIPTION) VALUES (null, '" .
       $objHostory->username . "', '" . $objHostory->user_action . "', '" . $objHostory->date . "', '" . $objHostory->description . "');";

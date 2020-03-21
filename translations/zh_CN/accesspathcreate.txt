@@ -9,5 +9,4 @@
 "Browse...","浏览..."
 "Reason for creating the Access Path","创建访问路径的原因"
 "Why you create this Access Path","你为什么创建该访问路径，说明原因"
-"Create Access Path: ","创建访问路径: "
 "An unknown error occured. Check your configuration. Maybe this AccessPath exist. please.","未知错误(该访问路径可能已经存在)，请检查配置."

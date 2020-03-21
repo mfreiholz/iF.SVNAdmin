@@ -24,12 +24,26 @@ else
     if ($appEngine->isAuthenticationActive())
     {
       $currentUsername = $appEngine->getSessionUsername();
+
+
+        // is access path manager
       if ($appEngine->getAclManager()->isUserAccessPathManager($currentUsername))
       {
         if (!$appEngine->getAclManager()->isUserAdminOfPath($currentUsername, $path))
         {
           $doCreate = false;
           $appEngine->addException(new Exception(tr("You don't have the permission to create this access path: %0", array($path))));
+        }
+      }
+
+      // make sure the admin always can create access path
+      $oUser = new \svnadmin\core\entities\User;
+      $oUser->id = $currentUsername;
+      $oUser->name = $currentUsername;
+      $rolesOfUser = $appEngine->getAclManager()->getRolesOfUser($oUser);
+      for ($i = 0; $i < count($rolesOfUser); ++$i) {
+        if ($appEngine->getAclManager()->isAdminRole($rolesOfUser[$i])){
+          $doCreate = true;
         }
       }
     }
