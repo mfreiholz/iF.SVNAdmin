@@ -9,10 +9,15 @@ $appEngine->checkUserAuthentication(true, ACL_MOD_PROJECTMANAGER, ACL_ACTION_UNA
 
 $selusers = get_request_var("selected_users");
 $selpaths = get_request_var("selected_accesspaths");
+$reason = get_request_var('reason');
+
 
 if ($selusers == null || $selpaths == null)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one access-path and one user.")));
+}
+else if ($reason == NULL) {
+  $appEngine->addException(new ValidationException(tr("You have to input the reason.")));
 }
 else
 {
@@ -27,7 +32,7 @@ else
 	  {
 	    for ($j=0; $j<$selpathsCount; $j++)
 	    {
-	      $b = $appEngine->getAclManager()->removeAccessPathAdmin($selpaths[$j], $selusers[$i]);
+	      $b = $appEngine->getAclManager()->removeAccessPathAdmin($selpaths[$j], $selusers[$i], $reason);
 	      if ($b)
 	      	$appEngine->addMessage(tr("Removed Project-Manager status of user %0 from %1", array($selusers[$i], $selpaths[$j])));
 	      else

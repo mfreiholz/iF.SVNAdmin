@@ -518,9 +518,10 @@ namespace svnadmin\core\acl
      * Removes the project administrator of an access-path.
      * @param string $accesspath
      * @param string $username
+     * @param string $reason
      * @return bool Always returns TRUE.
      */
-    public function removeAccessPathAdmin($accesspath, $username)
+    public function removeAccessPathAdmin($accesspath, $username, $reason)
     {
       $section = $username.$this->path_postfix;
       if (!isset($this->assignments[$section]))
@@ -547,6 +548,9 @@ namespace svnadmin\core\acl
           $this->assignments[$section][$i] = $list[$i];
         }
       }
+      // add the process history to database
+      global $appEngine;
+      $appEngine->getHistoryViewProvider()->addHistory(tr("Removed Project-Manager status of user %0 from %1", array($username, $accesspath)),$reason);
 
       return true;
     }
