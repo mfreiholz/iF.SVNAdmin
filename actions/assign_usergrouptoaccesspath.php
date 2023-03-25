@@ -7,11 +7,11 @@ $selgroups = get_request_var('selected_groups');
 $selpaths  = get_request_var('selected_accesspaths');
 $selperm   = get_request_var('permission'); // TODO: There is no check, whether this var is given!
 
-if (count($selusers) == 1 && empty($selusers[0]))
+if ($selusers != NULL && count($selusers) == 1 && empty($selusers[0]))
   $selusers = NULL;
-if (count($selgroups) == 1 && empty($selgroups[0]))
+if ($selgroups != NULL && count($selgroups) == 1 && empty($selgroups[0]))
   $selgroups = NULL;
-if (count($selpaths) == 1 && empty($selpaths[0]))
+if ($selpaths != NULL && count($selpaths) == 1 && empty($selpaths[0]))
   $selpaths = NULL;
 
 if( $selpaths == NULL || ( $selusers == NULL && $selgroups == NULL ) )
