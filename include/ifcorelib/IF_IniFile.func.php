@@ -105,6 +105,10 @@ function if_write_ini_file( $dest_filename, $data )
   }
 
   $fh = fopen( $dest_filename, "w" );
+  if ( !is_resource( $fh ) )
+  {
+    return false; // failed to open file
+  }
   flock( $fh, LOCK_EX );
   foreach( $data as $section_name=>$section_data ) // iterate sections.
   {
