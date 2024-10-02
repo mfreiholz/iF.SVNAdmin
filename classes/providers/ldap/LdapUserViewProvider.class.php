@@ -380,6 +380,33 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 
 	/**
 	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupViewProvider::getGroupsOfSubgroup()
+	 */
+	public function getGroupsOfSubgroup($objGroup)
+	{
+		throw new Exception('not implemented');
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see svnadmin\core\interfaces.IGroupViewProvider::getSubgroupsOfGroup()
+	 */
+	public function getSubgroupsOfGroup($objGroup)
+	{
+		throw new Exception('not implemented');
+	}
+
+	/**
+	* (non-PHPdoc)
+	* @see svnadmin\core\interfaces.IGroupViewProvider::getSubgroupsOfGroup()
+	*/
+	public function isSubgroupInGroup($objSubgroup, $objGroup)
+	{
+		throw new Exception('not implemented');
+	}
+
+	/**
+	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::groupExists()
 	 */
 	public function groupExists($objGroup)
