@@ -40,6 +40,7 @@ if (!file_exists("./data/config.ini"))
  * Password encryption type for BASIC authentication.
  */
 //define("IF_HtPasswd_DefaultCrypt", "CRYPT"); // Unix only.
+//define("IF_HtPasswd_DefaultCrypt", "BLOWFISH");
 //define("IF_HtPasswd_DefaultCrypt", "SHA1");
 //define("IF_HtPasswd_DefaultCrypt", "MD5"); // Custom Apache APR1 MD5 hash.
 
@@ -97,7 +98,7 @@ include_once( "./classes/core/Exceptions.class.php" );
  * iF.SVNAdmin version.
  */
 define("MAJOR_VERSION", "1");
-define("MINOR_VERSION", "6.3");
+define("MINOR_VERSION", "7.0");
 define("VERSION_EXTRA", "UNOFFICIAL");
 
 /**

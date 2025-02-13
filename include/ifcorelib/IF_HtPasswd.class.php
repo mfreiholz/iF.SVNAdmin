@@ -22,6 +22,7 @@
  *
  * The following password encryptions are supported:
  * - define("IF_HtPasswd_DefaultCrypt", "CRYPT")
+ * - define("IF_HtPasswd_DefaultCrypt", "BLOWFISH")
  * - define("IF_HtPasswd_DefaultCrypt", "SHA1")
  * - define("IF_HtPasswd_DefaultCrypt", "MD5")
  *
@@ -188,6 +189,19 @@ class IF_HtPasswd
       		else
       		  return false;
       	}
+		// BCrypt/Blowfish
+		elseif (strpos($pass, '$2') === 0 && preg_match('/^\$2([abxy])\$(\d+)\$(.{22}).{31}$/', $pass, $matches) > 0)
+		{
+			$blowfish_version = $matches[1];
+			$cost = (int)$matches[2];
+			$salt = $matches[3];
+			$password_crypted = self::crypt_blowfish($password, $cost, $salt, $blowfish_version);
+
+			if ($password_crypted == $pass)
+				return true;
+			else
+				continue;
+		}
       	// MD5
       	elseif (strpos($pass, '$apr1$') === 0 && preg_match('/\$(.*)\$(.*)\$(.*)/', $pass, $matches) > 0)
       	{
@@ -245,7 +259,7 @@ class IF_HtPasswd
    * Parses the user file and saves the data in a localy holded array, which
    * can be accessed by the public functions of this class.
    *
-   * @param striing $userfile The file to parse.
+   * @param string $userfile The file to parse.
    * @return bool
    */
   private function parseUserFile( $userfile )
@@ -298,7 +312,7 @@ class IF_HtPasswd
    * Saves the local m_data, which holds the user information to the given file.
    *
    * @param $filename
-   * @return unknown_type
+   * @return bool
    */
   public function writeToFile( $filename = NULL )
   {
@@ -337,8 +351,11 @@ class IF_HtPasswd
 
   	switch ($type)
   	{
-  		case "CRYPT":
-  			return self::crypt_unix($plainpasswd);
+		case "CRYPT":
+			return self::crypt_unix($plainpasswd);
+
+		case "BLOWFISH":
+			return self::crypt_blowfish($plainpasswd);
 
   		case "SHA1":
   			return self::crypt_sha($plainpasswd);
@@ -351,28 +368,50 @@ class IF_HtPasswd
   	}
   }
 
-  /**
-   * Creates a default unix crypt hash of the given password with the
-   * specified salt. If no salt is given then the function will use its own
-   * generated salt.
-   *
-   * @param string $plainpasswd
-   * @param string $salt
-   * @return string
-   */
-  private function crypt_unix($plainpasswd, $salt = "")
-  {
-  	$password_crypted = "";
-  	if (empty($salt))
-  	{
-  		$password_crypted = crypt($plainpasswd);
-  	}
-  	else
-  	{
-  		$password_crypted = crypt($plainpasswd, $salt);
-  	}
-  	return $password_crypted;
-  }
+	/**
+	 * Creates a default unix crypt hash of the given password with the
+	 * specified salt. If no salt is given then the function will use its own
+	 * generated salt.
+	 *
+	 * @param string $plainpasswd
+	 * @param string $salt
+	 * @return string
+	 */
+	private function crypt_unix($plainpasswd, $salt = "")
+	{
+		// If no salt is defined, let's use blowfish (with a salt)
+		if (empty($salt)) {
+			return self::crypt_blowfish($plainpasswd);
+		}
+		return crypt($plainpasswd, $salt);
+	}
+
+	/**
+	 * Creates a default blowfish hash of the given password with the
+	 * specified salt. If no salt is given then the function will use its own
+	 * generated salt.
+	 *
+	 * @param string $plainpasswd
+	 * @param int $cost
+	 * @param string $salt
+	 * @param string $blowfish_version
+	 * @return string
+	 */
+	private function crypt_blowfish($plainpasswd, $cost = 12, $salt = "", $blowfish_version = 'y')
+	{
+		// Provide a salt anyway
+		if (empty($salt)) {
+			$salt = substr(base64_encode(openssl_random_pseudo_bytes(17)), 0, 22);
+			$salt = str_replace("+", ".", $salt);
+		}
+		$blowfish = sprintf(
+			'$2%s$%02s$%s',
+			$blowfish_version,
+			$cost,
+			$salt
+		);
+		return crypt($plainpasswd, $blowfish);
+	}
 
   /**
    * Creates an SHA1 generated hash of the given plain text password.
@@ -416,7 +455,7 @@ class IF_HtPasswd
 
 		for($i=$len; $i>0; $i>>=1)
 		{
-			$text.= ($i & 1) ? chr(0) : $plainpasswd{0};
+			$text.= ($i & 1) ? chr(0) : $plainpasswd[0];
 		}
 
 		$bin = pack("H32", md5($text));

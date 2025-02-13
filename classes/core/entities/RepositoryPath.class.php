@@ -27,6 +27,8 @@ class RepositoryPath
 	public $author;
 	public $revision;
 	public $date;
+	public $apacheWebLink;
+	public $customWebLink;
 
 	public function __construct(
 		$parent=null, $name=null, $type=null, $author=null,
@@ -38,6 +40,8 @@ class RepositoryPath
 		$this->author = $author;
 		$this->revision = $revision;
 		$this->date = $date;
+		$this->apacheWebLink = null;
+		$this->customWebLink = null;
 	}
 
 	public function getParent()
@@ -81,7 +85,10 @@ class RepositoryPath
 	public function getEncodedRelativePath()
 	{
 		$relPath = self::getRelativePath();
-		return rawurlencode( $relPath );
+		// Encode the individual parts of the path only (so we will not encode the path separator)
+		return implode('/', array_map(function ($v) {
+			return rawurlencode($v);
+		}, explode('/', $relPath)));
 	}
 }
 ?>

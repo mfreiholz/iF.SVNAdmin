@@ -50,6 +50,7 @@ function if_json_last_error_message($code = null)
  * @var string
  */
 //define("IF_HtPasswd_DefaultCrypt", "CRYPT"); // Unix only.
+//define("IF_HtPasswd_DefaultCrypt", "BLOWFISH");
 //define("IF_HtPasswd_DefaultCrypt", "SHA1");
 //define("IF_HtPasswd_DefaultCrypt", "MD5"); // Custom Apache APR1 MD5 hash.
 
