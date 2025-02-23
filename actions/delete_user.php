@@ -25,9 +25,9 @@ if (!defined('ACTION_HANDLING'))
 $appEngine->forwardInvalidModule(!$appEngine->isUserEditActive());
 $appEngine->checkUserAuthentication(true, ACL_MOD_USER, ACL_ACTION_DELETE);
 
-$selusers = get_request_var('selected_users');
+$selusers = get_request_var('selected_users', array());
 
-if ($selusers == NULL)
+if (count($selusers) <= 0)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one user.")));
 }

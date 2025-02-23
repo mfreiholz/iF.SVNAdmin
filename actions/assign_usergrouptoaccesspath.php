@@ -2,19 +2,12 @@
 $appEngine->checkUserAuthentication(true, ACL_MOD_ACCESSPATH, ACL_ACTION_ASSIGN);
 
 // Required variables.
-$selusers  = get_request_var('selected_users');
-$selgroups = get_request_var('selected_groups');
-$selpaths  = get_request_var('selected_accesspaths');
+$selusers  = get_request_var('selected_users', array());
+$selgroups = get_request_var('selected_groups', array());
+$selpaths  = get_request_var('selected_accesspaths', array());
 $selperm   = get_request_var('permission'); // TODO: There is no check, whether this var is given!
 
-if (!empty($selusers) && count($selusers) == 1 && empty($selusers[0]))
-  $selusers = NULL;
-if (!empty($selgroups) && count($selgroups) == 1 && empty($selgroups[0]))
-  $selgroups = NULL;
-if (!empty($selpaths) && count($selpaths) == 1 && empty($selpaths[0]))
-  $selpaths = NULL;
-
-if( $selpaths == NULL || ( $selusers == NULL && $selgroups == NULL ) )
+if (count($selpaths) <= 0 || (count($selusers) <= 0 && count($selgroups) <= 0))
 {
 	$appEngine->addException(new ValidationException(tr("You have to select a user or group and an access-path to perform this action.")));
 }

@@ -25,13 +25,13 @@ if( !defined('ACTION_HANDLING') ) {
 $appEngine->forwardInvalidModule(!$appEngine->isAclManagerActive());
 
 // Selected users on page.
-$selusers = get_request_var("selected_users");
+$selusers = get_request_var("selected_users", array());
 
 // Selected roles on page.
-$selroles = get_request_var("selected_roles");
+$selroles = get_request_var("selected_roles", array());
 
 // Validate the selection.
-if ($selusers == NULL || $selroles == NULL)
+if (count($selusers) <= 0 || count($selroles) <= 0)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one user and one role.")));
 }

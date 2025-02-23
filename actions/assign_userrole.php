@@ -2,26 +2,13 @@
 $appEngine->forwardInvalidModule( !$appEngine->isAclManagerActive() );
 
 // Get request vars.
+// If a single role is given, we convert it into an array, otherwise lets fallback to array of roles parameter.
 $selroles = get_request_var("selected_assign_role_name");
-$selusers = get_request_var("selected_users");
-
-// Fallback to array of roles.
-if ($selroles == NULL)
-{
-	$selroles = get_request_var("selected_roles");
-}
-else
-{
-	$selroles = array($selroles);
-}
-
-if (count($selroles) == 1 && empty($selroles[0]))
-{
-	$selroles = NULL;
-}
+$selroles = $selroles != NULL ? array($selroles) : get_request_var("selected_roles", array());
+$selusers = get_request_var("selected_users", array());
 
 // Validate selection.
-if ($selroles == NULL || $selusers == NULL)
+if (count($selroles) <= 0 || count($selusers) <= 0)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one user and one role.")));
 }

@@ -37,16 +37,15 @@ $engine->checkUserAuthentication(true, ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN);
 // HTTP Request Vars
 //
 
-$selusers = get_request_var('selected_users');
-$selgroups = get_request_var('selected_groups');
-$selpaths = get_request_var('selected_accesspaths');
+$selusers = get_request_var('selected_users', array());
+$selgroups = get_request_var('selected_groups', array());
+$selpaths = get_request_var('selected_accesspaths', array());
 
 //
 // Validation
 //
 
-if ($selpaths == NULL
-	|| ($selgroups == NULL && $selusers == NULL)) {
+if (count($selpaths) <= 0 || (count($selgroups) <= 0 && count($selusers) <= 0)) {
 	$engine->addException(new ValidationException(tr("You have to select at least one access-path and one user or group.")));
 }
 else {

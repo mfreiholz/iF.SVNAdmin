@@ -140,7 +140,7 @@ function check_request_var($varname, &$method = NULL)
 	return false;
 }
 
-function get_request_var( $varname )
+function get_request_var( $varname, $defaultValue = NULL )
 {
 	$method = null;
 	if (check_request_var($varname, $method))
@@ -152,7 +152,7 @@ function get_request_var( $varname )
 				{
 					if (count($_GET[$varname]) == 1 && empty($_GET[$varname][0]))
 					{
-						return null;
+						return $defaultValue;
 					}
 				}
 				return $_GET[$varname];
@@ -162,13 +162,13 @@ function get_request_var( $varname )
 				{
 					if (count($_POST[$varname]) == 1 && empty($_POST[$varname][0]))
 					{
-						return null;
+						return $defaultValue;
 					}
 				}
 				return $_POST[$varname];
 		}
 	}
-	return null;
+	return $defaultValue;
 }
 
 function remove_item_by_value( &$arr, $value, $preserve = false )

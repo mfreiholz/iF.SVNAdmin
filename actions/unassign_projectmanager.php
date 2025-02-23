@@ -7,10 +7,10 @@ if(!defined('ACTION_HANDLING'))
 $appEngine->forwardInvalidModule(!$appEngine->isAuthenticationActive());
 $appEngine->checkUserAuthentication(true, ACL_MOD_PROJECTMANAGER, ACL_ACTION_UNASSIGN);
 
-$selusers = get_request_var("selected_users");
-$selpaths = get_request_var("selected_accesspaths");
+$selusers = get_request_var("selected_users", array());
+$selpaths = get_request_var("selected_accesspaths", array());
 
-if ($selusers == null || $selpaths == null)
+if (count($selusers) <= 0 || count($selpaths) <= 0)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one access-path and one user.")));
 }

@@ -2,36 +2,18 @@
 $appEngine->forwardInvalidModule( !$appEngine->isGroupEditActive() );
 
 // Parameters.
-$selusers = get_request_var('selusers');
-$selgroups = get_request_var('selgroups');
-$selsubgroups = get_request_var('selsubgroups');
+$selusers = get_request_var('selusers', array());
+$selgroups = get_request_var('selgroups', array());
+$selsubgroups = get_request_var('selsubgroups', array());
 
-if ($selusers == NULL)
-	$selusers = get_request_var("selected_users");
-
-if ($selgroups == NULL)
-	$selgroups = get_request_var("selected_groups");
-
-if ($selsubgroups == NULL)
-	$selsubgroups = get_request_var("selected_subgroups");
-
-if ($selusers != NULL && count($selusers) > 0 && empty($selusers[0]))
-{
-	$selusers = NULL;
-}
-
-if ($selgroups != NULL && count($selgroups) > 0 && empty($selgroups[0]))
-{
-	$selgroups = NULL;
-}
-
-if ($selsubgroups != NULL && count($selsubgroups) > 0 && empty($selsubgroups[0]))
-{
-	$selsubgroups = NULL;
-}
+// Parameters (alternative names).
+// TODO: Search for the pages which use different names and make them use the same.
+$selusers = count($selusers) <= 0 ? get_request_var("selected_users", array()) : $selusers;
+$selgroups = count($selgroups) <= 0 ? get_request_var("selected_groups", array()) : $selgroups;
+$selsubgroups = count($selsubgroups) <= 0 ? get_request_var("selected_subgroups", array()) : $selsubgroups;
 
 // Validate.
-if( ($selusers == NULL && $selsubgroups == NULL) || $selgroups == NULL )
+if((count($selusers) <= 0 && count($selsubgroups) <= 0) || count($selgroups) <= 0)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one user and one group.")));
 }

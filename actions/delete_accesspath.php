@@ -34,13 +34,13 @@ $appEngine->checkUserAuthentication(true, ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)
 // HTTP Request Vars
 //
 
-$selected = get_request_var('selected_accesspaths');
+$selected = get_request_var('selected_accesspaths', array());
 
 //
 // Validation
 //
 
-if ($selected == NULL)
+if (count($selected) <= 0)
 {
 	$appEngine->addException(new ValidationException(tr("You have to select at least one access-path.")));
 }

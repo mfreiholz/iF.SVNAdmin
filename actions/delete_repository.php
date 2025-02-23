@@ -41,7 +41,7 @@ if (!($engine->getConfig()->getValueAsBoolean('GUI', 'RepositoryDeleteEnabled', 
 //
 
 $varParentIdentifierEnc = get_request_var('pi');
-$selrepos = get_request_var("selected_repos");
+$selrepos = get_request_var("selected_repos", array());
 $remove_accesspaths = check_request_var('delete_ap');
 
 $varParentIdentifier = rawurldecode($varParentIdentifierEnc);
@@ -50,7 +50,7 @@ $varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 // Validation
 //
 
-if ($selrepos == NULL || $varParentIdentifier === NULL) {
+if (count($selrepos) <= 0 || $varParentIdentifier === NULL) {
 	$engine->addException(new ValidationException(tr("You have to select at least one repository.")));
 }
 else {

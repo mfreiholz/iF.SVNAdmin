@@ -25,8 +25,8 @@ if (!defined('ACTION_HANDLING'))
 $appEngine->forwardInvalidModule( !$appEngine->isGroupEditActive() );
 
 
-$selected = get_request_var('selected_groups');
-if($selected == NULL)
+$selected = get_request_var('selected_groups', array());
+if (count($selected) <= 0)
 {
   $appEngine->addException(new ValidationException(tr("You have to select at least one group.")));
 }
