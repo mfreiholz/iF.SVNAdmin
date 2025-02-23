@@ -430,6 +430,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		return $ret;
 	}
 
+	public function getGroupsOfSubgroup( $objSubgroup )
+	{
+		return array();
+	}
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::getUsersOfGroup()
@@ -495,6 +500,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		return $ret;
 	}
 
+	public function getSubgroupsOfGroup( $objGroup )
+	{
+		return array();
+	}
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::isUserInGroup()
@@ -521,6 +531,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 			return false;
 
 		return true;
+	}
+
+	public function isSubgroupInGroup( $objSubgroup, $objGroup )
+	{
+		return false;
 	}
 
 	/**************************************************************************
