@@ -336,16 +336,19 @@ class Engine
 			return true;
 		}
 
-    // use proxied configuration if available
-		if (isset($_SERVER["X-Forwarded-User"]))
+		// Allow to authenticate by proxy-server.
+		if ($this->getConfig()->getValueAsBoolean("Common", "HttpProxyAuth"))
 		{
-			$_SESSION["svnadmin_username"] = $_SERVER["X-Forwarded-User"];
-		}
-
-    // use proxied configuration if available
-		if (isset($_SERVER["REMOTE_USER"]))
-		{
-			$_SESSION["svnadmin_username"] = $_SERVER["REMOTE_USER"];
+			// use proxied configuration if available
+			if (isset($_SERVER["X-Forwarded-User"]))
+			{
+				$_SESSION["svnadmin_username"] = $_SERVER["X-Forwarded-User"];
+			}
+			// use proxied configuration if available
+			if (isset($_SERVER["REMOTE_USER"]))
+			{
+				$_SESSION["svnadmin_username"] = $_SERVER["REMOTE_USER"];
+			}
 		}
 
 		// At this place the authentication is ON.
