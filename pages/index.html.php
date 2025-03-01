@@ -18,7 +18,7 @@
   <tbody>
     <tr>
       <td><?php Translate("Application version"); ?></td>
-      <td><?php AppVersion(); ?> <small>(<a href="http://www.insanefactory.com/if-svnadmin/"><?php Translate("Check for updates"); ?></a>)</small></td>
+      <td><?php AppVersion(); ?> <small>(<a href="http://svnadmin.insanefactory.com/"><?php Translate("Check for updates"); ?></a>)</small></td>
     </tr>
     <tr>
       <td><?php Translate("PHP version"); ?></td>

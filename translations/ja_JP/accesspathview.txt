@@ -1,0 +1,3 @@
+"Assigned users and groups to this access-path.","アクセスパスへのユーザー/グループの割当"
+"Assigned users","割当済ユーザー"
+"Assigned groups","割当済みグループ"

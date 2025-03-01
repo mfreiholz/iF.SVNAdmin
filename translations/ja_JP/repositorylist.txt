@@ -1,0 +1,2 @@
+"On this page you can view your existing repositories and create or delete an repository.","このページでは存在するリポジトリの一覧および作成/削除が行えます。"
+"Repository management","リポジトリ管理"

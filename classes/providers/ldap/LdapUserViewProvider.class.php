@@ -70,6 +70,8 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 * Settings to find users.
 	 */
 
+  protected $user_view_enabled = false;
+
 	/**
 	 * The base path of users.
 	 * @var string
@@ -90,9 +92,22 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 */
 	protected $users_attributes;
 
+	/**
+	 * Allows to define a custom displayName format for each user.
+	 * Makes it possible to display the user's firstname and lastname instead of
+	 * the internal login name.
+	 * Using attributes from User's LDAP object requires them to be fetched via
+	 * the "$users_attributes" variable.
+	 * e.g.: %givenName %sn (%sAMAccountName)
+	 * @var string
+	 */
+	protected $users_display_name_format;
+
 	/*
 	 * Settings to find groups.
 	 */
+
+  protected $group_view_enabled = false;
 
 	/**
 	 * The base path of groups.
@@ -151,6 +166,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		$this->users_search_filter = $cfg->getValue("Users:ldap", "SearchFilter");
 		$this->users_attributes = $cfg->getValue("Users:ldap", "Attributes");
 		$this->users_attributes = explode(",", $this->users_attributes);
+		$this->users_display_name_format = $cfg->getValue("Users:ldap", "DisplayNameFormat");
 
 		$this->groups_base_dn = $cfg->getValue("Groups:ldap", "BaseDN");
 		$this->groups_search_filter = $cfg->getValue("Groups:ldap", "SearchFilter");
@@ -182,17 +198,29 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		$this->bind_password = $bindPassword;
 	}
 
+  public function setUserViewEnabled($yesno)
+  {
+    $this->user_view_enabled = $yesno;
+  }
+
 	// Required to execute tests on settings page.
 	public function setUserViewInformation($usersBaseDn, $usersSearchFilter, $usersAttributes)
 	{
+	  $this->user_view_enabled = true;
 		$this->users_base_dn = $usersBaseDn;
 		$this->users_search_filter = $usersSearchFilter;
 		$this->users_attributes = explode(",", $usersAttributes);
 	}
 
+	public function setGroupViewEnabled($yesno)
+	{
+	  $this->group_view_enabled = $yesno;
+	}
+
 	// Required to execute tests on settings page.
 	public function setGroupViewInformation($groupsBaseDn, $groupsSearchFilter, $groupsAttributes, $groupsMemberAttribute, $groupsMemberAttributeValueAttribute)
 	{
+	  $this->group_view_enabled = true;
 		$this->groups_base_dn = $groupsBaseDn;
 		$this->groups_search_filter = $groupsSearchFilter;
 		$this->groups_attributes = explode(",", $groupsAttributes);
@@ -225,7 +253,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 */
 	public function isUpdateable()
 	{
-		return true;
+		return $this->user_view_enabled && $this->group_view_enabled;
 	}
 
 	/**
@@ -249,6 +277,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		return true;
 	}
 
+  public function getUserCount($withStarUser=true)
+  {
+    return parent::objectSearchResultCount($this->connection, $this->users_base_dn, $this->users_search_filter);
+  }
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IUserViewProvider::getUsers()
@@ -267,6 +300,7 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 			$u = new \svnadmin\core\entities\User;
 			$u->id = $ldapUsers[$i]->dn;
 			$u->name = $ldapUsers[$i]->$up_name;
+			$u->displayName = $this->formatDisplayName($this->users_display_name_format, $ldapUsers[$i]);
 			$ret[] = $u;
 		}
 
@@ -396,6 +430,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		return $ret;
 	}
 
+	public function getGroupsOfSubgroup( $objSubgroup )
+	{
+		return array();
+	}
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::getUsersOfGroup()
@@ -461,6 +500,11 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		return $ret;
 	}
 
+	public function getSubgroupsOfGroup( $objGroup )
+	{
+		return array();
+	}
+
 	/**
 	 * (non-PHPdoc)
 	 * @see svnadmin\core\interfaces.IGroupViewProvider::isUserInGroup()
@@ -489,9 +533,32 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 		return true;
 	}
 
+	public function isSubgroupInGroup( $objSubgroup, $objGroup )
+	{
+		return false;
+	}
+
 	/**************************************************************************
 	 * Protected helper methods.
 	 *************************************************************************/
+
+  protected function formatDisplayName($format, $ldapUser)
+  {
+    if (empty($format) || empty($ldapUser))
+      return null;
+    $displayName = $format;
+    $matches = array();
+    $offset = 0;
+    while (preg_match('/\%([A-Za-z0-9\-\_]+)/i', $displayName, $matches, PREG_OFFSET_CAPTURE, $offset) === 1) {
+      $attributeName = strtolower($matches[1][0]);
+      if (!isset($ldapUser->$attributeName)) {
+        $offset = $matches[0][1] + strlen($matches[0][0]);
+        continue;
+      }
+      $displayName = str_replace($matches[0][0], $ldapUser->$attributeName, $displayName);
+    }
+    return $displayName;
+  }
 
 	/**
 	 * Gets all user LDAP entries from server.
@@ -582,12 +649,8 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	 */
 	protected function p_resolveGroupMemberId($memberId)
 	{
-		// Create filter.
-		$filter = $this->groups_to_users_attribute_value.'='.$memberId;
-		$filter = '(&('.$filter.')'.$this->users_search_filter.')';
-
 		// Execute search.
-		$found = parent::objectSearch($this->connection, $this->users_base_dn, $filter, $this->users_attributes, 1);
+        $found = parent::objectSearch($this->connection, $memberId, $this->users_search_filter, $this->users_attributes, 1);
 
 		if (!is_array($found) || count($found) <= 0)
 		{
@@ -605,12 +668,20 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 	{
 		$this->init();
 		$E = \svnadmin\core\Engine::getInstance();
-		
+
 		// Increase max_execution_time for big LDAP structures.
 		$maxTime = intval(ini_get('max_execution_time'));
 		if ($maxTime != 0 && $maxTime < 300) {
 			@ini_set('max_execution_time', 300);
 		}
+    
+    // Check connection before doing the update.
+    $connector = new \IF_AbstractLdapConnector();
+    if (!$connector->connect($this->host_address, 0, $this->host_protocol_version)) {
+      throw new \Exception("Can not connect.", 0);
+    } else if (!$connector->bind($this->bind_dn, $this->bind_password)) {
+      throw new \Exception("Can not connect. Authentication failed.");
+    }
 
 		try {
 			// @todo Backup file.
@@ -764,6 +835,8 @@ class LdapUserViewProvider extends \IF_AbstractLdapConnector
 				// Users.
 				foreach ($svnAuthFile->usersOfRepository($r) as $u)
 				{
+          if ($u === "*")
+            continue; // #87 Do not check for * user in LDAP..
 					if (!$this->userExists(new \svnadmin\core\entities\User($u, $u)))
 					{
 						// The user has direct AccessPath permissions but does

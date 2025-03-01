@@ -42,7 +42,7 @@ $varPathEnc = get_request_var('p');
 
 $varParentIdentifier = rawurldecode($varParentIdentifierEnc);
 $varRepo = rawurldecode($varRepoEnc);
-$varPath = rawurldecode($varPathEnc);
+$varPath = is_null($varPathEnc) ? null : rawurldecode($varPathEnc);
 
 //
 // View Data
@@ -75,7 +75,7 @@ try {
 		// Add weblink property.
 		if ($hasApacheWebLink || $hasCustomWebLink)
 		{
-			$args = array($oR->name, $val->getEncodedRelativePath());
+			$args = array($oR->getEncodedName(), $val->getEncodedRelativePath());
 
 			if ($hasApacheWebLink)
 			{

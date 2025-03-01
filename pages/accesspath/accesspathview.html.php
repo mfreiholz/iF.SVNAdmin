@@ -39,7 +39,7 @@
 							<select name="selected_users[]">
 								<option value="">--- <?php Translate("User"); ?> ---</option>
 								<?php foreach (GetArrayValue("UserListAll") as $u) : ?>
-								<option value="<?php print($u->getName()); ?>"><?php print($u->getName()); ?></option>
+								<option value="<?php print($u->getName()); ?>"><?php print($u->getDisplayName()); ?></option>
 								<?php endforeach; ?>
 							</select>
 

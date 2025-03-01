@@ -1,0 +1,2 @@
+"Repository browsing","リポジトリの閲覧"
+"Add access path","アクセスパスの追加"

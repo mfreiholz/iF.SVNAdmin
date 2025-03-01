@@ -35,7 +35,7 @@ $(document).ready(function(){
               <?php foreach(GetArrayValue("UserList") as $u): ?>
               <tr>
                 <td><input type="checkbox" name="selected_users[]" value="<?php print($u->getName()); ?>"></td>
-                <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getName()); ?></a></td>
+                <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
               </tr>
               <?php endforeach; ?>
               </tbody>

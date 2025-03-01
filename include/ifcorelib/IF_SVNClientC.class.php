@@ -41,15 +41,10 @@ class IF_SVNClientC extends IF_SVNBaseC
 		$this->non_interactive = true;
 		$this->svnExe = $svn_exe;
 
-		if (!file_exists($svn_exe))
-		{
-			throw new IF_SVNException('Path to "svn.exe" does not exist: '.$this->svnExe);
-		}
-
-		if (!is_executable($svn_exe))
-		{
-			throw new IF_SVNException('Permission denied! Can not execute "svn" executable: '.$this->svnExe);
-		}
+		// if (!file_exists($svn_exe))
+		// 	throw new IF_SVNException('Path to "svn.exe" does not exist: '.$this->svnExe);
+		// if (!is_executable($svn_exe))
+		// 	throw new IF_SVNException('Permission denied! Can not execute "svn" executable: '.$this->svnExe);
 	}
 
 	/**

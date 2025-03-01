@@ -90,7 +90,7 @@ class IF_SVNBaseC
 		$soft = PHP_OS;
 		$soft = strtoupper($soft);
 
-		if (strpos($soft, "WIN") !== FALSE)
+		if (stripos($soft, "WIN") !== FALSE)
 		{
 			$this->is_windows_server = true;
 		}

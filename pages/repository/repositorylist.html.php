@@ -19,7 +19,7 @@
 				<th width="22"></th>
 				<th width="20"></th>
 				<th>
-					<?php Translate("Repository"); ?>
+					<?php Translate("Repositories"); ?>
 				</th>
 				<?php if (GetBoolValue("ShowOptions")) : ?>
 				<th width="150">
@@ -82,7 +82,7 @@
 				<td>
 					<?php if (GetBoolValue("ShowDumpOption")) : ?>
 					<a href="repositorylist.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>&amp;dump=true">
-						<?php Translate("Dump"); ?>
+						<img src="templates/icons/exportdump.png" border="0" alt="<?php Translate("Dump"); ?>" title="<?php Translate("Export dump"); ?>">
 					</a>
 					<?php endif; ?>
 				</td>

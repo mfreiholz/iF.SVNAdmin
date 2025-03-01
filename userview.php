@@ -29,7 +29,7 @@ $appTR->loadModule("roles");
 // Action handling.
 if (check_request_var('unassign'))
 {
-  $appEngine->handleAction('unassign_usergroup');
+  $appEngine->handleAction('unassign_fromgroup');
 }
 else if (check_request_var('unassign_permission'))
 {
@@ -49,7 +49,7 @@ else if(check_request_var('unassign_projectmanager'))
 }
 else if(check_request_var('assign_usergroup'))
 {
-	$appEngine->handleAction('assign_usertogroup');
+  $appEngine->handleAction('assign_togroup');
 }
 
 // Get required variables.
@@ -75,6 +75,19 @@ if ($appEngine->isAclManagerActive() && $appEngine->checkUserAuthentication(fals
     $allroles = $appEngine->getAclManager()->getRoles();
     usort($allroles, array('\svnadmin\core\entities\Role',"compare"));
 
+    // Remove "admin" role from array, if the current user doesn't have privileges to assign them.
+    if (!$appEngine->hasPermission(ACL_MOD_ROLE, ACL_ACTION_ASSIGN_ADMIN_ROLE))
+    {
+      for ($i = 0; $i < count($allroles); ++$i)
+      {
+        if ($appEngine->getAclManager()->isAdminRole($allroles[$i]))
+        {
+          if_array_remove_object_element($allroles, $allroles[$i], "name");
+          break;
+        }
+      }
+    }
+
     // Remove all roles from array, which are already assigned to the user.
     $rolesOfUserLen = count($rolesOfUser);
     for ($i=0; $i<$rolesOfUserLen; $i++)
@@ -92,7 +105,7 @@ if ($appEngine->isGroupViewActive() && $appEngine->checkUserAuthentication(false
 {
   $groups = $appEngine->getGroupViewProvider()->getGroupsOfUser( $oUser );
   usort( $groups, array('\svnadmin\core\entities\Group',"compare") );
-  
+
   // Get all existing groups and remove the groups in which the user is already in.
   if ($appEngine->isGroupViewActive() && $appEngine->checkUserAuthentication(false, ACL_MOD_GROUP, ACL_ACTION_ASSIGN))
   {

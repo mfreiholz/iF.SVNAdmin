@@ -1,0 +1,3 @@
+"On this page you can view your existing repositories and create or delete an repository.","Nesta página você  pode ver, criar ou remover os repositórios."
+"Repository management","Gestão dos repositórios"
+"Location","Local"

@@ -1,0 +1,4 @@
+"You must login to get access to the application.","アプリケーションにアクセスするにはログインしてください。"
+"Username","ユーザー名"
+"Password","パスワード"
+"You are now logged out.","ログアウトしました。."

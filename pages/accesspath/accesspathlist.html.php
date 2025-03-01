@@ -42,7 +42,7 @@ $(document).ready(function(){
                 <select name="selected_users[]">
                   <option value="">--- <?php Translate("Set project manager"); ?> ---</option>
                 <?php foreach (GetArrayValue("UserList") as $u) : ?>
-                  <option><?php print($u->name); ?></option>
+                  <option value="<?php print($u->name); ?>"><?php print($u->getDisplayName()); ?></option>
                 <?php endforeach; ?>
                 </select>
                 <input type="submit" name="assign_projectmanager" value="<?php Translate("Assign"); ?>">

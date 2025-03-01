@@ -24,21 +24,14 @@ if(!defined('ACTION_HANDLING'))
 
 $appEngine->forwardInvalidModule( !$appEngine->isGroupEditActive() );
 
-$selusers = get_request_var('selected_users');
-$selgroups = get_request_var('selected_groups');
-
-// Remove empty selections.
-if ($selusers != NULL && is_array($selusers))
-	$selusers = if_array_remove_empty_values($selusers);
-
-if ($selgroups != NULL && is_array($selgroups))
-  $selgroups = if_array_remove_empty_values($selgroups);
-
+$selusers = get_request_var('selected_users', array());
+$selgroups = get_request_var('selected_groups', array());
+$selsubgroups = get_request_var('selected_subgroups', array());
 
 // Validation.
-if ($selusers == NULL || $selgroups == NULL)
+if ((count($selusers) <= 0 && count($selsubgroups) <= 0) || count($selgroups) <= 0)
 {
-	$appEngine->addException(new ValidationException(tr("You have to select at least one user and one group.")));
+	$appEngine->addException(new ValidationException(tr("You have to select at least one user or one group.")));
 }
 else
 {
@@ -52,7 +45,23 @@ else
 	    $oG = new \svnadmin\core\entities\Group;
 	    $oG->id = $selgroups[$i];
 	    $oG->name = $selgroups[$i];
-	
+
+	    for( $k=0; $k<count($selsubgroups); $k++ )
+	    {
+	      $oS = new \svnadmin\core\entities\Group;
+	      $oS->id = $selsubgroups[$k];
+	      $oS->name = $selsubgroups[$k];
+
+	      if( $appEngine->getGroupEditProvider()->removeSubgroupFromGroup( $oS, $oG ) )
+	      {
+	      	$appEngine->addMessage(tr("Removed group %0 from group %1", array($oS->name, $oG->name)));
+	      }
+	      else
+	      {
+	      	$appEngine->addException(tr("Could not remove group %0 from group %1", array($oS->name, $oG->name)));
+	      }
+	    } //for
+
 	    for( $j=0; $j<count($selusers); $j++ )
 	    {
 	      $oU = new \svnadmin\core\entities\User;

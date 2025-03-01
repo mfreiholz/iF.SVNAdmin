@@ -1,0 +1,6 @@
+"Create group","グループの作成"
+"Create a new group to grant access to the repositories for a range of users.","複数のユーザーにリポジトリへのアクセスを許可するための新グループを作成。"
+"New group data","新グループデータ"
+"Group name","グループ名"
+"Valid group names are","有効なグループ名は"
+"Invalid group names are","無効なグループ名は"

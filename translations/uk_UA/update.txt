@@ -1,0 +1,8 @@
+"Synchronize","Синхронізація"
+"Synchronize your data.","Синхронізація даних репозиторіїв з провайдерами даних."
+"The following views are up-to-date now:","Наступні представлення є актуальними зараз:"
+"has been updated","були оновлені"
+"The following views could not been updated:","Наступні представлення не можуть бути оновлені:"
+"Your current application configuration uses a data provider, which requires updates from time to time. Here you can force an update now, if you didn't configure any cron-jobs or Windows task to perform this update.","Ваша поточна конфігурація сервера використовує провайдера даних, який потребує періодичного оновлення. Тут ви мождете ініціалізувати позачергове оновлення, якщо ви не задали спеціальних завдань в cron або планувальнику Windows для автоматичного оновдення."
+"Note: This could take a few seconds. Do not press this button twice!","Примітка: Цей процес може зайняти кілька секунд. Не натискайте кнопку більше ніж один раз!"
+"Synchronize now","Синхронізувати зараз"

@@ -18,6 +18,9 @@ Documentation about installation and configuration can be found on the project h
 
 Who is responsible for this crap?
 ---------------------------------
-&copy; 2009-2012 Manuel Freiholz, [insaneFactory.com](http://www.insanefactory.com/)
+&copy; 2009-2025 Manuel Freiholz, [insaneFactory.com](http://www.insanefactory.com/)
 
-&copy; 2012 Roy Kaldung <roy@kaldung.com> for the Active Directory Stuff
+
+Contributions
+-------------
+- Roy Kaldung <https://github.com/rkaldung> for the specialized Active-Directory integration.

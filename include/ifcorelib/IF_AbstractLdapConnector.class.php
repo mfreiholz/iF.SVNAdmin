@@ -36,7 +36,7 @@ class IF_AbstractLdapConnector
 	 * @var string
 	 */
 	protected $protocolVersion;
-	
+
 	/**
 	 * If PHP function "ldap_control_paged_results()" is available,
 	 * this value indicates the size of each page fetched from LDAP server.
@@ -261,7 +261,7 @@ class IF_AbstractLdapConnector
 
 	/**
 	 * Searches for entries in the ldap.
-	 * 
+	 *
 	 * <b>Note:</b>
 	 * Using PHP version < 5.4 will never return more than 1001 items.
 	 * PHP 5.4 is required for large results.
@@ -275,7 +275,7 @@ class IF_AbstractLdapConnector
 	 * @return array of stdClass objects with property values defined by $return_attributes+"dn"
 	 */
 	protected function objectSearch($conn, $base_dn, $search_filter, $return_attributes, $limit)
-	{	
+	{
 		$base_dn = $this->prepareQueryString($base_dn);
 		$search_filter = $this->prepareQueryString($search_filter);
 
@@ -285,12 +285,12 @@ class IF_AbstractLdapConnector
 			if (function_exists("ldap_control_paged_result") && function_exists("ldap_control_paged_result_response")) {
 				ldap_control_paged_result($conn, $this->ldapSearchPageSize, true, $pageCookie);
 			}
-			
+
 			// Start search in LDAP directory.
 			$sr = ldap_search($conn, $base_dn, $search_filter, $return_attributes, 0, $limit);
 			if (!$sr)
 				break;
-			
+
 			// Get the found entries as array.
 			$entries = ldap_get_entries($conn,$sr);
 			if (!$entries)
@@ -306,7 +306,7 @@ class IF_AbstractLdapConnector
 				$o = self::createObjectFromEntry($entry);
 				$ret[] = $o;
 			}
-			
+
 			if (function_exists("ldap_control_paged_result") && function_exists("ldap_control_paged_result_response")) {
 				ldap_control_paged_result_response($conn, $sr, $pageCookie);
 			}
@@ -314,6 +314,34 @@ class IF_AbstractLdapConnector
 		while ($pageCookie !== null && $pageCookie != "");
 		return $ret;
 	}
+
+  protected function objectSearchResultCount($conn, $base_dn, $search_filter)
+  {
+    $base_dn = $this->prepareQueryString($base_dn);
+    $search_filter = $this->prepareQueryString($search_filter);
+
+    $resultCount = 0;
+    $pageCookie = "";
+    do {
+      if (function_exists("ldap_control_paged_result") && function_exists("ldap_control_paged_result_response")) {
+        ldap_control_paged_result($conn, $this->ldapSearchPageSize, true, $pageCookie);
+      }
+
+      // Start search in LDAP directory.
+      $sr = ldap_search($conn, $base_dn, $search_filter, array(), 0, 0);
+      if (!$sr)
+        break;
+
+      // Get number of found results.
+      $resultCount += ldap_count_entries($conn, $sr);
+
+      if (function_exists("ldap_control_paged_result") && function_exists("ldap_control_paged_result_response")) {
+        ldap_control_paged_result_response($conn, $sr, $pageCookie);
+      }
+    }
+    while ($pageCookie !== null && $pageCookie != "");
+    return $resultCount;
+  }
 
 	/**
 	 * Creates a stdClass object with a property for each attribute.

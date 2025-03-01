@@ -30,7 +30,7 @@ $(document).ready(function(){
 
 <form action="userlist.php" method="POST">
 	<table id="userlist" class="datatable">
-	
+
 	<thead>
 	<tr>
 	  <th width="20">
@@ -39,15 +39,15 @@ $(document).ready(function(){
 	    <?php } ?>
 	  </th>
 	  <th>
-	  	<?php Translate("User"); ?>
+	  	<?php Translate("Users"); ?>
 	  </th>
 	</tr>
 	</thead>
-	
+
 	<tfoot>
 	<tr>
 	  <td colspan="2">
-	
+
 	    <table class="datatableinline">
 	      <colgroup>
 	        <col width="50%">
@@ -73,11 +73,11 @@ $(document).ready(function(){
 	        </td>
 	      </tr>
 	    </table>
-	
+
 	  </td>
 	</tr>
 	</tfoot>
-	
+
 	<tbody>
 		<?php foreach (GetArrayValue("UserList") as $u) { ?>
 		<tr>
@@ -86,7 +86,7 @@ $(document).ready(function(){
         <input type="checkbox" name="selected_users[]" value="<?php print($u->name); ?>">
         <?php } ?>
       </td>
-		  <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->name); ?></a></td>
+		  <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
 		</tr>
 		<?php } ?>
 	</tbody>
