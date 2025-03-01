@@ -94,7 +94,10 @@ include_once( "./classes/core/interfaces/IAclManager.iface.php" );
 include_once( "./classes/core/Engine.class.php" );
 include_once( "./classes/core/Exceptions.class.php" );
 
-include_once("src/adLDAP.php");
+if ((@include_once("src/adLDAP.php")) == TRUE)
+{
+	define("FOUND_LIBRARY_ADLDAP", TRUE);
+}
 
 /**
  * iF.SVNAdmin version.

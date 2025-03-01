@@ -4,10 +4,10 @@ The iF.SVNAdmin application is a web based GUI to your Subversion authorization
 file. It is based on PHP 5.3 and requires a web server (Apache) to be installed. 
 The application doesn’t need a database back end or anything similar, it 
 completely based on the Subversion authorization- and user authentication file. 
-(+Includes LDAP support for users and groups).
 
-Now with direct Active Directory support (provider: ad) including nested groups.
-This feature needs the adLDAP library.
+
++ Includes LDAP support for users and groups (Provider: ldap)
++ Includes special Active Directory support with nested groups (Provider: ad). Requires the adLDAP library (https://github.com/adldap/adLDAP).
 
 
 Documentation

@@ -50,6 +50,16 @@ if (!$skip_auth)
 $appTR->loadModule("settings");
 
 ////////////////////////////////////////////////////////////////////////////////
+// Check for third party libraries.
+////////////////////////////////////////////////////////////////////////////////
+
+$found_adLDAP = false;
+if (defined("FOUND_LIBRARY_ADLDAP") && FOUND_LIBRARY_ADLDAP == TRUE)
+{
+	$found_adLDAP = true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Fetch request parameters.
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -84,7 +94,6 @@ $pAdBindUser = get_request_var("AdBindUser");
 $pAdBindPassword = get_request_var("AdBindPassword");
 $pAdGroupFilter = get_request_var("AdGroupFilter");
 $pAdGroupStrictMode = get_request_var("AdGroupStrictMode");
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Reset first start up value.
@@ -130,12 +139,15 @@ if (check_request_var("save"))
 	$cfgEngine->setValue("Groups:ldap", "Attributes", $pLdapGroupAttributes);
 	$cfgEngine->setValue("Groups:ldap", "GroupsToUserAttribute", $pLdapGroupsToUserAttribute);
 	$cfgEngine->setValue("Groups:ldap", "GroupsToUserAttributeValue", $pLdapGroupsToUserAttributeValue);
-    $cfgEngine->setValue('Ad', 'DomainName', $pAdDomainName);
-    $cfgEngine->setValue('Ad', 'DomainController', $pAdDomainController);
-    $cfgEngine->setValue('Ad', 'BindUser', $pAdBindUser);
-    $cfgEngine->setValue('Ad', 'BindPassword', $pAdBindPassword);
-    $cfgEngine->setValue('Groups:ad', 'Filter', $pAdGroupFilter);
-    $cfgEngine->setValue('Groups:ad', 'StrictMode', $pAdGroupStrictMode ? 'true' : 'false');
+	if ($found_adLDAP)
+	{
+		$cfgEngine->setValue('Ad', 'DomainName', $pAdDomainName);
+		$cfgEngine->setValue('Ad', 'DomainController', $pAdDomainController);
+		$cfgEngine->setValue('Ad', 'BindUser', $pAdBindUser);
+		$cfgEngine->setValue('Ad', 'BindPassword', $pAdBindPassword);
+		$cfgEngine->setValue('Groups:ad', 'Filter', $pAdGroupFilter);
+		$cfgEngine->setValue('Groups:ad', 'StrictMode', $pAdGroupStrictMode ? 'true' : 'false');
+	}
 	$cfgEngine->setValue("Common", "FirstStart", 0);
 
 	// Save configuration now.
@@ -342,7 +354,7 @@ if (check_request_var("dotest") && check_request_var("dotestsec"))
 			break;
 
         case "AdDomainControllerDetect":
-            if (IF_AbstractLdapConnector::isLdapExtensionEnabled())
+            if (IF_AbstractLdapConnector::isLdapExtensionEnabled() && $found_adLDAP)
             {
                 $dcs = dns_get_record('_ldap._tcp.dc._msdcs.' . $pAdDomainName, DNS_SRV);
                 if (is_array($dcs)) {
@@ -363,7 +375,7 @@ if (check_request_var("dotest") && check_request_var("dotestsec"))
             break;
 
         case 'AdConnection':
-            if (IF_AbstractLdapConnector::isLdapExtensionEnabled())
+            if (IF_AbstractLdapConnector::isLdapExtensionEnabled() && $found_adLDAP)
             {
                 try {
                     $test = new adLDAP(array(
@@ -512,6 +524,7 @@ if (check_request_var("setadmin") || $show_setadmin)
   ProcessTemplate("settings/setadmin.html.php");
   exit(0);
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 // Form values.
 ////////////////////////////////////////////////////////////////////////////////
@@ -527,7 +540,11 @@ SetValue("SVNAuthFile", $svnAuthFile);
 SetValue("SVNAuthFileEx", $svnAuthFileEx);
 
 // UserViewProviderType
-$userViewProviderTypes = array("off", "passwd", "digest", "ldap", "ad");
+$userViewProviderTypes = array("off", "passwd", "digest", "ldap");
+if ($found_adLDAP)
+{
+	array_push($userViewProviderTypes, "ad");
+}
 array_unshift($userViewProviderTypes, $cfgEngine->getValue("Engine:Providers","UserViewProviderType"));
 SetValue("userViewProviderTypes", $userViewProviderTypes);
 
@@ -537,7 +554,11 @@ array_unshift($userEditProviderTypes, $cfgEngine->getValue("Engine:Providers","U
 SetValue("userEditProviderTypes", $userEditProviderTypes);
 
 // GroupViewProviderType
-$groupViewProviderTypes = array("off", "svnauthfile", "ldap", "ad");
+$groupViewProviderTypes = array("off", "svnauthfile", "ldap");
+if ($found_adLDAP)
+{
+	array_push($groupViewProviderTypes, "ad");
+}
 array_unshift($groupViewProviderTypes, $cfgEngine->getValue("Engine:Providers","GroupViewProviderType"));
 SetValue("groupViewProviderTypes", $groupViewProviderTypes);
 
@@ -642,20 +663,26 @@ SetValue("LdapGroupsToUserAttributeValue", $ldapGroupsToUserAttributeValue);
 SetValue("LdapGroupsToUserAttributeValueEx", $ldapGroupsToUserAttributeValueEx);
 
 // AD connection
-$adDomainName = $cfg->getValue('Ad', 'DomainName');
-$adBindUser   = $cfg->getValue('Ad', 'BindUser');
-$adBindPassword = $cfg->getValue('Ad', 'BindPassword');
-$adDomainController = $cfg->getValue('Ad', 'DomainController');
-$adGroupFilter = $cfg->getValue('Groups:ad', 'Filter');
-$adGroupStrictMode = $cfg->getValueAsBoolean('Groups:ad', 'StrictMode');
-SetValue('AdDomainName', $adDomainName);
-SetValue('AdBindUser', $adBindUser);
-SetValue('AdBindPassword', $adBindPassword);
-SetValue('AdDomainController', $adDomainController);
-SetValue('AdGroupFilter', $adGroupFilter);
-SetValue('AdGroupStrictMode', $adGroupStrictMode);
-
-
+if (defined("FOUND_LIBRARY_ADLDAP") && FOUND_LIBRARY_ADLDAP == TRUE)
+{
+	$adDomainName = $cfg->getValue('Ad', 'DomainName');
+	$adBindUser   = $cfg->getValue('Ad', 'BindUser');
+	$adBindPassword = $cfg->getValue('Ad', 'BindPassword');
+	$adDomainController = $cfg->getValue('Ad', 'DomainController');
+	$adGroupFilter = $cfg->getValue('Groups:ad', 'Filter');
+	$adGroupStrictMode = $cfg->getValueAsBoolean('Groups:ad', 'StrictMode');
+	SetValue('AdDomainName', $adDomainName);
+	SetValue('AdBindUser', $adBindUser);
+	SetValue('AdBindPassword', $adBindPassword);
+	SetValue('AdDomainController', $adDomainController);
+	SetValue('AdGroupFilter', $adGroupFilter);
+	SetValue('AdGroupStrictMode', $adGroupStrictMode);
+	SetValue('FOUND_LIBRARY_ADLDAP', TRUE);
+}
+else
+{
+	SetValue('FOUND_LIBRARY_ADLDAP', FALSE);
+}
 
 // Process template.
 ProcessTemplate("settings/backend.html.php");

@@ -56,6 +56,7 @@ $(document).ready(function(){
     "#LdapGroupTestResult");
   });
 
+<?php if (GetBoolValue("FOUND_LIBRARY_ADLDAP")): ?>
   $('#AdDomainControllerDetect').click(function(){
       getSettings("AdDomainControllerDetect", {AdDomainName: $("#AdDomainName").val()}, "#AdDomainController");
   });
@@ -66,6 +67,7 @@ $(document).ready(function(){
          AdBindUser: $("#AdBindUser").val(), AdBindPassword: $("#AdBindPassword").val()},
         "#AdConnectionTestResult");
   });
+<?php endif; ?>
 
 });
 </script>
@@ -375,6 +377,8 @@ $(document).ready(function(){
 </table>
 <br>
 
+<?php if (GetBoolValue("FOUND_LIBRARY_ADLDAP")): ?>
+
 <!-- AD connection -->
 <table class="datatable settings" id="tbl_adconnection">
     <colgroup>
@@ -415,7 +419,6 @@ $(document).ready(function(){
 </table>
 <br>
 
-
 <!-- AD Group provider -->
 <table class="datatable settings" id="tbl_adgroup">
     <colgroup>
@@ -439,6 +442,8 @@ $(document).ready(function(){
     </tbody>
 </table>
 <br>
+
+<?php endif; ?>
 
 <input type="submit" value="<?php Translate("Save configuration"); ?>">
 
