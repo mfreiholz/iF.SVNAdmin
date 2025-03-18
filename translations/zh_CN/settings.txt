@@ -1,13 +1,13 @@
 # All
-"Example","样例"
+"Example","示例"
 
 # Settings table
 "Subversion authorization","Subversion 授权相关"
 "Subversion authorization file","Subversion 授权文件"
-"Data providers","数据提供方相关"
+"Data providers","数据提供者"
 "User authentication","用户身份验证"
 "User authentication file (SVNUserFile)","用户身份验证文件 (SVNUserFile)"
-"Subversion settings","Subversion 设置相关"
+"Subversion settings","Subversion 设置"
 "Parent directory of the repositories (SVNParentPath)","代码仓库的父目录 (SVNParentPath)"
 "Subversion client executable","'svn.exe' 或 'svn'可执行文件："
 "Subversion admin executable","'svnadmin.exe' 或 'svnadmin' 可执行文件："
