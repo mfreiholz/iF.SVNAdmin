@@ -1,0 +1,31 @@
+# All
+"Example","예시"
+
+# Settings table
+"Subversion authorization","Subversion 인증"
+"Subversion authorization file","Subversion 인증 파일"
+"Data providers","데이터 공급자"
+"User authentication","사용자 인증"
+"User authentication file (SVNUserFile)","사용자 인증 파일 (SVNUserFile)"
+"Subversion settings","Subversion 설정"
+"Parent directory of the repositories (SVNParentPath)","저장소의 부모 디렉터리 (SVNParentPath)"
+"Subversion client executable","Subversion client 실행 파일"
+"Subversion admin executable","Subversion admin 실행 파일'"
+"Parent directory of the svn Http server","svn http 서버의 부모 디렉터리"
+"Parent directory of the svn Http viewer","svn http 뷰어의 부모 디렉터리"
+"LDAP connection information","LDAP 연결 정보"
+"Host address","호스트 주소"
+"Protocol version","프로토콜 버전"
+"LDAP user provider information","LDAP 사용자 공급자 정보"
+"LDAP group provider information","LDAP 그룹 공급자 정보"
+
+# No users, no edit provider
+"You have not defined an "UserEditProviderType", but the system also could not find any user from the configured user view provider.","“UserEditProviderType”을 정의하지 않았으며, 시스템은 구성된 사용자 보기 공급자에서도 사용자를 찾을 수 없습니다."
+"You should now create a new user in your configured backend (e.g.: LDAP/Active Directory).","이제 설정된 백엔드(예시: LDAP/Active Directory)에 새 사용자를 생성해야 합니다."
+"If you think your configuration is incorrect, <a href="settings.php?firststart=1">click here.</a>","설정이 잘못되었다고 판단되면, <a href="settings.php?firststart=1">여기</a>를 클릭하세요."
+
+# Define administrator
+"Could not find existing users with your configuration. Created default Administrator account.","현재 구성에서 사용자를 찾을 수 없습니다. 기본 관리자 계정을 생성했습니다."
+"You can <a href="login.php"><b>login now.</b></a>","지금 <a href="login.php"><b>로그인</b></a>할 수 있습니다."
+"No administrator defined! Select the user for the administator privileges, please.","관리자가 지정되지 않았습니다! 관리자 권한을 부여할 사용자를 선택해 주세요."
+"Save","저장"

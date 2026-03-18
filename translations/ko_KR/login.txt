@@ -1,0 +1,4 @@
+"You must login to get access to the application.","애플리케이션에 접근하려면 로그인을 해야 합니다."
+"Username","사용자명"
+"Password","비밀번호"
+"You are now logged out.","현재 로그아웃되었습니다."

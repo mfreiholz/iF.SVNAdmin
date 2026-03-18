@@ -1,0 +1,6 @@
+"On this page you can see all assignments of the user.","이 페이지에서는 사용자의 모든 할당 상태를 확인할 수 있습니다."
+"Groups of user","소속된 그룹"
+"Permissions of users","사용자 권한"
+"Inherit from Group","그룹으로부터 상속"
+"<b>Note:</b> You can not unassign permissions from user, which are inherited by a group.","<b>참고:</b> 그룹에서 상속받은 권한은 사용자에게서 할당을 해제할 수 없습니다."
+"User is project manager of:","관리 프로젝트:"

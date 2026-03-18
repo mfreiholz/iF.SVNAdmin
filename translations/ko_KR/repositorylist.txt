@@ -1,0 +1,2 @@
+"On this page you can view your existing repositories and create or delete an repository.","이 페이지에서는 기존 저장소를 확인하고, 저장소를 생성하거나 삭제할 수 있습니다."
+"Repository management","저장소 관리"

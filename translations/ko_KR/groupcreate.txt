@@ -1,0 +1,6 @@
+"Create group","그룹 생성"
+"Create a new group to grant access to the repositories for a range of users.","여러 사용자에게 저장소에 대한 접근 권한을 부여하려면 새 그룹을 생성하세요."
+"New group data","새 그룹 데이터"
+"Group name","그룹명"
+"Valid group names are","유효한 그룹명은"
+"Invalid group names are","잘못된 그룹명은"

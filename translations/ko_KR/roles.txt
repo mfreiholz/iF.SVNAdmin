@@ -1,0 +1,27 @@
+"Roles of user","사용자 역할"
+"Please choose","선택해 주세요"
+"You have to select at least one user and one role.","최소 한 명의 사용자와 하나의 역할을 선택해야 합니다."
+
+"Administrator","관리자"
+"Web application administrator.","웹 애플리케이션 관리자."
+
+"User","사용자"
+"Can login and change the own password.","로그인하여 자신의 비밀번호를 변경할 수 있습니다."
+
+"User-Group-Manager","사용자-그룹 관리자"
+"Create/Delete users and groups and manages memberships and change passwords of users.","사용자 및 그룹 생성/삭제, 회원 관리, 사용자 비밀번호 변경을 수행합니다."
+
+"Access-Path-Manager","접근 경로 관리자"
+"Create/Delete Access-Paths and manages user and group permissions.","접근 경로의 생성/삭제, 사용자 및 그룹 권한을 관리합니다."
+
+"Repository-Creator","저장소 생성자"
+"Can create new repositories, but NOT delete.","새 저장소를 생성할 수 있지만, 삭제할 수는 없습니다."
+
+"Repository-Manager","저장소 관리자"
+"Create/Delete repositories.","저장소의 생성 및 삭제가 가능합니다."
+
+"Role-Manager","역할 관리자"
+"Assign and unassign web application roles to users.","사용자에게 웹 애플리케이션 역할을 할당하거나 할당을 해제합니다."
+
+"Update-Manager","업데이트 관리자"
+"Can synchronize the user data from provider with the SVNAuthFile.","공급자의 사용자 데이터를 SVNAuthFile과 동기화할 수 있습니다."

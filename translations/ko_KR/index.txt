@@ -1,0 +1,5 @@
+"General information","일반정보"
+"Logged in as","로그인됨"
+"Application version","애플리케이션 버전"
+"Check for updates","업데이트 확인"
+"PHP version","PHP 버전"

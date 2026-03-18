@@ -1,0 +1,6 @@
+"Create user","사용자 생성"
+"Create a new user to grant access to the repositories.","저장소에 대한 접근 권한을 부여할 새로운 사용자를 생성합니다."
+"New user data","신규 사용자 정보"
+"Username","사용자명"
+"Password","비밀번호"
+"Re-type password","비밀번호 재입력"

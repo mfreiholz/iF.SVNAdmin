@@ -1,0 +1,2 @@
+"Group management","그룹 관리"
+"Here you can see a list of all groups, which are defined in your subversion configuration.","이 페이지에서는 Subversion에서 설정된 모든 그룹을 확인할 수 있습니다."

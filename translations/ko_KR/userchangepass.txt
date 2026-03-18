@@ -1,0 +1,5 @@
+"Change password of user","사용자 비밀번호 변경"
+"Change the password of your subversion account.","Subversion 계정의 비밀번호를 변경합니다."
+"New password","새 비밀번호"
+"Re-type password","비밀번호 재입력"
+"The password's doesn't match each other.","비밀번호가 서로 일치하지 않습니다."

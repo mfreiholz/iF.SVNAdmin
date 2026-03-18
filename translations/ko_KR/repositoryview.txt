@@ -1,0 +1,2 @@
+"Repository browsing","저장소 찾아보기"
+"Add access path","접근 경로 추가"

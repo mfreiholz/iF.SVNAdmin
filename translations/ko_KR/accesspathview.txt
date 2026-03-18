@@ -1,0 +1,3 @@
+"Assigned users and groups to this access-path.","이 접근 경로에 사용자 및 그룹을 지정했습니다."
+"Assigned users","지정된 사용자"
+"Assigned groups","지정된 그룹"
