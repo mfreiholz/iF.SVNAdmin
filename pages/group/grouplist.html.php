@@ -13,7 +13,7 @@ $(document).ready(function(){
 
 <?php HtmlFilterBox("grouplist", 1); ?>
 
-<form id="grouplist" action="grouplist.php" method="POST">
+<form id="grouplist" action="grouplist.php" method="POST"><?php PrintCsrfField(); ?>
 <table class="datatable">
 <thead>
 <tr>
@@ -47,8 +47,8 @@ $(document).ready(function(){
 <tbody>
 <?php foreach (GetArrayValue("GroupList") as $g) { ?>
 <tr>
-  <td><?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_DELETE)) { ?><input type="checkbox" name="selected_groups[]" value="<?php print($g->name); ?>"><?php } ?></td>
-  <td><a href="groupview.php?groupname=<?php print($g->getEncodedName()); ?>"><?php print($g->name); ?></a></td>
+  <td><?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_DELETE)) { ?><input type="checkbox" name="selected_groups[]" value="<?php print(h($g->name)); ?>"><?php } ?></td>
+  <td><a href="groupview.php?groupname=<?php print(h($g->getEncodedName())); ?>"><?php print(h($g->name)); ?></a></td>
 </tr>
 <?php } ?>
 </tbody>

@@ -231,6 +231,7 @@ function testSettings(testSection, params, resultContainer)
 {	
 	// Append static control parameters.
 	params.dotest = 1;
+	params.csrf_token = $('input[name=csrf_token]').first().val();
 	params.dotestsec = testSection;
 	
 	var C = $(resultContainer);
@@ -299,6 +300,7 @@ function getSettings(testSection, params, resultContainer, errorContainer)
 {
     // Append static control parameters.
     params.dotest = 1;
+	params.csrf_token = $('input[name=csrf_token]').first().val();
     params.dotestsec = testSection;
 
     var C = $(errorContainer);

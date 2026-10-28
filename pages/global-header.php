@@ -26,10 +26,10 @@
 			<div id="locale-selection">
 				<select id="locale-selector" name="locale">
 					<?php foreach (GetArrayValue("LocaleList") as $l) {?>
-					<option value="<?php print($l->locale); ?>"
-						style="background-image:url('templates/flags/<?php print($l->locale); ?>.png');"
+					<option value="<?php print(h($l->locale)); ?>"
+						style="background-image:url('templates/flags/<?php print(h($l->locale)); ?>.png');"
 						<?php if (CurrentLocale() == $l->locale) { ?> selected="selected"<?php } ?>>
-						<?php print($l->name); ?> (<?php Translate("Translated by"); ?> <?php print($l->author); ?>)
+						<?php print(h($l->name)); ?> (<?php Translate("Translated by"); ?> <?php print(h($l->author)); ?>)
 					</option>
 					<?php } ?>
 				</select>
@@ -51,7 +51,7 @@
 				<div class="top-message-content">
 					<ul>
 						<?php foreach (AppEngine()->getExceptions() as $item) : ?>
-						<li><?php print($item->getMessage()); ?></li>
+						<li><?php print(h_once($item->getMessage())); ?></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>

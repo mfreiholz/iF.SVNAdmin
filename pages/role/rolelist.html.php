@@ -11,8 +11,8 @@
   <tbody>
   <?php foreach(GetArrayValue('RoleList') as $r): ?>
   <tr>
-    <td><?php print($r->getTranslatedName()); ?></td>
-    <td><?php print($r->getTranslatedDescription()); ?></td>
+    <td><?php print(h($r->getTranslatedName())); ?></td>
+    <td><?php print(h($r->getTranslatedDescription())); ?></td>
   </tr>
   <?php endforeach; ?>
   </tbody>

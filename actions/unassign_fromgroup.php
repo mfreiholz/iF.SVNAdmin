@@ -58,7 +58,7 @@ else
 	      }
 	      else
 	      {
-	      	$appEngine->addException(tr("Could not remove group %0 from group %1", array($oS->name, $oG->name)));
+	      	$appEngine->addException(new Exception(tr("Could not remove group %0 from group %1", array($oS->name, $oG->name))));
 	      }
 	    } //for
 
@@ -74,7 +74,7 @@ else
 	      }
 	      else
 	      {
-	      	$appEngine->addException(tr("Could not remove user %0 from group %1", array($oU->name, $oG->name)));
+	      	$appEngine->addException(new Exception(tr("Could not remove user %0 from group %1", array($oU->name, $oG->name))));
 	      }
 	    } //for
 	  } //for

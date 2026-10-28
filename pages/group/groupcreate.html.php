@@ -4,7 +4,7 @@
 <p class="hdesc"><?php Translate("Create a new group to grant access to the repositories for a range of users."); ?></p>
 
 <div>
-  <form method="POST" action="groupcreate.php">
+  <form method="POST" action="groupcreate.php"><?php PrintCsrfField(); ?>
   
     <div class="form-field">
       <label for="name"><?php Translate("Group name"); ?></label>

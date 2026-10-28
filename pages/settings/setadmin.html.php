@@ -29,7 +29,7 @@
   <?php Translate("No administrator defined! Select the user for the administator privileges, please."); ?>
 </div>
 
-<form method="post" action="settings.php">
+<form method="post" action="settings.php"><?php PrintCsrfField(); ?>
   <table class="datatable settings">
     <tbody>
       <tr>
@@ -37,7 +37,7 @@
         <td>
           <select name="selected_users[]">
             <?php foreach(GetArrayValue("UserList") as $u): ?>
-            <option value="<?php print($u->getEncodedName()); ?>"><?php print($u->getName()); ?></option>
+            <option value="<?php print(h($u->getEncodedName())); ?>"><?php print(h($u->getName())); ?></option>
             <?php endforeach; ?>
           </select>
         </td>

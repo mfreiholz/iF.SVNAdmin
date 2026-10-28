@@ -11,6 +11,74 @@ function exception_handler($exception)
   exit(1);
 }
 
+/**
+ * Escapes a value for HTML output (element content and quoted attributes).
+ */
+function h($value)
+{
+  return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+/**
+ * Escapes text which may already contain escaped parts, e.g. exception
+ * messages built with tr() (escaped arguments) or from raw input.
+ * The result is escaped exactly once.
+ */
+function h_once($value)
+{
+  return h(html_entity_decode((string)$value, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+}
+
+////////////////////////////////////////////////////////////////////////
+// CSRF PROTECTION
+////////////////////////////////////////////////////////////////////////
+
+/**
+ * Gets the CSRF token of the current session, creates it if needed.
+ */
+function csrf_token()
+{
+  if (empty($_SESSION['csrf_token']))
+  {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+  }
+  return $_SESSION['csrf_token'];
+}
+
+/**
+ * Prints the hidden CSRF token field. Must be part of every POST form.
+ */
+function PrintCsrfField()
+{
+  print('<input type="hidden" name="csrf_token" value="'.h(csrf_token()).'">');
+}
+
+/**
+ * Checks that the current request is a POST request with a valid CSRF token.
+ * @return bool
+ */
+function csrf_check()
+{
+  if (!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST')
+    return false;
+  if (!isset($_POST['csrf_token']) || !is_string($_POST['csrf_token']))
+    return false;
+  return hash_equals(csrf_token(), $_POST['csrf_token']);
+}
+
+/**
+ * Same as csrf_check(), but adds a visible error for the user on failure.
+ * @return bool
+ */
+function csrf_require()
+{
+  if (csrf_check())
+    return true;
+  global $appEngine;
+  $appEngine->addException(new ValidationException(tr("The form has expired or is invalid. Please try again.")));
+  return false;
+}
+
 function tr($text, $args=null)
 {
   global $appTR;
@@ -185,7 +253,7 @@ function GetBoolValue($varName)
 	return false;
 }
 
-function PrintStringValue($varName) { print(GetStringValue($varName)); }
+function PrintStringValue($varName) { print(h(GetStringValue($varName))); }
 function PrintIntValue($varName) { print(GetIntValue($varName)); }
 function PrintBoolValue($varName) { print(GetBoolValue($varName)); }
 

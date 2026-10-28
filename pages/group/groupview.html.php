@@ -6,7 +6,7 @@
 
 <?php if (IsProviderActive(PROVIDER_GROUP_VIEW) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_VIEW)) : ?>
 <h2><?php Translate("Users of group"); ?></h2>
-<form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?>" method="POST">
+<form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?><?php PrintCsrfField(); ?>" method="POST">
   <input type="hidden" name="selected_groups[]" value="<?php PrintStringValue('GroupName'); ?>">
 
   <?php HtmlFilterBox("groupuserlist", 1); ?>
@@ -40,7 +40,7 @@
               <select name="selected_users[]">
                 <option value="">--- <?php Translate("User"); ?> ---</option>
                 <?php foreach(GetArrayValue("AllUserList") as $u): ?>
-                <option value="<?php print($u->name); ?>"><?php print($u->getDisplayName()); ?></option>
+                <option value="<?php print(h($u->name)); ?>"><?php print(h($u->getDisplayName())); ?></option>
                 <?php endforeach; ?>
               </select>
               <input type="submit" name="assign_usergroup" value="<?php Translate('Assign'); ?>" class="anbtn">
@@ -59,11 +59,11 @@
     <tr>
       <td>
         <?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_UNASSIGN)): ?>
-        <input type="checkbox" name="selected_users[]" value="<?php print($u->name); ?>">
+        <input type="checkbox" name="selected_users[]" value="<?php print(h($u->name)); ?>">
         <?php endif; ?>
       </td>
       <td>
-        <a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->name); ?></a>
+        <a href="userview.php?username=<?php print(h($u->getEncodedName())); ?>"><?php print(h($u->name)); ?></a>
       </td>
     </tr>
     <?php endforeach; ?>
@@ -75,7 +75,7 @@
 
 <?php if (IsProviderActive(PROVIDER_GROUP_VIEW) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_VIEW)) : ?>
 <h2><?php Translate("Groups of group"); ?></h2>
-<form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?>" method="POST">
+<form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?><?php PrintCsrfField(); ?>" method="POST">
   <input type="hidden" name="selected_groups[]" value="<?php PrintStringValue('GroupName'); ?>">
 
   <?php HtmlFilterBox("groupgrouplist", 1); ?>
@@ -109,7 +109,7 @@
               <select name="selected_subgroups[]">
                 <option value="">--- <?php Translate("Group"); ?> ---</option>
                 <?php foreach(GetArrayValue("AllGroupList") as $g): ?>
-                <option value="<?php print($g->name); ?>"><?php print($g->name); ?></option>
+                <option value="<?php print(h($g->name)); ?>"><?php print(h($g->name)); ?></option>
                 <?php endforeach; ?>
               </select>
               <input type="submit" name="assign_subgroupgroup" value="<?php Translate('Assign'); ?>" class="anbtn">
@@ -128,11 +128,11 @@
     <tr>
       <td>
         <?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_UNASSIGN)): ?>
-        <input type="checkbox" name="selected_subgroups[]" value="<?php print($g->name); ?>">
+        <input type="checkbox" name="selected_subgroups[]" value="<?php print(h($g->name)); ?>">
         <?php endif; ?>
       </td>
       <td>
-        <a href="groupview.php?groupname=<?php print($g->getEncodedName()); ?>"><?php print($g->name); ?></a>
+        <a href="groupview.php?groupname=<?php print(h($g->getEncodedName())); ?>"><?php print(h($g->name)); ?></a>
       </td>
     </tr>
     <?php endforeach; ?>
@@ -144,7 +144,7 @@
 
 <?php if (IsProviderActive(PROVIDER_ACCESSPATH_VIEW) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_VIEW)): ?>
 <h2><?php Translate("Permissions of group"); ?></h2>
-<form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?>" method="POST">
+<form action="groupview.php?groupname=<?php PrintStringValue('GroupNameEncoded'); ?><?php PrintCsrfField(); ?>" method="POST">
 <input type="hidden" name="selected_groups[]" value="<?php PrintStringValue('GroupNameEncoded'); ?>">
 
   <?php HtmlFilterBox("grouplist", 1); ?>
@@ -185,14 +185,14 @@
     <tr>
       <td>
         <?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN)): ?>
-        <input type="checkbox" name="selected_accesspaths[]" value="<?php echo $ap->getPath(); ?>">
+        <input type="checkbox" name="selected_accesspaths[]" value="<?php print(h($ap->getPath())); ?>">
         <?php endif; ?>
       </td>
       <td>
-        <a href="accesspathview.php?accesspath=<?php echo $ap->getEncodedPath(); ?>"><?php echo $ap->getPath(); ?></a>
+        <a href="accesspathview.php?accesspath=<?php print(h($ap->getEncodedPath())); ?>"><?php print(h($ap->getPath())); ?></a>
       </td>
       <td>
-        <?php echo $ap->getPerm(); ?>
+        <?php print(h($ap->getPerm())); ?>
       </td>
     </tr>
     <?php endforeach; ?>

@@ -73,7 +73,7 @@ $(document).ready(function(){
 </script>
 
 <h1><?php Translate("Settings"); ?></h1>
-<form method="post" action="settings.php?save=1">
+<form method="post" action="settings.php?save=1"><?php PrintCsrfField(); ?>
 
 <!-- Basics -->
 <table class="datatable settings" id="tbl_basic">
@@ -116,7 +116,7 @@ $(document).ready(function(){
       <td>
         <select name="UserViewProviderType" id="UserViewProviderType">
           <?php foreach(GetArrayValue("userViewProviderTypes") as $t): ?>
-          <option><?php print($t); ?></option>
+          <option><?php print(h($t)); ?></option>
           <?php endforeach; ?>
         </select>
       </td>
@@ -126,7 +126,7 @@ $(document).ready(function(){
       <td>
         <select name="UserEditProviderType" id="UserEditProviderType">
           <?php foreach(GetArrayValue("userEditProviderTypes") as $t): ?>
-          <option><?php print($t); ?></option>
+          <option><?php print(h($t)); ?></option>
           <?php endforeach; ?>
         </select>
       </td>
@@ -136,7 +136,7 @@ $(document).ready(function(){
       <td>
         <select name="GroupViewProviderType" id="GroupViewProviderType">
           <?php foreach(GetArrayValue("groupViewProviderTypes") as $t): ?>
-          <option><?php print($t); ?></option>
+          <option><?php print(h($t)); ?></option>
           <?php endforeach; ?>
         </select>
       </td>
@@ -146,7 +146,7 @@ $(document).ready(function(){
       <td>
         <select name="GroupEditProviderType" id="GroupEditProviderType">
           <?php foreach(GetArrayValue("groupEditProviderTypes") as $t): ?>
-          <option><?php print($t); ?></option>
+          <option><?php print(h($t)); ?></option>
           <?php endforeach; ?>
         </select>
       </td>
@@ -156,7 +156,7 @@ $(document).ready(function(){
       <td>
         <select name="RepositoryViewProviderType" id="RepositoryViewProviderType">
           <?php foreach(GetArrayValue("repositoryViewProviderTypes") as $t): ?>
-          <option><?php print($t); ?></option>
+          <option><?php print(h($t)); ?></option>
           <?php endforeach; ?>
         </select>
       </td>
@@ -166,7 +166,7 @@ $(document).ready(function(){
       <td>
         <select name="RepositoryEditProviderType" id="RepositoryEditProviderType">
           <?php foreach(GetArrayValue("repositoryEditProviderTypes") as $t): ?>
-          <option><?php print($t); ?></option>
+          <option><?php print(h($t)); ?></option>
           <?php endforeach; ?>
         </select>
       </td>

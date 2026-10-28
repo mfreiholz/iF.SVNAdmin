@@ -99,7 +99,7 @@ $pAdGroupStrictMode = get_request_var("AdGroupStrictMode");
 // Reset first start up value.
 ////////////////////////////////////////////////////////////////////////////////
 
-if (check_request_var("firststart"))
+if (check_request_var("firststart") && csrf_require())
 {
   $cfgEngine->setValue("Common", "FirstStart", 1);
   $cfgEngine->saveToFile();
@@ -112,7 +112,7 @@ if (check_request_var("firststart"))
 // Save values.
 ////////////////////////////////////////////////////////////////////////////////
 
-if (check_request_var("save"))
+if (check_request_var("save") && csrf_require())
 {
 	$cfgEngine->setValue("Engine:Providers", "UserViewProviderType", $pUserViewProviderType);
 	$cfgEngine->setValue("Engine:Providers", "UserEditProviderType", $pUserEditProviderType);
@@ -173,7 +173,7 @@ if (check_request_var("save"))
 // Do the tests. (Comes in with AJAX)
 ////////////////////////////////////////////////////////////////////////////////
 
-if (check_request_var("dotest") && check_request_var("dotestsec"))
+if (check_request_var("dotest") && check_request_var("dotestsec") && csrf_check())
 {
 	// Turn off error reporting, we only want return JSON code.
 	// Update: Do NOT turn it off. We probably could use register_shutdown_function()
@@ -423,7 +423,7 @@ if (check_request_var("dotest") && check_request_var("dotestsec"))
 if (check_request_var("setadmin") || $show_setadmin)
 {
   // Assign the Administrator role.
-  if (check_request_var("saveadmin"))
+  if (check_request_var("saveadmin") && csrf_require())
   {
     $selusers = get_request_var("selected_users");
 

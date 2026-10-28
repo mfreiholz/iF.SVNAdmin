@@ -329,6 +329,12 @@ if ($cfg->getValue("Engine:Providers", "AuthenticationStatus") == "basic")
   }
 }
 
+// The CSRF token is stored in the session, so it is needed even without authentication.
+if (session_status() !== PHP_SESSION_ACTIVE)
+{
+  session_start();
+}
+
 /**
  * An administrator role MUST be defined, if the authentication is active.
  * Otherwise nobody could setup the application.

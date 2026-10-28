@@ -4,7 +4,7 @@
 <p class="hdesc"><?php Translate("Create a new user to grant access to the repositories."); ?></p>
 
 <div>
-  <form method="POST" action="usercreate.php">
+  <form method="POST" action="usercreate.php"><?php PrintCsrfField(); ?>
   
     <div class="form-field">
       <label for="username"><?php Translate("Username"); ?></label>

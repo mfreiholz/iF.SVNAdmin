@@ -5,14 +5,14 @@
 
 <?php foreach (GetArrayValue('RepositoryParentList') as $rp) : ?>
 
-	<h2><?php Translate('Location'); ?>: <?php print($rp->description); ?><br><small>(<?php print($rp->path); ?>)</small></h2>
+	<h2><?php Translate('Location'); ?>: <?php print(h($rp->description)); ?><br><small>(<?php print(h($rp->path)); ?>)</small></h2>
 
 	<?php HtmlFilterBox('repolist_' . $rp->identifier); ?>
 
-	<form action="repositorylist.php" method="POST">
-		<input type="hidden" name="pi" value="<?php print($rp->getEncodedIdentifier()); ?>">
+	<form action="repositorylist.php" method="POST"><?php PrintCsrfField(); ?>
+		<input type="hidden" name="pi" value="<?php print(h($rp->getEncodedIdentifier())); ?>">
 		
-		<table id="repolist_<?php print($rp->identifier); ?>" class="datatable">
+		<table id="repolist_<?php print(h($rp->identifier)); ?>" class="datatable">
 
 		<thead>
 			<tr>
@@ -65,23 +65,23 @@
 			<tr>
 				<td>
 					<?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_ADD)) : ?>
-						<a href="accesspathcreate.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>">
+						<a href="accesspathcreate.php?pi=<?php print(h($r->getEncodedParentIdentifier())); ?>&amp;r=<?php print(h($r->getEncodedName())); ?>">
 							<img src="templates/icons/addpath.png" alt="<?php Translate("Add access path"); ?>" title="<?php Translate("Add access path"); ?>">
 						</a>
 					<?php endif; ?>
 				</td>
 				<td>
 					<?php if (GetBoolValue('ShowDeleteButton') && IsProviderActive(PROVIDER_REPOSITORY_EDIT) && HasAccess(ACL_MOD_REPO, ACL_ACTION_DELETE)) : ?>
-						<input type="checkbox" name="selected_repos[]" value="<?php print($r->name); ?>">
+						<input type="checkbox" name="selected_repos[]" value="<?php print(h($r->name)); ?>">
 					<?php endif; ?>
 				</td>
 				<td>
-					<a href="repositoryview.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>"><?php print($r->name); ?></a>
+					<a href="repositoryview.php?pi=<?php print(h($r->getEncodedParentIdentifier())); ?>&amp;r=<?php print(h($r->getEncodedName())); ?>"><?php print(h($r->name)); ?></a>
 				</td>
 				<?php if (GetBoolValue("ShowOptions")) : ?>
 				<td>
 					<?php if (GetBoolValue("ShowDumpOption")) : ?>
-					<a href="repositorylist.php?pi=<?php print($r->getEncodedParentIdentifier()); ?>&amp;r=<?php print($r->getEncodedName()); ?>&amp;dump=true">
+					<a href="repositorylist.php?pi=<?php print(h($r->getEncodedParentIdentifier())); ?>&amp;r=<?php print(h($r->getEncodedName())); ?>&amp;dump=true">
 						<img src="templates/icons/exportdump.png" border="0" alt="<?php Translate("Dump"); ?>" title="<?php Translate("Export dump"); ?>">
 					</a>
 					<?php endif; ?>

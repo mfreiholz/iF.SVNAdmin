@@ -13,7 +13,7 @@ $(document).ready(function(){
 
 <?php HtmlFilterBox("accesspathlist", 1); ?>
 
-<form action="accesspathslist.php" method="POST">
+<form action="accesspathslist.php" method="POST"><?php PrintCsrfField(); ?>
 <table id="accesspathlist" class="datatable">
 <thead>
 <tr>
@@ -42,7 +42,7 @@ $(document).ready(function(){
                 <select name="selected_users[]">
                   <option value="">--- <?php Translate("Set project manager"); ?> ---</option>
                 <?php foreach (GetArrayValue("UserList") as $u) : ?>
-                  <option value="<?php print($u->name); ?>"><?php print($u->getDisplayName()); ?></option>
+                  <option value="<?php print(h($u->name)); ?>"><?php print(h($u->getDisplayName())); ?></option>
                 <?php endforeach; ?>
                 </select>
                 <input type="submit" name="assign_projectmanager" value="<?php Translate("Assign"); ?>">
@@ -57,10 +57,10 @@ $(document).ready(function(){
       <tbody>
       <?php foreach (GetArrayValue("AccessPathList") as $ap) : ?>
       <tr>
-        <td><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print($ap->getPath()); ?>"><?php endif; ?></td>
+        <td><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_DELETE)) : ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print(h($ap->getPath())); ?>"><?php endif; ?></td>
         <td>
-          <a href="accesspathview.php?accesspath=<?php print($ap->getEncodedPath()); ?>"><?php print($ap->getPath()); ?></a><br>
-          <small><?php Translate("Managers"); ?>: <?php print($ap->getManagersAsString()); ?></small>
+          <a href="accesspathview.php?accesspath=<?php print(h($ap->getEncodedPath())); ?>"><?php print(h($ap->getPath())); ?></a><br>
+          <small><?php Translate("Managers"); ?>: <?php print(h($ap->getManagersAsString())); ?></small>
         </td>
       </tr>
       <?php endforeach; ?>

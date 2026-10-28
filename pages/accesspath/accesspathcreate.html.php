@@ -4,7 +4,7 @@
 <p class="hdesc"><?php Translate("Create a new access-path to grant access to users and groups."); ?></p>
 
 <div>
-	<form method="POST" action="accesspathcreate.php">
+	<form method="POST" action="accesspathcreate.php"><?php PrintCsrfField(); ?>
 
 		<div class="form-field">
 			<label for="path"><?php Translate("Path"); ?>:</label>

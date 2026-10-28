@@ -3,7 +3,7 @@
 <h1><?php Translate("Change password of user"); ?> <?php PrintStringValue("Username"); ?></h1>
 <p class="hdesc"><?php Translate("Change the password of your subversion account."); ?></p>
 <div>
-	<form method="POST" action="userchangepass.php">
+	<form method="POST" action="userchangepass.php"><?php PrintCsrfField(); ?>
 		<input type="hidden" name="username" value="<?php PrintStringValue("Username"); ?>">
 
 		<div class="form-field">

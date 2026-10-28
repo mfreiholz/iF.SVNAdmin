@@ -28,7 +28,7 @@
 				<div class="top-message-content">
 					<ul>
 						<?php foreach (AppEngine()->getExceptions() as $item) : ?>
-						<li><?php print($item->getMessage()); ?></li>
+						<li><?php print(h_once($item->getMessage())); ?></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>
@@ -51,7 +51,7 @@
 			<?php endif; ?>
 
 			<div class="formdiv">
-				<form action="login.php" method="POST">
+				<form action="login.php" method="POST"><?php PrintCsrfField(); ?>
 					<label for="loginname"><?php Translate("Username"); ?>:</label><br>
 					<input type="text" name="loginname" id="loginname" class="lineedit"><br>
 
@@ -65,7 +65,7 @@
 			</div>
 
 		<?php foreach (GetArrayValue("LocaleList") as $l): ?>
-			<a href="<?php PrintCurrentScriptName(); ?>?locale=<?php print($l->getLocale()); ?>" title="<?php Translate("Translated by"); ?> <?php print($l->getAuthor()); ?>"><img src="templates/flags/<?php print($l->getLocale()); ?>.png" alt="<?php print($l->getName()); ?>"><?php print($l->getName()); ?></a>
+			<a href="<?php PrintCurrentScriptName(); ?>?locale=<?php print(h($l->getLocale())); ?>" title="<?php Translate("Translated by"); ?> <?php print(h($l->getAuthor())); ?>"><img src="templates/flags/<?php print(h($l->getLocale())); ?>.png" alt="<?php print(h($l->getName())); ?>"><?php print(h($l->getName())); ?></a>
 		<?php endforeach; ?>
 		</div>
 	</div>

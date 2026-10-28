@@ -91,7 +91,7 @@ else
 	    }
 	    else
 	    {
-	    	$appEngine->addException(tr("Can not remove user %0."));
+	    	$appEngine->addException(new Exception(tr("Can not remove user %0.", array($u->name))));
 	    }
 	  } // for(users)
 	  

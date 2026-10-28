@@ -299,6 +299,12 @@ class Engine
 
 		$appTR->loadModule("actions");
 
+		// Logout is a plain link and harmless, all other actions change data.
+		if ($action != 'logout' && !csrf_require())
+		{
+			return;
+		}
+
 		if(!defined('ACTION_HANDLING'))
 		{
 			define('ACTION_HANDLING', true);

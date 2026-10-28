@@ -17,7 +17,7 @@ $(document).ready(function(){
 <h1><?php Translate("Permissions"); ?></h1>
 <p class="hdesc"><?php Translate("Manage the user and group permissions for the different access-paths on this site."); ?></p>
 
-      <form action="permissionassign.php" method="POST">
+      <form action="permissionassign.php" method="POST"><?php PrintCsrfField(); ?>
       <table width="100%">
         <tr>
           <td valign="top" width="50%">
@@ -34,8 +34,8 @@ $(document).ready(function(){
               <tbody>
               <?php foreach(GetArrayValue("UserList") as $u): ?>
               <tr>
-                <td><input type="checkbox" name="selected_users[]" value="<?php print($u->getName()); ?>"></td>
-                <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
+                <td><input type="checkbox" name="selected_users[]" value="<?php print(h($u->getName())); ?>"></td>
+                <td><a href="userview.php?username=<?php print(h($u->getEncodedName())); ?>"><?php print(h($u->getDisplayName())); ?></a></td>
               </tr>
               <?php endforeach; ?>
               </tbody>
@@ -56,8 +56,8 @@ $(document).ready(function(){
               <tbody>
               <?php foreach(GetArrayValue("GroupList") as $g): ?>
               <tr>
-                <td><input type="checkbox" name="selected_groups[]" value="<?php print($g->getName()); ?>"></td>
-                <td><a href="groupview.php?groupname=<?php print($g->getEncodedName()); ?>"><?php print($g->getName()); ?></a></td>
+                <td><input type="checkbox" name="selected_groups[]" value="<?php print(h($g->getName())); ?>"></td>
+                <td><a href="groupview.php?groupname=<?php print(h($g->getEncodedName())); ?>"><?php print(h($g->getName())); ?></a></td>
               </tr>
               <?php endforeach; ?>
               </tbody>
@@ -110,8 +110,8 @@ $(document).ready(function(){
       <tbody>
         <?php foreach(GetArrayValue("AccessPathList") as $p): ?>
         <tr>
-          <td><input type="checkbox" name="selected_accesspaths[]" value="<?php print($p->getPath()); ?>"></td>
-          <td><a href="accesspathview.php?accesspath=<?php print($p->getEncodedPath()); ?>"><?php print($p->getPath()); ?></a></td>
+          <td><input type="checkbox" name="selected_accesspaths[]" value="<?php print(h($p->getPath())); ?>"></td>
+          <td><a href="accesspathview.php?accesspath=<?php print(h($p->getEncodedPath())); ?>"><?php print(h($p->getPath())); ?></a></td>
         </tr>
 		<?php endforeach; ?>
       </tbody>

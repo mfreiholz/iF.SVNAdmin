@@ -17,7 +17,7 @@ $(document).ready(function(){
 <h1><?php Translate("User and Group &lt;&gt; Group assignment"); ?></h1>
 <p class="hdesc"><?php Translate("Here you can assign users to groups."); ?></p>
 
-<form action="groupassign.php" method="POST">
+<form action="groupassign.php" method="POST"><?php PrintCsrfField(); ?>
   <table width="100%">
 
     <tbody>
@@ -36,8 +36,8 @@ $(document).ready(function(){
             <tbody>
             <?php foreach (GetArrayValue("UserList") as $u) : ?>
             <tr>
-              <td><input type="checkbox" name="selusers[]" value="<?php print($u->name); ?>"></td>
-              <td><a href="userview.php?username=<?php print($u->getEncodedName()); ?>"><?php print($u->getDisplayName()); ?></a></td>
+              <td><input type="checkbox" name="selusers[]" value="<?php print(h($u->name)); ?>"></td>
+              <td><a href="userview.php?username=<?php print(h($u->getEncodedName())); ?>"><?php print(h($u->getDisplayName())); ?></a></td>
             </tr>
             <?php endforeach; ?>
             </tbody>
@@ -55,8 +55,8 @@ $(document).ready(function(){
             <tbody>
             <?php foreach(GetArrayValue("GroupList") as $g) : ?>
             <tr>
-              <td><input type="checkbox" name="selsubgroups[]" value="<?php print($g->name); ?>"></td>
-              <td><a href="groupview.php?groupname=<?php print($g->getEncodedName()); ?>"><?php print($g->name); ?></a></td>
+              <td><input type="checkbox" name="selsubgroups[]" value="<?php print(h($g->name)); ?>"></td>
+              <td><a href="groupview.php?groupname=<?php print(h($g->getEncodedName())); ?>"><?php print(h($g->name)); ?></a></td>
             </tr>
             <?php endforeach; ?>
             </tbody>
@@ -80,8 +80,8 @@ $(document).ready(function(){
             <tbody>
             <?php foreach(GetArrayValue("GroupList") as $g) : ?>
             <tr>
-              <td><input type="checkbox" name="selgroups[]" value="<?php print($g->name); ?>"></td>
-              <td><a href="groupview.php?groupname=<?php print($g->getEncodedName()); ?>"><?php print($g->name); ?></a></td>
+              <td><input type="checkbox" name="selgroups[]" value="<?php print(h($g->name)); ?>"></td>
+              <td><a href="groupview.php?groupname=<?php print(h($g->getEncodedName())); ?>"><?php print(h($g->name)); ?></a></td>
             </tr>
             <?php endforeach; ?>
             </tbody>

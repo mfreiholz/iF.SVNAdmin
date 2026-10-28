@@ -47,6 +47,7 @@ else
 			if ($authOK)
 			{
 				// Set session variable which indicates that the user is logged in.
+				session_regenerate_id(true);
 				$_SESSION["svnadmin_username"] = $loginname;
 				$appEngine->forward(PAGE_HOME, null, true);
 			}

@@ -215,7 +215,8 @@ class IF_Translator
     $argsCount = count($args);
     for ($i=0; $i<$argsCount; $i++)
     {
-      $str = str_replace("%".$i, $args[$i], $str);
+      // Arguments may contain user input, the translation itself is trusted.
+      $str = str_replace("%".$i, htmlspecialchars((string)$args[$i], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), $str);
     }
     return $str;
   }

@@ -43,7 +43,7 @@ $(document).ready(function(){
   Roles of user
 -->
 <h2><?php Translate("Roles of user"); ?></h2>
-<form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
+<form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?><?php PrintCsrfField(); ?>" method="POST">
 	<input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 	<table class="datatable">
 	
@@ -76,7 +76,7 @@ $(document).ready(function(){
 	          <select name="selected_assign_role_name">
 	            <option value="">--- <?php Translate("Role"); ?> ---</option>
 	            <?php foreach (GetArrayValue("RoleListAll") as $r) { ?>
-	            <option value="<?php print($r->name); ?>"><?php Translate($r->name); ?></option>
+	            <option value="<?php print(h($r->name)); ?>"><?php Translate($r->name); ?></option>
 	            <?php } ?>
 	          </select>
 	          <input type="submit" name="assign_role" value="<?php Translate("Assign"); ?>" class="anbtn">
@@ -92,7 +92,7 @@ $(document).ready(function(){
 	<tbody>
 	<?php foreach (GetArrayValue("RoleList") as $r) { ?>
 	<tr>
-	  <td><?php if (HasAccess(ACL_MOD_ROLE, ACL_ACTION_UNASSIGN)) { ?><input type="checkbox" name="selected_roles[]" value="<?php print($r->name); ?>"><?php } ?></td>
+	  <td><?php if (HasAccess(ACL_MOD_ROLE, ACL_ACTION_UNASSIGN)) { ?><input type="checkbox" name="selected_roles[]" value="<?php print(h($r->name)); ?>"><?php } ?></td>
 	  <td><?php Translate($r->name); ?></td>
 	  <td><?php Translate($r->description); ?></td>
 	</tr>
@@ -109,7 +109,7 @@ $(document).ready(function(){
   Groups of user
 -->
 <h2><?php Translate("Groups of user"); ?></h2>
-<form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
+<form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?><?php PrintCsrfField(); ?>" method="POST">
 <input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 
 <?php HtmlFilterBox("usergrouplist", 1); ?>
@@ -142,7 +142,7 @@ $(document).ready(function(){
 	          <select name="selected_groups[]">
 	            <option value="">--- <?php Translate("Group"); ?> ---</option>
 	            <?php foreach (GetArrayValue("GroupListAll") as $g) { ?>
-	            <option value="<?php print($g->name); ?>"><?php print($g->name); ?></option>
+	            <option value="<?php print(h($g->name)); ?>"><?php print(h($g->name)); ?></option>
 	            <?php } ?>
 	          </select>
 	          <input type="submit" name="assign_usergroup" value="<?php Translate("Assign"); ?>" class="anbtn">
@@ -158,8 +158,8 @@ $(document).ready(function(){
 	<tbody>
 	<?php foreach (GetArrayValue("GroupList") as $g) { ?>
 	<tr>
-	  <td><?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_UNASSIGN)) { ?><input type="checkbox" name="selected_groups[]" value="<?php print($g->name); ?>"><?php } ?></td>
-	  <td><a href="groupview.php?groupname=<?php print($g->getEncodedName()); ?>"><?php print($g->name); ?></a></td>
+	  <td><?php if (IsProviderActive(PROVIDER_GROUP_EDIT) && HasAccess(ACL_MOD_GROUP, ACL_ACTION_UNASSIGN)) { ?><input type="checkbox" name="selected_groups[]" value="<?php print(h($g->name)); ?>"><?php } ?></td>
+	  <td><a href="groupview.php?groupname=<?php print(h($g->getEncodedName())); ?>"><?php print(h($g->name)); ?></a></td>
 	</tr>
 	<?php } ?>
 	</tbody>
@@ -174,7 +174,7 @@ $(document).ready(function(){
   Permissions of user
 -->
 <h2><?php Translate("Permissions of users"); ?></h2>
-<form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
+<form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?><?php PrintCsrfField(); ?>" method="POST">
 <input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 
 <?php HtmlFilterBox("userpermissionlist", 1); ?>
@@ -213,10 +213,10 @@ $(document).ready(function(){
 	<tbody>
   <?php foreach (GetArrayValue("PathList") as $ap) { ?>
 	<tr>
-	  <td><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN) && empty($ap->inherited)) { ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print($ap->path); ?>"><?php } ?></td>
-	  <td><a href="accesspathview.php?accesspath=<?php print($ap->getEncodedPath()); ?>"><?php print($ap->path); ?></a></td>
-	  <td><?php print($ap->perm); ?></td>
-	  <td><?php print($ap->inherited); ?></td>
+	  <td><?php if (IsProviderActive(PROVIDER_ACCESSPATH_EDIT) && HasAccess(ACL_MOD_ACCESSPATH, ACL_ACTION_UNASSIGN) && empty($ap->inherited)) { ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print(h($ap->path)); ?>"><?php } ?></td>
+	  <td><a href="accesspathview.php?accesspath=<?php print(h($ap->getEncodedPath())); ?>"><?php print(h($ap->path)); ?></a></td>
+	  <td><?php print(h($ap->perm)); ?></td>
+	  <td><?php print(h($ap->inherited)); ?></td>
 	</tr>
 	<?php } ?>
 	</tbody>
@@ -232,7 +232,7 @@ $(document).ready(function(){
   Project manager's access path list
 -->
 <h2><?php Translate("User is project manager of:"); ?></h2>
-<form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?>" method="POST">
+<form action="userview.php?username=<?php PrintStringValue("UsernameEncoded"); ?><?php PrintCsrfField(); ?>" method="POST">
 <input type="hidden" name="selected_users[]" value="<?php PrintStringValue("Username"); ?>">
 <table class="datatable">
   <thead>
@@ -265,8 +265,8 @@ $(document).ready(function(){
   <tbody>
     <?php foreach (GetArrayValue("RestrictedPathList") as $rp) { ?>
     <tr>
-      <td><?php if (HasAccess(ACL_MOD_PROJECTMANAGER, ACL_ACTION_UNASSIGN)) { ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print($rp->path); ?>"><?php } ?></td>
-      <td><a href="accesspathview.php?accesspath=<?php print($rp->getEncodedPath()); ?>"><?php print($rp->path); ?></a> <small>(<?php Translate("+All sub Access-Path's"); ?>)</small></td>
+      <td><?php if (HasAccess(ACL_MOD_PROJECTMANAGER, ACL_ACTION_UNASSIGN)) { ?><input type="checkbox" name="selected_accesspaths[]" value="<?php print(h($rp->path)); ?>"><?php } ?></td>
+      <td><a href="accesspathview.php?accesspath=<?php print(h($rp->getEncodedPath())); ?>"><?php print(h($rp->path)); ?></a> <small>(<?php Translate("+All sub Access-Path's"); ?>)</small></td>
     </tr>
     <?php } ?>
   </tbody>

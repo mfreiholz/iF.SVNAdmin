@@ -19,18 +19,18 @@ $(document).ready(function(){
 <h1><?php Translate("Create repository"); ?></h1>
 <p class="hdesc"><?php Translate("Create a new repository to manage your sources."); ?></p>
 <div>
-  <form method="POST" action="repositorycreate.php">
+  <form method="POST" action="repositorycreate.php"><?php PrintCsrfField(); ?>
 	  
 	<div class="form-field">
 		<label for="pi"><?php Translate('Repository location'); ?></label>
 		<select name="pi" id="pi" class="">
 			<?php foreach (GetArrayValue('RepositoryParentList') as $rp) : ?>
-				<option value="<?php print($rp->getEncodedIdentifier()); ?>">
-					<?php print($rp->path); ?>
+				<option value="<?php print(h($rp->getEncodedIdentifier())); ?>">
+					<?php print(h($rp->path)); ?>
 					<?php
 					if (!empty($rp->description)) {
-						print(' - ');
-						print($rp->description);
+						print(h(' - '));
+						print(h($rp->description));
 					}
 					?>
 				</option>
